@@ -2,6 +2,7 @@
 import flet as ft
 from loguru import logger
 
+from src.gui.gui import AppLogger
 from src.core.checking_program import CheckingProgram
 from src.core.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
                               WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, time_sending_messages_2,
@@ -18,10 +19,9 @@ from src.features.account.TGViewingPosts import ViewingPosts
 from src.features.account.inviting import InvitingToAGroup
 from src.features.account.parsing.parsing import ParsingGroupMembers
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
-from src.features.auth.logging_in import loging
+from src.features.auth.logging_in import SendLog
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage, get_unique_filename, reaction_gui
-from src.gui.gui import end_time, start_time
 from src.gui.main_menu import main_menu_program
 from src.gui.menu import bio_editing_menu, settings_menu, reactions_menu, working_with_contacts_menu
 from src.gui.notification import show_notification
@@ -36,7 +36,7 @@ async def main(page: ft.Page):
     Аргументы:
     :param page: Страница интерфейса Flet для отображения элементов управления.
     """
-    await loging(page)
+    await SendLog(page=page).loging()
 
     create_database()  # Создание базы данных
 
@@ -44,7 +44,8 @@ async def main(page: ft.Page):
     page.window.width = WINDOW_WIDTH  # Ширина окна
     page.window.height = WINDOW_HEIGHT  # Высота окна
     page.window.resizable = WINDOW_RESIZABLE  # Разрешение изменения размера окна
-
+    app_logger = AppLogger(page=page)
+    
     async def route_change(_):
         page.views.clear()
         # ______________________________________________________________________________________________________________
@@ -64,17 +65,17 @@ async def main(page: ft.Page):
         elif page.route == "/working_with_reactions":  # Меню "Работа с реакциями"
             await reactions_menu(page=page)
         elif page.route == "/setting_reactions":  # Ставим реакции
-            start = await start_time(page=page)
+            start = await app_logger.start_time(page=page)
             logger.info("▶️ Начало Проставления реакций")
             await WorkingWithReactions().send_reaction_request(page=page)
             logger.info("🔚 Конец Проставления реакций")
-            await end_time(start, page=page)
+            await app_logger.end_time(start, page=page)
         elif page.route == "/automatic_setting_of_reactions":  # Автоматическое выставление реакций
-            start = await start_time(page=page)
+            start = await app_logger.start_time(page=page)
             logger.info("▶️ Начало Автоматического выставления реакций")
             await WorkingWithReactions().setting_reactions(page=page)
             logger.info("🔚 Конец Автоматического выставления реакций")
-            await end_time(start, page=page)
+            await app_logger.end_time(start, page=page)
         # __________________________________________________________________________________________________________
         # elif page.route == "/viewing_posts_menu":  # Автоматическое выставление просмотров меню
         #     await viewing_posts_menu(page=page)
@@ -94,7 +95,7 @@ async def main(page: ft.Page):
         elif page.route == "/working_with_contacts":  # Меню "Работа с контактами"
             await working_with_contacts_menu(page=page)
         elif page.route == "/creating_contact_list":  # Формирование списка контактов
-            start = await start_time(page=page)
+            start = await app_logger.start_time(page=page)
             logger.info("▶️ Начало Формирования списка контактов")
             open_and_read_data(table_name="contact")  # Удаление списка с контактами
             # TODO миграция на PEEWEE
@@ -102,25 +103,25 @@ async def main(page: ft.Page):
                                                                 column_name="contact", route="/working_with_contacts",
                                                                 into_columns="contact")
             logger.info("🔚 Конец Формирования списка контактов")
-            await end_time(start, page=page)
+            await app_logger.end_time(start, page=page)
         elif page.route == "/show_list_contacts":  # Показать список контактов
-            start = await start_time(page=page)
+            start = await app_logger.start_time(page=page)
             logger.info("▶️ Начало Показа списка контактов")
             await TGContact(page=page).show_account_contact_list()
             logger.info("🔚 Конец Показа списка контактов")
-            await end_time(start, page=page)
+            await app_logger.end_time(start, page=page)
         elif page.route == "/deleting_contacts":  # Удаление контактов
-            start = await start_time(page=page)
+            start = await app_logger.start_time(page=page)
             logger.info("▶️ Начало Удаления контактов")
             await TGContact(page=page).delete_contact()
             logger.info("🔚 Конец Удаления контактов")
-            await end_time(start, page=page)
+            await app_logger.end_time(start, page=page)
         elif page.route == "/adding_contacts":  # Добавление контактов
-            start = await start_time(page=page)
+            start = await app_logger.start_time(page=page)
             logger.info("▶️ Начало Добавления контактов")
             await TGContact(page=page).inviting_contact()
             logger.info("🔚 Конец Добавления контактов")
-            await end_time(start, page=page)
+            await app_logger.end_time(start, page=page)
         # __________________________________________________________________________________________________________
         elif page.route == "/account_connection_menu":  # Подключение аккаунтов 'меню'.
             await TGConnect(page=page).account_connection_menu()
