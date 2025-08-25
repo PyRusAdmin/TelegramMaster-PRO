@@ -13,7 +13,7 @@ from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import function_button_ready_viewing
-from src.gui.gui import log_and_display
+from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations
 
 
@@ -26,6 +26,7 @@ class ViewingPosts:
         self.page = page
         self.tg_connect = TGConnect(page=page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
+        self.app_logger = AppLogger(page=page)
 
     async def viewing_posts_menu(self):
         """Отображает меню работы с просмотрами."""
@@ -58,7 +59,7 @@ class ViewingPosts:
                 for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
                     client = await self.tg_connect.get_telegram_client(self.page, session_name,
                                                                        account_directory=path_accounts_folder)
-                    await log_and_display(f"[+] Работаем с каналом: {link_channel.value}", self.page)
+                    await self.app_logger.log_and_display(f"[+] Работаем с каналом: {link_channel.value}")
                     await self.sub_unsub_tg.subscribe_to_group_or_channel(client, link_channel.value, self.page)
                     msg_id = int(re.search(r'/(\d+)$', link_post.value).group(1))  # Получаем id сообщения из ссылки
                     await self.viewing_posts(client, link_post.value, msg_id, link_channel.value, self.page)
@@ -92,7 +93,7 @@ class ViewingPosts:
                 await self.sub_unsub_tg.subscribe_to_group_or_channel(client, link_channel, self.page)
                 channel = await client.get_entity(link_channel)  # Получение информации о канале
                 await asyncio.sleep(5)
-                await log_and_display(f"Ссылка на пост: {link_post}\n", self.page)
+                await self.app_logger.log_and_display(f"Ссылка на пост: {link_post}\n")
                 await asyncio.sleep(5)
                 await client(GetMessagesViewsRequest(peer=channel, id=[int(number)], increment=True))
             except KeyError:
