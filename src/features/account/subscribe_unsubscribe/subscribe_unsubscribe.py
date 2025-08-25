@@ -29,7 +29,7 @@ from src.features.account.subscribe_unsubscribe.gui_input_builders import (
     LinkInputRowBuilder, TimeInputRowBuilder)
 from src.features.settings.setting import (recording_limits_file,
                                            writing_settings_to_a_file)
-from src.gui.gui import AppLogger, end_time, list_view, start_time
+from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
@@ -45,7 +45,6 @@ class SubscribeUnsubscribeTelegram:
         """
         Меню подписка и отписка
         """
-
         self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
@@ -53,7 +52,7 @@ class SubscribeUnsubscribeTelegram:
             """
             Отписываемся от групп, каналов, личных сообщений
             """
-            start = await start_time(self.page)
+            start = await self.app_logger.start_time()
             try:
                 for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
                     client = await self.tg_connect.get_telegram_client(session_name,
@@ -66,11 +65,11 @@ class SubscribeUnsubscribeTelegram:
                     await client.disconnect()
             except Exception as error:
                 logger.exception(error)
-            await end_time(start, self.page)
+            await self.app_logger.end_time(start)
 
         async def add_items(_):
             """Подписываемся на группы и каналы"""
-            start = await start_time(self.page)
+            start = await self.app_logger.start_time()
             for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
                 session_string = await self.tg_connect.get_string_session(session_name)
                 # Создаем клиент, используя StringSession и вашу строку
@@ -97,7 +96,7 @@ class SubscribeUnsubscribeTelegram:
                     await client.disconnect()
                 except sqlite3.DatabaseError:
                     logger.error("❌ Не удалось подписаться на канал / группу, так как файл аккаунта повреждён")
-            await end_time(start, self.page)
+            await self.app_logger.end_time(start)
 
         async def save(_):
             """Сохраняет ссылки в базу данных в таблицу writing_group_links, для последующей подписки"""

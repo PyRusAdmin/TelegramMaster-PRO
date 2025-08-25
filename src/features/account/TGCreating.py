@@ -11,9 +11,9 @@ from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_fol
 from src.core.utils import find_filess
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
-from src.gui.gui import end_time, list_view, log_and_display, start_time
+from src.gui.gui import list_view
 from src.locales.translations_loader import translations
-
+from src.gui.gui import AppLogger
 
 class CreatingGroupsAndChats:
     """
@@ -23,6 +23,7 @@ class CreatingGroupsAndChats:
     def __init__(self, page: ft.Page):
         self.page = page
         self.tg_connect = TGConnect(page)
+        self.app_logger = AppLogger(page=page)
 
     async def creating_groups_and_chats(self) -> None:
         """
@@ -37,19 +38,19 @@ class CreatingGroupsAndChats:
             """
             🚀 Запускает процесс создания групп и отображает статус в интерфейсе.
             """
-            start = await start_time(self.page)
+            start = await self.app_logger.start_time()
             self.page.update()
 
             if not selected_sessions:
-                await log_and_display(translations["ru"]["errors"]["files_not_selected_warning"], self.page)
+                await self.app_logger.log_and_display(translations["ru"]["errors"]["files_not_selected_warning"])
                 session_files = await find_filess(directory_path=path_accounts_folder, extension='session')
                 if not session_files:
-                    await log_and_display(translations["ru"]["errors"]["no_session_files"], self.page)
+                    await self.app_logger.log_and_display(translations["ru"]["errors"]["no_session_files"])
                     self.page.update()
                     return
             else:
                 session_files = selected_sessions
-                await log_and_display(translations["ru"]["notifications"]["start_creating"], self.page)
+                await self.app_logger.log_and_display(translations["ru"]["notifications"]["start_creating"])
             try:
                 for session_name in session_files:
                     # Извлекаем только имя файла без расширения
@@ -59,7 +60,7 @@ class CreatingGroupsAndChats:
                     await client(functions.channels.CreateChannelRequest(title='My awesome title',
                                                                          about='Description for your group',
                                                                          megagroup=True))
-                    await log_and_display(translations["ru"]["notifications"]["notification_creating"], self.page)
+                    await self.app_logger.log_and_display(translations["ru"]["notifications"]["notification_creating"])
             except TypeError:
                 pass
             except Exception as error:
