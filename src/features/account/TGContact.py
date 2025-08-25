@@ -6,12 +6,12 @@ import flet as ft
 from loguru import logger
 from telethon import functions, types
 
+from src.gui.gui import AppLogger
 from src.core.configs import path_accounts_folder
 from src.core.sqlite_working_tools import add_member_to_db
 from src.core.utils import find_filess
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.parsing import UserInfo
-from src.gui.gui import log_and_display
 from src.locales.translations_loader import translations
 
 
@@ -22,7 +22,8 @@ class TGContact:
 
     def __init__(self, page):
         self.page = page
-        self.tg_connect = TGConnect(page)
+        self.tg_connect = TGConnect(page=page)
+        self.app_logger = AppLogger(page=page)
 
     async def show_account_contact_list(self) -> None:
         """
@@ -52,7 +53,7 @@ class TGContact:
         except Exception as error:
             logger.exception(error)
 
-    async def we_get_the_account_id(self, client, page: ft.Page) -> None:
+    async def we_get_the_account_id(self, client) -> None:
         """
         Получаем id аккаунта
 
@@ -61,15 +62,15 @@ class TGContact:
         """
         try:
             entities: list = []  # Создаем список сущностей
-            for user in await self.get_and_parse_contacts(client, page):  # Выводим результат parsing
+            for user in await self.get_and_parse_contacts(client, self.page):  # Выводим результат parsing
                 await self.get_user_data(user, entities)
-                await self.we_show_and_delete_the_contact_of_the_phone_book(client, user, page)
+                await self.we_show_and_delete_the_contact_of_the_phone_book(client, user, self.page)
             await write_parsed_chat_participants_to_db(entities)
         except Exception as error:
             logger.exception(error)
 
-    @staticmethod
-    async def get_and_parse_contacts(client, page: ft.Page):
+
+    async def get_and_parse_contacts(self, client):
         """
         Получаем контакты
 
@@ -79,7 +80,7 @@ class TGContact:
         try:
             all_participants: list = []
             result = await client(functions.contacts.GetContactsRequest(hash=0))
-            await log_and_display(f"{result}", page)
+            await self.app_logger.log_and_display(f"{result}")
             all_participants.extend(result.users)
             return all_participants
         except Exception as error:
@@ -95,7 +96,7 @@ class TGContact:
         """
         try:
             await client(functions.contacts.DeleteContactsRequest(id=[await UserInfo().get_user_id(user)]))
-            await log_and_display(f"Подождите 2 - 4 секунды", self.page)
+            await self.app_logger.log_and_display(f"Подождите 2 - 4 секунды")
             await asyncio.sleep(random.randrange(2, 3, 4))  # Спим для избежания ошибки о flood
         except Exception as error:
             logger.exception(error)
@@ -136,7 +137,7 @@ class TGContact:
         """
         try:
             records: list = await open_and_read_data(table_name="contact", page=self.page)
-            await log_and_display(f"Всего номеров: {len(records)}", self.page)
+            await self.app_logger.log_and_display(f"Всего номеров: {len(records)}")
             entities: list = []  # Создаем список сущностей
             for rows in records:
                 user = {"phone": rows[0]}
@@ -150,14 +151,13 @@ class TGContact:
                     # Получаем данные номера телефона https://docs.telethon.dev/en/stable/concepts/entities.html
                     contact = await client.get_entity(phone)
                     await self.get_user_data(contact, entities)
-                    await log_and_display(f"[+] Контакт с добавлен в телефонную книгу!", self.page)
+                    await self.app_logger.log_and_display(f"[+] Контакт с добавлен в телефонную книгу!")
                     await asyncio.sleep(4)
                     # Запись результатов parsing в файл members_contacts.db, для дальнейшего inviting
                     # После работы с номером телефона, программа удаляет номер со списка
                     await delete_row_db(table="contact", column="phone", value=user["phone"])
                 except ValueError:
-                    await log_and_display(translations["ru"]["errors"]["contact_not_registered_or_cannot_add"],
-                                          self.page)
+                    await self.app_logger.log_and_display(translations["ru"]["errors"]["contact_not_registered_or_cannot_add"])
                     # После работы с номером телефона, программа удаляет номер со списка
                     await delete_row_db(table="contact", column="phone", value=user["phone"])
             client.disconnect()  # Разрываем соединение telegram
