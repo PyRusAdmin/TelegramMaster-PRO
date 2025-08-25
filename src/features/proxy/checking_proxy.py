@@ -6,8 +6,6 @@ import requests
 from loguru import logger
 
 from src.core.sqlite_working_tools import deleting_an_invalid_proxy, get_proxy_database
-from src.features.auth.logging_in import get_country_flag
-from src.gui.gui import log_and_display
 
 
 def reading_proxy_data_from_the_database():
@@ -68,10 +66,7 @@ async def connecting_to_proxy_with_verification(proxy_type, addr, port, username
     try:
         # Указываем параметры прокси
         proxy = {'http': f'{proxy_type}://{username}:{password}@{addr}:{port}'}
-        emoji, country = get_country_flag(addr)
-        await log_and_display(
-            f"Проверяемый прокси: {proxy_type}://{username}:{password}@{addr}:{port}. Страна proxy {country} {emoji}",
-            page)
+        await log_and_display(f"Проверяемый прокси: {proxy_type}://{username}:{password}@{addr}:{port}.", page)
         requests.get('http://example.org', proxies=proxy)
         await log_and_display(f"⚠️ Proxy: {proxy_type}://{username}:{password}@{addr}:{port} рабочий!", page)
     # RequestException исключение возникает при ошибках, которые могут быть вызваны при запросе к веб-серверу.

