@@ -18,7 +18,6 @@ from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
 from src.core.configs import (path_accounts_folder)
 from src.core.utils import find_filess, working_with_accounts
 from src.features.account.parsing.gui_elements import GUIProgram
-from src.features.auth.logging_in import getting_phone_number_data_by_phone_number
 from src.features.proxy.checking_proxy import checking_the_proxy_for_work, reading_proxy_data_from_the_database
 from src.gui.gui import AppLogger
 from src.gui.notification import show_notification
@@ -293,8 +292,6 @@ class TGConnect:
             os.remove(f"user_data/accounts/{phone_old}.session")
         except Exception as error:
             logger.exception(error)
-
-        await getting_phone_number_data_by_phone_number(phone, self.page)  # Выводим информацию о номере телефона
 
     async def get_telegram_client(self, session_name, account_directory):
         """
