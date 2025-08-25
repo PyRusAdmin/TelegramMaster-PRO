@@ -5,23 +5,30 @@ import sqlite3
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon import functions, types
-from telethon.errors import (ChannelPrivateError, SessionRevokedError, InviteRequestSentError, FloodWaitError,
-                             AuthKeyUnregisteredError, ChannelsTooMuchError)
-from telethon.errors import (InviteHashExpiredError, InviteHashInvalidError, SessionPasswordNeededError,
+from telethon.errors import (AuthKeyUnregisteredError, ChannelPrivateError,
+                             ChannelsTooMuchError, FloodWaitError,
+                             InviteHashExpiredError, InviteHashInvalidError,
+                             InviteRequestSentError,
+                             SessionPasswordNeededError, SessionRevokedError,
                              UserNotParticipantError)
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
-from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
+from telethon.tl.functions.channels import (JoinChannelRequest,
+                                            LeaveChannelRequest)
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
-from features.account.TGConnect import TGConnect
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_folder
-from src.core.configs import time_subscription_1, time_subscription_2
-from src.core.sqlite_working_tools import write_writing_group_links_to_db, get_writing_group_links
+from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON,
+                              path_accounts_folder, time_subscription_1,
+                              time_subscription_2)
+from src.core.sqlite_working_tools import (get_writing_group_links,
+                                           write_writing_group_links_to_db)
 from src.core.utils import find_filess
+from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
-from src.features.account.subscribe_unsubscribe.gui_input_builders import LinkInputRowBuilder, TimeInputRowBuilder
-from src.features.settings.setting import writing_settings_to_a_file, recording_limits_file
+from src.features.account.subscribe_unsubscribe.gui_input_builders import (
+    LinkInputRowBuilder, TimeInputRowBuilder)
+from src.features.settings.setting import (recording_limits_file,
+                                           writing_settings_to_a_file)
 from src.gui.gui import AppLogger, end_time, list_view, start_time
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
@@ -32,7 +39,7 @@ class SubscribeUnsubscribeTelegram:
     def __init__(self, page):
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
         self.tg_connect = TGConnect(page=page)
-        self.app_logger = AppLogger(page)
+        self.app_logger = AppLogger(page=page)
 
     async def subscribe_and_unsubscribe_menu(self):
         """
