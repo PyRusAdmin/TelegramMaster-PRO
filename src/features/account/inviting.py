@@ -19,7 +19,7 @@ from src.core.configs import (BUTTON_HEIGHT, ConfigReader, LIMITS, WIDTH_WIDE_BU
                               TIME_INVITING_1, TIME_INVITING_2)
 from src.core.sqlite_working_tools import select_records_with_limit, get_links_inviting, save_links_inviting
 from src.core.utils import find_filess, record_and_interrupt, record_inviting_results
-from src.features.account.TGConnect import get_string_session, getting_account_data
+from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.parsing.switch_controller import ToggleController
 from src.features.account.subscribe_unsubscribe.gui_input_builders import TimeInputRowBuilder, LinkInputRowBuilder
@@ -45,6 +45,7 @@ class InvitingToAGroup:
         self.api_hash = self.api_id_api_hash[1]
         self.links_inviting = get_links_inviting()  # Получаем список ссылок на группы для инвайтинга из базы данных
         self.app_logger = AppLogger(page=page)
+        self.tg_connect = TGConnect(page=page)
 
     async def inviting_menu(self):
         """
@@ -63,7 +64,7 @@ class InvitingToAGroup:
             start = await self.app_logger.start_time(self.page)
             self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
             for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
-                session_string = await get_string_session(session_name)
+                session_string = await self.tg_connect.get_string_session(session_name)
                 # Создаем клиент, используя StringSession и вашу строку
                 client = TelegramClient(
                     StringSession(session_string),  # <-- Используем StringSession
@@ -72,7 +73,7 @@ class InvitingToAGroup:
                     system_version="4.16.30-vxCUSTOM",
                 )
                 await client.connect()
-                await getting_account_data(client, self.page)
+                await self.tg_connect.getting_account_data(client)
                 await Subscribe(page=self.page).subscribe_to_group_or_channel(client, dropdown.value)
                 logger.info(f"Подписка на группу {dropdown.value} выполнена")
                 await self.app_logger.log_and_display(f"{dropdown.value}")
