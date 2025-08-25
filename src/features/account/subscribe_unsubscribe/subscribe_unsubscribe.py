@@ -14,15 +14,15 @@ from telethon.sync import TelegramClient
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
+from features.account.TGConnect import TGConnect
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_folder
 from src.core.configs import time_subscription_1, time_subscription_2
 from src.core.sqlite_working_tools import write_writing_group_links_to_db, get_writing_group_links
 from src.core.utils import find_filess
-from src.features.account.TGConnect import TGConnect, get_string_session, getting_account_data
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.gui_input_builders import LinkInputRowBuilder, TimeInputRowBuilder
 from src.features.settings.setting import writing_settings_to_a_file, recording_limits_file
-from src.gui.gui import end_time, list_view, log_and_display, start_time
+from src.gui.gui import AppLogger, end_time, list_view, start_time
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
@@ -32,6 +32,7 @@ class SubscribeUnsubscribeTelegram:
     def __init__(self, page):
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
         self.tg_connect = TGConnect(page=page)
+        self.app_logger = AppLogger(page)
 
     async def subscribe_and_unsubscribe_menu(self):
         """
@@ -51,9 +52,9 @@ class SubscribeUnsubscribeTelegram:
                     client = await self.tg_connect.get_telegram_client(session_name,
                                                                        account_directory=path_accounts_folder)
                     dialogs = client.iter_dialogs()
-                    await log_and_display(f"Диалоги: {dialogs}", self.page)
+                    await self.app_logger.log_and_display(f"Диалоги: {dialogs}")
                     async for dialog in dialogs:
-                        await log_and_display(f"{dialog.name}, {dialog.id}", self.page)
+                        await self.app_logger.log_and_display(f"{dialog.name}, {dialog.id}")
                         await client.delete_dialog(dialog)
                     await client.disconnect()
             except Exception as error:
@@ -64,9 +65,7 @@ class SubscribeUnsubscribeTelegram:
             """Подписываемся на группы и каналы"""
             start = await start_time(self.page)
             for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
-                # client = await self.tg_connect.get_telegram_client(session_name,
-                #                                                    account_directory=path_accounts_folder)
-                session_string = await get_string_session(session_name)
+                session_string = await self.tg_connect.get_string_session(session_name)
                 # Создаем клиент, используя StringSession и вашу строку
                 client = TelegramClient(
                     StringSession(session_string),  # <-- Используем StringSession
@@ -75,19 +74,15 @@ class SubscribeUnsubscribeTelegram:
                     system_version="4.16.30-vxCUSTOM",
                 )
                 await client.connect()
-                await getting_account_data(client, self.page)
+                await self.tg_connect.getting_account_data(client)
 
                 if client is None:
                     logger.error("❌ Не удалось подключиться к Telegram")
-                    # pass  # Пропустить аккаунт, если не удалось подключиться
-                # string_session = string_session.session.save()
-                # logger.info("📦 String session:", string_session)
                 # Получение ссылки
                 links_inviting: list = get_writing_group_links()  # Открываем базу данных
-                await log_and_display(f"Ссылка для подписки и проверки:  {links_inviting}", self.page)
+                await self.app_logger.log_and_display(f"Ссылка для подписки и проверки:  {links_inviting}")
                 for link_tuple in links_inviting:
-                    # link = link_tuple[0]
-                    await log_and_display(f"Ссылка для подписки и проверки:  {link_tuple}", self.page)
+                    await self.app_logger.log_and_display(f"Ссылка для подписки и проверки:  {link_tuple}")
                     # Проверка ссылок для подписки и подписка на группу или канал
                     logger.info(f"Работа с аккаунтом {session_name}")
                     await self.checking_links(client, link_tuple)
@@ -211,31 +206,29 @@ class SubscribeUnsubscribeTelegram:
                 try:
                     result = await client(functions.messages.CheckChatInviteRequest(hash=link_hash))
                     if isinstance(result, types.ChatInvite):
-                        await log_and_display(f"Ссылка валидна: {link}, Название группы: {result.title}, "
+                        await self.app_logger.log_and_display(f"Ссылка валидна: {link}, Название группы: {result.title}, "
                                               f"Количество участников: {result.participants_count}, "
-                                              f"Мега-группа: {'Да' if result.megagroup else 'Нет'}, Описание: {result.about or 'Нет описания'}",
-                                              self.page)
+                                              f"Мега-группа: {'Да' if result.megagroup else 'Нет'}, Описание: {result.about or 'Нет описания'}")
                         try:
-                            await log_and_display(f"Подписка на группу / канал по ссылке приглашению {link}", self.page)
+                            await self.app_logger.log_and_display(f"Подписка на группу / канал по ссылке приглашению {link}")
                             try:
                                 await client(ImportChatInviteRequest(
                                     link_hash))  # Подписка на группу / канал по ссылке приглашению
                             except InviteHashInvalidError:
-                                await log_and_display(translations["ru"]["errors"]["invite_request_sent"], self.page)
+                                await self.app_logger.log_and_display(translations["ru"]["errors"]["invite_request_sent"])
                         except InviteHashExpiredError:
-                            await log_and_display(translations["ru"]["errors"]["subscribe_error"], self.page)
+                            await self.app_logger.log_and_display(translations["ru"]["errors"]["subscribe_error"])
                             try:
                                 await client(ImportChatInviteRequest(
                                     link_hash))  # Подписка на группу / канал по ссылке приглашению
-                                await log_and_display(f"Подписка на группу / канал по ссылке приглашению {link_hash}",
-                                                      self.page)
+                                await self.app_logger.log_and_display(f"Подписка на группу / канал по ссылке приглашению {link_hash}")
                             except InviteHashInvalidError:
-                                await log_and_display(translations["ru"]["errors"]["invite_request_sent"], self.page)
+                                await self.app_logger.log_and_display(translations["ru"]["errors"]["invite_request_sent"])
                     elif isinstance(result, types.ChatInviteAlready):
-                        await log_and_display(
-                            f"Вы уже состоите в группе: {link}, Название группы: {result.chat.title}", self.page)
+                        await self.app_logger.log_and_display(
+                            f"Вы уже состоите в группе: {link}, Название группы: {result.chat.title}")
                 except FloodWaitError as e:
-                    await log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", self.page, level="error")
+                    await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
 
             elif link.startswith("https://t.me/"):
                 # Извлекаем имя пользователя или группы
@@ -244,62 +237,58 @@ class SubscribeUnsubscribeTelegram:
                 result = await client(functions.contacts.ResolveUsernameRequest(username=username))
                 chat = result.chats[0] if result.chats else None
                 if chat:
-                    await log_and_display(f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                    await self.app_logger.log_and_display(f"Публичная группа/канал: {link}, Название: {chat.title}, "
                                           f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
-                                          f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}",
-                                          self.page)
+                                          f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
                     logger.info(f"Подписка на группу / канал по ссылке {link}")
                     try:
                         await client(JoinChannelRequest(link))
                     except ChannelsTooMuchError:
-                        await log_and_display(translations["ru"]["errors"]["user_channels_too_much"], self.page)
+                        await self.app_logger.log_and_display(translations["ru"]["errors"]["user_channels_too_much"])
                 else:
-                    await log_and_display(f"Не удалось найти публичный чат: {link}", self.page)
+                    await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
 
             else:
                 # Считаем, что это просто хэш
                 try:
                     result = await client(functions.messages.CheckChatInviteRequest(hash=link))
                     if isinstance(result, types.ChatInvite):
-                        await log_and_display(f"Ссылка валидна: {link}, Название группы: {result.title}, "
+                        await self.app_logger.log_and_display(f"Ссылка валидна: {link}, Название группы: {result.title}, "
                                               f"Количество участников: {result.participants_count}, "
                                               f"Мега-группа: {'Да' if result.megagroup else 'Нет'}, "
-                                              f"Описание: {result.about or 'Нет описания'}",
-                                              self.page)
+                                              f"Описание: {result.about or 'Нет описания'}")
                         await client(JoinChannelRequest(link))
                     elif isinstance(result, types.ChatInviteAlready):
-                        await log_and_display(
-                            f"Вы уже состоите в группе: {link}, Название группы: {result.chat.title}", self.page)
+                        await self.app_logger.log_and_display(f"Вы уже состоите в группе: {link}, Название группы: {result.chat.title}")
                 except FloodWaitError as e:
-                    await log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", self.page, level="error")
+                    await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
                 except InviteHashExpiredError:
-                    await log_and_display(f"Повторная проверка ссылки: {link}", self.page)
+                    await self.app_logger.log_and_display(f"Повторная проверка ссылки: {link}")
                     result = await client(functions.contacts.ResolveUsernameRequest(username=link))
                     chat = result.chats[0] if result.chats else None
                     if chat:
-                        await log_and_display(f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                        await self.app_logger.log_and_display(f"Публичная группа/канал: {link}, Название: {chat.title}, "
                                               f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
-                                              f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}",
-                                              self.page)
+                                              f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
                     else:
-                        await log_and_display(f"Не удалось найти публичный чат: {link}", self.page)
+                        await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
 
                 except AuthKeyUnregisteredError:
-                    await log_and_display(translations["ru"]["errors"]["auth_key_unregistered"], self.page)
+                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
                     await asyncio.sleep(2)
                 except SessionPasswordNeededError:
-                    await log_and_display(translations["ru"]["errors"]["two_factor_required"], self.page)
+                    await self.app_logger.log_and_display(translations["ru"]["errors"]["two_factor_required"])
                     await asyncio.sleep(2)
 
         except FloodWaitError as e:
-            await log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", self.page, level="error")
+            await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
         except InviteRequestSentError:
-            await log_and_display(translations["ru"]["errors"]["invite_request_sent"], self.page)
+            await self.app_logger.log_and_display(translations["ru"]["errors"]["invite_request_sent"])
         except AuthKeyUnregisteredError:
-            await log_and_display(translations["ru"]["errors"]["auth_key_unregistered"], self.page)
+            await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
             await asyncio.sleep(2)
         except SessionPasswordNeededError:
-            await log_and_display(translations["ru"]["errors"]["two_factor_required"], self.page)
+            await self.app_logger.log_and_display(translations["ru"]["errors"]["two_factor_required"])
             await asyncio.sleep(2)
 
     # async def subscribe_telegram(self, page: ft.Page) -> None:
@@ -351,17 +340,15 @@ class SubscribeUnsubscribeTelegram:
                 await client(LeaveChannelRequest(entity))
             # await client.disconnect()  # Разрываем соединение с Telegram
         except ChannelPrivateError:  # Аккаунт Telegram не может отписаться так как не имеет доступа
-            await log_and_display(translations["ru"]["errors"]["channel_private"], self.page)
+            await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
         except UserNotParticipantError:
-            await log_and_display(translations["ru"]["errors"]["unsubscribe_not_member"], self.page)
+            await self.app_logger.log_and_display(translations["ru"]["errors"]["unsubscribe_not_member"])
         except SessionRevokedError:
-            await log_and_display(translations["ru"]["errors"]["invalid_auth_session_terminated"], self.page)
+            await self.app_logger.log_and_display(translations["ru"]["errors"]["invalid_auth_session_terminated"])
         except sqlite3.DatabaseError:
-            await log_and_display(
-                f"❌ Попытка подписки на группу / канал {group_link}. Ошибка базы данных, аккаунта или аккаунт заблокирован.",
-                self.page)
+            await self.app_logger.log_and_display(f"❌ Попытка подписки на группу / канал {group_link}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")
         except ConnectionError:
-            await log_and_display("Ошибка соединения с Telegram", self.page)
+            await self.app_logger.log_and_display("Ошибка соединения с Telegram")
         # except Exception as error:
         #     logger.exception(error)
 
