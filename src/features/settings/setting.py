@@ -6,10 +6,9 @@ import os
 import sys
 
 import flet as ft  # Импортируем библиотеку flet
-
+from src.gui.gui import AppLogger, list_view
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.sqlite_working_tools import save_proxy_data_to_db
-from src.gui.gui import list_view, log_and_display
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
@@ -23,6 +22,7 @@ class SettingPage:
 
     def __init__(self, page: ft.Page):
         self.page = page
+        self.app_logger = AppLogger(page=page)
 
     async def creating_the_main_window_for_proxy_data_entry(self) -> None:
         """
@@ -92,7 +92,7 @@ class SettingPage:
             await show_notification(self.page, "Данные успешно записаны!")
         except configparser.NoSectionError as error:
             await show_notification(self.page, "⚠️ Поврежден файл user_data/config/config.ini")
-            await log_and_display(f"Ошибка: {error}", self.page)
+            await self.app_logger.log_and_display(f"Ошибка: {error}")
 
     async def recording_the_time_to_launch_an_invite_every_day(self, hour_textfield, minutes_textfield) -> None:
         """Записывает данные в файл config.ini"""
@@ -100,10 +100,10 @@ class SettingPage:
             hour = int(hour_textfield.value)
             minutes = int(minutes_textfield.value)
             if not 0 <= hour < 24:
-                await log_and_display(f"Введите часы в пределах от 0 до 23!", self.page)
+                await self.app_logger.log_and_display(f"Введите часы в пределах от 0 до 23!")
                 return
             if not 0 <= minutes < 60:
-                await log_and_display(f"Введите минуты в пределах от 0 до 59!", self.page)
+                await self.app_logger.log_and_display(f"Введите минуты в пределах от 0 до 59!")
                 return
             # Предполагая, что config является объектом, похожим на словарь
             config.get("hour_minutes_every_day", "hour")
@@ -114,7 +114,7 @@ class SettingPage:
             await show_notification(self.page, "Данные успешно записаны!")
 
         except ValueError:
-            await log_and_display(f"Введите числовые значения для часов и минут!", self.page)
+            await self.app_logger.log_and_display(f"Введите числовые значения для часов и минут!")
         self.page.update()  # Обновляем страницу
 
     async def create_main_window(self, variable, smaller_timex, larger_timex) -> None:
