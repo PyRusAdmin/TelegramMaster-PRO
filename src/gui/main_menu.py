@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import flet as ft
 import base64
+
+import flet as ft
+
 from src.core.configs import BUTTON_HEIGHT, PROGRAM_NAME, DATE_OF_PROGRAM_CHANGE, PROGRAM_VERSION
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.locales.translations_loader import translations

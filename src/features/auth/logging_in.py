@@ -8,8 +8,7 @@ import requests
 from telethon import TelegramClient
 from telethon.errors import FilePartsInvalidError
 
-from src.core.configs import (DATE_OF_PROGRAM_CHANGE, PROGRAM_NAME,
-                              PROGRAM_VERSION)
+from src.core.configs import DATE_OF_PROGRAM_CHANGE, PROGRAM_NAME, PROGRAM_VERSION
 from src.gui.gui import AppLogger
 
 
@@ -18,7 +17,6 @@ class SendLog:
     def __init__(self, page: ft.Page):
         self.page = page
         self.app_logger = AppLogger(page)
-
 
     def get_country_flag(self, ip_address):
         """
@@ -33,7 +31,6 @@ class SendLog:
         except KeyError:
             return "🏳️", "🌍"
 
-
     def get_external_ip(self):
         """Получение внешнего ip адреса"""
         try:
@@ -42,7 +39,6 @@ class SendLog:
             return response.json().get("origin")
         except requests.RequestException as _:
             return None
-
 
     async def loging(self):
         """
@@ -58,7 +54,7 @@ class SendLog:
         # Красивое сообщение
         message = (
             f"🚀 **Launch Information**\n\n"
-    
+
             f"Program name: `{PROGRAM_NAME}`\n"
             f"🌍 IP Address: `{local_ip}`\n"
             f"📍 Location: {country} {emoji}\n"

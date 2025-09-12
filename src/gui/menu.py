@@ -191,5 +191,3 @@ async def reactions_menu(page: ft.Page):
                                        text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
                                        on_click=lambda _: page.go("/automatic_setting_of_reactions")),
                  ])]))
-
-

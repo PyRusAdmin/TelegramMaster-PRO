@@ -11,9 +11,10 @@ from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_fol
 from src.core.utils import find_filess
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
+from src.gui.gui import AppLogger
 from src.gui.gui import list_view
 from src.locales.translations_loader import translations
-from src.gui.gui import AppLogger
+
 
 class CreatingGroupsAndChats:
     """

@@ -95,7 +95,8 @@ class SendTelegramMessages:
                                     await self.app_logger.log_and_display(
                                         translations["ru"]["errors"]["invalid_username"])
                                 except ChatWriteForbiddenError:
-                                    await self.app_logger.log_and_display(translations["ru"]["errors"]["chat_write_forbidden"])
+                                    await self.app_logger.log_and_display(
+                                        translations["ru"]["errors"]["chat_write_forbidden"])
                                     await record_and_interrupt(time_from, time_to, self.page)
                                     break  # Прерываем работу и меняем аккаунт
                                 except (TypeError, UnboundLocalError):
@@ -197,7 +198,8 @@ class SendTelegramMessages:
                             await self.app_logger.log_and_display(
                                 f"Вам запрещено отправлять сообщения в супергруппах/каналах (вызвано запросом SendMessageRequest)")
                         except ValueError:
-                            await self.app_logger.log_and_display(f"❌ Ошибка рассылки, проверьте ссылку  на группу: {group_link}")
+                            await self.app_logger.log_and_display(
+                                f"❌ Ошибка рассылки, проверьте ссылку  на группу: {group_link}")
                             break
                         await self.random_dream()  # Прерываем работу и меняем аккаунт
                     await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
@@ -220,12 +222,14 @@ class SendTelegramMessages:
                             # Отправляем сообщения и файлы в группу
                             await self.send_content(client, group_link, messages, files)
                         except ChannelPrivateError:
-                            await self.app_logger.log_and_display(f"Группа {group_link} приватная или подписка запрещена.")
+                            await self.app_logger.log_and_display(
+                                f"Группа {group_link} приватная или подписка запрещена.")
                         except PeerFloodError:
                             await record_and_interrupt(time_subscription_1, time_subscription_2, self.page)
                             break  # Прерываем работу и меняем аккаунт
                         except FloodWaitError as e:
-                            await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
+                            await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}",
+                                                                  level="error")
                             await asyncio.sleep(e.seconds)
                         except UserBannedInChannelError:
                             await record_and_interrupt(time_subscription_1, time_subscription_2, self.page)
@@ -241,7 +245,8 @@ class SendTelegramMessages:
                             await self.app_logger.log_and_display(translations["ru"]["errors"]["slow_mode_wait"])
                             await asyncio.sleep(e.seconds)
                         except ValueError:
-                            await self.app_logger.log_and_display(translations["ru"]["errors"]["sending_error_check_link"])
+                            await self.app_logger.log_and_display(
+                                translations["ru"]["errors"]["sending_error_check_link"])
                             break
                         except (TypeError, UnboundLocalError):
                             continue  # Записываем ошибку в software_database.db и продолжаем работу

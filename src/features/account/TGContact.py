@@ -2,16 +2,15 @@
 import asyncio
 import random
 
-import flet as ft
 from loguru import logger
 from telethon import functions, types
 
-from src.gui.gui import AppLogger
 from src.core.configs import path_accounts_folder
 from src.core.sqlite_working_tools import add_member_to_db
 from src.core.utils import find_filess
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.parsing import UserInfo
+from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations
 
 
@@ -68,7 +67,6 @@ class TGContact:
             await write_parsed_chat_participants_to_db(entities)
         except Exception as error:
             logger.exception(error)
-
 
     async def get_and_parse_contacts(self, client):
         """
@@ -157,7 +155,8 @@ class TGContact:
                     # После работы с номером телефона, программа удаляет номер со списка
                     await delete_row_db(table="contact", column="phone", value=user["phone"])
                 except ValueError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["contact_not_registered_or_cannot_add"])
+                    await self.app_logger.log_and_display(
+                        translations["ru"]["errors"]["contact_not_registered_or_cannot_add"])
                     # После работы с номером телефона, программа удаляет номер со списка
                     await delete_row_db(table="contact", column="phone", value=user["phone"])
             client.disconnect()  # Разрываем соединение telegram
