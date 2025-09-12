@@ -5,12 +5,14 @@ import sys  # Импортируем библиотеку для работы с
 
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger  # Импортируем библиотеку loguru для логирования
+from telethon.errors import SessionRevokedError
 from telethon.tl.functions.messages import GetMessagesViewsRequest
 
 from src.core.configs import path_accounts_folder, WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
 from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
+from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
@@ -29,6 +31,7 @@ class ViewingPosts:
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.function_button = FunctionButton(page=page)
+        self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
 
     async def viewing_posts_menu(self):
         """Отображает меню работы с просмотрами."""
@@ -59,12 +62,16 @@ class ViewingPosts:
             async def btn_click(_) -> None:
 
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                    client = await self.tg_connect.get_telegram_client(session_name,
-                                                                       account_directory=path_accounts_folder)
+                    # client = await self.tg_connect.get_telegram_client(session_name=session_name, account_directory=path_accounts_folder)
+
+                    client = await self.tg_connect.client_connect_string_session(session_name)
+
                     await self.app_logger.log_and_display(f"[+] Работаем с каналом: {link_channel.value}")
-                    await self.sub_unsub_tg.subscribe_to_group_or_channel(client, link_channel.value, self.page)
+
+                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=link_channel.value)
+
                     msg_id = int(re.search(r'/(\d+)$', link_post.value).group(1))  # Получаем id сообщения из ссылки
-                    await self.viewing_posts(client, link_post.value, msg_id, link_channel.value)
+                    await self.viewing_posts(client, link_post.value, msg_id, link_channel.value, session_name)
                     await asyncio.sleep(1)
                     await client.disconnect()
                     # Изменение маршрута на новый (если необходимо)
@@ -76,7 +83,7 @@ class ViewingPosts:
         except Exception as error:
             logger.exception(error)
 
-    async def viewing_posts(self, client, link_post, number, link_channel) -> None:
+    async def viewing_posts(self, client, link_post, number, link_channel, session_name) -> None:
         """
         Накрутка просмотров постов
 
@@ -84,11 +91,11 @@ class ViewingPosts:
         :param link_post: Ссылка на пост
         :param number: Количество просмотров
         :param link_channel: Ссылка на канал
-        :return: None
+        :param session_name: Имя сессии (аккаунта Telegram)
         """
         try:
             try:
-                await self.sub_unsub_tg.subscribe_to_group_or_channel(client, link_channel)
+                await self.subscribe.subscribe_to_group_or_channel(client=client, groups=link_channel)
                 channel = await client.get_entity(link_channel)  # Получение информации о канале
                 await asyncio.sleep(5)
                 await self.app_logger.log_and_display(f"Ссылка на пост: {link_post}\n")
@@ -96,5 +103,7 @@ class ViewingPosts:
                 await client(GetMessagesViewsRequest(peer=channel, id=[int(number)], increment=True))
             except KeyError:
                 sys.exit(1)
+            except SessionRevokedError:
+                logger.error(f"Не валидная сессия: {session_name}")
         except Exception as error:
             logger.exception(error)

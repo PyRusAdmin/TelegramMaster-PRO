@@ -21,24 +21,24 @@ class Subscribe:
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
 
-    async def subscribe_to_group_or_channel(self, client, groups_wr) -> None:
+    async def subscribe_to_group_or_channel(self, client, groups) -> None:
         """
         Подписываемся на группу или канал
 
-        :param groups_wr: Str - группа или канал
-        :param client:    TelegramClient - объект клиента
+        :param groups: Str - группа или канал
+        :param client: TelegramClient - объект клиента
         """
         # цикл for нужен для того, что бы сработала команда brake команда break в Python используется только для выхода из
         # цикла, а не выхода из программы в целом.
-        await self.app_logger.log_and_display(f"Группа для подписки {groups_wr}")
+        await self.app_logger.log_and_display(f"Группа для подписки {groups}")
         try:
-            await client(JoinChannelRequest(groups_wr))
-            await self.app_logger.log_and_display(f"Аккаунт подписался на группу / канал: {groups_wr}")
+            await client(JoinChannelRequest(groups))
+            await self.app_logger.log_and_display(f"Аккаунт подписался на группу / канал: {groups}")
         except SessionRevokedError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["invalid_auth_session_terminated"])
         except UserDeactivatedBanError:
             await self.app_logger.log_and_display(
-                f"❌ Попытка подписки на группу / канал {groups_wr}. Аккаунт заблокирован.")
+                f"❌ Попытка подписки на группу / канал {groups}. Аккаунт заблокирован.")
         except ChannelsTooMuchError:
             """Если аккаунт подписан на множество групп и каналов, то отписываемся от них"""
             async for dialog in client.iter_dialogs():
@@ -53,8 +53,8 @@ class Subscribe:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
         except (UsernameInvalidError, ValueError, TypeError):
             await self.app_logger.log_and_display(
-                f"❌ Попытка подписки на группу / канал {groups_wr}. Не верное имя или cсылка {groups_wr} не является группой / каналом: {groups_wr}")
-            write_data_to_db(groups_wr)
+                f"❌ Попытка подписки на группу / канал {groups}. Не верное имя или cсылка {groups} не является группой / каналом: {groups}")
+            write_data_to_db(groups)
         except PeerFloodError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["peer_flood"], level="error")
             await asyncio.sleep(random.randrange(50, 60))
@@ -65,7 +65,7 @@ class Subscribe:
             raise
         except InviteRequestSentError:
             await self.app_logger.log_and_display(
-                f"❌ Попытка подписки на группу / канал {groups_wr}. Действия будут доступны после одобрения администратором на вступление в группу")
+                f"❌ Попытка подписки на группу / канал {groups}. Действия будут доступны после одобрения администратором на вступление в группу")
         except sqlite3.DatabaseError:
             await self.app_logger.log_and_display(
-                f"❌ Попытка подписки на группу / канал {groups_wr}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")
+                f"❌ Попытка подписки на группу / канал {groups}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")

@@ -11,8 +11,6 @@ from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, Sessio
                              UserIdInvalidError, ChatAdminRequiredError, UserPrivacyRestrictedError,
                              BotGroupsBlockedError, BadRequestError, ChatWriteForbiddenError, InviteRequestSentError,
                              FloodWaitError, AuthKeyUnregisteredError, PeerFloodError)
-from telethon.sessions import StringSession
-from telethon.sync import TelegramClient
 from telethon.tl.functions.channels import InviteToChannelRequest
 
 from src.core.configs import (BUTTON_HEIGHT, ConfigReader, LIMITS, WIDTH_WIDE_BUTTON, path_accounts_folder,
@@ -47,6 +45,7 @@ class InvitingToAGroup:
         self.tg_connect = TGConnect(page=page)
         self.utils = Utils(page=page)
         self.setting_page = SettingPage(page=page)
+        self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
 
     async def inviting_menu(self):
         """
@@ -65,17 +64,11 @@ class InvitingToAGroup:
             start = await self.app_logger.start_time()
             self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                session_string = await self.tg_connect.get_string_session(session_name)
-                # Создаем клиент, используя StringSession и вашу строку
-                client = TelegramClient(
-                    StringSession(session_string),  # <-- Используем StringSession
-                    api_id=7655060,
-                    api_hash="cc1290cd733c1f1d407598e5a31be4a8",
-                    system_version="4.16.30-vxCUSTOM",
-                )
-                await client.connect()
+
+                client = await self.tg_connect.client_connect_string_session(session_name)
+
                 await self.tg_connect.getting_account_data(client)
-                await Subscribe(page=self.page).subscribe_to_group_or_channel(client, dropdown.value)
+                await self.subscribe.subscribe_to_group_or_channel(client, dropdown.value)
                 logger.info(f"Подписка на группу {dropdown.value} выполнена")
                 await self.app_logger.log_and_display(f"{dropdown.value}")
 
@@ -263,7 +256,7 @@ class InvitingToAGroup:
 
         self.page.views.append(
             ft.View("/inviting",
-                    [await GUIProgram().key_app_bar(), # Кнопка назад
+                    [await GUIProgram().key_app_bar(),  # Кнопка назад
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["inviting_menu"]["inviting"],
                          ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
