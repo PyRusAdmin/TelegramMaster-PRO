@@ -156,7 +156,7 @@ async def reactions_menu(page: ft.Page):
     """
     page.views.append(
         ft.View("/working_with_reactions",
-                [await GUIProgram().key_app_bar(),
+                [await GUIProgram().key_app_bar(),  # Кнопка "Назад"
                  ft.Text(spans=[ft.TextSpan(
                      translations["ru"]["menu"]["reactions"],
                      ft.TextStyle(

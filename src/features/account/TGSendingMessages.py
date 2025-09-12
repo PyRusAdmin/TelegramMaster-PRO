@@ -19,6 +19,7 @@ from src.core.sqlite_working_tools import select_records_with_limit, open_and_re
 from src.core.utils import (all_find_files, find_files, find_filess, read_json_file, record_and_interrupt,
                             record_inviting_results)
 from src.features.account.TGConnect import TGConnect
+from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.gui import list_view, AppLogger
 from src.locales.translations_loader import translations
@@ -44,8 +45,8 @@ class SendTelegramMessages:
 
         output = ft.Text("Отправка сообщений в личку", size=18, weight=ft.FontWeight.BOLD)
 
-        # Обработчик кнопки "Готово"
         async def button_clicked(_):
+            """Обработчик кнопки "Готово" """
             time_from = tb_time_from.value or TIME_SENDING_MESSAGES_1  # Получаем значение первого поля
             time_to = tb_time_to.value or time_sending_messages_2  # Получаем значение второго поля
 
@@ -116,22 +117,24 @@ class SendTelegramMessages:
         sleep_time_group = ft.Row(controls=[tb_time_from, tb_time_to], spacing=20, )
         # Поле для формирования списка чатов
         account_limits_inputs = ft.TextField(label="Введите лимит на сообщения", multiline=True, max_lines=12)
+
         # Кнопка "Готово"
         button_done = ft.ElevatedButton(text=translations["ru"]["buttons"]["done"], width=WIDTH_WIDE_BUTTON,
                                         height=BUTTON_HEIGHT,
                                         on_click=button_clicked, )
-        # Кнопка "Назад"
-        button_back = ft.ElevatedButton(text=translations["ru"]["buttons"]["back"], width=WIDTH_WIDE_BUTTON,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=lambda _: self.page.go("/sending_messages_via_chats_menu"))
+
         t = ft.Text()
         # Разделение интерфейса на верхнюю и нижнюю части
         self.page.views.append(
             ft.View("/sending_messages_via_chats_menu",
-                    controls=[output, sleep_time_group, t, account_limits_inputs,
-                              ft.Column(  # Верхняя часть: контрольные элементы
-                                  controls=[button_done, button_back, ],
-                              ), ], ))
+                    controls=[
+                        await GUIProgram().key_app_bar(),  # Кнопка "Назад"
+                        output, sleep_time_group, t, account_limits_inputs,
+                        ft.Column(  # Верхняя часть: контрольные элементы
+                            controls=[
+                                button_done,
+                            ],
+                        ), ], ))
 
     @staticmethod
     async def sleep_selection_input():
@@ -218,7 +221,7 @@ class SendTelegramMessages:
                         try:
                             await self.sub_unsub_tg.subscribe_to_group_or_channel(client, group_link, self.page)
                             # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
-                            messages, files = await self.all_find_and_all_files(self.page)
+                            messages, files = await self.all_find_and_all_files()
                             # Отправляем сообщения и файлы в группу
                             await self.send_content(client, group_link, messages, files)
                         except ChannelPrivateError:
