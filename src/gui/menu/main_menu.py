@@ -78,10 +78,6 @@ async def main_menu_program(page: ft.Page):
                                                 text=translations["ru"]["reactions_menu"][
                                                     "we_are_winding_up_post_views"],
                                                 on_click=lambda _: page.go("/viewing_posts_menu")),
-                              # ⚙️ Настройки
-                              ft.ElevatedButton(width=350, height=BUTTON_HEIGHT,
-                                                text=translations["ru"]["menu"]["settings"],
-                                                on_click=lambda _: page.go("/settings")),
                               # 💬 Рассылка сообщений по чатам
                               ft.ElevatedButton(width=350, height=BUTTON_HEIGHT,
                                                 text=translations["ru"]["message_sending_menu"][
@@ -92,6 +88,10 @@ async def main_menu_program(page: ft.Page):
                                                 text=translations["ru"]["parsing_menu"][
                                                     "importing_a_list_of_parsed_data"],
                                                 on_click=lambda _: page.go("/importing_a_list_of_parsed_data")),
+                              # ⚙️ Настройки
+                              ft.ElevatedButton(width=350, height=BUTTON_HEIGHT,
+                                                text=translations["ru"]["menu"]["settings"],
+                                                on_click=lambda _: page.go("/settings")),
                           ], scroll=ft.ScrollMode.AUTO),
                           # Вертикальный разделитель - улучшенные параметры
                           ft.VerticalDivider(
