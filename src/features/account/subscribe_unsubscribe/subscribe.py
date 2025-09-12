@@ -9,7 +9,7 @@ from telethon.tl.functions.channels import JoinChannelRequest
 
 from src.core.configs import time_subscription_1, time_subscription_2
 from src.core.sqlite_working_tools import write_data_to_db
-from src.core.utils import record_and_interrupt
+from src.core.utils import Utils
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations
 
@@ -19,6 +19,7 @@ class Subscribe:
     def __init__(self, page):
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
         self.app_logger = AppLogger(page=page)
+        self.utils = Utils(page=page)
 
     async def subscribe_to_group_or_channel(self, client, groups_wr) -> None:
         """
@@ -59,7 +60,7 @@ class Subscribe:
             await asyncio.sleep(random.randrange(50, 60))
         except FloodWaitError as e:
             await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
-            await record_and_interrupt(time_subscription_1, time_subscription_2, self.page)
+            await self.utils.record_and_interrupt(time_subscription_1, time_subscription_2)
             # Прерываем работу и меняем аккаунт
             raise
         except InviteRequestSentError:

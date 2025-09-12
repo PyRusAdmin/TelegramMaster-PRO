@@ -16,7 +16,7 @@ from telethon.tl.functions.messages import ImportChatInviteRequest
 from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_folder, time_subscription_1,
                               time_subscription_2)
 from src.core.sqlite_working_tools import get_writing_group_links, write_writing_group_links_to_db
-from src.core.utils import find_filess
+from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.gui_input_builders import LinkInputRowBuilder, TimeInputRowBuilder
@@ -32,6 +32,7 @@ class SubscribeUnsubscribeTelegram:
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
         self.tg_connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
+        self.utils = Utils(page=page)
 
     async def subscribe_and_unsubscribe_menu(self):
         """
@@ -46,7 +47,7 @@ class SubscribeUnsubscribeTelegram:
             """
             start = await self.app_logger.start_time()
             try:
-                for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     client = await self.tg_connect.get_telegram_client(session_name,
                                                                        account_directory=path_accounts_folder)
                     dialogs = client.iter_dialogs()
@@ -62,7 +63,7 @@ class SubscribeUnsubscribeTelegram:
         async def add_items(_):
             """Подписываемся на группы и каналы"""
             start = await self.app_logger.start_time()
-            for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
+            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 session_string = await self.tg_connect.get_string_session(session_name)
                 # Создаем клиент, используя StringSession и вашу строку
                 client = TelegramClient(

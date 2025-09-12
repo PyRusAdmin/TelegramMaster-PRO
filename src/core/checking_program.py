@@ -3,7 +3,7 @@ import flet as ft
 
 from src.core.configs import path_send_message_folder_answering_machine_message, path_folder_with_messages, LIMITS
 from src.core.sqlite_working_tools import select_records_with_limit
-from src.core.utils import find_filess
+from src.core.utils import Utils
 from src.gui.notification import show_notification
 
 
@@ -14,6 +14,7 @@ class CheckingProgram:
         self.page = page
         self.account_extension = "session"  # Расширение файла аккаунта
         self.file_extension = "json"
+        self.utils = Utils(page=page)
 
     async def check_before_sending_messages_via_chats(self):
         """
@@ -39,10 +40,10 @@ class CheckingProgram:
         """
         ⛔ Проверка наличия аккаунта в папке с аккаунтами (Рассылка сообщений по чатам с автоответчиком)
         """
-        if not find_filess(directory_path=path_folder_with_messages, extension=self.file_extension):
+        if not self.utils.find_filess(directory_path=path_folder_with_messages, extension=self.file_extension):
             await show_notification(self.page, f"⛔ Нет заготовленных сообщений в папке {path_folder_with_messages}")
-        if not find_filess(directory_path=path_send_message_folder_answering_machine_message,
-                           extension=self.file_extension):
+        if not self.utils.find_filess(directory_path=path_send_message_folder_answering_machine_message,
+                                      extension=self.file_extension):
             await show_notification(
                 self.page,
                 f"⛔ Нет заготовленных сообщений для автоответчика в папке {path_send_message_folder_answering_machine_message}")

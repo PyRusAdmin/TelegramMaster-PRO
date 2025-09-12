@@ -16,7 +16,7 @@ from thefuzz import fuzz
 
 from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
 from src.core.configs import path_accounts_folder
-from src.core.utils import find_filess, working_with_accounts
+from src.core.utils import Utils
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.proxy.checking_proxy import checking_the_proxy_for_work, reading_proxy_data_from_the_database
 from src.gui.gui import AppLogger
@@ -33,6 +33,7 @@ class TGConnect:
         self.api_id = self.api_id_api_hash[0]
         self.api_hash = self.api_id_api_hash[1]
         self.app_logger = AppLogger(page)
+        self.utils = Utils(page=page)
 
     async def getting_account_data(self, client):
         """Получаем данные аккаунта"""
@@ -71,8 +72,8 @@ class TGConnect:
                 if not await client.is_user_authorized():  # Если аккаунт не авторизирован
                     await client.disconnect()
                     await asyncio.sleep(5)
-                    working_with_accounts(f"user_data/accounts/{session_name}.session",
-                                          f"user_data/accounts/banned/{session_name}.session")
+                    self.utils.working_with_accounts(f"user_data/accounts/{session_name}.session",
+                                                     f"user_data/accounts/banned/{session_name}.session")
                 else:
                     await self.app_logger.log_and_display(f"Аккаунт {session_name} авторизован")
                     await client.disconnect()  # Отключаемся после проверки
@@ -84,8 +85,8 @@ class TGConnect:
                 await asyncio.sleep(2)
             except sqlite3.OperationalError:
                 await client.disconnect()
-                working_with_accounts(f"user_data/accounts/{session_name}.session",
-                                      f"user_data/accounts/banned/{session_name}.session")
+                self.utils.working_with_accounts(f"user_data/accounts/{session_name}.session",
+                                                 f"user_data/accounts/banned/{session_name}.session")
             except AttributeError:
                 pass
         except Exception as error:
@@ -105,12 +106,12 @@ class TGConnect:
         try:
             await self.app_logger.log_and_display(message=f"⛔ Аккаунт banned: {session_name}. {str(exception)}")
             await telegram_client.disconnect()
-            working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
-                                  new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+            self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
+                                             new_account_folder=f"user_data/accounts/banned/{session_name}.session")
         except sqlite3.OperationalError:
             await telegram_client.disconnect()
-            working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
-                                  new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+            self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
+                                             new_account_folder=f"user_data/accounts/banned/{session_name}.session")
 
     async def check_for_spam(self) -> None:
         """
@@ -118,7 +119,7 @@ class TGConnect:
         """
         try:
             start = await self.app_logger.start_time()
-            for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
+            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 client: TelegramClient = await self.get_telegram_client(session_name=session_name,
                                                                         account_directory=path_accounts_folder)
                 try:
@@ -142,8 +143,8 @@ class TGConnect:
                             await self.app_logger.log_and_display(
                                 message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
                             # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
-                            working_with_accounts(f"user_data/accounts/{session_name}.session",
-                                                  f"user_data/accounts/banned/{session_name}.session")
+                            self.utils.working_with_accounts(f"user_data/accounts/{session_name}.session",
+                                                             f"user_data/accounts/banned/{session_name}.session")
                         similarity_ratio_en: int = fuzz.ratio(f"{message.message}",
                                                               "I’m very sorry that you had to contact me. Unfortunately, "
                                                               "some account_actions can trigger a harsh response from our "
@@ -160,8 +161,8 @@ class TGConnect:
                                 message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
                             # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
                             await self.app_logger.log_and_display(message=f"{session_name}")
-                            working_with_accounts(f"user_data/accounts/{session_name}.session",
-                                                  f"user_data/accounts/banned/{session_name}.session")
+                            self.utils.working_with_accounts(f"user_data/accounts/{session_name}.session",
+                                                             f"user_data/accounts/banned/{session_name}.session")
                         await self.app_logger.log_and_display(
                             message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
                         try:
@@ -221,7 +222,7 @@ class TGConnect:
             start = await self.app_logger.start_time()
             await checking_the_proxy_for_work(page=self.page)  # Проверка proxy
             # Сканирование каталога с аккаунтами
-            for session_file in find_filess(directory_path=path_accounts_folder, extension='session'):
+            for session_file in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 await self.app_logger.log_and_display(message=f"⚠️ Проверяемый аккаунт: {session_file}")
                 # Проверка аккаунтов
                 await self.verify_account(session_name=session_file)
@@ -239,7 +240,7 @@ class TGConnect:
             start = await self.app_logger.start_time()
             await checking_the_proxy_for_work(page=self.page)  # Проверка proxy
             # Сканирование каталога с аккаунтами
-            for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
+            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 await self.app_logger.log_and_display(message=f"⚠️ Переименовываемый аккаунт: {session_name}")
                 # Переименовывание аккаунтов
                 client = await self.get_telegram_client(session_name=session_name,
@@ -253,13 +254,13 @@ class TGConnect:
                     await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
                     await self.app_logger.log_and_display(
                         message=f"⛔ Битый файл или аккаунт banned: {session_name}.session. Возможно, запущен под другим IP")
-                    working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
-                                          new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                    self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
+                                                     new_account_folder=f"user_data/accounts/banned/{session_name}.session")
                 except AuthKeyUnregisteredError:
                     await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
                     await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
-                    working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
-                                          new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                    self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
+                                                     new_account_folder=f"user_data/accounts/banned/{session_name}.session")
             await self.app_logger.end_time(start)
             await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
         except Exception as error:
@@ -343,8 +344,8 @@ class TGConnect:
         except AuthKeyDuplicatedError:
             await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
             await self.app_logger.log_and_display(message=f"❌ Аккаунт {session_name} запущен под другим ip")
-            working_with_accounts(f"{account_directory}/{session_name}.session",
-                                  f"user_data/accounts/banned/{session_name}.session")
+            self.utils.working_with_accounts(f"{account_directory}/{session_name}.session",
+                                             f"user_data/accounts/banned/{session_name}.session")
             return None
         except AttributeError as error:
             await self.app_logger.log_and_display(message=f"❌ Ошибка: {error}")
