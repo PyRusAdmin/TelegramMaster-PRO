@@ -153,9 +153,10 @@ async def main(page: ft.Page):
         elif page.route == "/settings":  # Меню "Настройки TelegramMaster"
             await settings_menu(page=page)
 
-        elif page.route == "/choice_of_reactions":  # Выбор реакций
+        elif page.route == "/choice_of_reactions":  # 👍 Выбор реакций
             await setting_page.reaction_gui()
-        
+        elif page.route == "/proxy_entry":  # 🔐 Запись proxy
+            await setting_page.creating_the_main_window_for_proxy_data_entry()
 
         elif page.route == "/recording_api_id_api_hash":  # Запись api_id, api_hash
             await setting_page.writing_api_id_api_hash()
@@ -169,8 +170,7 @@ async def main(page: ft.Page):
         elif page.route == "/forming_list_of_chats_channels":  # Формирование списка чатов / каналов
             await setting_page.output_the_input_field(page, "writing_group_links", "writing_group_links",
                                                       "/settings", "writing_group_links")
-        elif page.route == "/proxy_entry":  # Запись proxy
-            await setting_page.creating_the_main_window_for_proxy_data_entry()
+
         elif page.route == "/message_recording":  # Запись сообщений
             await setting_page.recording_text_for_sending_messages("Введите текст для сообщения",
                                                                    setting_page.get_unique_filename(
