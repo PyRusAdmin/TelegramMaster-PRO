@@ -20,7 +20,7 @@ from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.gui_input_builders import LinkInputRowBuilder, TimeInputRowBuilder
-from src.features.settings.setting import recording_limits_file, writing_settings_to_a_file
+from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
@@ -33,6 +33,7 @@ class SubscribeUnsubscribeTelegram:
         self.tg_connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
+        self.setting_page = SettingPage(page=page)
 
     async def subscribe_and_unsubscribe_menu(self):
         """
@@ -108,9 +109,10 @@ class SubscribeUnsubscribeTelegram:
                 larger_times = int(larger_timex.value)
                 if smaller_times < larger_times:  # Проверяем, что первое время меньше второго
                     # Если условие прошло проверку, то возвращаем первое и второе время
-                    writing_settings_to_a_file(
-                        await recording_limits_file(str(smaller_times), str(larger_times), variable="time_subscription",
-                                                    page=self.page))
+                    self.setting_page.writing_settings_to_a_file(
+                        await self.setting_page.recording_limits_file(time_1=str(smaller_times),
+                                                                      time_2=str(larger_times),
+                                                                      variable="time_subscription"))
                     list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
                     await show_notification(self.page, "Данные успешно записаны!")
                     # page.go("/settings")  # Изменение маршрута в представлении существующих настроек

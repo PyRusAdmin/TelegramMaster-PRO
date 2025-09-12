@@ -46,6 +46,7 @@ class InvitingToAGroup:
         self.app_logger = AppLogger(page=page)
         self.tg_connect = TGConnect(page=page)
         self.utils = Utils(page=page)
+        self.setting_page = SettingPage(page=page)
 
     async def inviting_menu(self):
         """
@@ -175,17 +176,17 @@ class InvitingToAGroup:
 
         async def write_tame_start_inviting(_):
             """Записывает время запуска инвайтинга по времени. Час запуска и минуты запуска"""
-            await SettingPage(self.page).recording_the_time_to_launch_an_invite_every_day(hour_textfield,
-                                                                                          minutes_textfield)
+            await self.setting_page.recording_the_time_to_launch_an_invite_every_day(hour_textfield,
+                                                                                     minutes_textfield)
 
         async def write_limit_account_inviting_timex(_):
             """Записывает время между сном во время ивайтинга"""
-            await SettingPage(self.page).create_main_window(variable="time_inviting", smaller_timex=smaller_timex,
-                                                            larger_timex=larger_timex)
+            await self.setting_page.create_main_window(variable="time_inviting", smaller_timex=smaller_timex,
+                                                       larger_timex=larger_timex)
 
         async def write_limit_account_inviting(_):
             """Записывает лимит на аккаунт для инвайтинга"""
-            await SettingPage(self.page).record_setting(limit_type="account_limits", limits=limits)
+            await self.setting_page.record_setting(limit_type="account_limits", limits=limits)
 
         async def start_inviting_grup(_):
             """
