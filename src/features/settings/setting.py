@@ -53,31 +53,29 @@ class SettingPage:
             self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
             self.page.update()
 
-        self.add_view_with_fields_and_button(self.page,
-                                             [proxy_type, addr_type, port_type, username_type, password_type],
+        self.add_view_with_fields_and_button([proxy_type, addr_type, port_type, username_type, password_type],
                                              btn_click)
 
-    async def recording_text_for_sending_messages(self, page: ft.Page, label, unique_filename) -> None:
+    async def recording_text_for_sending_messages(self, label, unique_filename) -> None:
         """
         Запись текста в файл для отправки сообщений в Telegram в формате JSON. Данные записываются в файл с именем
         <имя файла>.json и сохраняются в формате JSON.
 
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         :param label: Текст для отображения в поле ввода.
         :param unique_filename: Имя файла для записи данных.
         """
-        page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+        self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
         list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
         text_to_send = ft.TextField(label=label, multiline=True, max_lines=19)
 
         async def btn_click(_) -> None:
-            write_data_to_json_file(reactions=text_to_send.value,
-                                    path_to_the_file=unique_filename)  # Сохраняем данные в файл
-            await show_notification(page, "Данные успешно записаны!")
-            page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-            page.update()
+            self.write_data_to_json_file(reactions=text_to_send.value,
+                                         path_to_the_file=unique_filename)  # Сохраняем данные в файл
+            await show_notification(self.page, "Данные успешно записаны!")
+            self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+            self.page.update()
 
-        self.add_view_with_fields_and_button(page, [text_to_send], btn_click)
+        self.add_view_with_fields_and_button([text_to_send], btn_click)
 
     async def record_setting(self, limit_type: str, limits):
         """
@@ -89,7 +87,7 @@ class SettingPage:
         try:
             config.get(limit_type, limit_type)
             config.set(limit_type, limit_type, limits.value)
-            writing_settings_to_a_file(config)
+            self.writing_settings_to_a_file(config)
             await show_notification(self.page, "Данные успешно записаны!")
         except configparser.NoSectionError as error:
             await show_notification(self.page, "⚠️ Поврежден файл user_data/config/config.ini")
@@ -111,7 +109,7 @@ class SettingPage:
             config.set("hour_minutes_every_day", "hour", str(hour))
             config.get("hour_minutes_every_day", "minutes")
             config.set("hour_minutes_every_day", "minutes", str(minutes))
-            writing_settings_to_a_file(config)
+            self.writing_settings_to_a_file(config)
             await show_notification(self.page, "Данные успешно записаны!")
 
         except ValueError:
@@ -130,9 +128,8 @@ class SettingPage:
             larger_times = int(larger_timex.value)
             if smaller_times < larger_times:  # Проверяем, что первое время меньше второго
                 # Если условие прошло проверку, то возвращаем первое и второе время
-                writing_settings_to_a_file(
-                    await recording_limits_file(str(smaller_times), str(larger_times), variable=variable,
-                                                page=self.page))
+                self.writing_settings_to_a_file(
+                    await self.recording_limits_file(str(smaller_times), str(larger_times), variable=variable))
                 list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
                 await show_notification(self.page, "Данные успешно записаны!")
                 self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
@@ -142,13 +139,11 @@ class SettingPage:
             list_view.controls.append(ft.Text("Ошибка: введите числовые значения!"))
         self.page.update()  # обновляем страницу
 
-    async def writing_api_id_api_hash(self, page: ft.Page):
+    async def writing_api_id_api_hash(self):
         """
         Записываем api, hash полученный с помощью регистрации приложения на сайте https://my.telegram.org/auth
-
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         """
-        page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+        self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
         list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
         api_id_data = ft.TextField(label="Введите api_id", multiline=True, max_lines=19)
         api_hash_data = ft.TextField(label="Введите api_hash", multiline=True, max_lines=19)
@@ -158,18 +153,16 @@ class SettingPage:
             config.set("telegram_settings", "id", api_id_data.value)
             config.get("telegram_settings", "hash")
             config.set("telegram_settings", "hash", api_hash_data.value)
-            writing_settings_to_a_file(config)
-            page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-            page.update()
+            self.writing_settings_to_a_file(config)
+            self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+            self.page.update()
 
-        self.add_view_with_fields_and_button(page, [api_id_data, api_hash_data], btn_click)
+        self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
 
-    @staticmethod
-    def add_view_with_fields_and_button(page: ft.Page, fields: list, btn_click) -> None:
+    def add_view_with_fields_and_button(self, fields: list, btn_click) -> None:
         """
         Добавляет представление с заданными текстовыми полями и кнопкой.
 
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         :param fields: Список текстовых полей для добавления
         :param btn_click: Кнопка для добавления
         :return: None
@@ -177,10 +170,10 @@ class SettingPage:
 
         def back_button_clicked(_) -> None:
             """Кнопка возврата в меню настроек"""
-            page.go("/settings")
+            self.page.go("/settings")
 
         # Создание View с элементами
-        page.views.append(
+        self.page.views.append(
             ft.View(
                 "/settings",
                 controls=[
@@ -196,106 +189,100 @@ class SettingPage:
                         ]
                     )]))
 
+    def writing_settings_to_a_file(self, config) -> None:
+        """Запись данных в файл user_data/config.ini"""
+        with open("user_data/config/config.ini", "w") as setup:  # Открываем файл в режиме записи
+            config.write(setup)  # Записываем данные в файл
 
-def writing_settings_to_a_file(config) -> None:
-    """Запись данных в файл user_data/config.ini"""
-    with open("user_data/config/config.ini", "w") as setup:  # Открываем файл в режиме записи
-        config.write(setup)  # Записываем данные в файл
+    async def recording_limits_file(self, time_1, time_2, variable: str) -> configparser.ConfigParser:
+        """
+        Запись данных в файл TelegramMaster/user_data/config.ini
 
+        :param time_1: Время в секундах
+        :param time_2: Время в секундах
+        :param variable: Название переменной в файле config.ini
+        """
+        try:
+            config.get(f"{variable}", f"{variable}_1")
+            config.set(f"{variable}", f"{variable}_1", time_1)
+            config.get(f"{variable}", f"{variable}_2")
+            config.set(f"{variable}", f"{variable}_2", time_2)
+        except configparser.NoSectionError as error:
+            await log_and_display(
+                message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config/config.ini",
+                page=page)
+        return config
 
-async def recording_limits_file(time_1, time_2, variable: str, page: ft.Page) -> configparser.ConfigParser:
-    """
-    Запись данных в файл TelegramMaster/user_data/config.ini
+    def write_data_to_json_file(self, reactions, path_to_the_file):
+        """Открываем файл для записи данных в формате JSON"""
+        with open(path_to_the_file, 'w', encoding='utf-8') as file:
+            json.dump(reactions, file, ensure_ascii=False, indent=4)
 
-    :param time_1: Время в секундах
-    :param time_2: Время в секундах
-    :param variable: Название переменной в файле config.ini
-    :param page: Страница интерфейса Flet для отображения элементов управления.
-    """
-    try:
-        config.get(f"{variable}", f"{variable}_1")
-        config.set(f"{variable}", f"{variable}_1", time_1)
-        config.get(f"{variable}", f"{variable}_2")
-        config.set(f"{variable}", f"{variable}_2", time_2)
-    except configparser.NoSectionError as error:
-        await log_and_display(
-            message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config/config.ini",
-            page=page)
-    return config
+    def get_unique_filename(self, base_filename) -> str:
+        """Функция для получения уникального имени файла"""
+        index = 1
+        while True:
+            new_filename = f"{base_filename}_{index}.json"
+            if not os.path.isfile(new_filename):
+                return new_filename
+            index += 1
 
+    async def reaction_gui(self):
+        """
+        Выбираем реакцию с помощью чекбокса
+        """
 
-def write_data_to_json_file(reactions, path_to_the_file):
-    """Открываем файл для записи данных в формате JSON"""
-    with open(path_to_the_file, 'w', encoding='utf-8') as file:
-        json.dump(reactions, file, ensure_ascii=False, indent=4)
+        t = ft.Text(value='Выберите реакцию')  # Создает текстовое поле (t).
 
+        # Создаем все чекбоксы единожды и сохраняем их в списке
+        checkboxes = [
+            ft.Checkbox(label="😀"), ft.Checkbox(label="😎"), ft.Checkbox(label="😍"),
+            ft.Checkbox(label="😂"), ft.Checkbox(label="😡"), ft.Checkbox(label="😱"),
+            ft.Checkbox(label="😭"), ft.Checkbox(label="👍"), ft.Checkbox(label="👎"),
+            ft.Checkbox(label="❤"), ft.Checkbox(label="🔥"), ft.Checkbox(label="🎉"),
+            ft.Checkbox(label="😁"), ft.Checkbox(label="😢"), ft.Checkbox(label="💩"),
+            ft.Checkbox(label="👏"), ft.Checkbox(label="🤷‍♀️"), ft.Checkbox(label="🤷"),
+            ft.Checkbox(label="🤷‍♂️"), ft.Checkbox(label="👾"), ft.Checkbox(label="🙊"),
+            ft.Checkbox(label="💊"), ft.Checkbox(label="😘"), ft.Checkbox(label="🦄"),
+            ft.Checkbox(label="💘"), ft.Checkbox(label="🆒"), ft.Checkbox(label="🗿"),
+            ft.Checkbox(label="🤪"), ft.Checkbox(label="💅"), ft.Checkbox(label="☃️"),
+            ft.Checkbox(label="🎄"), ft.Checkbox(label="🎅"), ft.Checkbox(label="🤗"),
+            ft.Checkbox(label="🤬"), ft.Checkbox(label="🤮"), ft.Checkbox(label="🤡"),
+            ft.Checkbox(label="🥴"), ft.Checkbox(label="💯"), ft.Checkbox(label="🌭"),
+            ft.Checkbox(label="⚡️"), ft.Checkbox(label="🍌"), ft.Checkbox(label="🖕"),
+            ft.Checkbox(label="💋"), ft.Checkbox(label="👀"), ft.Checkbox(label="🤝"),
+            ft.Checkbox(label="🍾"), ft.Checkbox(label="🏆"), ft.Checkbox(label="🥱"),
+            ft.Checkbox(label="🕊"), ft.Checkbox(label="😭")
+        ]
 
-def get_unique_filename(base_filename) -> str:
-    """Функция для получения уникального имени файла"""
-    index = 1
-    while True:
-        new_filename = f"{base_filename}_{index}.json"
-        if not os.path.isfile(new_filename):
-            return new_filename
-        index += 1
+        async def button_clicked(_) -> None:
+            """Выбранная реакция"""
+            selected_reactions = [checkbox.label for checkbox in checkboxes if
+                                  checkbox.value]  # Получаем только выбранные реакции
+            self.write_data_to_json_file(reactions=selected_reactions,
+                                         path_to_the_file='user_data/reactions/reactions.json')
 
+            await show_notification(self.page, "Данные успешно записаны!")
+            self.page.go("/settings")  # Переход к странице настроек
 
-async def reaction_gui(page: ft.Page):
-    """
-    Выбираем реакцию с помощью чекбокса
+        async def back_button_clicked(_) -> None:
+            """Кнопка возврата в меню настроек"""
+            self.page.go("/settings")
 
-    :param page: Страница интерфейса Flet для отображения элементов управления.
-    """
-
-    t = ft.Text(value='Выберите реакцию')  # Создает текстовое поле (t).
-
-    # Создаем все чекбоксы единожды и сохраняем их в списке
-    checkboxes = [
-        ft.Checkbox(label="😀"), ft.Checkbox(label="😎"), ft.Checkbox(label="😍"),
-        ft.Checkbox(label="😂"), ft.Checkbox(label="😡"), ft.Checkbox(label="😱"),
-        ft.Checkbox(label="😭"), ft.Checkbox(label="👍"), ft.Checkbox(label="👎"),
-        ft.Checkbox(label="❤"), ft.Checkbox(label="🔥"), ft.Checkbox(label="🎉"),
-        ft.Checkbox(label="😁"), ft.Checkbox(label="😢"), ft.Checkbox(label="💩"),
-        ft.Checkbox(label="👏"), ft.Checkbox(label="🤷‍♀️"), ft.Checkbox(label="🤷"),
-        ft.Checkbox(label="🤷‍♂️"), ft.Checkbox(label="👾"), ft.Checkbox(label="🙊"),
-        ft.Checkbox(label="💊"), ft.Checkbox(label="😘"), ft.Checkbox(label="🦄"),
-        ft.Checkbox(label="💘"), ft.Checkbox(label="🆒"), ft.Checkbox(label="🗿"),
-        ft.Checkbox(label="🤪"), ft.Checkbox(label="💅"), ft.Checkbox(label="☃️"),
-        ft.Checkbox(label="🎄"), ft.Checkbox(label="🎅"), ft.Checkbox(label="🤗"),
-        ft.Checkbox(label="🤬"), ft.Checkbox(label="🤮"), ft.Checkbox(label="🤡"),
-        ft.Checkbox(label="🥴"), ft.Checkbox(label="💯"), ft.Checkbox(label="🌭"),
-        ft.Checkbox(label="⚡️"), ft.Checkbox(label="🍌"), ft.Checkbox(label="🖕"),
-        ft.Checkbox(label="💋"), ft.Checkbox(label="👀"), ft.Checkbox(label="🤝"),
-        ft.Checkbox(label="🍾"), ft.Checkbox(label="🏆"), ft.Checkbox(label="🥱"),
-        ft.Checkbox(label="🕊"), ft.Checkbox(label="😭")
-    ]
-
-    async def button_clicked(_) -> None:
-        """Выбранная реакция"""
-        selected_reactions = [checkbox.label for checkbox in checkboxes if
-                              checkbox.value]  # Получаем только выбранные реакции
-        write_data_to_json_file(reactions=selected_reactions, path_to_the_file='user_data/reactions/reactions.json')
-
-        await show_notification(page, "Данные успешно записаны!")
-        page.go("/settings")  # Переход к странице настроек
-
-    async def back_button_clicked(_) -> None:
-        """Кнопка возврата в меню настроек"""
-        page.go("/settings")
-
-    # Добавляем элементы на страницу
-    page.views.append(
-        ft.View(
-            "/settings",
-            controls=[
-                t,
-                ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),  # Чекбоксы в колонках
-                ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                  text=translations["ru"]["buttons"]["done"],
-                                  on_click=button_clicked),  # Кнопка "Готово",
-                ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                  text=translations["ru"]["buttons"]["back"],
-                                  on_click=back_button_clicked),  # Кнопка "Назад"
-            ]
+        # Добавляем элементы на страницу
+        self.page.views.append(
+            ft.View(
+                "/settings",
+                controls=[
+                    t,
+                    ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
+                    # Чекбоксы в колонках
+                    ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                      text=translations["ru"]["buttons"]["done"],
+                                      on_click=button_clicked),  # Кнопка "Готово",
+                    ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                      text=translations["ru"]["buttons"]["back"],
+                                      on_click=back_button_clicked),  # Кнопка "Назад"
+                ]
+            )
         )
-    )

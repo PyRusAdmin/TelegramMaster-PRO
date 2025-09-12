@@ -8,7 +8,7 @@ from loguru import logger  # Импортируем библиотеку loguru 
 from telethon.tl.functions.messages import GetMessagesViewsRequest
 
 from src.core.configs import path_accounts_folder, WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
-from src.core.utils import find_filess
+from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
@@ -27,6 +27,7 @@ class ViewingPosts:
         self.tg_connect = TGConnect(page=page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
         self.app_logger = AppLogger(page=page)
+        self.utils = Utils(page=page)
 
     async def viewing_posts_menu(self):
         """Отображает меню работы с просмотрами."""
@@ -56,13 +57,13 @@ class ViewingPosts:
 
             async def btn_click(_) -> None:
 
-                for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
-                    client = await self.tg_connect.get_telegram_client(self.page, session_name,
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    client = await self.tg_connect.get_telegram_client(session_name,
                                                                        account_directory=path_accounts_folder)
                     await self.app_logger.log_and_display(f"[+] Работаем с каналом: {link_channel.value}")
                     await self.sub_unsub_tg.subscribe_to_group_or_channel(client, link_channel.value, self.page)
                     msg_id = int(re.search(r'/(\d+)$', link_post.value).group(1))  # Получаем id сообщения из ссылки
-                    await self.viewing_posts(client, link_post.value, msg_id, link_channel.value, self.page)
+                    await self.viewing_posts(client, link_post.value, msg_id, link_channel.value)
                     await asyncio.sleep(1)
                     await client.disconnect()
                     # Изменение маршрута на новый (если необходимо)
@@ -90,7 +91,7 @@ class ViewingPosts:
         """
         try:
             try:
-                await self.sub_unsub_tg.subscribe_to_group_or_channel(client, link_channel, self.page)
+                await self.sub_unsub_tg.subscribe_to_group_or_channel(client, link_channel)
                 channel = await client.get_entity(link_channel)  # Получение информации о канале
                 await asyncio.sleep(5)
                 await self.app_logger.log_and_display(f"Ссылка на пост: {link_post}\n")

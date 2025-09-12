@@ -16,8 +16,7 @@ from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON, pa
                               TIME_SENDING_MESSAGES_1, time_sending_messages_2, time_subscription_1,
                               time_subscription_2)
 from src.core.sqlite_working_tools import select_records_with_limit, open_and_read_data
-from src.core.utils import (all_find_files, find_files, find_filess, read_json_file, record_and_interrupt,
-                            record_inviting_results)
+from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
@@ -37,6 +36,7 @@ class SendTelegramMessages:
         self.account_extension = "session"  # Расширение файла аккаунта
         self.file_extension = "json"
         self.app_logger = AppLogger(page=page)
+        self.utils = Utils(page=page)
 
     async def send_files_to_personal_chats(self) -> None:
         """
@@ -60,7 +60,7 @@ class SendTelegramMessages:
             if time_from < time_to:
                 try:
                     # Просим пользователя ввести расширение сообщения
-                    for session_name in find_filess(directory_path=path_accounts_folder,
+                    for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
                                                     extension=self.account_extension):
                         client = await self.tg_connect.get_telegram_client(session_name,
                                                                            account_directory=path_accounts_folder)
@@ -77,16 +77,17 @@ class SendTelegramMessages:
                                     user_to_add = await client.get_input_entity(username)
                                     messages, files = await self.all_find_and_all_files()
                                     await self.send_content(client, user_to_add, messages, files)
-                                    await self.app_logger.log_and_display(f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
-                                    await record_inviting_results(time_from, time_to, rows, self.page)
+                                    await self.app_logger.log_and_display(
+                                        f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
+                                    await self.utils.record_inviting_results(time_from, time_to, rows)
                                 except FloodWaitError as e:
                                     await self.app_logger.log_and_display(
                                         f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                         level="error")
-                                    await record_and_interrupt(time_from, time_to, self.page)
+                                    await self.utils.record_and_interrupt(time_from, time_to)
                                     break  # Прерываем работу и меняем аккаунт
                                 except PeerFloodError:
-                                    await record_and_interrupt(time_from, time_to, self.page)
+                                    await self.utils.record_and_interrupt(time_from, time_to)
                                     break  # Прерываем работу и меняем аккаунт
                                 except UserNotMutualContactError:
                                     await self.app_logger.log_and_display(
@@ -97,7 +98,7 @@ class SendTelegramMessages:
                                 except ChatWriteForbiddenError:
                                     await self.app_logger.log_and_display(
                                         translations["ru"]["errors"]["chat_write_forbidden"])
-                                    await record_and_interrupt(time_from, time_to, self.page)
+                                    await self.utils.record_and_interrupt(time_from, time_to)
                                     break  # Прерываем работу и меняем аккаунт
                                 except (TypeError, UnboundLocalError):
                                     continue  # Записываем ошибку в software_database.db и продолжаем работу
@@ -168,7 +169,7 @@ class SendTelegramMessages:
 
         if checs == True:
             try:
-                for session_name in find_filess(directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
+                for session_name in self.utils.find_filess(directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
                                                 extension=self.account_extension):
                     client = await self.tg_connect.get_telegram_client(session_name,
                                                                        account_directory=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE)
@@ -178,9 +179,9 @@ class SendTelegramMessages:
                         """Обрабатывает входящие личные сообщения"""
                         if event.is_private:  # Проверяем, является ли сообщение личным
                             await self.app_logger.log_and_display(f"Входящее сообщение: {event.message.message}")
-                            entities = find_files(
+                            entities = self.utils.find_files(
                                 directory_path=path_send_message_folder_answering_machine_message,
-                                extension=self.file_extension, page=self.page)
+                                extension=self.file_extension)
                             await self.app_logger.log_and_display(f"{entities}")
                             data = await self.select_and_read_random_file(entities, folder="answering_machine")
                             await self.app_logger.log_and_display(f"{data}")
@@ -193,7 +194,7 @@ class SendTelegramMessages:
                         try:
                             await self.sub_unsub_tg.subscribe_to_group_or_channel(client, group_link, self.page)
                             # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
-                            messages, files = await self.all_find_and_all_files(self.page)
+                            messages, files = await self.all_find_and_all_files()
                             # Отправляем сообщения и файлы в группу
                             await self.send_content(client, group_link, messages, files)
                         except UserBannedInChannelError:
@@ -210,7 +211,7 @@ class SendTelegramMessages:
         else:
             try:
                 start = await self.app_logger.start_time()
-                for session_name in find_filess(directory_path=path_accounts_folder,
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
                                                 extension=self.account_extension):
                     client = await self.tg_connect.get_telegram_client(session_name,
                                                                        account_directory=path_accounts_folder)
@@ -227,21 +228,21 @@ class SendTelegramMessages:
                             await self.app_logger.log_and_display(
                                 f"Группа {group_link} приватная или подписка запрещена.")
                         except PeerFloodError:
-                            await record_and_interrupt(time_subscription_1, time_subscription_2, self.page)
+                            await self.utils.record_and_interrupt(time_subscription_1, time_subscription_2)
                             break  # Прерываем работу и меняем аккаунт
                         except FloodWaitError as e:
                             await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                                                   level="error")
                             await asyncio.sleep(e.seconds)
                         except UserBannedInChannelError:
-                            await record_and_interrupt(time_subscription_1, time_subscription_2, self.page)
+                            await self.utils.record_and_interrupt(time_subscription_1, time_subscription_2)
                             break  # Прерываем работу и меняем аккаунт
                         except ChatAdminRequiredError:
                             await self.app_logger.log_and_display(translations["ru"]["errors"]["admin_rights_required"])
                             break
                         except ChatWriteForbiddenError:
                             await self.app_logger.log_and_display(translations["ru"]["errors"]["chat_write_forbidden"])
-                            await record_and_interrupt(time_subscription_1, time_subscription_2, self.page)
+                            await self.utils.record_and_interrupt(time_subscription_1, time_subscription_2)
                             break  # Прерываем работу и меняем аккаунт
                         except SlowModeWaitError as e:
                             await self.app_logger.log_and_display(translations["ru"]["errors"]["slow_mode_wait"])
@@ -335,9 +336,8 @@ class SendTelegramMessages:
         """
         Находит все файлы в папке с сообщениями и папке с файлами для отправки.
         """
-        messages = find_files(directory_path=path_folder_with_messages, extension=self.file_extension,
-                              page=self.page)
-        files = all_find_files(directory_path="user_data/files_to_send")
+        messages = self.utils.find_files(directory_path=path_folder_with_messages, extension=self.file_extension)
+        files = self.utils.all_find_files(directory_path="user_data/files_to_send")
         return messages, files
 
     async def random_dream(self):
@@ -363,7 +363,7 @@ class SendTelegramMessages:
                 # Выбираем рандомный файл для чтения
                 random_file = random.choice(entities)  # Выбираем случайный файл для чтения из списка файлов
                 await self.app_logger.log_and_display(f"Выбран файл для чтения: {random_file[0]}.json")
-                data = read_json_file(filename=f"user_data/{folder}/{random_file[0]}.json")
+                data = self.utils.read_json_file(filename=f"user_data/{folder}/{random_file[0]}.json")
             return data  # Возвращаем данные из файла
         except Exception as error:
             logger.exception(error)
