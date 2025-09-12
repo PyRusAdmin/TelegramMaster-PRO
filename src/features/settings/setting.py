@@ -9,6 +9,7 @@ import flet as ft  # Импортируем библиотеку flet
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.sqlite_working_tools import save_proxy_data_to_db
+from src.features.account.parsing.gui_elements import GUIProgram
 from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
@@ -265,24 +266,24 @@ class SettingPage:
             await show_notification(self.page, "Данные успешно записаны!")
             self.page.go("/settings")  # Переход к странице настроек
 
-        async def back_button_clicked(_) -> None:
-            """Кнопка возврата в меню настроек"""
-            self.page.go("/settings")
+        # async def back_button_clicked(_) -> None:
+        #     """Кнопка возврата в меню настроек"""
+        #     self.page.go("/settings")
 
         # Добавляем элементы на страницу
         self.page.views.append(
             ft.View(
                 "/settings",
-                controls=[
-                    t,
-                    ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
-                    # Чекбоксы в колонках
-                    ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["buttons"]["done"],
-                                      on_click=button_clicked),  # Кнопка "Готово",
-                    ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["buttons"]["back"],
-                                      on_click=back_button_clicked),  # Кнопка "Назад"
-                ]
+                controls=[await GUIProgram().key_app_bar(),
+                          t,
+                          ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
+                          # Чекбоксы в колонках
+                          ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                            text=translations["ru"]["buttons"]["done"],
+                                            on_click=button_clicked),  # Кнопка "Готово",
+                          # ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                          #                   text=translations["ru"]["buttons"]["back"],
+                          #                   on_click=back_button_clicked),  # Кнопка "Назад"
+                          ]
             )
         )

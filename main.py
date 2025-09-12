@@ -45,6 +45,8 @@ async def main(page: ft.Page):
     page.window.height = WINDOW_HEIGHT  # Высота окна
     page.window.resizable = WINDOW_RESIZABLE  # Разрешение изменения размера окна
     app_logger = AppLogger(page=page)
+    setting_page = SettingPage(page=page)
+    account_bio = AccountBIO(page=page)
 
     async def route_change(_):
         page.views.clear()
@@ -98,9 +100,9 @@ async def main(page: ft.Page):
             logger.info("▶️ Начало Формирования списка контактов")
             open_and_read_data(table_name="contact")  # Удаление списка с контактами
             # TODO миграция на PEEWEE
-            await SettingPage(page=page).output_the_input_field(page=page, table_name="contact",
-                                                                column_name="contact", route="/working_with_contacts",
-                                                                into_columns="contact")
+            await setting_page.output_the_input_field(page=page, table_name="contact",
+                                                      column_name="contact", route="/working_with_contacts",
+                                                      into_columns="contact")
             logger.info("🔚 Конец Формирования списка контактов")
             await app_logger.end_time(start)
         elif page.route == "/show_list_contacts":  # Показать список контактов
@@ -137,55 +139,53 @@ async def main(page: ft.Page):
         elif page.route == "/bio_editing":  # Меню "Редактирование_BIO"
             await bio_editing_menu(page=page)
         elif page.route == "/edit_description":  # Изменение описания
-            await AccountBIO(page=page).change_bio_profile_gui()
+            await account_bio.change_bio_profile_gui()
         elif page.route == "/name_change":  # Изменение имени профиля Telegram
-            await AccountBIO(page=page).change_name_profile_gui()
+            await account_bio.change_name_profile_gui()
         elif page.route == "/change_surname":  # Изменение фамилии
-            await AccountBIO(page=page).change_last_name_profile_gui()
+            await account_bio.change_last_name_profile_gui()
         elif page.route == "/edit_photo":  # Изменение фото
-            await AccountBIO(page=page).change_photo_profile_gui()
+            await account_bio.change_photo_profile_gui()
             await show_notification(page=page, message="🔚 Фото изменено")  # Выводим уведомление пользователю
         elif page.route == "/changing_username":  # Изменение username
-            await AccountBIO(page=page).change_username_profile_gui()
+            await account_bio.change_username_profile_gui()
         # __________________________________________________________________________________________________________
         elif page.route == "/settings":  # Меню "Настройки TelegramMaster"
             await settings_menu(page=page)
-        elif page.route == "/recording_api_id_api_hash":  # Запись api_id, api_hash
-            await SettingPage(page=page).writing_api_id_api_hash()
-        elif page.route == "/message_limits":  # Лимиты на сообщения
-            await SettingPage(page=page).record_setting("message_limits", "Введите лимит на сообщения")
-        elif page.route == "/creating_username_list":  # Формирование списка username
-            await SettingPage(page=page).output_the_input_field(page, "members",
-                                                                "username, id, access_hash, first_name, last_name, "
-                                                                "user_phone, online_at, photos_id, user_premium",
-                                                                "/settings", "members (username)")
-        elif page.route == "/forming_list_of_chats_channels":  # Формирование списка чатов / каналов
-            await SettingPage(page=page).output_the_input_field(page, "writing_group_links", "writing_group_links",
-                                                                "/settings", "writing_group_links")
-        elif page.route == "/proxy_entry":  # Запись proxy
-            await SettingPage(page=page).creating_the_main_window_for_proxy_data_entry()
-        elif page.route == "/message_recording":  # Запись сообщений
-            await SettingPage(page=page).recording_text_for_sending_messages("Введите текст для сообщения",
-                                                                             SettingPage(page=page).get_unique_filename(
-                                                                                 base_filename='user_data/message/message'))
-        elif page.route == "/recording_reaction_link":  # Запись ссылки для реакций
-            await SettingPage(page=page).recording_text_for_sending_messages("Введите ссылку для реакций",
-                                                                             'user_data/reactions/link_channel.json')
+
         elif page.route == "/choice_of_reactions":  # Выбор реакций
-            await SettingPage(page=page).reaction_gui()
+            await setting_page.reaction_gui()
+        
+
+        elif page.route == "/recording_api_id_api_hash":  # Запись api_id, api_hash
+            await setting_page.writing_api_id_api_hash()
+        elif page.route == "/message_limits":  # Лимиты на сообщения
+            await setting_page.record_setting("message_limits", "Введите лимит на сообщения")
+        elif page.route == "/creating_username_list":  # Формирование списка username
+            await setting_page.output_the_input_field(page, "members",
+                                                      "username, id, access_hash, first_name, last_name, "
+                                                      "user_phone, online_at, photos_id, user_premium",
+                                                      "/settings", "members (username)")
+        elif page.route == "/forming_list_of_chats_channels":  # Формирование списка чатов / каналов
+            await setting_page.output_the_input_field(page, "writing_group_links", "writing_group_links",
+                                                      "/settings", "writing_group_links")
+        elif page.route == "/proxy_entry":  # Запись proxy
+            await setting_page.creating_the_main_window_for_proxy_data_entry()
+        elif page.route == "/message_recording":  # Запись сообщений
+            await setting_page.recording_text_for_sending_messages("Введите текст для сообщения",
+                                                                   setting_page.get_unique_filename(
+                                                                       base_filename='user_data/message/message'))
+        elif page.route == "/recording_reaction_link":  # Запись ссылки для реакций
+            await setting_page.recording_text_for_sending_messages("Введите ссылку для реакций",
+                                                                   'user_data/reactions/link_channel.json')
+
         elif page.route == "/recording_the_time_between_messages":  # Запись времени между сообщениями
 
-            await SettingPage(page=page).create_main_window(
-                variable="time_sending_messages",
-                time_range=[TIME_SENDING_MESSAGES_1,
-                            time_sending_messages_2]
-            )
+            await setting_page.create_main_window(variable="time_sending_messages",
+                                                  time_range=[TIME_SENDING_MESSAGES_1, time_sending_messages_2])
         elif page.route == "/changing_accounts":  # Смена аккаунтов
-            await SettingPage(page=page).create_main_window(
-                variable="time_changing_accounts",
-                time_range=[time_changing_accounts_1,
-                            time_changing_accounts_2]
-            )
+            await setting_page.create_main_window(variable="time_changing_accounts",
+                                                  time_range=[time_changing_accounts_1, time_changing_accounts_2])
 
         page.update()
 
