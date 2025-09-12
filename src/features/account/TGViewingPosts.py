@@ -8,23 +8,21 @@ from loguru import logger  # Импортируем библиотеку loguru 
 from telethon.errors import SessionRevokedError
 from telethon.tl.functions.messages import GetMessagesViewsRequest
 
-from src.core.configs import path_accounts_folder, WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
+from src.core.configs import path_accounts_folder
 from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
-from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
-from src.locales.translations_loader import translations
 
 
 class ViewingPosts:
     """
-    Функционал для накрутки просмотров постов в Telegram.
+    Функционал для накрутки просмотров постов каналов в Telegram.
     """
 
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
         self.page = page
         self.tg_connect = TGConnect(page=page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
@@ -32,25 +30,6 @@ class ViewingPosts:
         self.utils = Utils(page=page)
         self.function_button = FunctionButton(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
-
-    async def viewing_posts_menu(self):
-        """Отображает меню работы с просмотрами."""
-        self.page.views.append(
-            ft.View("/viewing_posts_menu",
-                    [await GUIProgram().key_app_bar(),
-                     ft.Text(spans=[ft.TextSpan(
-                         translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                         ft.TextStyle(
-                             size=20, weight=ft.FontWeight.BOLD,
-                             foreground=ft.Paint(
-                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
-                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                         # 👁️‍🗨️ Накручиваем просмотры постов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                                           on_click=lambda _: self.page.go("/we_are_winding_up_post_views")),
-                     ])]))
 
     async def viewing_posts_request(self) -> None:
         """Окно с полями ввода и кнопками для накрутки просмотров."""

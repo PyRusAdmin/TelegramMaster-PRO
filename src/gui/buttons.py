@@ -3,6 +3,7 @@ import flet as ft  # Импортируем библиотеку flet
 
 from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
 from src.features.account.parsing.gui_elements import GUIProgram
+from src.gui.gui import list_view
 from src.locales.translations_loader import translations
 
 
@@ -73,6 +74,17 @@ class FunctionButton:
                 "/viewing_posts_menu",  # Маршрут для этого представления
                 [
                     await GUIProgram().key_app_bar(),  # Кнопка "Назад"
+
+                    ft.Text(spans=[ft.TextSpan(
+                        translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+                        ft.TextStyle(
+                            size=20, weight=ft.FontWeight.BOLD,
+                            foreground=ft.Paint(
+                                gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
+                                                                                     ft.Colors.PURPLE])), ), ), ], ),
+
+                    list_view,  # Отображение логов 📝
+
                     link_channel,  # Поле ввода ссылки на чат
                     link_post,  # Поле ввода ссылки пост
                     ft.Column(),  # Колонка для размещения других элементов (при необходимости)
