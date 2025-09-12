@@ -11,7 +11,7 @@ from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import SendReactionRequest
 
 from src.core.configs import path_accounts_folder
-from src.core.utils import find_filess, read_json_file
+from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import function_button_ready_reactions
@@ -29,6 +29,7 @@ class WorkingWithReactions:
         self.tg_connect = TGConnect(page=page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
         self.app_logger = AppLogger(page=page)
+        self.utils = Utils(page=page)
 
     async def send_reaction_request(self, page: ft.Page) -> None:
         """
@@ -42,9 +43,8 @@ class WorkingWithReactions:
             message = ft.TextField(label="Введите ссылку на сообщение или пост:", multiline=False, max_lines=1)
 
             async def btn_click(_) -> None:
-                # random_value = await self.choosing_random_reaction()  # Выбираем случайное значение из списка (реакция)
-                for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
-                    client = await self.tg_connect.get_telegram_client(page, session_name,
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    client = await self.tg_connect.get_telegram_client(session_name,
                                                                        account_directory=path_accounts_folder)
                     await self.app_logger.log_and_display(f"[+] Работаем с группой: {chat.value}")
                     await self.sub_unsub_tg.subscribe_to_group_or_channel(client, chat.value, page)
@@ -53,7 +53,7 @@ class WorkingWithReactions:
                     try:
                         await client(SendReactionRequest(
                             peer=chat.value, msg_id=msg_id,
-                            reaction=[types.ReactionEmoji(emoticon=f'{self.choosing_random_reaction(page)}')]))
+                            reaction=[types.ReactionEmoji(emoticon=f'{self.choosing_random_reaction()}')]))
                         await asyncio.sleep(1)
                         await client.disconnect()
                     except ReactionInvalidError:
@@ -74,10 +74,10 @@ class WorkingWithReactions:
         except Exception as error:
             logger.exception(error)
 
-    async def choosing_random_reaction(self, page):
+    async def choosing_random_reaction(self):
         """Выбираем случайное значение из списка (реакция)"""
         try:
-            random_value = random.choice(read_json_file(filename='user_data/reactions/reactions.json'))
+            random_value = random.choice(self.utils.read_json_file(filename='user_data/reactions/reactions.json'))
             await self.app_logger.log_and_display(f"{random_value}")
             return random_value
         except Exception as error:
@@ -90,13 +90,12 @@ class WorkingWithReactions:
 
         :param number: Ссылка на сообщение
         :param chat: Ссылка на группу
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         """
         try:
-            for session_name in find_filess(directory_path="user_data/accounts/reactions_list",
-                                            # TODO переместить путь к файлу в конфиг файл
-                                            extension='session'):
-                client = await self.tg_connect.get_telegram_client(self.page, session_name,
+            for session_name in self.utils.find_filess(directory_path="user_data/accounts/reactions_list",
+                                                       # TODO переместить путь к файлу в конфиг файл
+                                                       extension='session'):
+                client = await self.tg_connect.get_telegram_client(session_name,
                                                                    account_directory="user_data/accounts/reactions_list")
                 await client(JoinChannelRequest(chat))  # Подписываемся на канал / группу
                 await asyncio.sleep(5)
@@ -104,7 +103,7 @@ class WorkingWithReactions:
                 try:
                     await client(SendReactionRequest(peer=chat, msg_id=int(number),
                                                      reaction=[types.ReactionEmoji(
-                                                         emoticon=f'{self.choosing_random_reaction(self.page)}')]))
+                                                         emoticon=f'{self.choosing_random_reaction()}')]))
                     await asyncio.sleep(1)
                     await client.disconnect()
                 except ReactionInvalidError:
@@ -119,10 +118,10 @@ class WorkingWithReactions:
         Выставление реакций на новые посты
         """
         try:
-            for session_name in find_filess(directory_path=path_accounts_folder, extension='session'):
-                client = await self.tg_connect.get_telegram_client(self.page, session_name,
+            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                client = await self.tg_connect.get_telegram_client(session_name,
                                                                    account_directory=path_accounts_folder)
-                chat = read_json_file(filename='user_data/reactions/link_channel.json')
+                chat = self.utils.read_json_file(filename='user_data/reactions/link_channel.json')
                 await self.app_logger.log_and_display(f"{chat}")
                 await client(JoinChannelRequest(chat))  # Подписываемся на канал / группу
 
@@ -133,7 +132,7 @@ class WorkingWithReactions:
                     await self.app_logger.log_and_display(f"Идентификатор сообщения: {message_id}, {message}")
                     # Проверяем, является ли сообщение постом и не является ли оно нашим
                     if message.post and not message.out:
-                        await self.reactions_for_groups_and_messages_test(message_id, chat, self.page)
+                        await self.reactions_for_groups_and_messages_test(message_id, chat)
 
                 await client.run_until_disconnected()  # Запуск клиента в режиме ожидания событий
         except Exception as error:
