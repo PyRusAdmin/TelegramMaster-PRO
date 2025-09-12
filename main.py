@@ -22,8 +22,8 @@ from src.features.auth.logging_in import SendLog
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage, get_unique_filename, reaction_gui
 from src.gui.gui import AppLogger
-from src.gui.main_menu import main_menu_program
-from src.gui.menu import bio_editing_menu, settings_menu, reactions_menu, working_with_contacts_menu
+from src.gui.menu.main_menu import main_menu_program
+from src.gui.menu.menu import bio_editing_menu, settings_menu, reactions_menu, working_with_contacts_menu
 from src.gui.notification import show_notification
 
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")  # Логирование программы
@@ -51,7 +51,6 @@ async def main(page: ft.Page):
         # ______________________________________________________________________________________________________________
         await main_menu_program(page=page)  # Главное меню программы
         # ______________________________________________________________________________________________________________
-        # try:
         if page.route == "/inviting":  # Меню "🚀 Инвайтинг"
             # TODO миграция на Peewee. вернуть проверку на наличие аккаунтов, username, ссылки на инвайтинг
             await InvitingToAGroup(page=page).inviting_menu()
