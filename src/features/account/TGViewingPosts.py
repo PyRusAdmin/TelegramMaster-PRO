@@ -12,7 +12,7 @@ from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
-from src.gui.buttons import function_button_ready_viewing
+from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations
 
@@ -28,6 +28,7 @@ class ViewingPosts:
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
+        self.function_button = FunctionButton(page=page)
 
     async def viewing_posts_menu(self):
         """Отображает меню работы с просмотрами."""
@@ -70,12 +71,8 @@ class ViewingPosts:
                     self.page.go("/viewing_posts_menu")
                     self.page.update()  # Обновление страницы для отображения изменений
 
-            def back_button_clicked(_) -> None:
-                """Кнопка возврата в меню накрутки просмотров"""
-                self.page.go("/viewing_posts_menu")
-
-            function_button_ready_viewing(self.page, btn_click, back_button_clicked, link_channel, link_post)
-
+            await self.function_button.function_button_ready_viewing(btn_click=btn_click, link_channel=link_channel,
+                                                                     link_post=link_post)
         except Exception as error:
             logger.exception(error)
 

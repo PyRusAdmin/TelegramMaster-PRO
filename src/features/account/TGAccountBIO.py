@@ -8,7 +8,7 @@ from telethon.errors import (AuthKeyUnregisteredError, UsernameInvalidError, Use
 from src.core.configs import path_accounts_folder
 from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
-from src.gui.buttons import function_button_ready
+from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
@@ -18,6 +18,7 @@ class GUIManager:
 
     def __init__(self, page):
         self.page = page
+        self.function_button = FunctionButton(page=page)
 
     async def create_profile_gui(self, action, label: str) -> None:
         """
@@ -38,7 +39,7 @@ class GUIManager:
                 """Кнопка возврата в меню изменения профиля."""
                 self.page.go("/bio_editing")
 
-            function_button_ready(self.page, btn_click, back_button_clicked, user_input)  # Функция для кнопки "Готово"
+            self.function_button.function_button_ready(btn_click, back_button_clicked, user_input)  # Функция для кнопки "Готово"
         except Exception as error:
             logger.exception(error)
 

@@ -77,14 +77,8 @@ async def main(page: ft.Page):
             logger.info("🔚 Конец Автоматического выставления реакций")
             await app_logger.end_time(start)
         # __________________________________________________________________________________________________________
-        # elif page.route == "/viewing_posts_menu":  # Автоматическое выставление просмотров меню
-        #     await viewing_posts_menu(page=page)
         elif page.route == "/viewing_posts_menu":  # ️‍🗨️ Накручиваем просмотры постов
-            # start = await start_time(page=page)
-            # logger.info("▶️ Начало Накрутки просмотров постов")
             await ViewingPosts(page=page).viewing_posts_request()
-            # logger.info("🔚 Конец Накрутки просмотров постов")
-            # await end_time(start, page=page)
         # __________________________________________________________________________________________________________
         elif page.route == "/parsing":  # Меню "Парсинг"
             await ParsingGroupMembers(page=page).account_selection_menu()
