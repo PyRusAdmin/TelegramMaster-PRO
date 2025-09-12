@@ -18,7 +18,7 @@ from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
 from src.core.configs import path_accounts_folder
 from src.core.utils import Utils
 from src.features.account.parsing.gui_elements import GUIProgram
-from src.features.proxy.checking_proxy import checking_the_proxy_for_work, reading_proxy_data_from_the_database
+from src.features.proxy.checking_proxy import Proxy
 from src.gui.gui import AppLogger
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
@@ -34,6 +34,7 @@ class TGConnect:
         self.api_hash = self.api_id_api_hash[1]
         self.app_logger = AppLogger(page)
         self.utils = Utils(page=page)
+        self.proxy = Proxy(page=page)
 
     async def getting_account_data(self, client):
         """Получаем данные аккаунта"""
@@ -220,7 +221,7 @@ class TGConnect:
         """
         try:
             start = await self.app_logger.start_time()
-            await checking_the_proxy_for_work(page=self.page)  # Проверка proxy
+            await self.proxy.checking_the_proxy_for_work()  # Проверка proxy
             # Сканирование каталога с аккаунтами
             for session_file in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 await self.app_logger.log_and_display(message=f"⚠️ Проверяемый аккаунт: {session_file}")
@@ -238,7 +239,7 @@ class TGConnect:
         """
         try:
             start = await self.app_logger.start_time()
-            await checking_the_proxy_for_work(page=self.page)  # Проверка proxy
+            await self.proxy.checking_the_proxy_for_work()  # Проверка proxy
             # Сканирование каталога с аккаунтами
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 await self.app_logger.log_and_display(message=f"⚠️ Переименовываемый аккаунт: {session_name}")
@@ -311,7 +312,7 @@ class TGConnect:
             api_id=self.api_id,
             api_hash=self.api_hash,
             system_version="4.16.30-vxCUSTOM",
-            proxy=reading_proxy_data_from_the_database()
+            proxy=self.proxy.reading_proxy_data_from_the_database()
         )
         try:
             await client.connect()
@@ -369,7 +370,7 @@ class TGConnect:
             telegram_client = TelegramClient(
                 f"user_data/accounts/{phone_number_value}",
                 api_id=self.api_id, api_hash=self.api_hash, system_version="4.16.30-vxCUSTOM",
-                proxy=reading_proxy_data_from_the_database())
+                proxy=self.proxy.reading_proxy_data_from_the_database())
             await telegram_client.connect()  # Подключаемся к Telegram
             if not await telegram_client.is_user_authorized():
                 await self.app_logger.log_and_display(f"Пользователь не авторизован")

@@ -54,8 +54,8 @@ class SettingPage:
             self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
             self.page.update()
 
-        self.add_view_with_fields_and_button([proxy_type, addr_type, port_type, username_type, password_type],
-                                             btn_click)
+        await self.add_view_with_fields_and_button([proxy_type, addr_type, port_type, username_type, password_type],
+                                                   btn_click)
 
     async def recording_text_for_sending_messages(self, label, unique_filename) -> None:
         """
@@ -76,7 +76,7 @@ class SettingPage:
             self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
             self.page.update()
 
-        self.add_view_with_fields_and_button([text_to_send], btn_click)
+        await self.add_view_with_fields_and_button([text_to_send], btn_click)
 
     async def record_setting(self, limit_type: str, limits):
         """
@@ -158,9 +158,9 @@ class SettingPage:
             self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
             self.page.update()
 
-        self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
+        await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
 
-    def add_view_with_fields_and_button(self, fields: list, btn_click) -> None:
+    async def add_view_with_fields_and_button(self, fields: list, btn_click) -> None:
         """
         Добавляет представление с заданными текстовыми полями и кнопкой.
 
@@ -169,26 +169,19 @@ class SettingPage:
         :return: None
         """
 
-        def back_button_clicked(_) -> None:
-            """Кнопка возврата в меню настроек"""
-            self.page.go("/settings")
-
         # Создание View с элементами
         self.page.views.append(
             ft.View(
                 "/settings",
-                controls=[
-                    list_view,  # отображение логов 📝
-                    ft.Column(
-                        controls=fields + [
-                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                              text=translations["ru"]["buttons"]["done"],
-                                              on_click=btn_click),
-                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                              text=translations["ru"]["buttons"]["back"],
-                                              on_click=back_button_clicked)
-                        ]
-                    )]))
+                controls=[await GUIProgram().key_app_bar(),  # Кнопка для перехода на главную страницу
+                          list_view,  # отображение логов 📝
+                          ft.Column(
+                              controls=fields + [
+                                  ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                                    text=translations["ru"]["buttons"]["done"],
+                                                    on_click=btn_click),
+                              ]
+                          )]))
 
     def writing_settings_to_a_file(self, config) -> None:
         """Запись данных в файл user_data/config.ini"""
@@ -209,7 +202,8 @@ class SettingPage:
             config.get(f"{variable}", f"{variable}_2")
             config.set(f"{variable}", f"{variable}_2", time_2)
         except configparser.NoSectionError as error:
-            await self.app_logger.log_and_display(message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config/config.ini")
+            await self.app_logger.log_and_display(
+                message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config/config.ini")
         return config
 
     def write_data_to_json_file(self, reactions, path_to_the_file):
@@ -268,7 +262,7 @@ class SettingPage:
         self.page.views.append(
             ft.View(
                 "/settings",
-                controls=[await GUIProgram().key_app_bar(),
+                controls=[await GUIProgram().key_app_bar(),  # Кнопка для перехода на главную страницу
                           t,
                           ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
                           # Чекбоксы в колонках
