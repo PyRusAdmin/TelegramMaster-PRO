@@ -74,7 +74,6 @@ class WorkingWithReactions:
         except Exception as error:
             logger.exception(error)
 
-
     async def choosing_random_reaction(self, page):
         """Выбираем случайное значение из списка (реакция)"""
         try:

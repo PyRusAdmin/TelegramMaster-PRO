@@ -15,7 +15,7 @@ from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
 from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
-from src.core.configs import (path_accounts_folder)
+from src.core.configs import path_accounts_folder
 from src.core.utils import find_filess, working_with_accounts
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.proxy.checking_proxy import checking_the_proxy_for_work, reading_proxy_data_from_the_database
@@ -139,7 +139,8 @@ class TGConnect:
                         if similarity_ratio_ru >= 97:
                             await self.app_logger.log_and_display(message=f"⛔ Аккаунт заблокирован")
                             await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
-                            await self.app_logger.log_and_display(message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
+                            await self.app_logger.log_and_display(
+                                message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
                             # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
                             working_with_accounts(f"user_data/accounts/{session_name}.session",
                                                   f"user_data/accounts/banned/{session_name}.session")
@@ -166,7 +167,8 @@ class TGConnect:
                         try:
                             await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
                         except sqlite3.OperationalError as e:
-                            await self.app_logger.log_and_display(message=f"Ошибка при отключении аккаунта: {session_name}")
+                            await self.app_logger.log_and_display(
+                                message=f"Ошибка при отключении аккаунта: {session_name}")
                             await self.handle_banned_account(telegram_client=client, session_name=session_name,
                                                              exception=e)
 

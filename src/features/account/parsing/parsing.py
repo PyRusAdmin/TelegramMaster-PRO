@@ -72,7 +72,8 @@ class ParsingGroupMembers:
                     if len(participants.users) < 1:
                         while_condition = False
                 except TypeError:
-                    await self.app_logger.log_and_display(f"❌ Ошибка: {groups_wr} не является группой / каналом.", level="error")
+                    await self.app_logger.log_and_display(f"❌ Ошибка: {groups_wr} не является группой / каналом.",
+                                                          level="error")
                     await asyncio.sleep(2)
                     break
                 except ChatAdminRequiredError:
@@ -346,13 +347,15 @@ class ParsingGroupMembers:
                             if not existing_user:
                                 administrators_entries_in_database(log_data)
                             else:
-                                await self.app_logger.log_and_display(f"⚠️ Пользователь с user_id {log_data['user_id']} уже есть в базе. Пропущен.")
+                                await self.app_logger.log_and_display(
+                                    f"⚠️ Пользователь с user_id {log_data['user_id']} уже есть в базе. Пропущен.")
                     else:
                         try:
                             await self.app_logger.log_and_display(f"Это не группа, а канал: {entity.title}")
                             # Удаляем группу из списка после завершения парсинга 🗑️
                         except AttributeError:
-                            await self.app_logger.log_and_display(f"⚠️ Ошибка при получении сущности группы {groups[0]}")
+                            await self.app_logger.log_and_display(
+                                f"⚠️ Ошибка при получении сущности группы {groups[0]}")
                 except UsernameInvalidError:
                     await self.app_logger.log_and_display(translations["ru"]["errors"]["group_entity_error"])
                 except ValueError:
@@ -369,7 +372,8 @@ class ParsingGroupMembers:
         phone = self.page.session.get("selected_sessions") or []
         logger.debug(f"🔍 Парсинг групп/каналов, в которых состоит аккаунт: {phone}")
         client = await self.tg_connect.get_telegram_client(phone[0], account_directory=path_accounts_folder)
-        await self.app_logger.log_and_display(f"🔗 Подключение к аккаунту: {phone}\n 🔄 Парсинг групп/каналов, на которые подписан аккаунт")
+        await self.app_logger.log_and_display(
+            f"🔗 Подключение к аккаунту: {phone}\n 🔄 Парсинг групп/каналов, на которые подписан аккаунт")
         await self.forming_a_list_of_groups(client)
 
     async def parse_active_users(self, chat_input, limit_active_user, phone_number) -> None:
@@ -414,7 +418,8 @@ class ParsingGroupMembers:
                         await self.app_logger.log_and_display(f"{log_data}")
                         await add_member_to_db(log_data)
                     except ValueError as e:
-                        await self.app_logger.log_and_display(f"❌ Не удалось найти сущность для пользователя {message.from_id.user_id}: {e}")
+                        await self.app_logger.log_and_display(
+                            f"❌ Не удалось найти сущность для пользователя {message.from_id.user_id}: {e}")
                 else:
                     await self.app_logger.log_and_display(f"Сообщение {message.id} не имеет действительного from_id.")
         except Exception as error:
@@ -482,7 +487,8 @@ class ParsingGroupMembers:
                     title = entity.title or "Без названия"
                     about = getattr(chat, 'about', '')
                     # Логируем информацию
-                    await self.app_logger.log_and_display(f"{dialog.id}, {title}, {link or 'без ссылки'}, {participants_count}")
+                    await self.app_logger.log_and_display(
+                        f"{dialog.id}, {title}, {link or 'без ссылки'}, {participants_count}")
                     await save_group_channel_info(dialog, title, about, link, participants_count)
                 except TypeError as te:
                     logger.warning(f"❌ TypeError при обработке диалога {dialog.id}: {te}")

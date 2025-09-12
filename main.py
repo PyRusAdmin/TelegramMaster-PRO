@@ -2,7 +2,6 @@
 import flet as ft
 from loguru import logger
 
-from src.gui.gui import AppLogger
 from src.core.checking_program import CheckingProgram
 from src.core.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
                               WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, time_sending_messages_2,
@@ -22,6 +21,7 @@ from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import Sub
 from src.features.auth.logging_in import SendLog
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage, get_unique_filename, reaction_gui
+from src.gui.gui import AppLogger
 from src.gui.main_menu import main_menu_program
 from src.gui.menu import bio_editing_menu, settings_menu, reactions_menu, working_with_contacts_menu
 from src.gui.notification import show_notification
@@ -45,7 +45,7 @@ async def main(page: ft.Page):
     page.window.height = WINDOW_HEIGHT  # Высота окна
     page.window.resizable = WINDOW_RESIZABLE  # Разрешение изменения размера окна
     app_logger = AppLogger(page=page)
-    
+
     async def route_change(_):
         page.views.clear()
         # ______________________________________________________________________________________________________________

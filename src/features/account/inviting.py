@@ -26,11 +26,10 @@ from src.features.account.subscribe_unsubscribe.gui_input_builders import TimeIn
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.features.settings.setting import SettingPage
-from src.gui.gui import list_view
 from src.gui.gui import AppLogger
+from src.gui.gui import list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
-
 
 
 class InvitingToAGroup:
@@ -96,7 +95,8 @@ class InvitingToAGroup:
                     try:
                         await self.add_user_test(client, dropdown.value, username, self.page)
                     except KeyboardInterrupt:  # Закрытие окна программы
-                        await self.app_logger.log_and_display(translations["ru"]["errors"]["script_stopped"], level="error")
+                        await self.app_logger.log_and_display(translations["ru"]["errors"]["script_stopped"],
+                                                              level="error")
                 await SubscribeUnsubscribeTelegram(self.page).unsubscribe_from_the_group(client, dropdown.value)
                 await self.app_logger.log_and_display(f"[!] Инвайтинг окончен!")
             await self.app_logger.end_time(start)
@@ -165,7 +165,8 @@ class InvitingToAGroup:
             async def general_invitation_group_scheduler():
                 await general_invitation_to_the_group(_)
 
-            await self.app_logger.log_and_display(f"Скрипт будет запускаться каждый день в {hour_textfield.value}:{self.minutes}")
+            await self.app_logger.log_and_display(
+                f"Скрипт будет запускаться каждый день в {hour_textfield.value}:{self.minutes}")
             self.scheduler.daily(dt.time(hour=int(hour_textfield.value), minute=int(minutes_textfield.value)),
                                  general_invitation_group_scheduler)
             while True:
@@ -304,19 +305,19 @@ class InvitingToAGroup:
         logger.info(usernames)
         find_filesss = find_filess(directory_path=path_accounts_folder, extension='session')
         await self.app_logger.log_and_display(f"Лимит на аккаунт: {LIMITS}\n"
-                              f"Всего usernames: {len(usernames)}\n"
-                              f"Подключенные аккаунты {find_filesss}\n"
-                              f"Всего подключенных аккаунтов: {len(find_filesss)}\n")
+                                              f"Всего usernames: {len(usernames)}\n"
+                                              f"Подключенные аккаунты {find_filesss}\n"
+                                              f"Всего подключенных аккаунтов: {len(find_filesss)}\n")
 
-    
     async def add_user_test(self, client, username_group, username):
         try:
             await self.app_logger.log_and_display(f"Попытка приглашения {username} в группу {username_group}.")
             await client.connect()
-            
+
             # Выполняем приглашение
             await client(InviteToChannelRequest(username_group, [username]))
-            await self.app_logger.log_and_display(f"✅  Участник {username} добавлен, если не состоит в чате {username_group}. Спим от {TIME_INVITING_1} до {TIME_INVITING_2}")
+            await self.app_logger.log_and_display(
+                f"✅  Участник {username} добавлен, если не состоит в чате {username_group}. Спим от {TIME_INVITING_1} до {TIME_INVITING_2}")
             await record_inviting_results(TIME_INVITING_1, TIME_INVITING_2, username, self.page)
         except UserChannelsTooMuchError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["user_channels_too_much"])
@@ -348,7 +349,7 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["type_or_scope"])
         except BadRequestError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["chat_member_add_failed"])
-        
+
         # Ошибка инвайтинга прерываем работу
         except ChatWriteForbiddenError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["chat_write_forbidden"])
