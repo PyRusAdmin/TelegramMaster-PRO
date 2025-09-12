@@ -21,8 +21,7 @@ from src.features.auth.logging_in import SendLog
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger
-from src.gui.menu.main_menu import main_menu_program
-from src.gui.menu.menu import bio_editing_menu, settings_menu, reactions_menu, working_with_contacts_menu
+from src.gui.menu import Menu
 from src.gui.notification import show_notification
 
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")  # Логирование программы
@@ -46,11 +45,12 @@ async def main(page: ft.Page):
     app_logger = AppLogger(page=page)
     setting_page = SettingPage(page=page)
     account_bio = AccountBIO(page=page)
+    menu = Menu(page=page)
 
     async def route_change(_):
         page.views.clear()
         # ______________________________________________________________________________________________________________
-        await main_menu_program(page=page)  # Главное меню программы
+        await menu.main_menu_program()  # Главное меню программы
         # ______________________________________________________________________________________________________________
         if page.route == "/inviting":  # Меню "🚀 Инвайтинг"
             # TODO миграция на Peewee. вернуть проверку на наличие аккаунтов, username, ссылки на инвайтинг
@@ -63,7 +63,7 @@ async def main(page: ft.Page):
             await SubscribeUnsubscribeTelegram(page=page).subscribe_and_unsubscribe_menu()
         # __________________________________________________________________________________________________________
         elif page.route == "/working_with_reactions":  # Меню "Работа с реакциями"
-            await reactions_menu(page=page)
+            await menu.reactions_menu()
         elif page.route == "/setting_reactions":  # Ставим реакции
             start = await app_logger.start_time()
             logger.info("▶️ Начало Проставления реакций")
@@ -93,7 +93,7 @@ async def main(page: ft.Page):
             await ReceivingAndRecording().write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
         # __________________________________________________________________________________________________________
         elif page.route == "/working_with_contacts":  # Меню "Работа с контактами"
-            await working_with_contacts_menu(page=page)
+            await menu.working_with_contacts_menu()
         elif page.route == "/creating_contact_list":  # Формирование списка контактов
             start = await app_logger.start_time()
             logger.info("▶️ Начало Формирования списка контактов")
@@ -136,7 +136,7 @@ async def main(page: ft.Page):
             await SendTelegramMessages(page=page).send_files_to_personal_chats()
         # __________________________________________________________________________________________________________
         elif page.route == "/bio_editing":  # Меню "Редактирование_BIO"
-            await bio_editing_menu(page=page)
+            await menu.bio_editing_menu()
         elif page.route == "/edit_description":  # Изменение описания
             await account_bio.change_bio_profile_gui()
         elif page.route == "/name_change":  # Изменение имени профиля Telegram
@@ -150,7 +150,7 @@ async def main(page: ft.Page):
             await account_bio.change_username_profile_gui()
         # __________________________________________________________________________________________________________
         elif page.route == "/settings":  # Меню "Настройки TelegramMaster"
-            await settings_menu(page=page)
+            await menu.settings_menu()
         elif page.route == "/choice_of_reactions":  # 👍 Выбор реакций
             await setting_page.reaction_gui()
         elif page.route == "/proxy_entry":  # 🔐 Запись proxy
