@@ -20,7 +20,7 @@ from src.features.account.parsing.parsing import ParsingGroupMembers
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.features.auth.logging_in import SendLog
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
-from src.features.settings.setting import SettingPage, get_unique_filename, reaction_gui
+from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger
 from src.gui.menu.main_menu import main_menu_program
 from src.gui.menu.menu import bio_editing_menu, settings_menu, reactions_menu, working_with_contacts_menu
@@ -137,21 +137,21 @@ async def main(page: ft.Page):
         elif page.route == "/bio_editing":  # Меню "Редактирование_BIO"
             await bio_editing_menu(page=page)
         elif page.route == "/edit_description":  # Изменение описания
-            await AccountBIO(page=page).change_bio_profile_gui(page=page)
+            await AccountBIO(page=page).change_bio_profile_gui()
         elif page.route == "/name_change":  # Изменение имени профиля Telegram
-            await AccountBIO(page=page).change_name_profile_gui(page=page)
+            await AccountBIO(page=page).change_name_profile_gui()
         elif page.route == "/change_surname":  # Изменение фамилии
-            await AccountBIO(page=page).change_last_name_profile_gui(page=page)
+            await AccountBIO(page=page).change_last_name_profile_gui()
         elif page.route == "/edit_photo":  # Изменение фото
             await AccountBIO(page=page).change_photo_profile_gui()
             await show_notification(page=page, message="🔚 Фото изменено")  # Выводим уведомление пользователю
         elif page.route == "/changing_username":  # Изменение username
-            await AccountBIO(page=page).change_username_profile_gui(page=page)
+            await AccountBIO(page=page).change_username_profile_gui()
         # __________________________________________________________________________________________________________
         elif page.route == "/settings":  # Меню "Настройки TelegramMaster"
             await settings_menu(page=page)
         elif page.route == "/recording_api_id_api_hash":  # Запись api_id, api_hash
-            await SettingPage(page=page).writing_api_id_api_hash(page=page)
+            await SettingPage(page=page).writing_api_id_api_hash()
         elif page.route == "/message_limits":  # Лимиты на сообщения
             await SettingPage(page=page).record_setting("message_limits", "Введите лимит на сообщения")
         elif page.route == "/creating_username_list":  # Формирование списка username
@@ -165,14 +165,14 @@ async def main(page: ft.Page):
         elif page.route == "/proxy_entry":  # Запись proxy
             await SettingPage(page=page).creating_the_main_window_for_proxy_data_entry()
         elif page.route == "/message_recording":  # Запись сообщений
-            await SettingPage(page=page).recording_text_for_sending_messages(page, "Введите текст для сообщения",
-                                                                             get_unique_filename(
+            await SettingPage(page=page).recording_text_for_sending_messages("Введите текст для сообщения",
+                                                                             SettingPage(page=page).get_unique_filename(
                                                                                  base_filename='user_data/message/message'))
         elif page.route == "/recording_reaction_link":  # Запись ссылки для реакций
-            await SettingPage(page=page).recording_text_for_sending_messages(page, "Введите ссылку для реакций",
+            await SettingPage(page=page).recording_text_for_sending_messages("Введите ссылку для реакций",
                                                                              'user_data/reactions/link_channel.json')
         elif page.route == "/choice_of_reactions":  # Выбор реакций
-            await reaction_gui(page=page)
+            await SettingPage(page=page).reaction_gui()
         elif page.route == "/recording_the_time_between_messages":  # Запись времени между сообщениями
 
             await SettingPage(page=page).create_main_window(
