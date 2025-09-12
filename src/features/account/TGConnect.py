@@ -9,7 +9,8 @@ import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon.errors import (ApiIdInvalidError, AuthKeyDuplicatedError, AuthKeyNotFound, AuthKeyUnregisteredError,
                              PasswordHashInvalidError, PhoneNumberBannedError, SessionPasswordNeededError,
-                             TimedOutError, TypeNotFoundError, UserDeactivatedBanError, YouBlockedUserError)
+                             TimedOutError, TypeNotFoundError, UserDeactivatedBanError, YouBlockedUserError,
+                             SessionRevokedError)
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz
@@ -42,6 +43,19 @@ class TGConnect:
         logger.info(f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
         await self.app_logger.log_and_display(
             f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
+
+    async def client_connect_string_session(self, session_name):
+        """Подключение к Telegram аккаунту через StringSession"""
+        session_string = await self.get_string_session(session_name)
+        # Создаем клиент, используя StringSession и вашу строку
+        client = TelegramClient(
+            StringSession(session_string),  # <-- Используем StringSession
+            api_id=7655060,
+            api_hash="cc1290cd733c1f1d407598e5a31be4a8",
+            system_version="4.16.30-vxCUSTOM",
+        )
+        await client.connect()
+        return client
 
     async def get_string_session(self, session_name):
         """Получение строки сессии"""
