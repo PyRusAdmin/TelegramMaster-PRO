@@ -21,11 +21,11 @@ class TGChek:
 
         async def validation_check(_) -> None:
             """Проверка валидности аккаунтов"""
-            await self.TGConnect.verify_all_accounts(page=self.page)
+            await self.TGConnect.verify_all_accounts()
 
         async def renaming_accounts(_):
             """Переименование аккаунтов"""
-            await self.TGConnect.get_account_details(page=self.page)
+            await self.TGConnect.get_account_details()
 
         async def checking_for_spam_bots(_):
             """Проверка на спам ботов"""
@@ -33,7 +33,7 @@ class TGChek:
 
         async def full_verification(_):
             """Полная проверка аккаунтов"""
-            await self.TGConnect.checking_all_accounts(page=self.page)
+            await self.TGConnect.checking_all_accounts()
 
         self.page.views.append(
             ft.View("/account_verification_menu",

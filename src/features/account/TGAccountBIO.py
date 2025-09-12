@@ -6,7 +6,7 @@ from telethon.errors import (AuthKeyUnregisteredError, UsernameInvalidError, Use
                              UsernamePurchaseAvailableError)
 
 from src.core.configs import path_accounts_folder
-from src.core.utils import find_files, find_filess
+from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.gui.buttons import function_button_ready
 from src.gui.gui import AppLogger
@@ -16,12 +16,13 @@ from src.locales.translations_loader import translations
 
 class GUIManager:
 
-    @classmethod
-    async def create_profile_gui(cls, page: ft.Page, action, label: str) -> None:
+    def __init__(self, page):
+        self.page = page
+
+    async def create_profile_gui(self, action, label: str) -> None:
         """
         Создание графического интерфейса для изменения профиля Telegram.
 
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         :param action: Функция, которая выполняет специфическое действие с переданным значением.
         :param label: Подпись для текстового поля.
         """
@@ -29,15 +30,15 @@ class GUIManager:
             user_input = ft.TextField(label=label, multiline=True, max_lines=19)
 
             async def btn_click(_) -> None:
-                await action(page, user_input.value)
-                page.go("/bio_editing")  # Изменение маршрута
-                page.update()
+                await action(self.page, user_input.value)
+                self.page.go("/bio_editing")  # Изменение маршрута
+                self.page.update()
 
             def back_button_clicked(_) -> None:
                 """Кнопка возврата в меню изменения профиля."""
-                page.go("/bio_editing")
+                self.page.go("/bio_editing")
 
-            function_button_ready(page, btn_click, back_button_clicked, user_input)  # Функция для кнопки "Готово"
+            function_button_ready(self.page, btn_click, back_button_clicked, user_input)  # Функция для кнопки "Готово"
         except Exception as error:
             logger.exception(error)
 
@@ -52,7 +53,7 @@ class AccountBIO:
         self.extension = 'session'
         self.tg_connect = TGConnect(page)
         self.account_actions = AccountActions(path_accounts_folder, self.extension, self.tg_connect, self.page)
-        self.gui_manager = GUIManager()
+        self.gui_manager = GUIManager(page=page)
 
     async def change_photo_profile_gui(self) -> None:
         """
@@ -60,40 +61,32 @@ class AccountBIO:
         """
         await self.account_actions.change_photo_profile()
 
-    async def change_username_profile_gui(self, page: ft.Page) -> None:
+    async def change_username_profile_gui(self) -> None:
         """
         Изменение био профиля Telegram в графическое окно Flet
-
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         """
-        await self.gui_manager.create_profile_gui(page, self.account_actions.change_username_profile,
+        await self.gui_manager.create_profile_gui(self.account_actions.change_username_profile,
                                                   label="Введите username профиля (не более 32 символов):")
 
-    async def change_bio_profile_gui(self, page: ft.Page) -> None:
+    async def change_bio_profile_gui(self) -> None:
         """
         Изменение био профиля Telegram в графическое окно Flet.
-
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         """
-        await self.gui_manager.create_profile_gui(page, self.account_actions.change_bio_profile,
+        await self.gui_manager.create_profile_gui(self.account_actions.change_bio_profile,
                                                   label="Введите описание профиля, не более 70 символов: ")
 
-    async def change_name_profile_gui(self, page: ft.Page) -> None:
+    async def change_name_profile_gui(self) -> None:
         """
         Изменение био профиля Telegram в графическое окно Flet
-
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         """
-        await self.gui_manager.create_profile_gui(page, self.account_actions.change_name_profile,
+        await self.gui_manager.create_profile_gui(self.account_actions.change_name_profile,
                                                   label="Введите имя профиля, не более 64 символов: ")
 
-    async def change_last_name_profile_gui(self, page: ft.Page) -> None:
+    async def change_last_name_profile_gui(self) -> None:
         """
         Изменение био профиля Telegram в графическое окно Flet
-
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         """
-        await self.gui_manager.create_profile_gui(page, self.account_actions.change_last_name_profile,
+        await self.gui_manager.create_profile_gui(self.account_actions.change_last_name_profile,
                                                   label="Введите фамилию профиля, не более 64 символов: ")
 
 
@@ -107,7 +100,8 @@ class AccountActions:
         self.directory_path = directory_path  # путь к папке с аккаунтами Telegram
         self.extension = extension  # расширение файла с аккаунтом Telegram (session)
         self.tg_connect = tg_connect  # объект класса TelegramConnect (подключение к Telegram аккаунту)
-        self.app_logger = AppLogger(page)
+        self.app_logger = AppLogger(page=page)
+        self.utils = Utils(page=page)
 
     async def change_bio_profile(self, user_input):
         """
@@ -118,7 +112,7 @@ class AccountActions:
         """
         try:
             await self.app_logger.log_and_display(f"Запуск смены  описания профиля")
-            for session_name in find_filess(directory_path=self.directory_path, extension='session'):
+            for session_name in self.utils.find_filess(directory_path=self.directory_path, extension='session'):
                 await self.app_logger.log_and_display(f"{session_name}")
                 client = await self.tg_connect.get_telegram_client(self.page, session_name=session_name,
                                                                    account_directory=self.directory_path)
@@ -147,7 +141,7 @@ class AccountActions:
         :param user_input  - новое имя пользователя
         """
         try:
-            for session_name in find_filess(directory_path=self.directory_path, extension='session'):
+            for session_name in self.utils.find_filess(directory_path=self.directory_path, extension='session'):
                 await self.app_logger.log_and_display(f"{session_name}")
                 client = await self.tg_connect.get_telegram_client(self.page, session_name=session_name,
                                                                    account_directory=self.directory_path)
@@ -173,7 +167,7 @@ class AccountActions:
         :param user_input - новое имя пользователя
         """
         try:
-            for session_name in find_filess(directory_path=self.directory_path, extension='session'):
+            for session_name in self.utils.find_filess(directory_path=self.directory_path, extension='session'):
                 await self.app_logger.log_and_display(f"{session_name}")
                 client = await self.tg_connect.get_telegram_client(self.page, session_name=session_name,
                                                                    account_directory=self.directory_path)
@@ -197,7 +191,7 @@ class AccountActions:
         :param user_input - новое имя пользователя Telegram
         """
         try:
-            for session_name in find_filess(directory_path=self.directory_path, extension='session'):
+            for session_name in self.utils.find_filess(directory_path=self.directory_path, extension='session'):
                 await self.app_logger.log_and_display(f"{session_name}")
                 client = await self.tg_connect.get_telegram_client(self.page, session_name=session_name,
                                                                    account_directory=self.directory_path)
@@ -217,11 +211,11 @@ class AccountActions:
         """Изменение фото профиля.
         """
         try:
-            for session_name in find_filess(directory_path=self.directory_path, extension='session'):
+            for session_name in self.utils.find_filess(directory_path=self.directory_path, extension='session'):
                 await self.app_logger.log_and_display(f"{session_name}")
                 client = await self.tg_connect.get_telegram_client(self.page, session_name=session_name,
                                                                    account_directory=self.directory_path)
-                for photo_file in await find_files(directory_path="user_data/bio", extension='jpg', page=self.page):
+                for photo_file in await self.utils.find_files(directory_path="user_data/bio", extension='jpg'):
                     try:
                         await client.connect()
                         await client(functions.photos.UploadProfilePhotoRequest(
