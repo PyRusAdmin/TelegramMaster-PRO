@@ -129,9 +129,10 @@ async def main(page: ft.Page):
         elif page.route == "/creating_groups":  # Создание групп (чатов)
             await CreatingGroupsAndChats(page=page).creating_groups_and_chats()
         # __________________________________________________________________________________________________________
-        elif page.route == "/sending_messages_files_via_chats":  # Рассылка сообщений по чатам
+        elif page.route == "/sending_messages_files_via_chats":  # 💬 Рассылка сообщений по чатам
             await CheckingProgram(page=page).check_before_sending_messages_via_chats()
             await SendTelegramMessages(page=page).sending_messages_files_via_chats()
+
         elif page.route == "/sending_files_to_personal_account_with_limits":  # Отправка сообщений в личку
             await SendTelegramMessages(page=page).send_files_to_personal_chats()
         # __________________________________________________________________________________________________________

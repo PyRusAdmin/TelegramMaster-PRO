@@ -61,7 +61,7 @@ class SendTelegramMessages:
                 try:
                     # Просим пользователя ввести расширение сообщения
                     for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
-                                                    extension=self.account_extension):
+                                                               extension=self.account_extension):
                         client = await self.tg_connect.get_telegram_client(session_name,
                                                                            account_directory=path_accounts_folder)
                         try:
@@ -170,7 +170,7 @@ class SendTelegramMessages:
         if checs == True:
             try:
                 for session_name in self.utils.find_filess(directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
-                                                extension=self.account_extension):
+                                                           extension=self.account_extension):
                     client = await self.tg_connect.get_telegram_client(session_name,
                                                                        account_directory=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE)
 
@@ -212,7 +212,7 @@ class SendTelegramMessages:
             try:
                 start = await self.app_logger.start_time()
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
-                                                extension=self.account_extension):
+                                                           extension=self.account_extension):
                     client = await self.tg_connect.get_telegram_client(session_name,
                                                                        account_directory=path_accounts_folder)
                     # Открываем базу данных с группами, в которые будут рассылаться сообщения
@@ -296,17 +296,16 @@ class SendTelegramMessages:
             ft.View(
                 "/sending_messages_via_chats_menu",
                 controls=[
+                    await GUIProgram().key_app_bar(),  # Кнопка "Назад"
                     ft.Text(translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"], size=18,
                             weight=ft.FontWeight.BOLD), c, ft.Row(controls=[tb_time_from, tb_time_to], spacing=20, ), t,
                     chat_list_field,
                     ft.Column(  # Верхняя часть: контрольные элементы
-                        controls=[ft.ElevatedButton(text=translations["ru"]["buttons"]["done"], width=WIDTH_WIDE_BUTTON,
-                                                    height=BUTTON_HEIGHT,
-                                                    on_click=button_clicked, ),
-                                  ft.ElevatedButton(text=translations["ru"]["buttons"]["back"], width=WIDTH_WIDE_BUTTON,
-                                                    height=BUTTON_HEIGHT,
-                                                    on_click=lambda _: self.page.go(
-                                                        "/sending_messages_via_chats_menu")), ],
+                        controls=[
+                            ft.ElevatedButton(text=translations["ru"]["buttons"]["done"], width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
+                                              on_click=button_clicked, ),
+                        ],
                     ), ], ))
 
     async def send_content(self, client, target, messages, files):
