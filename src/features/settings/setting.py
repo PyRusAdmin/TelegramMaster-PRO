@@ -125,9 +125,9 @@ class SettingPage:
         :return: None
         """
         try:
-            smaller_times = int(smaller_timex.value)
-            larger_times = int(larger_timex.value)
-            if smaller_times < larger_times:  # Проверяем, что первое время меньше второго
+            smaller_times = smaller_timex.value
+            larger_times = larger_timex.value
+            if int(smaller_times) < int(larger_times):  # Проверяем, что первое время меньше второго
                 # Если условие прошло проверку, то возвращаем первое и второе время
                 self.writing_settings_to_a_file(
                     await self.recording_limits_file(str(smaller_times), str(larger_times), variable=variable))
