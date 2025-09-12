@@ -14,7 +14,7 @@ from src.core.configs import path_accounts_folder
 from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
-from src.gui.buttons import function_button_ready_reactions
+from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations
 
@@ -30,6 +30,7 @@ class WorkingWithReactions:
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
+        self.function_button = FunctionButton(page=page)
 
     async def send_reaction_request(self, page: ft.Page) -> None:
         """
@@ -69,7 +70,7 @@ class WorkingWithReactions:
                 """Кнопка возврата в меню проставления реакций"""
                 page.go("/working_with_reactions")
 
-            function_button_ready_reactions(page, btn_click, back_button_clicked, chat, message)
+            self.function_button.function_button_ready_reactions(btn_click, back_button_clicked, chat, message)
 
         except Exception as error:
             logger.exception(error)
