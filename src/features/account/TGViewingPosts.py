@@ -14,7 +14,7 @@ from src.features.account.TGConnect import TGConnect
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
-from src.gui.gui import AppLogger
+from src.gui.gui import AppLogger, list_view
 
 
 class ViewingPosts:
@@ -34,6 +34,10 @@ class ViewingPosts:
     async def viewing_posts_request(self) -> None:
         """Окно с полями ввода и кнопками для накрутки просмотров."""
         try:
+            # Получаем количество аккаунтов
+            sessions_count = len(self.utils.find_filess(directory_path=path_accounts_folder, extension='session'))
+            list_view.controls.append(ft.Text(f"Подключенных аккаунтов {sessions_count}"))
+
             # Поле для ввода ссылки на чат
             link_channel = ft.TextField(label="Введите ссылку на канал:", multiline=False, max_lines=1)
             link_post = ft.TextField(label="Введите ссылку на пост:", multiline=False, max_lines=1)
@@ -41,11 +45,10 @@ class ViewingPosts:
             async def btn_click(_) -> None:
 
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                    # client = await self.tg_connect.get_telegram_client(session_name=session_name, account_directory=path_accounts_folder)
-
                     client = await self.tg_connect.client_connect_string_session(session_name)
 
-                    await self.app_logger.log_and_display(f"[+] Работаем с каналом: {link_channel.value}")
+                    # await self.app_logger.log_and_display(f"[+] Работаем с каналом: {link_channel.value}")
+                    list_view.controls.append(ft.Text(f"[+] Работаем с каналом: {link_channel.value}"))
 
                     await self.subscribe.subscribe_to_group_or_channel(client=client, groups=link_channel.value)
 
