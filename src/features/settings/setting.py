@@ -209,9 +209,7 @@ class SettingPage:
             config.get(f"{variable}", f"{variable}_2")
             config.set(f"{variable}", f"{variable}_2", time_2)
         except configparser.NoSectionError as error:
-            await log_and_display(
-                message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config/config.ini",
-                page=page)
+            await self.app_logger.log_and_display(message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config/config.ini")
         return config
 
     def write_data_to_json_file(self, reactions, path_to_the_file):
@@ -263,12 +261,8 @@ class SettingPage:
             self.write_data_to_json_file(reactions=selected_reactions,
                                          path_to_the_file='user_data/reactions/reactions.json')
 
-            await show_notification(self.page, "Данные успешно записаны!")
+            await show_notification(page=self.page, message="Данные успешно записаны!")
             self.page.go("/settings")  # Переход к странице настроек
-
-        # async def back_button_clicked(_) -> None:
-        #     """Кнопка возврата в меню настроек"""
-        #     self.page.go("/settings")
 
         # Добавляем элементы на страницу
         self.page.views.append(
@@ -281,9 +275,6 @@ class SettingPage:
                           ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                             text=translations["ru"]["buttons"]["done"],
                                             on_click=button_clicked),  # Кнопка "Готово",
-                          # ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                          #                   text=translations["ru"]["buttons"]["back"],
-                          #                   on_click=back_button_clicked),  # Кнопка "Назад"
                           ]
             )
         )
