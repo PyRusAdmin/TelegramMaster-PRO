@@ -4,8 +4,7 @@ from loguru import logger
 
 from src.core.checking_program import CheckingProgram
 from src.core.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
-                              WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, time_sending_messages_2,
-                              time_changing_accounts_1, time_changing_accounts_2)
+                              WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, time_sending_messages_2)
 from src.core.sqlite_working_tools import create_database, open_and_read_data
 from src.features.account.TGAccountBIO import AccountBIO
 from src.features.account.TGChek import TGChek
@@ -152,41 +151,23 @@ async def main(page: ft.Page):
         # __________________________________________________________________________________________________________
         elif page.route == "/settings":  # Меню "Настройки TelegramMaster"
             await settings_menu(page=page)
-
         elif page.route == "/choice_of_reactions":  # 👍 Выбор реакций
             await setting_page.reaction_gui()
         elif page.route == "/proxy_entry":  # 🔐 Запись proxy
             await setting_page.creating_the_main_window_for_proxy_data_entry()
-
-        elif page.route == "/recording_api_id_api_hash":  # Запись api_id, api_hash
+        elif page.route == "/recording_api_id_api_hash":  # 📝 Запись api_id, api_hash
             await setting_page.writing_api_id_api_hash()
-        elif page.route == "/message_limits":  # Лимиты на сообщения
-            await setting_page.record_setting("message_limits", "Введите лимит на сообщения")
-        elif page.route == "/creating_username_list":  # Формирование списка username
-            await setting_page.output_the_input_field(page, "members",
-                                                      "username, id, access_hash, first_name, last_name, "
-                                                      "user_phone, online_at, photos_id, user_premium",
-                                                      "/settings", "members (username)")
-        elif page.route == "/forming_list_of_chats_channels":  # Формирование списка чатов / каналов
-            await setting_page.output_the_input_field(page, "writing_group_links", "writing_group_links",
-                                                      "/settings", "writing_group_links")
-
-        elif page.route == "/message_recording":  # Запись сообщений
+        elif page.route == "/message_recording":  # ✉️ Запись сообщений
             await setting_page.recording_text_for_sending_messages("Введите текст для сообщения",
                                                                    setting_page.get_unique_filename(
                                                                        base_filename='user_data/message/message'))
         elif page.route == "/recording_reaction_link":  # Запись ссылки для реакций
             await setting_page.recording_text_for_sending_messages("Введите ссылку для реакций",
                                                                    'user_data/reactions/link_channel.json')
-
         elif page.route == "/recording_the_time_between_messages":  # Запись времени между сообщениями
-
             await setting_page.create_main_window(variable="time_sending_messages",
-                                                  time_range=[TIME_SENDING_MESSAGES_1, time_sending_messages_2])
-        elif page.route == "/changing_accounts":  # Смена аккаунтов
-            await setting_page.create_main_window(variable="time_changing_accounts",
-                                                  time_range=[time_changing_accounts_1, time_changing_accounts_2])
-
+                                                  smaller_timex=TIME_SENDING_MESSAGES_1,
+                                                  larger_timex=time_sending_messages_2)
         page.update()
 
     def view_pop(_):
