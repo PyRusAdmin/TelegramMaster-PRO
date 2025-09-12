@@ -75,10 +75,9 @@ class SendTelegramMessages:
                                 await self.app_logger.log_and_display(f"[!] Отправляем сообщение: {username}")
                                 try:
                                     user_to_add = await client.get_input_entity(username)
-                                    messages, files = await self.all_find_and_all_files(self.page)
+                                    messages, files = await self.all_find_and_all_files()
                                     await self.send_content(client, user_to_add, messages, files)
-                                    await self.app_logger.log_and_display(
-                                        f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
+                                    await self.app_logger.log_and_display(f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
                                     await record_inviting_results(time_from, time_to, rows, self.page)
                                 except FloodWaitError as e:
                                     await self.app_logger.log_and_display(

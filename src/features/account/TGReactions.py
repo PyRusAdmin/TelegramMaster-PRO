@@ -26,8 +26,8 @@ class WorkingWithReactions:
 
     def __init__(self, page):
         self.page = page
-        self.tg_connect = TGConnect()
-        self.sub_unsub_tg = SubscribeUnsubscribeTelegram()
+        self.tg_connect = TGConnect(page=page)
+        self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
         self.app_logger = AppLogger(page=page)
 
     async def send_reaction_request(self, page: ft.Page) -> None:
