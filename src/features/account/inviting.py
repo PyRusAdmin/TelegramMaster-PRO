@@ -263,7 +263,7 @@ class InvitingToAGroup:
 
         self.page.views.append(
             ft.View("/inviting",
-                    [await GUIProgram().key_app_bar(),
+                    [await GUIProgram().key_app_bar(), # Кнопка назад
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["inviting_menu"]["inviting"],
                          ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
