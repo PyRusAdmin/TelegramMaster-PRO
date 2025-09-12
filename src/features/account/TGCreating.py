@@ -8,7 +8,7 @@ from loguru import logger
 from telethon import functions
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_folder
-from src.core.utils import find_filess
+from src.core.utils import Utils
 from src.features.account.TGConnect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.gui.gui import AppLogger
@@ -25,6 +25,7 @@ class CreatingGroupsAndChats:
         self.page = page
         self.tg_connect = TGConnect(page)
         self.app_logger = AppLogger(page=page)
+        self.utils = Utils(page=page)
 
     async def creating_groups_and_chats(self) -> None:
         """
@@ -44,7 +45,7 @@ class CreatingGroupsAndChats:
 
             if not selected_sessions:
                 await self.app_logger.log_and_display(translations["ru"]["errors"]["files_not_selected_warning"])
-                session_files = await find_filess(directory_path=path_accounts_folder, extension='session')
+                session_files = await self.utils.find_filess(directory_path=path_accounts_folder, extension='session')
                 if not session_files:
                     await self.app_logger.log_and_display(translations["ru"]["errors"]["no_session_files"])
                     self.page.update()
@@ -56,7 +57,7 @@ class CreatingGroupsAndChats:
                 for session_name in session_files:
                     # Извлекаем только имя файла без расширения
                     session_name = os.path.splitext(os.path.basename(session_name))[0]
-                    client = await self.tg_connect.get_telegram_client(self.page, session_name,
+                    client = await self.tg_connect.get_telegram_client(session_name,
                                                                        account_directory=path_accounts_folder)
                     await client(functions.channels.CreateChannelRequest(title='My awesome title',
                                                                          about='Description for your group',
