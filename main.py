@@ -65,17 +65,17 @@ async def main(page: ft.Page):
         elif page.route == "/working_with_reactions":  # Меню "Работа с реакциями"
             await reactions_menu(page=page)
         elif page.route == "/setting_reactions":  # Ставим реакции
-            start = await app_logger.start_time(page=page)
+            start = await app_logger.start_time()
             logger.info("▶️ Начало Проставления реакций")
-            await WorkingWithReactions().send_reaction_request(page=page)
+            await WorkingWithReactions(page=page).send_reaction_request(page=page)
             logger.info("🔚 Конец Проставления реакций")
-            await app_logger.end_time(start, page=page)
+            await app_logger.end_time(start)
         elif page.route == "/automatic_setting_of_reactions":  # Автоматическое выставление реакций
-            start = await app_logger.start_time(page=page)
+            start = await app_logger.start_time()
             logger.info("▶️ Начало Автоматического выставления реакций")
-            await WorkingWithReactions().setting_reactions(page=page)
+            await WorkingWithReactions(page=page).setting_reactions()
             logger.info("🔚 Конец Автоматического выставления реакций")
-            await app_logger.end_time(start, page=page)
+            await app_logger.end_time(start)
         # __________________________________________________________________________________________________________
         # elif page.route == "/viewing_posts_menu":  # Автоматическое выставление просмотров меню
         #     await viewing_posts_menu(page=page)
@@ -95,7 +95,7 @@ async def main(page: ft.Page):
         elif page.route == "/working_with_contacts":  # Меню "Работа с контактами"
             await working_with_contacts_menu(page=page)
         elif page.route == "/creating_contact_list":  # Формирование списка контактов
-            start = await app_logger.start_time(page=page)
+            start = await app_logger.start_time()
             logger.info("▶️ Начало Формирования списка контактов")
             open_and_read_data(table_name="contact")  # Удаление списка с контактами
             # TODO миграция на PEEWEE
@@ -103,25 +103,25 @@ async def main(page: ft.Page):
                                                                 column_name="contact", route="/working_with_contacts",
                                                                 into_columns="contact")
             logger.info("🔚 Конец Формирования списка контактов")
-            await app_logger.end_time(start, page=page)
+            await app_logger.end_time(start)
         elif page.route == "/show_list_contacts":  # Показать список контактов
-            start = await app_logger.start_time(page=page)
+            start = await app_logger.start_time()
             logger.info("▶️ Начало Показа списка контактов")
             await TGContact(page=page).show_account_contact_list()
             logger.info("🔚 Конец Показа списка контактов")
-            await app_logger.end_time(start, page=page)
+            await app_logger.end_time(start)
         elif page.route == "/deleting_contacts":  # Удаление контактов
-            start = await app_logger.start_time(page=page)
+            start = await app_logger.start_time()
             logger.info("▶️ Начало Удаления контактов")
             await TGContact(page=page).delete_contact()
             logger.info("🔚 Конец Удаления контактов")
-            await app_logger.end_time(start, page=page)
+            await app_logger.end_time(start)
         elif page.route == "/adding_contacts":  # Добавление контактов
-            start = await app_logger.start_time(page=page)
+            start = await app_logger.start_time()
             logger.info("▶️ Начало Добавления контактов")
             await TGContact(page=page).inviting_contact()
             logger.info("🔚 Конец Добавления контактов")
-            await app_logger.end_time(start, page=page)
+            await app_logger.end_time(start)
         # __________________________________________________________________________________________________________
         elif page.route == "/account_connection_menu":  # Подключение аккаунтов 'меню'.
             await TGConnect(page=page).account_connection_menu()
@@ -138,16 +138,16 @@ async def main(page: ft.Page):
         elif page.route == "/bio_editing":  # Меню "Редактирование_BIO"
             await bio_editing_menu(page=page)
         elif page.route == "/edit_description":  # Изменение описания
-            await AccountBIO().change_bio_profile_gui(page=page)
+            await AccountBIO(page=page).change_bio_profile_gui(page=page)
         elif page.route == "/name_change":  # Изменение имени профиля Telegram
-            await AccountBIO().change_name_profile_gui(page=page)
+            await AccountBIO(page=page).change_name_profile_gui(page=page)
         elif page.route == "/change_surname":  # Изменение фамилии
-            await AccountBIO().change_last_name_profile_gui(page=page)
+            await AccountBIO(page=page).change_last_name_profile_gui(page=page)
         elif page.route == "/edit_photo":  # Изменение фото
-            await AccountBIO().change_photo_profile_gui()
+            await AccountBIO(page=page).change_photo_profile_gui()
             await show_notification(page=page, message="🔚 Фото изменено")  # Выводим уведомление пользователю
         elif page.route == "/changing_username":  # Изменение username
-            await AccountBIO().change_username_profile_gui(page=page)
+            await AccountBIO(page=page).change_username_profile_gui(page=page)
         # __________________________________________________________________________________________________________
         elif page.route == "/settings":  # Меню "Настройки TelegramMaster"
             await settings_menu(page=page)
@@ -176,13 +176,17 @@ async def main(page: ft.Page):
             await reaction_gui(page=page)
         elif page.route == "/recording_the_time_between_messages":  # Запись времени между сообщениями
 
-            await SettingPage(page=page).create_main_window(variable="time_sending_messages",
-                                                            time_range=[TIME_SENDING_MESSAGES_1,
-                                                                        time_sending_messages_2])
+            await SettingPage(page=page).create_main_window(
+                variable="time_sending_messages",
+                time_range=[TIME_SENDING_MESSAGES_1,
+                            time_sending_messages_2]
+            )
         elif page.route == "/changing_accounts":  # Смена аккаунтов
-            await SettingPage(page=page).create_main_window(variable="time_changing_accounts",
-                                                            time_range=[time_changing_accounts_1,
-                                                                        time_changing_accounts_2])
+            await SettingPage(page=page).create_main_window(
+                variable="time_changing_accounts",
+                time_range=[time_changing_accounts_1,
+                            time_changing_accounts_2]
+            )
 
         page.update()
 
