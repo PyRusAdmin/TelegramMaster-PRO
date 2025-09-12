@@ -10,18 +10,18 @@ from src.gui.notification import show_notification
 class CheckingProgram:
     """⛔ Проверка программы от пользователя"""
 
-    def __init__(self):
+    def __init__(self, page: ft.Page):
+        self.page = page
         self.account_extension = "session"  # Расширение файла аккаунта
         self.file_extension = "json"
 
-    @staticmethod
-    async def check_before_sending_messages_via_chats(page: ft.Page):
+    async def check_before_sending_messages_via_chats(self):
         """
         ⛔ Проверка наличия сформированного списка с чатами для рассылки по чатам.
         ⛔ Проверка папки с сообщениями на наличие заготовленных сообщений.
         """
         if len(select_records_with_limit(limit=LIMITS)) == 0:
-            await show_notification(page, "⛔ Не сформирован список для рассылки по чатам")
+            await show_notification(self.page, "⛔ Не сформирован список для рассылки по чатам")
 
     # TODO улучшить проверку на наличие username, ссылок в базе данных для инвайтинга и так далее
     # @staticmethod
@@ -35,16 +35,17 @@ class CheckingProgram:
     #     if len(await select_records_with_limit(table_name="links_inviting", limit=limits)) == 0:
     #         await show_notification(page, "⛔ Не записана группа для инвайтинга")
 
-    async def checking_sending_messages_via_chats_with_answering_machine(self, page: ft.Page):
+    async def checking_sending_messages_via_chats_with_answering_machine(self):
         """
         ⛔ Проверка наличия аккаунта в папке с аккаунтами (Рассылка сообщений по чатам с автоответчиком)
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         """
         if not find_filess(directory_path=path_folder_with_messages, extension=self.file_extension):
-            await show_notification(page, f"⛔ Нет заготовленных сообщений в папке {path_folder_with_messages}")
+            await show_notification(self.page, f"⛔ Нет заготовленных сообщений в папке {path_folder_with_messages}")
         if not find_filess(directory_path=path_send_message_folder_answering_machine_message,
                            extension=self.file_extension):
-            await show_notification(page,
-                                    f"⛔ Нет заготовленных сообщений для автоответчика в папке {path_send_message_folder_answering_machine_message}")
+            await show_notification(
+                self.page,
+                f"⛔ Нет заготовленных сообщений для автоответчика в папке {path_send_message_folder_answering_machine_message}")
         if len(await select_records_with_limit(table_name="writing_group_links", limit=LIMITS)) == 0:
-            await show_notification(page, "⛔ Не сформирован список для рассылки по чатам")
+            await show_notification(
+                self.page, "⛔ Не сформирован список для рассылки по чатам")
