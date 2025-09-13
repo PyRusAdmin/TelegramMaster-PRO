@@ -13,7 +13,7 @@ from src.features.account.TGContact import TGContact
 from src.features.account.TGCreating import CreatingGroupsAndChats
 from src.features.account.TGReactions import WorkingWithReactions
 from src.features.account.TGSendingMessages import SendTelegramMessages
-from src.features.account.TGViewingPosts import ViewingPosts
+from src.features.account.viewing_posts import ViewingPosts
 from src.features.account.inviting import InvitingToAGroup
 from src.features.account.parsing.parsing import ParsingGroupMembers
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
