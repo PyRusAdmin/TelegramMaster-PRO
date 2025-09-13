@@ -6,13 +6,13 @@ from src.core.checking_program import CheckingProgram
 from src.core.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
                               WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, time_sending_messages_2)
 from src.core.sqlite_working_tools import create_database, open_and_read_data
-from src.features.account.TGAccountBIO import AccountBIO
-from src.features.account.TGChek import TGChek
-from src.features.account.TGConnect import TGConnect
-from src.features.account.TGContact import TGContact
-from src.features.account.TGCreating import CreatingGroupsAndChats
-from src.features.account.TGReactions import WorkingWithReactions
-from src.features.account.TGSendingMessages import SendTelegramMessages
+from src.features.account.account_bio import AccountBIO
+from src.features.account.chek import TGChek
+from src.features.account.connect import TGConnect
+from src.features.account.contact import TGContact
+from src.features.account.creating import CreatingGroupsAndChats
+from src.features.account.reactions import WorkingWithReactions
+from src.features.account.sending_messages import SendTelegramMessages
 from src.features.account.viewing_posts import ViewingPosts
 from src.features.account.inviting import InvitingToAGroup
 from src.features.account.parsing.parsing import ParsingGroupMembers

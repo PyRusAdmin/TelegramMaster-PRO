@@ -7,7 +7,7 @@ from telethon.errors import (AuthKeyUnregisteredError, UsernameInvalidError, Use
 
 from src.core.configs import path_accounts_folder
 from src.core.utils import Utils
-from src.features.account.TGConnect import TGConnect
+from src.features.account.connect import TGConnect
 from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
 from src.gui.notification import show_notification

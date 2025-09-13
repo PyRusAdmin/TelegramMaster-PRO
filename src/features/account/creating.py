@@ -9,7 +9,7 @@ from telethon import functions
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_folder
 from src.core.utils import Utils
-from src.features.account.TGConnect import TGConnect
+from src.features.account.connect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.gui.gui import AppLogger
 from src.gui.gui import list_view

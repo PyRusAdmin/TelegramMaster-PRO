@@ -3,7 +3,7 @@ import base64
 
 import flet as ft
 
-from src.core.configs import BUTTON_HEIGHT, BUTTON_WIDTH, WIDTH_WIDE_BUTTON
+from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.configs import PROGRAM_NAME, DATE_OF_PROGRAM_CHANGE, PROGRAM_VERSION
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.locales.translations_loader import translations

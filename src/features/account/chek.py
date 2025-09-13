@@ -2,7 +2,7 @@
 import flet as ft
 
 from src.core.configs import BUTTON_WIDTH, BUTTON_HEIGHT
-from src.features.account.TGConnect import TGConnect
+from src.features.account.connect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.gui.gui import list_view
 from src.locales.translations_loader import translations
@@ -37,7 +37,7 @@ class TGChek:
 
         self.page.views.append(
             ft.View("/account_verification_menu",
-                    [await GUIProgram().key_app_bar(),
+                    [await GUIProgram().key_app_bar(), # Добавляет кнопку назад на страницу (page)
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["menu"]["account_check"],
                          ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,

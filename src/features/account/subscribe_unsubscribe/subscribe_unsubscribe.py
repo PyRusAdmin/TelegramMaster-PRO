@@ -17,7 +17,7 @@ from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_fo
                               time_subscription_2)
 from src.core.sqlite_working_tools import get_writing_group_links, write_writing_group_links_to_db
 from src.core.utils import Utils
-from src.features.account.TGConnect import TGConnect
+from src.features.account.connect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.gui_input_builders import LinkInputRowBuilder, TimeInputRowBuilder
 from src.features.settings.setting import SettingPage
