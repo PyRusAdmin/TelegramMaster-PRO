@@ -284,7 +284,7 @@ class Menu:
                                            on_click=lambda _: self.page.go("/automatic_setting_of_reactions")),
                      ])]))
 
-    async def chek_menu(self):
+    async def check_menu(self):
         """
         Меню 🔍 Проверка аккаунтов
         """
