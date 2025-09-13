@@ -39,7 +39,8 @@ class GUIManager:
                 """Кнопка возврата в меню изменения профиля."""
                 self.page.go("/bio_editing")
 
-            self.function_button.function_button_ready(btn_click, back_button_clicked, user_input)  # Функция для кнопки "Готово"
+            self.function_button.function_button_ready(btn_click, back_button_clicked,
+                                                       user_input)  # Функция для кнопки "Готово"
         except Exception as error:
             logger.exception(error)
 
