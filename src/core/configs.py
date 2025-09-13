@@ -24,11 +24,6 @@ class ConfigReader:
         self.config_path = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
         self.config_path.read('user_data/config/config_path.ini', encoding='utf-8')
 
-    # def get_config_time_changing_accounts(self):
-    #     """Получение времени смены аккаунтов"""
-    #     return (self.config.get('time_changing_accounts', 'time_changing_accounts_1', fallback=None),
-    #             self.config.get('time_changing_accounts', 'time_changing_accounts_2', fallback=None))
-
     def get_time_subscription(self):
         return (self.config.getint('time_subscription', 'time_subscription_1', fallback=None),
                 self.config.getint('time_subscription', 'time_subscription_2', fallback=None))
@@ -48,10 +43,6 @@ class ConfigReader:
         """   """
         return self.config.get('time_activity_user', 'time_activity_user_2', fallback=None)
 
-    # def get_time_sending_messages(self):
-    #     return (self.config.getint('time_sending_messages', 'time_sending_messages_1', fallback=None),
-    #             self.config.getint('time_sending_messages', 'time_sending_messages_2', fallback=None))
-
     def get_api_id_data_api_hash_data(self):
         return (self.config.get('telegram_settings', 'id', fallback=None),
                 self.config.get('telegram_settings', 'hash', fallback=None))
@@ -59,12 +50,6 @@ class ConfigReader:
     def get_hour_minutes_every_day(self):
         return (self.config.get('hour_minutes_every_day', 'hour', fallback=None),
                 self.config.get('hour_minutes_every_day', 'minutes', fallback=None))
-
-    # def get_line_width_button(self) -> str | None:
-    #     """
-    #     Получение ширины кнопки
-    #     """
-    #     return self.config_gui.get('line_width_button', 'line_width_button', fallback=None)
 
     def get_line_height_button(self) -> str | None:
         """

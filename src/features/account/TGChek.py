@@ -12,7 +12,7 @@ class TGChek:
 
     def __init__(self, page: ft.Page):
         self.page = page
-        self.TGConnect = TGConnect(page)
+        self.connect = TGConnect(page)
 
     async def account_verification_menu(self):
         """
@@ -21,19 +21,19 @@ class TGChek:
 
         async def validation_check(_) -> None:
             """Проверка валидности аккаунтов"""
-            await self.TGConnect.verify_all_accounts()
+            await self.connect.verify_all_accounts()
 
         async def renaming_accounts(_):
             """Переименование аккаунтов"""
-            await self.TGConnect.get_account_details()
+            await self.connect.get_account_details()
 
         async def checking_for_spam_bots(_):
             """Проверка на спам ботов"""
-            await self.TGConnect.check_for_spam()
+            await self.connect.check_for_spam()
 
         async def full_verification(_):
             """Полная проверка аккаунтов"""
-            await self.TGConnect.checking_all_accounts()
+            await self.connect.checking_all_accounts()
 
         self.page.views.append(
             ft.View("/account_verification_menu",

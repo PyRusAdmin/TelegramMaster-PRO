@@ -31,7 +31,7 @@ class SendTelegramMessages:
 
     def __init__(self, page: ft.Page):
         self.page = page
-        self.tg_connect = TGConnect(page)
+        self.connect = TGConnect(page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page)
         self.account_extension = "session"  # Расширение файла аккаунта
         self.file_extension = "json"
@@ -62,8 +62,8 @@ class SendTelegramMessages:
                     # Просим пользователя ввести расширение сообщения
                     for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
                                                                extension=self.account_extension):
-                        client = await self.tg_connect.get_telegram_client(session_name,
-                                                                           account_directory=path_accounts_folder)
+                        client = await self.connect.get_telegram_client(session_name,
+                                                                        account_directory=path_accounts_folder)
                         try:
                             # Открываем parsing список user_data/software_database.db для inviting в группу
                             usernames = select_records_with_limit(limit=int(limits))
@@ -171,8 +171,8 @@ class SendTelegramMessages:
             try:
                 for session_name in self.utils.find_filess(directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
                                                            extension=self.account_extension):
-                    client = await self.tg_connect.get_telegram_client(session_name,
-                                                                       account_directory=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE)
+                    client = await self.connect.get_telegram_client(session_name,
+                                                                    account_directory=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE)
 
                     @client.on(events.NewMessage(incoming=True))  # Обработчик личных сообщений
                     async def handle_private_messages(event):
@@ -213,8 +213,8 @@ class SendTelegramMessages:
                 start = await self.app_logger.start_time()
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
                                                            extension=self.account_extension):
-                    client = await self.tg_connect.get_telegram_client(session_name,
-                                                                       account_directory=path_accounts_folder)
+                    client = await self.connect.get_telegram_client(session_name,
+                                                                    account_directory=path_accounts_folder)
                     # Открываем базу данных с группами, в которые будут рассылаться сообщения
                     await self.app_logger.log_and_display(f"Всего групп: {len(chat_list_fields)}")
                     for group_link in chat_list_fields:  # Поочередно выводим записанные группы
