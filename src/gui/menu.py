@@ -260,7 +260,7 @@ class Menu:
 
     async def reactions_menu(self):
         """
-        Меню работа с реакциями
+        Меню ❤️ Работа с реакциями
         """
         self.page.views.append(
             ft.View("/working_with_reactions",
@@ -274,11 +274,11 @@ class Menu:
                                                                                       ft.Colors.PURPLE])), ), ), ], ),
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 👍 Ставим реакции
-                         ft.ElevatedButton(width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
+                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                            text=translations["ru"]["reactions_menu"]["setting_reactions"],
                                            on_click=lambda _: self.page.go("/setting_reactions")),
                          # 🤖 Автоматическое выставление реакций
-                         ft.ElevatedButton(width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
+                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                            text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
                                            on_click=lambda _: self.page.go("/automatic_setting_of_reactions")),
                      ])]))
