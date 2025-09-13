@@ -37,7 +37,7 @@ class TGChek:
 
         self.page.views.append(
             ft.View("/account_verification_menu",
-                    [await GUIProgram().key_app_bar(), # Добавляет кнопку назад на страницу (page)
+                    [await GUIProgram().key_app_bar(),  # Добавляет кнопку назад на страницу (page)
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["menu"]["account_check"],
                          ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
