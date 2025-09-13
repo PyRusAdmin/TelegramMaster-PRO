@@ -8,6 +8,9 @@ config.read('user_data/config/config.ini', encoding='utf-8')
 time_changing_accounts_1 = config.get('time_changing_accounts', 'time_changing_accounts_1', fallback=None)
 time_changing_accounts_2 = config.get('time_changing_accounts', 'time_changing_accounts_2', fallback=None)
 
+config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
+config_gui.read('user_data/config/config_gui.ini', encoding='utf-8')
+
 
 class ConfigReader:
 
@@ -57,11 +60,11 @@ class ConfigReader:
         return (self.config.get('hour_minutes_every_day', 'hour', fallback=None),
                 self.config.get('hour_minutes_every_day', 'minutes', fallback=None))
 
-    def get_line_width_button(self) -> str | None:
-        """
-        Получение ширины кнопки
-        """
-        return self.config_gui.get('line_width_button', 'line_width_button', fallback=None)
+    # def get_line_width_button(self) -> str | None:
+    #     """
+    #     Получение ширины кнопки
+    #     """
+    #     return self.config_gui.get('line_width_button', 'line_width_button', fallback=None)
 
     def get_line_height_button(self) -> str | None:
         """
@@ -147,8 +150,8 @@ class ConfigReader:
 
 
 # TODO - Все переменные должны быть с главных буквы
-"""Размеры кнопок"""
-WIDTH_WIDE_BUTTON = ConfigReader().get_line_width_button()  # Получение ширины широкой кнопки (Широкая кнопка)
+"""Размеры кнопок WIDTH_WIDE_BUTTON - Ширина широкой кнопки"""
+WIDTH_WIDE_BUTTON = config_gui.get('line_width_button', 'line_width_button', fallback=None)
 BUTTON_HEIGHT = ConfigReader().get_line_height_button()  # Получение ширины кнопки
 SMALL_BUTTON_WIDTH = ConfigReader().get_small_button_width()  # Ширина малой кнопки
 BUTTON_WIDTH = ConfigReader().line_width()  # Ширина окна и ширина строки
