@@ -24,7 +24,7 @@ class ViewingPosts:
 
     def __init__(self, page: ft.Page):
         self.page = page
-        self.tg_connect = TGConnect(page=page)
+        self.connect = TGConnect(page=page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
@@ -47,7 +47,7 @@ class ViewingPosts:
             async def btn_click(_) -> None:
 
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                    client = await self.tg_connect.client_connect_string_session(session_name)
+                    client = await self.connect.client_connect_string_session(session_name)
 
                     # await self.app_logger.log_and_display(f"[+] Работаем с каналом: {link_channel.value}")
                     list_view.controls.append(ft.Text(f"[+] Работаем с каналом: {link_channel.value}"))

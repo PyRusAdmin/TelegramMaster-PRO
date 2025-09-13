@@ -21,7 +21,7 @@ class TGContact:
 
     def __init__(self, page):
         self.page = page
-        self.tg_connect = TGConnect(page=page)
+        self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
 
@@ -32,8 +32,8 @@ class TGContact:
         try:
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                client = await self.tg_connect.get_telegram_client(session_name,
-                                                                   account_directory=path_accounts_folder)
+                client = await self.connect.get_telegram_client(session_name,
+                                                                account_directory=path_accounts_folder)
                 await self.parsing_and_recording_contacts_in_the_database(client)
                 client.disconnect()  # Разрываем соединение telegram
         except Exception as error:
@@ -106,8 +106,8 @@ class TGContact:
         try:
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                client = await self.tg_connect.get_telegram_client(session_name,
-                                                                   account_directory=path_accounts_folder)
+                client = await self.connect.get_telegram_client(session_name,
+                                                                account_directory=path_accounts_folder)
                 await self.we_get_the_account_id(client)
                 client.disconnect()  # Разрываем соединение telegram
         except Exception as error:
@@ -121,8 +121,8 @@ class TGContact:
             # Открываем базу данных для работы с аккаунтами user_data/software_database.db
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                client = await self.tg_connect.get_telegram_client(session_name,
-                                                                   account_directory=path_accounts_folder)
+                client = await self.connect.get_telegram_client(session_name,
+                                                                account_directory=path_accounts_folder)
                 await self.add_contact_to_phone_book(client)
         except Exception as error:
             logger.exception(error)

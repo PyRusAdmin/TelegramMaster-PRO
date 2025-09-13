@@ -30,7 +30,7 @@ class SubscribeUnsubscribeTelegram:
 
     def __init__(self, page):
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
-        self.tg_connect = TGConnect(page=page)
+        self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.setting_page = SettingPage(page=page)
@@ -49,8 +49,8 @@ class SubscribeUnsubscribeTelegram:
             start = await self.app_logger.start_time()
             try:
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                    client = await self.tg_connect.get_telegram_client(session_name,
-                                                                       account_directory=path_accounts_folder)
+                    client = await self.connect.get_telegram_client(session_name,
+                                                                    account_directory=path_accounts_folder)
                     dialogs = client.iter_dialogs()
                     await self.app_logger.log_and_display(f"Диалоги: {dialogs}")
                     async for dialog in dialogs:
@@ -65,7 +65,7 @@ class SubscribeUnsubscribeTelegram:
             """Подписываемся на группы и каналы"""
             start = await self.app_logger.start_time()
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                session_string = await self.tg_connect.get_string_session(session_name)
+                session_string = await self.connect.get_string_session(session_name)
                 # Создаем клиент, используя StringSession и вашу строку
                 client = TelegramClient(
                     StringSession(session_string),  # <-- Используем StringSession
@@ -74,7 +74,7 @@ class SubscribeUnsubscribeTelegram:
                     system_version="4.16.30-vxCUSTOM",
                 )
                 await client.connect()
-                await self.tg_connect.getting_account_data(client)
+                await self.connect.getting_account_data(client)
 
                 if client is None:
                     logger.error("❌ Не удалось подключиться к Telegram")

@@ -42,7 +42,7 @@ class InvitingToAGroup:
         self.api_hash = self.api_id_api_hash[1]
         self.links_inviting = get_links_inviting()  # Получаем список ссылок на группы для инвайтинга из базы данных
         self.app_logger = AppLogger(page=page)
-        self.tg_connect = TGConnect(page=page)
+        self.connect = TGConnect(page=page)
         self.utils = Utils(page=page)
         self.setting_page = SettingPage(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
@@ -65,9 +65,9 @@ class InvitingToAGroup:
             self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
 
-                client = await self.tg_connect.client_connect_string_session(session_name)
+                client = await self.connect.client_connect_string_session(session_name)
 
-                await self.tg_connect.getting_account_data(client)
+                await self.connect.getting_account_data(client)
                 await self.subscribe.subscribe_to_group_or_channel(client, dropdown.value)
                 logger.info(f"Подписка на группу {dropdown.value} выполнена")
                 await self.app_logger.log_and_display(f"{dropdown.value}")
