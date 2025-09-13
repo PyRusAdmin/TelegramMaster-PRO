@@ -7,7 +7,6 @@ from src.core.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHA
                               WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, time_sending_messages_2)
 from src.core.sqlite_working_tools import create_database, open_and_read_data
 from src.features.account.account_bio import AccountBIO
-from src.features.account.chek import TGChek
 from src.features.account.connect import TGConnect
 from src.features.account.contact import TGContact
 from src.features.account.creating import CreatingGroupsAndChats
@@ -46,6 +45,7 @@ async def main(page: ft.Page):
     setting_page = SettingPage(page=page)
     account_bio = AccountBIO(page=page)
     menu = Menu(page=page)
+    connect = TGConnect(page=page)
 
     async def route_change(_):
         page.views.clear()
@@ -56,8 +56,16 @@ async def main(page: ft.Page):
             # TODO миграция на Peewee. вернуть проверку на наличие аккаунтов, username, ссылки на инвайтинг
             await InvitingToAGroup(page=page).inviting_menu()
         # __________________________________________________________________________________________________________
-        elif page.route == "/account_verification_menu":  # "Проверка аккаунтов"
-            await TGChek(page=page).account_verification_menu()
+        elif page.route == "/account_verification_menu":  # 🔍 Проверка аккаунтов
+            await menu.chek_menu()
+        elif page.route == "/checking_for_spam_bots":  # 🤖 Проверка через спам бот
+            await connect.check_for_spam()
+        elif page.route == "/validation_check":  # ✅ Проверка на валидность
+            await connect.validation_check()
+        elif page.route == "/renaming_accounts":  # ✏️ Переименование аккаунтов
+            await connect.renaming_accounts()
+        elif page.route == "/full_verification":  # 🔍 Полная проверка
+            await connect.full_verification()
         # __________________________________________________________________________________________________________
         elif page.route == "/subscribe_unsubscribe":  # Меню "Подписка и отписка"
             await SubscribeUnsubscribeTelegram(page=page).subscribe_and_unsubscribe_menu()

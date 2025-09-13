@@ -228,7 +228,7 @@ class TGConnect:
         except Exception as error:
             logger.exception(error)
 
-    async def verify_all_accounts(self) -> None:
+    async def validation_check(self) -> None:
         """
         Проверяет все аккаунты Telegram в указанной директории.
         """
@@ -246,7 +246,7 @@ class TGConnect:
         except Exception as error:
             logger.exception(error)
 
-    async def get_account_details(self):
+    async def renaming_accounts(self):
         """
         Получает информацию о Telegram аккаунте.
         """
@@ -280,11 +280,11 @@ class TGConnect:
         except Exception as error:
             logger.exception(error)
 
-    async def checking_all_accounts(self) -> None:
+    async def full_verification(self) -> None:
         try:
             start = await self.app_logger.start_time()
-            await self.verify_all_accounts()  # Проверка валидности аккаунтов
-            await self.get_account_details()  # Переименование аккаунтов
+            await self.validation_check()  # Проверка валидности аккаунтов
+            await self.renaming_accounts()  # Переименование аккаунтов
             await self.check_for_spam()  # Проверка на спам ботов
             await self.app_logger.end_time(start)
             await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
