@@ -12,12 +12,11 @@ from telethon.errors import (ChannelPrivateError, ChatAdminRequiredError, ChatWr
 
 from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON, path_accounts_folder,
                               path_folder_with_messages, PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
-                              path_send_message_folder_answering_machine_message,
-                              TIME_SENDING_MESSAGES_1, time_sending_messages_2, time_subscription_1,
-                              time_subscription_2)
+                              path_send_message_folder_answering_machine_message, TIME_SENDING_MESSAGES_1,
+                              time_sending_messages_2, time_subscription_1, time_subscription_2)
 from src.core.sqlite_working_tools import select_records_with_limit, open_and_read_data
 from src.core.utils import Utils
-from src.features.account.TGConnect import TGConnect
+from src.features.account.connect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.gui import list_view, AppLogger

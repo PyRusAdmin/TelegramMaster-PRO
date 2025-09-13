@@ -17,7 +17,7 @@ from src.core.configs import (BUTTON_HEIGHT, ConfigReader, LIMITS, WIDTH_WIDE_BU
                               TIME_INVITING_1, TIME_INVITING_2)
 from src.core.sqlite_working_tools import select_records_with_limit, get_links_inviting, save_links_inviting
 from src.core.utils import Utils
-from src.features.account.TGConnect import TGConnect
+from src.features.account.connect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.parsing.switch_controller import ToggleController
 from src.features.account.subscribe_unsubscribe.gui_input_builders import TimeInputRowBuilder, LinkInputRowBuilder

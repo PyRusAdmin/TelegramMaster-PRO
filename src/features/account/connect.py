@@ -9,8 +9,7 @@ import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon.errors import (ApiIdInvalidError, AuthKeyDuplicatedError, AuthKeyNotFound, AuthKeyUnregisteredError,
                              PasswordHashInvalidError, PhoneNumberBannedError, SessionPasswordNeededError,
-                             TimedOutError, TypeNotFoundError, UserDeactivatedBanError, YouBlockedUserError,
-                             SessionRevokedError)
+                             TimedOutError, TypeNotFoundError, UserDeactivatedBanError, YouBlockedUserError)
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz

@@ -8,7 +8,7 @@ from telethon import functions, types
 from src.core.configs import path_accounts_folder
 from src.core.sqlite_working_tools import add_member_to_db
 from src.core.utils import Utils
-from src.features.account.TGConnect import TGConnect
+from src.features.account.connect import TGConnect
 from src.features.account.parsing.parsing import UserInfo
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations
