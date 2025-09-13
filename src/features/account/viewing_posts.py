@@ -34,6 +34,8 @@ class ViewingPosts:
     async def viewing_posts_request(self) -> None:
         """Окно с полями ввода и кнопками для накрутки просмотров."""
         try:
+            list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
+
             # Получаем количество аккаунтов
             sessions_count = len(self.utils.find_filess(directory_path=path_accounts_folder, extension='session'))
             list_view.controls.append(ft.Text(f"Подключенных аккаунтов {sessions_count}"))
