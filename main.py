@@ -57,7 +57,7 @@ async def main(page: ft.Page):
             await InvitingToAGroup(page=page).inviting_menu()
         # __________________________________________________________________________________________________________
         elif page.route == "/account_verification_menu":  # 🔍 Проверка аккаунтов
-            await menu.chek_menu()
+            await menu.check_menu()
         elif page.route == "/checking_for_spam_bots":  # 🤖 Проверка через спам бот
             await connect.check_for_spam()
         elif page.route == "/validation_check":  # ✅ Проверка на валидность
