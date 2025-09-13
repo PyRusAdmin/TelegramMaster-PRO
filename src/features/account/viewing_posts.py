@@ -49,7 +49,6 @@ class ViewingPosts:
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     client = await self.connect.client_connect_string_session(session_name)
 
-                    # await self.app_logger.log_and_display(f"[+] Работаем с каналом: {link_channel.value}")
                     list_view.controls.append(ft.Text(f"[+] Работаем с каналом: {link_channel.value}"))
 
                     await self.subscribe.subscribe_to_group_or_channel(client=client, groups=link_channel.value)
