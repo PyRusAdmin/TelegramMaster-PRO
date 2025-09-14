@@ -53,6 +53,8 @@ async def main(page: ft.Page):
     viewing_posts = ViewingPosts(page=page)
     receiving_and_recording = ReceivingAndRecording()
     tg_contact = TGContact(page=page)
+    send_telegram_messages = SendTelegramMessages(page=page)
+    checking_program = CheckingProgram(page=page)
 
     async def route_change(_):
         page.views.clear()
@@ -139,11 +141,10 @@ async def main(page: ft.Page):
             await creating_groups_and_chats.creating_groups_and_chats()
         # __________________________________________________________________________________________________________
         elif page.route == "/sending_messages_files_via_chats":  # 💬 Рассылка сообщений по чатам
-            await CheckingProgram(page=page).check_before_sending_messages_via_chats()
-            await SendTelegramMessages(page=page).sending_messages_files_via_chats()
-
+            await checking_program.check_before_sending_messages_via_chats()
+            await send_telegram_messages.sending_messages_files_via_chats()
         elif page.route == "/sending_files_to_personal_account_with_limits":  # Отправка сообщений в личку
-            await SendTelegramMessages(page=page).send_files_to_personal_chats()
+            await send_telegram_messages.send_files_to_personal_chats()
         # __________________________________________________________________________________________________________
         elif page.route == "/bio_editing":  # Меню "Редактирование_BIO"
             await menu.bio_editing_menu()
