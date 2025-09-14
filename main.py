@@ -46,6 +46,7 @@ async def main(page: ft.Page):
     account_bio = AccountBIO(page=page)
     menu = Menu(page=page)
     connect = TGConnect(page=page)
+    creating_groups_and_chats = CreatingGroupsAndChats(page=page)
 
     async def route_change(_):
         page.views.clear()
@@ -129,7 +130,7 @@ async def main(page: ft.Page):
             await TGConnect(page=page).account_connection_menu()
         # __________________________________________________________________________________________________________
         elif page.route == "/creating_groups":  # Создание групп (чатов)
-            await CreatingGroupsAndChats(page=page).creating_groups_and_chats()
+            await creating_groups_and_chats.creating_groups_and_chats()
         # __________________________________________________________________________________________________________
         elif page.route == "/sending_messages_files_via_chats":  # 💬 Рассылка сообщений по чатам
             await CheckingProgram(page=page).check_before_sending_messages_via_chats()
