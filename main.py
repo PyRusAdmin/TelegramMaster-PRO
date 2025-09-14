@@ -51,6 +51,8 @@ async def main(page: ft.Page):
     working_with_reactions = WorkingWithReactions(page=page)
     parsing_group_members = ParsingGroupMembers(page=page)
     viewing_posts = ViewingPosts(page=page)
+    receiving_and_recording = ReceivingAndRecording()
+    tg_contact = TGContact(page=page)
 
     async def route_change(_):
         page.views.clear()
@@ -97,7 +99,7 @@ async def main(page: ft.Page):
             await parsing_group_members.account_selection_menu()
         # __________________________________________________________________________________________________________
         elif page.route == "/importing_a_list_of_parsed_data":  # 📋 Импорт списка от ранее спарсенных данных
-            await ReceivingAndRecording().write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
+            await receiving_and_recording.write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
         # __________________________________________________________________________________________________________
         elif page.route == "/working_with_contacts":  # Меню "Работа с контактами"
             await menu.working_with_contacts_menu()
@@ -114,19 +116,19 @@ async def main(page: ft.Page):
         elif page.route == "/show_list_contacts":  # Показать список контактов
             start = await app_logger.start_time()
             logger.info("▶️ Начало Показа списка контактов")
-            await TGContact(page=page).show_account_contact_list()
+            await tg_contact.show_account_contact_list()
             logger.info("🔚 Конец Показа списка контактов")
             await app_logger.end_time(start)
         elif page.route == "/deleting_contacts":  # Удаление контактов
             start = await app_logger.start_time()
             logger.info("▶️ Начало Удаления контактов")
-            await TGContact(page=page).delete_contact()
+            await tg_contact.delete_contact()
             logger.info("🔚 Конец Удаления контактов")
             await app_logger.end_time(start)
         elif page.route == "/adding_contacts":  # Добавление контактов
             start = await app_logger.start_time()
             logger.info("▶️ Начало Добавления контактов")
-            await TGContact(page=page).inviting_contact()
+            await tg_contact.inviting_contact()
             logger.info("🔚 Конец Добавления контактов")
             await app_logger.end_time(start)
         # __________________________________________________________________________________________________________
