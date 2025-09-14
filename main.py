@@ -50,6 +50,7 @@ async def main(page: ft.Page):
     subscribe_unsubscribe_telegram = SubscribeUnsubscribeTelegram(page=page)
     working_with_reactions = WorkingWithReactions(page=page)
     parsing_group_members = ParsingGroupMembers(page=page)
+    viewing_posts = ViewingPosts(page=page)
 
     async def route_change(_):
         page.views.clear()
@@ -90,7 +91,7 @@ async def main(page: ft.Page):
             await app_logger.end_time(start)
         # __________________________________________________________________________________________________________
         elif page.route == "/viewing_posts_menu":  # ️‍🗨️ Накручиваем просмотры постов
-            await ViewingPosts(page=page).viewing_posts_request()
+            await viewing_posts.viewing_posts_request()
         # __________________________________________________________________________________________________________
         elif page.route == "/parsing":  # Меню "Парсинг"
             await parsing_group_members.account_selection_menu()
