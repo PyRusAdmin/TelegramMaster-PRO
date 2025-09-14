@@ -99,7 +99,7 @@ class SubscribeUnsubscribeTelegram:
             data_to_save = {
                 "writing_group_links": writing_group_links,
             }
-            write_writing_group_links_to_db(data_to_save)
+            write_writing_group_links_to_db(data_to_save=data_to_save)
             logger.info(f"Сохранение ссылок для подписки завершено")
 
         async def btn_click(_) -> None:

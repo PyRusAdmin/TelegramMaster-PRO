@@ -22,7 +22,7 @@ class CheckingProgram:
         ⛔ Проверка папки с сообщениями на наличие заготовленных сообщений.
         """
         if len(select_records_with_limit(limit=LIMITS)) == 0:
-            await show_notification(self.page, "⛔ Не сформирован список для рассылки по чатам")
+            await show_notification(page=self.page, message="⛔ Не сформирован список для рассылки по чатам")
 
     # TODO улучшить проверку на наличие username, ссылок в базе данных для инвайтинга и так далее
     # @staticmethod
@@ -41,12 +41,13 @@ class CheckingProgram:
         ⛔ Проверка наличия аккаунта в папке с аккаунтами (Рассылка сообщений по чатам с автоответчиком)
         """
         if not self.utils.find_filess(directory_path=path_folder_with_messages, extension=self.file_extension):
-            await show_notification(self.page, f"⛔ Нет заготовленных сообщений в папке {path_folder_with_messages}")
+            await show_notification(page=self.page,
+                                    message=f"⛔ Нет заготовленных сообщений в папке {path_folder_with_messages}")
         if not self.utils.find_filess(directory_path=path_send_message_folder_answering_machine_message,
                                       extension=self.file_extension):
             await show_notification(
-                self.page,
-                f"⛔ Нет заготовленных сообщений для автоответчика в папке {path_send_message_folder_answering_machine_message}")
+                page=self.page,
+                message=f"⛔ Нет заготовленных сообщений для автоответчика в папке {path_send_message_folder_answering_machine_message}")
         if len(await select_records_with_limit(table_name="writing_group_links", limit=LIMITS)) == 0:
             await show_notification(
-                self.page, "⛔ Не сформирован список для рассылки по чатам")
+                page=self.page, message="⛔ Не сформирован список для рассылки по чатам")

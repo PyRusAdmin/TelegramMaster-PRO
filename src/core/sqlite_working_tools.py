@@ -179,6 +179,7 @@ def create_database():
 
 def write_to_single_column_table():
     """Запись username в таблицу members"""
+    pass
 
 
 """Работа с таблицей members"""

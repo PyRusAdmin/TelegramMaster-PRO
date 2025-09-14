@@ -98,7 +98,7 @@ class ParsingGroupMembers:
                 logger.info(f"Полученные данные: {user}")
                 # user_premium = "Пользователь с premium" if user.premium else "Обычный пользователь"
                 log_data = await self.collect_user_log_data(user)
-                add_member_to_db(log_data)
+                add_member_to_db(log_data=log_data)
 
         except TypeError as error:
             logger.exception(f"❌ Ошибка: {error}")
@@ -416,7 +416,7 @@ class ParsingGroupMembers:
                         # Получаем данные о пользователе
                         log_data = await self.collect_user_log_data(user)
                         await self.app_logger.log_and_display(f"{log_data}")
-                        await add_member_to_db(log_data)
+                        await add_member_to_db(log_data=log_data)
                     except ValueError as e:
                         await self.app_logger.log_and_display(
                             f"❌ Не удалось найти сущность для пользователя {message.from_id.user_id}: {e}")
@@ -489,7 +489,8 @@ class ParsingGroupMembers:
                     # Логируем информацию
                     await self.app_logger.log_and_display(
                         f"{dialog.id}, {title}, {link or 'без ссылки'}, {participants_count}")
-                    await save_group_channel_info(dialog, title, about, link, participants_count)
+                    await save_group_channel_info(dialog=dialog, title=title, about=about, link=link,
+                                                  participants_count=participants_count)
                 except TypeError as te:
                     logger.warning(f"❌ TypeError при обработке диалога {dialog.id}: {te}")
                     continue

@@ -86,8 +86,8 @@ class TGConnect:
                 if not await client.is_user_authorized():  # Если аккаунт не авторизирован
                     await client.disconnect()
                     await asyncio.sleep(5)
-                    self.utils.working_with_accounts(f"user_data/accounts/{session_name}.session",
-                                                     f"user_data/accounts/banned/{session_name}.session")
+                    self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
+                                                     new_account_folder=f"user_data/accounts/banned/{session_name}.session")
                 else:
                     await self.app_logger.log_and_display(f"Аккаунт {session_name} авторизован")
                     await client.disconnect()  # Отключаемся после проверки
@@ -99,8 +99,8 @@ class TGConnect:
                 await asyncio.sleep(2)
             except sqlite3.OperationalError:
                 await client.disconnect()
-                self.utils.working_with_accounts(f"user_data/accounts/{session_name}.session",
-                                                 f"user_data/accounts/banned/{session_name}.session")
+                self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
+                                                 new_account_folder=f"user_data/accounts/banned/{session_name}.session")
             except AttributeError:
                 pass
         except Exception as error:
@@ -157,8 +157,9 @@ class TGConnect:
                             await self.app_logger.log_and_display(
                                 message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
                             # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
-                            self.utils.working_with_accounts(f"user_data/accounts/{session_name}.session",
-                                                             f"user_data/accounts/banned/{session_name}.session")
+                            self.utils.working_with_accounts(
+                                account_folder=f"user_data/accounts/{session_name}.session",
+                                new_account_folder=f"user_data/accounts/banned/{session_name}.session")
                         similarity_ratio_en: int = fuzz.ratio(f"{message.message}",
                                                               "I’m very sorry that you had to contact me. Unfortunately, "
                                                               "some account_actions can trigger a harsh response from our "
@@ -175,8 +176,9 @@ class TGConnect:
                                 message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
                             # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
                             await self.app_logger.log_and_display(message=f"{session_name}")
-                            self.utils.working_with_accounts(f"user_data/accounts/{session_name}.session",
-                                                             f"user_data/accounts/banned/{session_name}.session")
+                            self.utils.working_with_accounts(
+                                account_folder=f"user_data/accounts/{session_name}.session",
+                                new_account_folder=f"user_data/accounts/banned/{session_name}.session")
                         await self.app_logger.log_and_display(
                             message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
                         try:
@@ -358,8 +360,8 @@ class TGConnect:
         except AuthKeyDuplicatedError:
             await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
             await self.app_logger.log_and_display(message=f"❌ Аккаунт {session_name} запущен под другим ip")
-            self.utils.working_with_accounts(f"{account_directory}/{session_name}.session",
-                                             f"user_data/accounts/banned/{session_name}.session")
+            self.utils.working_with_accounts(account_folder=f"{account_directory}/{session_name}.session",
+                                             new_account_folder=f"user_data/accounts/banned/{session_name}.session")
             return None
         except AttributeError as error:
             await self.app_logger.log_and_display(message=f"❌ Ошибка: {error}")
