@@ -23,7 +23,7 @@ class CreatingGroupsAndChats:
 
     def __init__(self, page: ft.Page):
         self.page = page
-        self.connect = TGConnect(page)
+        self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
 

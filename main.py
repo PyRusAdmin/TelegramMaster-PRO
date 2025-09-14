@@ -47,6 +47,9 @@ async def main(page: ft.Page):
     menu = Menu(page=page)
     connect = TGConnect(page=page)
     creating_groups_and_chats = CreatingGroupsAndChats(page=page)
+    subscribe_unsubscribe_telegram = SubscribeUnsubscribeTelegram(page=page)
+    working_with_reactions = WorkingWithReactions(page=page)
+    parsing_group_members = ParsingGroupMembers(page=page)
 
     async def route_change(_):
         page.views.clear()
@@ -69,20 +72,20 @@ async def main(page: ft.Page):
             await connect.full_verification()
         # __________________________________________________________________________________________________________
         elif page.route == "/subscribe_unsubscribe":  # Меню "Подписка и отписка"
-            await SubscribeUnsubscribeTelegram(page=page).subscribe_and_unsubscribe_menu()
+            await subscribe_unsubscribe_telegram.subscribe_and_unsubscribe_menu()
         # __________________________________________________________________________________________________________
         elif page.route == "/working_with_reactions":  # Меню "Работа с реакциями"
             await menu.reactions_menu()
         elif page.route == "/setting_reactions":  # Ставим реакции
             start = await app_logger.start_time()
             logger.info("▶️ Начало Проставления реакций")
-            await WorkingWithReactions(page=page).send_reaction_request(page=page)
+            await working_with_reactions.send_reaction_request(page=page)
             logger.info("🔚 Конец Проставления реакций")
             await app_logger.end_time(start)
         elif page.route == "/automatic_setting_of_reactions":  # Автоматическое выставление реакций
             start = await app_logger.start_time()
             logger.info("▶️ Начало Автоматического выставления реакций")
-            await WorkingWithReactions(page=page).setting_reactions()
+            await working_with_reactions.setting_reactions()
             logger.info("🔚 Конец Автоматического выставления реакций")
             await app_logger.end_time(start)
         # __________________________________________________________________________________________________________
@@ -90,7 +93,7 @@ async def main(page: ft.Page):
             await ViewingPosts(page=page).viewing_posts_request()
         # __________________________________________________________________________________________________________
         elif page.route == "/parsing":  # Меню "Парсинг"
-            await ParsingGroupMembers(page=page).account_selection_menu()
+            await parsing_group_members.account_selection_menu()
         # __________________________________________________________________________________________________________
         elif page.route == "/importing_a_list_of_parsed_data":  # 📋 Импорт списка от ранее спарсенных данных
             await ReceivingAndRecording().write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
@@ -127,7 +130,7 @@ async def main(page: ft.Page):
             await app_logger.end_time(start)
         # __________________________________________________________________________________________________________
         elif page.route == "/account_connection_menu":  # Подключение аккаунтов 'меню'.
-            await TGConnect(page=page).account_connection_menu()
+            await connect.account_connection_menu()
         # __________________________________________________________________________________________________________
         elif page.route == "/creating_groups":  # Создание групп (чатов)
             await creating_groups_and_chats.creating_groups_and_chats()
