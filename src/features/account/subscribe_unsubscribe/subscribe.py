@@ -54,7 +54,7 @@ class Subscribe:
         except (UsernameInvalidError, ValueError, TypeError):
             await self.app_logger.log_and_display(
                 f"❌ Попытка подписки на группу / канал {groups}. Не верное имя или cсылка {groups} не является группой / каналом: {groups}")
-            write_data_to_db(groups)
+            write_data_to_db(writing_group_links=groups)
         except PeerFloodError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["peer_flood"], level="error")
             await asyncio.sleep(random.randrange(50, 60))

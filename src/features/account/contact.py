@@ -160,7 +160,7 @@ class TGContact:
                     # После работы с номером телефона, программа удаляет номер со списка
                     await delete_row_db(table="contact", column="phone", value=user["phone"])
             client.disconnect()  # Разрываем соединение telegram
-            add_member_to_db(entities)  # Запись должна быть в таблицу members
+            add_member_to_db(log_data=entities)  # Запись должна быть в таблицу members
         except Exception as error:
             logger.exception(error)
 
