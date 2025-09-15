@@ -1,5 +1,8 @@
 <h1 align="center">TelegramMaster 🚀 by. <a href="https://t.me/PyAdminRU" target="_blank">PyAdminRU</a></h1>
 
+Русское сообщество: https://t.me/+8LO09QUNtvJkYmJi
+The English Community: https://t.me/+JZsl54JhzyJhOGIy
+
 [English readme](README.eng.md) • [Русский readme](README.md) • [Lengua española readme](README.es.md)
 
 ![alt text](docs/static/images/TelegramMaster_2.png "TelegramMaster_2")
