@@ -10,6 +10,8 @@
 🇷🇺 **Русское сообщество**: [Вступить](https://t.me/+8LO09QUNtvJkYmJi)  
 🇬🇧 **The English Community**: [Join](https://t.me/+JZsl54JhzyJhOGIy)
 
+<hr>
+
 [English readme](README.eng.md) • [Русский readme](README.md) • [Lengua española readme](README.es.md)
 
 ![alt text](docs/static/images/TelegramMaster_2.png "TelegramMaster_2")
