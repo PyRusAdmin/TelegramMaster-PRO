@@ -23,6 +23,10 @@ class ViewingPosts:
     """
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация экземпляра класса ViewingPosts
+        :param page: Объект страницы ft.Page
+        """
         self.page = page
         self.connect = TGConnect(page=page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
@@ -47,14 +51,14 @@ class ViewingPosts:
             async def btn_click(_) -> None:
 
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                    client = await self.connect.client_connect_string_session(session_name)
+                    client = await self.connect.client_connect_string_session(session_name=session_name)
 
                     list_view.controls.append(ft.Text(f"[+] Работаем с каналом: {link_channel.value}"))
 
                     await self.subscribe.subscribe_to_group_or_channel(client=client, groups=link_channel.value)
 
                     msg_id = int(re.search(r'/(\d+)$', link_post.value).group(1))  # Получаем id сообщения из ссылки
-                    await self.viewing_posts(client, link_post.value, msg_id, link_channel.value, session_name)
+                    await self.viewing_posts(client=client, link_post=link_post.value, number=msg_id, link_channel=link_channel.value, session_name=session_name)
                     await asyncio.sleep(1)
                     await client.disconnect()
                     # Изменение маршрута на новый (если необходимо)
@@ -81,7 +85,7 @@ class ViewingPosts:
                 await self.subscribe.subscribe_to_group_or_channel(client=client, groups=link_channel)
                 channel = await client.get_entity(link_channel)  # Получение информации о канале
                 await asyncio.sleep(5)
-                await self.app_logger.log_and_display(f"Ссылка на пост: {link_post}\n")
+                await self.app_logger.log_and_display(message=f"Ссылка на пост: {link_post}\n")
                 await asyncio.sleep(5)
                 await client(GetMessagesViewsRequest(peer=channel, id=[int(number)], increment=True))
             except KeyError:
