@@ -80,6 +80,28 @@ class AccountBIO:
         except Exception as error:
             logger.exception(error)
 
+    async def change_last_name_profile(self, user_input):
+        """
+        Изменение фамилии профиля
+
+        :param user_input - новое имя пользователя Telegram
+        """
+        try:
+            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                await self.app_logger.log_and_display(f"{session_name}")
+                client = await self.connect.client_connect_string_session(session_name=session_name)
+                await client.connect()
+                try:
+                    result = await client(functions.account.UpdateProfileRequest(last_name=user_input))
+                    await self.app_logger.log_and_display(f"{result}\nФамилия успешно обновлена!")
+                except AuthKeyUnregisteredError:
+                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                finally:
+                    await client.disconnect()
+                await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
+        except Exception as error:
+            logger.exception(error)
+
     async def bio_editing_menu(self):
         """
         Меню ✏️ Редактирование_BIO
@@ -106,6 +128,16 @@ class AccountBIO:
             await self.change_name_profile(user_input=profile_name_input_field)
             self.page.go("/bio_editing")  # Изменение маршрута
             self.page.update()
+
+        profile_last_name_input_field = ft.TextField(label="Введите фамилию профиля, не более 64 символов: ",
+                                                     multiline=True,
+                                                     max_lines=19)
+
+        async def change_last_name_profile_gui(_) -> None:
+            """
+            Изменение био профиля Telegram в графическое окно Flet
+            """
+            await self.change_last_name_profile(user_input=profile_last_name_input_field)
 
         self.page.views.append(
             ft.View("/bio_editing",
@@ -141,10 +173,12 @@ class AccountBIO:
                                            text=translations["ru"]["edit_bio_menu"]["name_change_n"],
                                            on_click=change_name_profile_gui),
 
+                         profile_last_name_input_field,
+
                          # 📝 Изменение фамилии
                          ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                            text=translations["ru"]["edit_bio_menu"]["name_change_f"],
-                                           on_click=lambda _: self.page.go("/change_surname")),
+                                           on_click=change_last_name_profile_gui),
                      ])]))
 
     async def change_photo_profile_gui(self) -> None:
@@ -159,26 +193,6 @@ class AccountBIO:
         """
         await self.create_profile_gui(self.change_username_profile,
                                       label="Введите username профиля (не более 32 символов):")
-
-    async def change_last_name_profile_gui(self) -> None:
-        """
-        Изменение био профиля Telegram в графическое окно Flet
-        """
-        await self.create_profile_gui(self.change_last_name_profile,
-                                      label="Введите фамилию профиля, не более 64 символов: ")
-
-    # class AccountActions:
-    #     """
-    #     Класс, отвечающий за выполнение действий над аккаунтом Telegram.
-    #     """
-    #
-    #     def __init__(self, directory_path, extension, tg_connect, page: ft.Page):
-    #         self.page = page  # Страница интерфейса Flet
-    #         self.directory_path = directory_path  # путь к папке с аккаунтами Telegram
-    #         self.extension = extension  # расширение файла с аккаунтом Telegram (session)
-    #         self.connect = tg_connect  # объект класса TelegramConnect (подключение к Telegram аккаунту)
-    #         self.app_logger = AppLogger(page=page)
-    #         self.utils = Utils(page=page)
 
     async def change_username_profile(self, user_input) -> None:
         """
@@ -205,28 +219,6 @@ class AccountBIO:
         except Exception as error:
             logger.exception(error)
 
-    async def change_last_name_profile(self, user_input):
-        """
-        Изменение фамилии профиля
-
-        :param user_input - новое имя пользователя Telegram
-        """
-        try:
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(f"{session_name}")
-                client = await self.connect.client_connect_string_session(session_name=session_name)
-                await client.connect()
-                try:
-                    result = await client(functions.account.UpdateProfileRequest(last_name=user_input))
-                    await self.app_logger.log_and_display(f"{result}\nФамилия успешно обновлена!")
-                except AuthKeyUnregisteredError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
-                finally:
-                    await client.disconnect()
-                await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
-        except Exception as error:
-            logger.exception(error)
-
     async def change_photo_profile(self):
         """Изменение фото профиля.
         """
@@ -248,3 +240,5 @@ class AccountBIO:
 
         await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
         self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
+
+# 244

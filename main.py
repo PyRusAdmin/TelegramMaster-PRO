@@ -149,12 +149,6 @@ async def main(page: ft.Page):
 
         elif page.route == "/bio_editing":  # Меню "Редактирование_BIO"
             await account_bio.bio_editing_menu()
-        # elif page.route == "/edit_description":  # Изменение описания
-        #     await account_bio.change_bio_profile_gui()
-        # elif page.route == "/name_change":  # Изменение имени профиля Telegram
-        #     await account_bio.change_name_profile_gui()
-        elif page.route == "/change_surname":  # Изменение фамилии
-            await account_bio.change_last_name_profile_gui()
         elif page.route == "/edit_photo":  # Изменение фото
             await account_bio.change_photo_profile_gui()
             await show_notification(page=page, message="🔚 Фото изменено")  # Выводим уведомление пользователю
@@ -195,3 +189,4 @@ async def main(page: ft.Page):
 
 if __name__ == '__main__':
     ft.app(target=main)
+    # 192
