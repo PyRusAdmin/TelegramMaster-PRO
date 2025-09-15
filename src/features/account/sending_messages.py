@@ -78,7 +78,8 @@ class SendTelegramMessages:
                                     await self.send_content(client, user_to_add, messages, files)
                                     await self.app_logger.log_and_display(
                                         message=f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
-                                    await self.utils.record_inviting_results(time_range_1=time_from, time_range_2=time_to, username=rows)
+                                    await self.utils.record_inviting_results(time_range_1=time_from,
+                                                                             time_range_2=time_to, username=rows)
                                 except FloodWaitError as e:
                                     await self.app_logger.log_and_display(
                                         message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
@@ -177,7 +178,8 @@ class SendTelegramMessages:
                     async def handle_private_messages(event):
                         """Обрабатывает входящие личные сообщения"""
                         if event.is_private:  # Проверяем, является ли сообщение личным
-                            await self.app_logger.log_and_display(message=f"Входящее сообщение: {event.message.message}")
+                            await self.app_logger.log_and_display(
+                                message=f"Входящее сообщение: {event.message.message}")
                             entities = self.utils.find_files(
                                 directory_path=path_send_message_folder_answering_machine_message,
                                 extension=self.file_extension)
@@ -227,24 +229,29 @@ class SendTelegramMessages:
                             await self.app_logger.log_and_display(
                                 message=f"Группа {group_link} приватная или подписка запрещена.")
                         except PeerFloodError:
-                            await self.utils.record_and_interrupt(time_range_1=time_subscription_1, time_range_2=time_subscription_2)
+                            await self.utils.record_and_interrupt(time_range_1=time_subscription_1,
+                                                                  time_range_2=time_subscription_2)
                             break  # Прерываем работу и меняем аккаунт
                         except FloodWaitError as e:
-                            await self.app_logger.log_and_display(message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
-                                                                  level="error")
+                            await self.app_logger.log_and_display(
+                                message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
+                                level="error")
                             await asyncio.sleep(e.seconds)
                         except UserBannedInChannelError:
-                            await self.utils.record_and_interrupt(time_range_1=time_subscription_1, time_range_2=time_subscription_2)
+                            await self.utils.record_and_interrupt(time_range_1=time_subscription_1,
+                                                                  time_range_2=time_subscription_2)
                             break  # Прерываем работу и меняем аккаунт
                         except ChatAdminRequiredError:
                             await self.app_logger.log_and_display(translations["ru"]["errors"]["admin_rights_required"])
                             break
                         except ChatWriteForbiddenError:
                             await self.app_logger.log_and_display(translations["ru"]["errors"]["chat_write_forbidden"])
-                            await self.utils.record_and_interrupt(time_range_1=time_subscription_1, time_range_2=time_subscription_2)
+                            await self.utils.record_and_interrupt(time_range_1=time_subscription_1,
+                                                                  time_range_2=time_subscription_2)
                             break  # Прерываем работу и меняем аккаунт
                         except SlowModeWaitError as e:
-                            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["slow_mode_wait"])
+                            await self.app_logger.log_and_display(
+                                message=translations["ru"]["errors"]["slow_mode_wait"])
                             await asyncio.sleep(e.seconds)
                         except ValueError:
                             await self.app_logger.log_and_display(
