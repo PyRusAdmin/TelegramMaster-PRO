@@ -151,8 +151,8 @@ async def main(page: ft.Page):
             await account_bio.bio_editing_menu()
         # elif page.route == "/edit_description":  # Изменение описания
         #     await account_bio.change_bio_profile_gui()
-        elif page.route == "/name_change":  # Изменение имени профиля Telegram
-            await account_bio.change_name_profile_gui()
+        # elif page.route == "/name_change":  # Изменение имени профиля Telegram
+        #     await account_bio.change_name_profile_gui()
         elif page.route == "/change_surname":  # Изменение фамилии
             await account_bio.change_last_name_profile_gui()
         elif page.route == "/edit_photo":  # Изменение фото
