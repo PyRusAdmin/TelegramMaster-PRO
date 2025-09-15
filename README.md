@@ -5,7 +5,7 @@
   🌍 Join our international community!
 </p>
 
-## 🌐 Communities
+## 🌐 Сообщество
 
 🇷🇺 **Русское сообщество**: [Вступить](https://t.me/+8LO09QUNtvJkYmJi)  
 🇬🇧 **The English Community**: [Join](https://t.me/+JZsl54JhzyJhOGIy)
