@@ -11,7 +11,7 @@ class AppLogger:
 
     def __init__(self, page: ft.Page):
         self.page = page
-        self.list_view = ft.ListView(expand=10, spacing=1, padding=2, auto_scroll=True)
+        self.list_view = list_view  # Используем переданный list_view
 
     async def start_time(self):
         start = datetime.datetime.now()  # фиксируем и выводим время старта работы кода
