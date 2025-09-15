@@ -21,43 +21,9 @@ class AccountBIO:
 
     def __init__(self, page: ft.Page):
         self.page = page
-        # self.extension = 'session'
         self.connect = TGConnect(page=page)
-        # self.account_actions = AccountActions(directory_path=path_accounts_folder, extension=self.extension,
-        #                                       tg_connect=self.connect, page=self.page)
-        # self.page = page
-        # self.function_button = FunctionButton(page=page)
-        # self.page = page  # Страница интерфейса Flet
-        # self.directory_path = directory_path  # путь к папке с аккаунтами Telegram
-        # self.extension = extension  # расширение файла с аккаунтом Telegram (session)
-        # self.connect = tg_connect  # объект класса TelegramConnect (подключение к Telegram аккаунту)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
-
-    # async def change_bio_profile_gui(self) -> None:
-    #     """
-    #     Изменение био профиля Telegram в графическое окно Flet. Изменение описания профиля
-    #     """
-    #     await self.create_profile_gui(action=self.change_bio_profile,
-    #                                   label="Введите описание профиля, не более 70 символов: ")
-
-    # async def create_profile_gui(self, action, label: str) -> None:
-    #     """
-    #     Создание графического интерфейса для изменения профиля Telegram.
-    #
-    #     :param action: Функция, которая выполняет специфическое действие с переданным значением.
-    #     :param label: Подпись для текстового поля.
-    #     """
-    #     try:
-    #
-    #         # def back_button_clicked(_) -> None:
-    #         #     """Кнопка возврата в меню изменения профиля."""
-    #         #     self.page.go("/bio_editing")
-    #
-    #         self.function_button.function_button_ready(btn_click, back_button_clicked,
-    #                                                    user_input)  # Функция для кнопки "Готово"
-    #     except Exception as error:
-    #         logger.exception(error)
 
     async def change_bio_profile(self, user_input):
         """
