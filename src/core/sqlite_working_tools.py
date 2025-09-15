@@ -420,7 +420,7 @@ def save_group_channel_info(dialog, title, about, link, participants_count):
     """
     Cохраняет или обновляет информацию о группе или канале в базе данных.
 
-    :param dialog: объект диалогового окна Telegram API
+    :param dialog: Объект диалогового окна Telegram API
     :param title: заголовок группы или канала
     :param about: описание группы или канала
     :param link: ссылка на группу или канал

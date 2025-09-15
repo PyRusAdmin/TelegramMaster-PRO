@@ -47,7 +47,8 @@ class ViewingPosts:
             # Поле для ввода ссылки на чат
             link_channel = ft.TextField(label=f"Введите ссылку на канал:", multiline=False, max_lines=1)
             link_post = ft.TextField(label=f"Введите ссылку на пост:", multiline=False, max_lines=1)
-            number_views = ft.TextField(label=f"Введите количество просмотров от 1 до {sessions_count}:", multiline=False, max_lines=1)
+            number_views = ft.TextField(label=f"Введите количество просмотров от 1 до {sessions_count}:",
+                                        multiline=False, max_lines=1)
 
             async def btn_click(_) -> None:
 
@@ -60,7 +61,6 @@ class ViewingPosts:
                 self.page.update()  # Обновление страницы, чтобы сразу показать сообщение 🔄
 
                 for session_name in views_selected:
-
                     client = await self.connect.client_connect_string_session(session_name=session_name)
 
                     list_view.controls.append(ft.Text(f"[+] Работаем с каналом: {link_channel.value}"))
@@ -68,7 +68,8 @@ class ViewingPosts:
                     await self.subscribe.subscribe_to_group_or_channel(client=client, groups=link_channel.value)
 
                     msg_id = int(re.search(r'/(\d+)$', link_post.value).group(1))  # Получаем id сообщения из ссылки
-                    await self.viewing_posts(client=client, link_post=link_post.value, number=msg_id, link_channel=link_channel.value, session_name=session_name)
+                    await self.viewing_posts(client=client, link_post=link_post.value, number=msg_id,
+                                             link_channel=link_channel.value, session_name=session_name)
                     await asyncio.sleep(1)
                     await client.disconnect()
                     # Изменение маршрута на новый (если необходимо)
@@ -77,7 +78,8 @@ class ViewingPosts:
 
                 await self.app_logger.end_time(start)  # Завершение таймера
 
-            await self.function_button.function_button_ready_viewing(number_views=number_views, btn_click=btn_click, link_channel=link_channel,
+            await self.function_button.function_button_ready_viewing(number_views=number_views, btn_click=btn_click,
+                                                                     link_channel=link_channel,
                                                                      link_post=link_post)
         except Exception as error:
             logger.exception(error)
