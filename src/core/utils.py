@@ -22,7 +22,7 @@ class Utils:
         Чтение данных из файла JSON.
 
         :param filename: Полный путь к файлу JSON.
-        :return:         Данные из файла JSON в виде словаря.
+        :return: Данные из файла JSON в виде словаря.
         """
         with open(filename, 'r', encoding="utf-8") as file:
             data = json.load(file)
@@ -32,8 +32,8 @@ class Utils:
         """
         Поиск файлов в директории.
 
-        :param directory_path:  Путь к директории
-        :return list:           Список имен найденных файлов
+        :param directory_path: Путь к директории
+        :return list: Список имен найденных файлов
         """
         entities = []  # Создаем список с именами найденных файлов
         for x in os.listdir(directory_path):
@@ -46,7 +46,7 @@ class Utils:
         Поиск файлов с определенным расширением в директории. Расширение файла должно быть указанно без точки.
 
         :param directory_path: Путь к директории
-        :param extension:      Расширение файла (указанное без точки)
+        :param extension: Расширение файла (указанное без точки)
         :return list: Список имен найденных файлов
         """
         entities = []  # Создаем словарь с именами найденных аккаунтов в папке user_data/accounts

@@ -45,8 +45,9 @@ class ViewingPosts:
             list_view.controls.append(ft.Text(f"Подключенных аккаунтов {sessions_count}"))
 
             # Поле для ввода ссылки на чат
-            link_channel = ft.TextField(label="Введите ссылку на канал:", multiline=False, max_lines=1)
-            link_post = ft.TextField(label="Введите ссылку на пост:", multiline=False, max_lines=1)
+            link_channel = ft.TextField(label=f"Введите ссылку на канал:", multiline=False, max_lines=1)
+            link_post = ft.TextField(label=f"Введите ссылку на пост:", multiline=False, max_lines=1)
+            number_views = ft.TextField(label=f"Введите количество просмотров от 1 до {sessions_count}:", multiline=False, max_lines=1)
 
             async def btn_click(_) -> None:
 
