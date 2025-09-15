@@ -1,7 +1,14 @@
 <h1 align="center">TelegramMaster 🚀 by. <a href="https://t.me/PyAdminRU" target="_blank">PyAdminRU</a></h1>
 
-Русское сообщество: https://t.me/+8LO09QUNtvJkYmJi
-The English Community: https://t.me/+JZsl54JhzyJhOGIy
+<p align="center">
+  🔥 Многофункциональный инструмент для работы с Telegram  
+  🌍 Join our international community!
+</p>
+
+## 🌐 Communities
+
+🇷🇺 **Русское сообщество**: [Вступить](https://t.me/+8LO09QUNtvJkYmJi)  
+🇬🇧 **The English Community**: [Join](https://t.me/+JZsl54JhzyJhOGIy)
 
 [English readme](README.eng.md) • [Русский readme](README.md) • [Lengua española readme](README.es.md)
 
