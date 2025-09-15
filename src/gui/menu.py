@@ -189,43 +189,6 @@ class Menu:
                                            on_click=lambda _: self.page.go("/recording_reaction_link")),
                      ])]))
 
-    async def bio_editing_menu(self):
-        """
-        Меню ✏️ Редактирование_BIO
-        """
-        self.page.views.append(
-            ft.View("/bio_editing",
-                    [await GUIProgram().key_app_bar(),
-                     ft.Text(spans=[ft.TextSpan(
-                         translations["ru"]["menu"]["edit_bio"],
-                         ft.TextStyle(
-                             size=20, weight=ft.FontWeight.BOLD,
-                             foreground=ft.Paint(
-                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
-                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                         # 🔄 Изменение username
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["edit_bio_menu"]["changing_the_username"],
-                                           on_click=lambda _: self.page.go("/changing_username")),
-                         # 🖼️ Изменение фото
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
-                                           on_click=lambda _: self.page.go("/edit_photo")),
-                         # ✏️ Изменение описания
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["edit_bio_menu"]["changing_the_description"],
-                                           on_click=lambda _: self.page.go("/edit_description")),
-                         # 📝 Изменение имени
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["edit_bio_menu"]["name_change_n"],
-                                           on_click=lambda _: self.page.go("/name_change")),
-                         # 📝 Изменение фамилии
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["edit_bio_menu"]["name_change_f"],
-                                           on_click=lambda _: self.page.go("/change_surname")),
-                     ])]))
-
     async def working_with_contacts_menu(self):
         """
         Меню 📇 Работа с контактами

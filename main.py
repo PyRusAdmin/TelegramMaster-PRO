@@ -146,10 +146,11 @@ async def main(page: ft.Page):
         elif page.route == "/sending_files_to_personal_account_with_limits":  # Отправка сообщений в личку
             await send_telegram_messages.send_files_to_personal_chats()
         # __________________________________________________________________________________________________________
+
         elif page.route == "/bio_editing":  # Меню "Редактирование_BIO"
-            await menu.bio_editing_menu()
-        elif page.route == "/edit_description":  # Изменение описания
-            await account_bio.change_bio_profile_gui()
+            await account_bio.bio_editing_menu()
+        # elif page.route == "/edit_description":  # Изменение описания
+        #     await account_bio.change_bio_profile_gui()
         elif page.route == "/name_change":  # Изменение имени профиля Telegram
             await account_bio.change_name_profile_gui()
         elif page.route == "/change_surname":  # Изменение фамилии
@@ -159,6 +160,7 @@ async def main(page: ft.Page):
             await show_notification(page=page, message="🔚 Фото изменено")  # Выводим уведомление пользователю
         elif page.route == "/changing_username":  # Изменение username
             await account_bio.change_username_profile_gui()
+
         # __________________________________________________________________________________________________________
         elif page.route == "/settings":  # Меню "Настройки TelegramMaster"
             await menu.settings_menu()
