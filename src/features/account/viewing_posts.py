@@ -51,7 +51,16 @@ class ViewingPosts:
 
             async def btn_click(_) -> None:
 
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                session = self.utils.find_filess(directory_path=path_accounts_folder, extension='session')
+                number_session = number_views.value
+                list_view.controls.append(ft.Text(f"Выбрано просмотров: {number_session}"))
+                views_selected = session[:int(number_session)]
+
+                start = await self.app_logger.start_time()  # Запуск таймера
+                self.page.update()  # Обновление страницы, чтобы сразу показать сообщение 🔄
+
+                for session_name in views_selected:
+
                     client = await self.connect.client_connect_string_session(session_name=session_name)
 
                     list_view.controls.append(ft.Text(f"[+] Работаем с каналом: {link_channel.value}"))
@@ -66,7 +75,9 @@ class ViewingPosts:
                     self.page.go("/viewing_posts_menu")
                     self.page.update()  # Обновление страницы для отображения изменений
 
-            await self.function_button.function_button_ready_viewing(btn_click=btn_click, link_channel=link_channel,
+                await self.app_logger.end_time(start)  # Завершение таймера
+
+            await self.function_button.function_button_ready_viewing(number_views=number_views, btn_click=btn_click, link_channel=link_channel,
                                                                      link_post=link_post)
         except Exception as error:
             logger.exception(error)
