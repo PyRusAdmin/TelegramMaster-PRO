@@ -25,7 +25,6 @@ class CheckingProgram:
             await show_notification(page=self.page, message="⛔ Не сформирован список для рассылки по чатам")
 
     # TODO улучшить проверку на наличие username, ссылок в базе данных для инвайтинга и так далее
-    # @staticmethod
     # async def check_before_inviting(page: ft.Page):
     #     """
     #     ⛔ Проверка наличия пользователя в списке участников, наличия аккаунта, наличия ссылки в базе данных
