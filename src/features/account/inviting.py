@@ -68,7 +68,7 @@ class InvitingToAGroup:
                 client = await self.connect.client_connect_string_session(session_name)
 
                 await self.connect.getting_account_data(client)
-                await self.subscribe.subscribe_to_group_or_channel(client, dropdown.value)
+                await self.subscribe.subscribe_to_group_or_channel(client=client, groups=dropdown.value)
                 logger.info(f"Подписка на группу {dropdown.value} выполнена")
                 await self.app_logger.log_and_display(message=f"{dropdown.value}")
 
