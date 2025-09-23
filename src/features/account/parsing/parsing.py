@@ -185,8 +185,8 @@ class ParsingGroupMembers:
                         for groups in data:
                             await self.parse_group(groups)
                     if active_switch.value:  # Парсинг активных пользователей
-                        await self.start_active_parsing(chat_input_active=chat_input.value,
-                                                        limit_active_user=limit_active_user.value)
+                        await self.start_active_parsing(link_chat=chat_input.value,
+                                                        number_messages=limit_active_user.value)
                     if account_group_selection_switch.value:  # Парсинг выбранной группы
                         await self.load_groups(dropdown, result_text)  # ⬅️ Подгружаем группы
                         await self.start_group_parsing(dropdown, result_text)
@@ -263,11 +263,11 @@ class ParsingGroupMembers:
         await client.disconnect()
         await self.app_logger.log_and_display("🔚 Парсинг завершен")
 
-    async def start_active_parsing(self, chat_input_active, limit_active_user):
+    async def start_active_parsing(self, link_chat, number_messages):
         """
         ⚠️ Парсинг активных пользователей
-        :param chat_input_active: ссылка на чат
-        :param limit_active_user: кол-во сообщений
+        :param link_chat: ссылка на чат
+        :param number_messages: кол-во сообщений
         """
         selected = self.page.session.get("selected_sessions") or []
         if not selected:
@@ -276,15 +276,9 @@ class ParsingGroupMembers:
 
         phone = self.page.session.get("selected_sessions") or []
         logger.debug(f"Аккаунт: {phone}")
-        # chat = chat_input_active.value
-        # try:
-        #     limit = int(limit_active_user.value)
-        # except ValueError:
-        #     await self.app_logger.log_and_display("⚠️ Некорректное число сообщений")
-        #     return
 
-        await self.app_logger.log_and_display(f"🔍 Сканируем чат: {chat_input_active} на {limit_active_user} сообщений")
-        await self.parse_active_users(chat_input_active, int(limit_active_user), phone[0])
+        await self.app_logger.log_and_display(f"🔍 Сканируем чат: {link_chat} на {number_messages} сообщений")
+        await self.parse_active_users(link_chat, int(number_messages), phone[0])
 
     async def load_groups(self, dropdown, result_text):
         try:
