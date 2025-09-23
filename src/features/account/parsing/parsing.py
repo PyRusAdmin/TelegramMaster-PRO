@@ -183,7 +183,8 @@ class ParsingGroupMembers:
                         for groups in data:
                             await self.parse_group(groups)
                     if active_switch.value:  # Парсинг активных пользователей
-                        await self.start_active_parsing(self.page, limit_active_user)
+                        await self.start_active_parsing(chat_input_active=chat_input.value,
+                                                        limit_active_user=limit_active_user.value)
                     if account_group_selection_switch.value:  # Парсинг выбранной группы
                         await self.load_groups(dropdown, result_text)  # ⬅️ Подгружаем группы
                         await self.start_group_parsing(dropdown, result_text)
@@ -261,6 +262,11 @@ class ParsingGroupMembers:
         await self.app_logger.log_and_display("🔚 Парсинг завершен")
 
     async def start_active_parsing(self, chat_input_active, limit_active_user):
+        """
+        ⚠️ Парсинг активных пользователей
+        :param chat_input_active: ссылка на чат
+        :param limit_active_user: кол-во сообщений
+        """
         selected = self.page.session.get("selected_sessions") or []
         if not selected:
             await self.app_logger.log_and_display("⚠️ Сначала выберите аккаунт")
@@ -379,6 +385,9 @@ class ParsingGroupMembers:
     async def parse_active_users(self, chat_input, limit_active_user, phone_number) -> None:
         """
         Парсинг активных пользователей в чате.
+        :param chat_input: ссылка на чат
+        :param limit_active_user: лимит сообщений
+        :param phone_number: номер телефона
         """
         try:
             client = await self.connect.get_telegram_client(phone_number,
