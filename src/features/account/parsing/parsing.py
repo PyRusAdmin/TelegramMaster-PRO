@@ -20,6 +20,7 @@ from src.features.account.connect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.parsing.switch_controller import ToggleController
 from src.features.account.parsing.user_info import UserInfo
+from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.gui import AppLogger, list_view
 from src.locales.translations_loader import translations
@@ -32,6 +33,7 @@ class ParsingGroupMembers:
         self.page = page
         self.connect = TGConnect(page)
         self.app_logger = AppLogger(page)
+        self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
 
     async def collect_user_log_data(self, user):
         return {
@@ -274,15 +276,15 @@ class ParsingGroupMembers:
 
         phone = self.page.session.get("selected_sessions") or []
         logger.debug(f"Аккаунт: {phone}")
-        chat = chat_input_active.value
-        try:
-            limit = int(limit_active_user.value)
-        except ValueError:
-            await self.app_logger.log_and_display("⚠️ Некорректное число сообщений")
-            return
+        # chat = chat_input_active.value
+        # try:
+        #     limit = int(limit_active_user.value)
+        # except ValueError:
+        #     await self.app_logger.log_and_display("⚠️ Некорректное число сообщений")
+        #     return
 
-        await self.app_logger.log_and_display(f"🔍 Сканируем чат: {chat} на {limit} сообщений")
-        await self.parse_active_users(chat, limit, phone[0])
+        await self.app_logger.log_and_display(f"🔍 Сканируем чат: {chat_input_active} на {limit_active_user} сообщений")
+        await self.parse_active_users(chat_input_active, int(limit_active_user), phone[0])
 
     async def load_groups(self, dropdown, result_text):
         try:
@@ -390,15 +392,19 @@ class ParsingGroupMembers:
         :param phone_number: номер телефона
         """
         try:
-            client = await self.connect.get_telegram_client(phone_number,
+            client = await self.connect.get_telegram_client(session_name=phone_number,
                                                             account_directory=path_accounts_folder)
-            await SubscribeUnsubscribeTelegram(self.page).subscribe_to_group_or_channel(client, chat_input)
+            # TODO: Проверка на наличие подписки на канал/группу
+            await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_input)
+
+            # await SubscribeUnsubscribeTelegram(self.page).subscribe_to_group_or_channel(client, chat_input)
+
             try:
                 await asyncio.sleep(int(TIME_ACTIVITY_USER_2 or 5))
             except TypeError:
                 await asyncio.sleep(5)
             # Все операции с Telegram API должны быть здесь
-            await self.get_active_users(client, chat_input, limit_active_user)
+            await self.get_active_users(client=client, chat=chat_input, limit_active_user=limit_active_user)
         except Exception as error:
             logger.exception(error)
 
@@ -417,18 +423,19 @@ class ParsingGroupMembers:
                 if from_id:
                     user = await client.get_entity(from_id)
                     try:
-                        await self.app_logger.log_and_display(f"{message.from_id}")
+                        await self.app_logger.log_and_display(message=f"{message.from_id}")
                         # Получаем входную сущность пользователя
-                        from_user = InputUser(user_id=await UserInfo().get_user_id(user),
-                                              access_hash=await UserInfo().get_access_hash(user))  # Создаем InputUser
-                        await self.app_logger.log_and_display(f"{from_user}")
+                        from_user = InputUser(user_id=await UserInfo().get_user_id(user=user),
+                                              access_hash=await UserInfo().get_access_hash(
+                                                  user=user))  # Создаем InputUser
+                        await self.app_logger.log_and_display(message=f"{from_user}")
                         # Получаем данные о пользователе
-                        log_data = await self.collect_user_log_data(user)
-                        await self.app_logger.log_and_display(f"{log_data}")
-                        await add_member_to_db(log_data=log_data)
+                        log_data = await self.collect_user_log_data(user=user)
+                        await self.app_logger.log_and_display(message=f"{log_data}")
+                        add_member_to_db(log_data=log_data)
                     except ValueError as e:
                         await self.app_logger.log_and_display(
-                            f"❌ Не удалось найти сущность для пользователя {message.from_id.user_id}: {e}")
+                            message=f"❌ Не удалось найти сущность для пользователя {message.from_id.user_id}: {e}")
                 else:
                     await self.app_logger.log_and_display(f"Сообщение {message.id} не имеет действительного from_id.")
         except Exception as error:
