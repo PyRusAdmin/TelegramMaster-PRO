@@ -21,7 +21,6 @@ from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.parsing.switch_controller import ToggleController
 from src.features.account.parsing.user_info import UserInfo
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
-from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.gui import AppLogger, list_view
 from src.locales.translations_loader import translations
 
@@ -386,13 +385,8 @@ class ParsingGroupMembers:
         :param phone_number: номер телефона
         """
         try:
-            client = await self.connect.get_telegram_client(session_name=phone_number,
-                                                            account_directory=path_accounts_folder)
-            # TODO: Проверка на наличие подписки на канал/группу
+            client = await self.connect.get_telegram_client(session_name=phone_number, account_directory=path_accounts_folder)
             await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_input)
-
-            # await SubscribeUnsubscribeTelegram(self.page).subscribe_to_group_or_channel(client, chat_input)
-
             try:
                 await asyncio.sleep(int(TIME_ACTIVITY_USER_2 or 5))
             except TypeError:
