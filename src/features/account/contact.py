@@ -6,7 +6,7 @@ from loguru import logger
 from telethon import functions, types
 
 from src.core.configs import path_accounts_folder
-from src.core.sqlite_working_tools import add_member_to_db
+from src.core.sqlite_working_tools import add_member_to_db, write_to_database_contacts_accounts
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.parsing.parsing import UserInfo
@@ -32,9 +32,9 @@ class TGContact:
         try:
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                client = await self.connect.get_telegram_client(session_name,
+                client = await self.connect.get_telegram_client(session_name=session_name,
                                                                 account_directory=path_accounts_folder)
-                await self.parsing_and_recording_contacts_in_the_database(client)
+                await self.parsing_and_recording_contacts_in_the_database(client=client)
                 client.disconnect()  # Разрываем соединение telegram
         except Exception as error:
             logger.exception(error)
@@ -47,9 +47,24 @@ class TGContact:
         """
         try:
             entities: list = []  # Создаем список сущностей
-            for contact in await self.get_and_parse_contacts(client):  # Выводим результат parsing
-                await self.get_user_data(contact, entities)
-            await write_parsed_chat_participants_to_db(entities)
+            for contact in await self.get_and_parse_contacts(client=client):  # Выводим результат parsing
+                await self.get_user_data(user=contact, entities=entities)
+                logger.info(contact)
+
+            for raw_contact in entities:
+                contact_dict = {
+                    "username": raw_contact[0],
+                    "user_id": raw_contact[1],
+                    "access_hash": raw_contact[2],
+                    "first_name": raw_contact[3],
+                    "last_name": raw_contact[4],
+                    "phone": raw_contact[5],
+                    "online_at": raw_contact[6],
+                    "photo_status": raw_contact[7],
+                    "premium_status": raw_contact[8],
+                }
+
+                write_to_database_contacts_accounts(contact_dict)
         except Exception as error:
             logger.exception(error)
 
@@ -58,7 +73,6 @@ class TGContact:
         Получаем id аккаунта
 
         :param client: Телеграм клиент
-        :param page: Страница интерфейса
         """
         try:
             entities: list = []  # Создаем список сущностей
