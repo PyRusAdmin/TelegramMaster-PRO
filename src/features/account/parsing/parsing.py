@@ -385,7 +385,8 @@ class ParsingGroupMembers:
         :param phone_number: номер телефона
         """
         try:
-            client = await self.connect.get_telegram_client(session_name=phone_number, account_directory=path_accounts_folder)
+            client = await self.connect.get_telegram_client(session_name=phone_number,
+                                                            account_directory=path_accounts_folder)
             await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_input)
             try:
                 await asyncio.sleep(int(TIME_ACTIVITY_USER_2 or 5))

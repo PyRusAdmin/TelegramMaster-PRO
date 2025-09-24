@@ -35,9 +35,9 @@ class ConfigReader:
     def get_limits(self):
         return self.config.getint('account_limits', 'account_limits', fallback=None)
 
-    def get_time_activity_user(self):
-        return (self.config.getint('time_activity_user', 'time_activity_user_1', fallback=None),
-                self.config.getint('time_activity_user', 'time_activity_user_2', fallback=None))
+    # def get_time_activity_user(self):
+    #     return (self.config.getint('time_activity_user', 'time_activity_user_1', fallback=None),
+    #             self.config.getint('time_activity_user', 'time_activity_user_2', fallback=None))
 
     def time_activity_user_2(self):
         """   """
