@@ -112,6 +112,45 @@ class MembersAdmin(Model):
         table_name = 'members_admin'
 
 
+class AccountContacts(Model):
+    """
+    Таблица для хранения контактов аккаунтов в таблице account_contacts
+    """
+    username = CharField(max_length=255, null=True)
+    user_id = IntegerField(unique=True)
+    access_hash = BigIntegerField(null=True)
+    first_name = CharField(max_length=255, null=True)
+    last_name = CharField(max_length=255, null=True)
+    phone = CharField(max_length=255, null=True)
+    online_at = DateTimeField(null=True)
+    photo_status = CharField(max_length=255, null=True)
+    premium_status = BooleanField(default=False)
+
+    class Meta:
+        database = db
+        table_name = 'account_contacts'
+
+
+def write_to_database_contacts_accounts(data):
+    """
+    Запись данных в таблицу account_contacts
+    :param data:
+    :return:
+    """
+    with db.atomic():
+        AccountContacts.get_or_create(
+            username=data["username"],
+            user_id=data["user_id"],
+            access_hash=data["access_hash"],
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+            phone=data["phone"],
+            online_at=data["online_at"],
+            photo_status=data["photo_status"],
+            premium_status=data["premium_status"]
+        )
+
+
 # def remove_duplicates():
 #     """
 #     Удаление дублирующихся id в таблице groups_and_channels
@@ -170,11 +209,13 @@ def cleaning_db(table_name):
 def create_database():
     """Создает все таблицы в базе данных"""
     db.connect()
+    db.create_tables([AccountContacts])  # Создаем таблицу для хранения контактов аккаунтов
     db.create_tables([WritingGroupLinks, GroupsAndChannels, MembersAdmin])
     db.create_tables([LinksInviting])  # Создаем таблицу для хранения ссылок для инвайтинга
     db.create_tables([MembersGroups])  # Создаем таблицу для хранения спарсенных пользователей
     db.create_tables([Contact])  # Создаем таблицу для хранения контактов
     db.create_tables([Proxy])  # Создаем таблицу для хранения прокси
+
 
 
 # def write_to_single_column_table():
