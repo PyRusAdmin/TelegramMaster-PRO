@@ -48,30 +48,30 @@ def get_writing_group_links():
     return writing_group_links
 
 
-async def read_writing_group_links():
-    """
-    Считывает все ссылки на группы из таблицы writing_group_links.
-
-    :return: Список строк (ссылок на группы)
-    """
-
-    db.connect(reuse_if_open=True)
-
-    links = [entry.writing_group_links for entry in WritingGroupLinks.select()]
-    return links
+# async def read_writing_group_links():
+#     """
+#     Считывает все ссылки на группы из таблицы writing_group_links.
+#
+#     :return: Список строк (ссылок на группы)
+#     """
+#
+#     db.connect(reuse_if_open=True)
+#
+#     links = [entry.writing_group_links for entry in WritingGroupLinks.select()]
+#     return links
 
 
 # Запись ссылки на группу в таблицу writing_group_links
-async def write_to_single_column_table_peewee(data: list[str]):
-    db.connect()
-
-    for line in set(data):
-        cleaned_line = line.strip()
-        try:
-            WritingGroupLinks.create(writing_group_links=cleaned_line)
-        except Exception as e:
-            logger.exception(e)
-    db.close()
+# async def write_to_single_column_table_peewee(data: list[str]):
+#     db.connect()
+#
+#     for line in set(data):
+#         cleaned_line = line.strip()
+#         try:
+#             WritingGroupLinks.create(writing_group_links=cleaned_line)
+#         except Exception as e:
+#             logger.exception(e)
+#     db.close()
 
 
 class GroupsAndChannels(Model):
@@ -112,31 +112,31 @@ class MembersAdmin(Model):
         table_name = 'members_admin'
 
 
-def remove_duplicates():
-    """
-    Удаление дублирующихся id в таблице groups_and_channels
-    """
-
-    # Находим все записи с дублирующимися id
-    duplicate_ids = (
-        GroupsAndChannels
-        .select(GroupsAndChannels.id)
-        .group_by(GroupsAndChannels.id)
-        .having(fn.COUNT(GroupsAndChannels.id) > 1)
-    )
-
-    # Для каждого дублирующегося id оставляем только первую запись, остальные удаляем
-    for duplicate in duplicate_ids:
-        # Находим все записи с этим id, сортируем по времени парсинга
-        duplicates = (
-            GroupsAndChannels
-            .select()
-            .where(GroupsAndChannels.id == duplicate.id)
-            .order_by(GroupsAndChannels.parsing_time)
-        )
-
-        for record in duplicates[1:]:  # Оставляем только первую запись, остальные удаляем
-            record.delete_instance()
+# def remove_duplicates():
+#     """
+#     Удаление дублирующихся id в таблице groups_and_channels
+#     """
+#
+#     # Находим все записи с дублирующимися id
+#     duplicate_ids = (
+#         GroupsAndChannels
+#         .select(GroupsAndChannels.id)
+#         .group_by(GroupsAndChannels.id)
+#         .having(fn.COUNT(GroupsAndChannels.id) > 1)
+#     )
+#
+#     # Для каждого дублирующегося id оставляем только первую запись, остальные удаляем
+#     for duplicate in duplicate_ids:
+#         # Находим все записи с этим id, сортируем по времени парсинга
+#         duplicates = (
+#             GroupsAndChannels
+#             .select()
+#             .where(GroupsAndChannels.id == duplicate.id)
+#             .order_by(GroupsAndChannels.parsing_time)
+#         )
+#
+#         for record in duplicates[1:]:  # Оставляем только первую запись, остальные удаляем
+#             record.delete_instance()
 
 
 class Contact(Model):
@@ -177,9 +177,9 @@ def create_database():
     db.create_tables([Proxy])  # Создаем таблицу для хранения прокси
 
 
-def write_to_single_column_table():
-    """Запись username в таблицу members"""
-    pass
+# def write_to_single_column_table():
+#     """Запись username в таблицу members"""
+#     pass
 
 
 """Работа с таблицей members"""

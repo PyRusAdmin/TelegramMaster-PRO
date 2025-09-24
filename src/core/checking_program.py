@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import flet as ft
 
-from src.core.configs import path_send_message_folder_answering_machine_message, path_folder_with_messages, LIMITS
+from src.core.configs import LIMITS
 from src.core.sqlite_working_tools import select_records_with_limit
 from src.core.utils import Utils
 from src.gui.notification import show_notification
@@ -34,18 +34,18 @@ class CheckingProgram:
     #     if len(await select_records_with_limit(table_name="links_inviting", limit=limits)) == 0:
     #         await show_notification(page, "⛔ Не записана группа для инвайтинга")
 
-    async def checking_sending_messages_via_chats_with_answering_machine(self):
-        """
-        ⛔ Проверка наличия аккаунта в папке с аккаунтами (Рассылка сообщений по чатам с автоответчиком)
-        """
-        if not self.utils.find_filess(directory_path=path_folder_with_messages, extension=self.file_extension):
-            await show_notification(page=self.page,
-                                    message=f"⛔ Нет заготовленных сообщений в папке {path_folder_with_messages}")
-        if not self.utils.find_filess(directory_path=path_send_message_folder_answering_machine_message,
-                                      extension=self.file_extension):
-            await show_notification(
-                page=self.page,
-                message=f"⛔ Нет заготовленных сообщений для автоответчика в папке {path_send_message_folder_answering_machine_message}")
-        if len(await select_records_with_limit(table_name="writing_group_links", limit=LIMITS)) == 0:
-            await show_notification(
-                page=self.page, message="⛔ Не сформирован список для рассылки по чатам")
+    # async def checking_sending_messages_via_chats_with_answering_machine(self):
+    #     """
+    #     ⛔ Проверка наличия аккаунта в папке с аккаунтами (Рассылка сообщений по чатам с автоответчиком)
+    #     """
+    #     if not self.utils.find_filess(directory_path=path_folder_with_messages, extension=self.file_extension):
+    #         await show_notification(page=self.page,
+    #                                 message=f"⛔ Нет заготовленных сообщений в папке {path_folder_with_messages}")
+    #     if not self.utils.find_filess(directory_path=path_send_message_folder_answering_machine_message,
+    #                                   extension=self.file_extension):
+    #         await show_notification(
+    #             page=self.page,
+    #             message=f"⛔ Нет заготовленных сообщений для автоответчика в папке {path_send_message_folder_answering_machine_message}")
+    #     if len(await select_records_with_limit(table_name="writing_group_links", limit=LIMITS)) == 0:
+    #         await show_notification(
+    #             page=self.page, message="⛔ Не сформирован список для рассылки по чатам")
