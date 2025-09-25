@@ -217,7 +217,6 @@ def create_database():
     db.create_tables([Proxy])  # Создаем таблицу для хранения прокси
 
 
-
 # def write_to_single_column_table():
 #     """Запись username в таблицу members"""
 #     pass

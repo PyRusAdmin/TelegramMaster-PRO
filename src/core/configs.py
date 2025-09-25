@@ -4,25 +4,25 @@ import configparser
 path_accounts_folder = "user_data/accounts"  # Папка для аккаунтов
 
 config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-config.read('user_data/config/config.ini', encoding='utf-8')
+config.read(filenames='user_data/config/config.ini', encoding='utf-8')
 time_changing_accounts_1 = config.get('time_changing_accounts', 'time_changing_accounts_1', fallback=None)
 time_changing_accounts_2 = config.get('time_changing_accounts', 'time_changing_accounts_2', fallback=None)
 
 config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-config_gui.read('user_data/config/config_gui.ini', encoding='utf-8')
+config_gui.read(filenames='user_data/config/config_gui.ini', encoding='utf-8')
 
 
 class ConfigReader:
 
     def __init__(self):
         self.config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-        self.config.read('user_data/config/config.ini', encoding='utf-8')
+        self.config.read(filenames='user_data/config/config.ini', encoding='utf-8')
 
         self.config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-        self.config_gui.read('user_data/config/config_gui.ini', encoding='utf-8')
+        self.config_gui.read(filenames='user_data/config/config_gui.ini', encoding='utf-8')
 
         self.config_path = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-        self.config_path.read('user_data/config/config_path.ini', encoding='utf-8')
+        self.config_path.read(filenames='user_data/config/config_path.ini', encoding='utf-8')
 
     def get_time_subscription(self):
         return (self.config.getint('time_subscription', 'time_subscription_1', fallback=None),
