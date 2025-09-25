@@ -60,49 +60,80 @@ class TGContact:
         list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
 
         sessions_count = self.status_display.display_account_count()  # Получаем количество аккаунтов
+        logger.info(f"Подключенных аккаунтов {sessions_count}")
+
+        async def show_account_contact_list(_) -> None:
+            """
+            Показать список контактов аккаунтов и запись результатов в файл
+            """
+            try:
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                    client = await self.connect.get_telegram_client(session_name=session_name,
+                                                                    account_directory=path_accounts_folder)
+                    await self.parsing_and_recording_contacts_in_the_database(client=client)
+                    client.disconnect()  # Разрываем соединение telegram
+            except Exception as error:
+                logger.exception(error)
+
+        async def delete_contact(_) -> None:
+            """
+            Удаляем контакты с аккаунтов
+            """
+            try:
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                    client = await self.connect.get_telegram_client(session_name,
+                                                                    account_directory=path_accounts_folder)
+                    await self.we_get_the_account_id(client)
+                    client.disconnect()  # Разрываем соединение telegram
+            except Exception as error:
+                logger.exception(error)
+
+        async def inviting_contact(_) -> None:
+            """
+            Добавление данных в телефонную книгу с последующим формированием списка software_database.db, для inviting
+            """
+            try:
+                # Открываем базу данных для работы с аккаунтами user_data/software_database.db
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                    client = await self.connect.get_telegram_client(session_name,
+                                                                    account_directory=path_accounts_folder)
+                    await self.add_contact_to_phone_book(client)
+            except Exception as error:
+                logger.exception(error)
 
         self.page.views.append(
             ft.View("/working_with_contacts",
-                    [await self.gui_program.key_app_bar(),
-                     ft.Text(spans=[ft.TextSpan(
-                         translations["ru"]["menu"]["contacts"],
-                         ft.TextStyle(
-                             size=20, weight=ft.FontWeight.BOLD,
-                             foreground=ft.Paint(
-                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
-                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                         # 📋 Формирование списка контактов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["contacts_menu"]["creating_a_contact_list"],
-                                           on_click=lambda _: self.page.go("/creating_contact_list")),
-                         # 👥 Показать список контактов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
-                                           on_click=lambda _: self.page.go("/show_list_contacts")),
-                         # 🗑️ Удаление контактов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["contacts_menu"]["deleting_contacts"],
-                                           on_click=lambda _: self.page.go("/deleting_contacts")),
-                         # ➕ Добавление контактов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["contacts_menu"]["adding_contacts"],
-                                           on_click=lambda _: self.page.go("/adding_contacts")),
-                     ])]))
-
-    async def show_account_contact_list(self) -> None:
-        """
-        Показать список контактов аккаунтов и запись результатов в файл
-        """
-        try:
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                client = await self.connect.get_telegram_client(session_name=session_name,
-                                                                account_directory=path_accounts_folder)
-                await self.parsing_and_recording_contacts_in_the_database(client=client)
-                client.disconnect()  # Разрываем соединение telegram
-        except Exception as error:
-            logger.exception(error)
+                    [
+                        await self.gui_program.key_app_bar(),
+                        ft.Text(spans=[ft.TextSpan(
+                            translations["ru"]["menu"]["contacts"],
+                            ft.TextStyle(
+                                size=20, weight=ft.FontWeight.BOLD,
+                                foreground=ft.Paint(
+                                    gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
+                                                                                         ft.Colors.PURPLE])), ), ), ], ),
+                        list_view,  # Отображение логов 📝
+                        ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                            # 📋 Формирование списка контактов
+                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                              text=translations["ru"]["contacts_menu"]["creating_a_contact_list"],
+                                              on_click=lambda _: self.page.go("/creating_contact_list")),
+                            # 👥 Показать список контактов
+                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                              text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
+                                              on_click=show_account_contact_list),
+                            # 🗑️ Удаление контактов
+                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                              text=translations["ru"]["contacts_menu"]["deleting_contacts"],
+                                              on_click=delete_contact),
+                            # ➕ Добавление контактов
+                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                              text=translations["ru"]["contacts_menu"]["adding_contacts"],
+                                              on_click=inviting_contact),
+                        ])]))
 
     async def parsing_and_recording_contacts_in_the_database(self, client) -> None:
         """
@@ -175,34 +206,6 @@ class TGContact:
             await client(functions.contacts.DeleteContactsRequest(id=[await self.user_info.get_user_id(user)]))
             await self.app_logger.log_and_display(f"Подождите 2 - 4 секунды")
             await asyncio.sleep(random.randrange(2, 3, 4))  # Спим для избежания ошибки о flood
-        except Exception as error:
-            logger.exception(error)
-
-    async def delete_contact(self) -> None:
-        """
-        Удаляем контакты с аккаунтов
-        """
-        try:
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                client = await self.connect.get_telegram_client(session_name,
-                                                                account_directory=path_accounts_folder)
-                await self.we_get_the_account_id(client)
-                client.disconnect()  # Разрываем соединение telegram
-        except Exception as error:
-            logger.exception(error)
-
-    async def inviting_contact(self) -> None:
-        """
-        Добавление данных в телефонную книгу с последующим формированием списка software_database.db, для inviting
-        """
-        try:
-            # Открываем базу данных для работы с аккаунтами user_data/software_database.db
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                client = await self.connect.get_telegram_client(session_name,
-                                                                account_directory=path_accounts_folder)
-                await self.add_contact_to_phone_book(client)
         except Exception as error:
             logger.exception(error)
 

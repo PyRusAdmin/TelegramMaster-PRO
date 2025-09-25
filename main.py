@@ -104,7 +104,7 @@ async def main(page: ft.Page):
             await receiving_and_recording.write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
         # __________________________________________________________________________________________________________
         elif page.route == "/working_with_contacts":  # Меню "Работа с контактами"
-            await menu.working_with_contacts_menu()
+            await tg_contact.working_with_contacts_menu()
         elif page.route == "/creating_contact_list":  # Формирование списка контактов
             start = await app_logger.start_time()
             logger.info("▶️ Начало Формирования списка контактов")
@@ -114,24 +114,6 @@ async def main(page: ft.Page):
                                                       column_name="contact", route="/working_with_contacts",
                                                       into_columns="contact")
             logger.info("🔚 Конец Формирования списка контактов")
-            await app_logger.end_time(start)
-        elif page.route == "/show_list_contacts":  # Показать список контактов
-            start = await app_logger.start_time()
-            logger.info("▶️ Начало Показа списка контактов")
-            await tg_contact.show_account_contact_list()
-            logger.info("🔚 Конец Показа списка контактов")
-            await app_logger.end_time(start)
-        elif page.route == "/deleting_contacts":  # Удаление контактов
-            start = await app_logger.start_time()
-            logger.info("▶️ Начало Удаления контактов")
-            await tg_contact.delete_contact()
-            logger.info("🔚 Конец Удаления контактов")
-            await app_logger.end_time(start)
-        elif page.route == "/adding_contacts":  # Добавление контактов
-            start = await app_logger.start_time()
-            logger.info("▶️ Начало Добавления контактов")
-            await tg_contact.inviting_contact()
-            logger.info("🔚 Конец Добавления контактов")
             await app_logger.end_time(start)
         # __________________________________________________________________________________________________________
         elif page.route == "/account_connection_menu":  # Подключение аккаунтов 'меню'.
