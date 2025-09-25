@@ -169,8 +169,8 @@ class InvitingToAGroup:
 
         async def write_tame_start_inviting(_):
             """Записывает время запуска инвайтинга по времени. Час запуска и минуты запуска"""
-            await self.setting_page.recording_the_time_to_launch_an_invite_every_day(hour_textfield,
-                                                                                     minutes_textfield)
+            await self.setting_page.recording_the_time_to_launch_an_invite_every_day(hour_textfield=hour_textfield,
+                                                                                     minutes_textfield=minutes_textfield)
 
         async def write_limit_account_inviting_timex(_):
             """Записывает время между сном во время ивайтинга"""
@@ -204,14 +204,14 @@ class InvitingToAGroup:
 
         # Два поля ввода для времени и кнопка сохранить
         smaller_timex, larger_timex, save_button_timex = await TimeInputRowBuilder().build_time_inputs_with_save_button(
-            write_limit_account_inviting_timex,
+            on_save_click=write_limit_account_inviting_timex,
             label_min="Мин. задержка (сек)",
             label_max="Макс. задержка (сек)",
             width=width_tvo_input
         )
         # Два поля ввода для времени и кнопка сохранить
         hour_textfield, minutes_textfield, save_button_time = await TimeInputRowBuilder().build_time_inputs_with_save_button(
-            write_tame_start_inviting,
+            on_save_click=write_tame_start_inviting,
             label_min="Час запуска (0–23)",
             label_max="Минуты (0–59)",
             width=width_tvo_input
@@ -219,12 +219,13 @@ class InvitingToAGroup:
 
         # Поле ввода, для ссылок для инвайтинга
         limits, save_button_limit = await LinkInputRowBuilder().build_link_input_with_save_button(
-            write_limit_account_inviting,
-            "Введите лимит на аккаунт", width=width_one_input)
+            on_save_click=write_limit_account_inviting,
+            label_text="Введите лимит на аккаунт", width=width_one_input)
 
-        link_entry_field, save_button = await LinkInputRowBuilder().build_link_input_with_save_button(save,
-                                                                                                      "Введите ссылку на группу для инвайтинга",
-                                                                                                      width=width_one_input)
+        link_entry_field, save_button = await LinkInputRowBuilder().build_link_input_with_save_button(
+            on_save_click=save,
+            label_text="Введите ссылку на группу для инвайтинга",
+            width=width_one_input)
 
         # Кнопки-переключатели
         inviting_switch = ft.CupertinoSwitch(label=translations["ru"]["inviting_menu"]["inviting"], value=False,
@@ -265,15 +266,19 @@ class InvitingToAGroup:
                                                                                                ft.Colors.PURPLE])), ), ), ], ),
                      list_view,  # Отображение логов 📝
 
-                     ft.Row([await TimeInputRowBuilder().compose_time_input_row(smaller_timex, larger_timex,
-                                                                                save_button_timex),
-                             await TimeInputRowBuilder().compose_time_input_row(hour_textfield, minutes_textfield,
-                                                                                save_button_time)]),
+                     ft.Row([await TimeInputRowBuilder().compose_time_input_row(min_time_input=smaller_timex,
+                                                                                max_time_input=larger_timex,
+                                                                                save_button=save_button_timex),
+                             await TimeInputRowBuilder().compose_time_input_row(min_time_input=hour_textfield,
+                                                                                max_time_input=minutes_textfield,
+                                                                                save_button=save_button_time)]),
 
                      await GUIProgram().diver_castom(),  # Горизонтальная линия
 
-                     ft.Row([await LinkInputRowBuilder().compose_link_input_row(limits, save_button_limit),
-                             await LinkInputRowBuilder().compose_link_input_row(link_entry_field, save_button), ]),
+                     ft.Row([await LinkInputRowBuilder().compose_link_input_row(link_input=limits,
+                                                                                save_button=save_button_limit),
+                             await LinkInputRowBuilder().compose_link_input_row(link_input=link_entry_field,
+                                                                                save_button=save_button), ]),
 
                      await GUIProgram().diver_castom(),  # Горизонтальная линия
                      ft.Text(value="📂 Выберите группу для инвайтинга"),  # Выбор группы для инвайтинга
