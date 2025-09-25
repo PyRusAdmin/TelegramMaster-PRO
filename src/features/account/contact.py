@@ -24,6 +24,7 @@ class TGContact:
         self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
+        self.user_info = UserInfo()
 
     async def show_account_contact_list(self) -> None:
         """
@@ -107,7 +108,7 @@ class TGContact:
         :param user: Телеграм пользователя
         """
         try:
-            await client(functions.contacts.DeleteContactsRequest(id=[await UserInfo().get_user_id(user)]))
+            await client(functions.contacts.DeleteContactsRequest(id=[await self.user_info.get_user_id(user)]))
             await self.app_logger.log_and_display(f"Подождите 2 - 4 секунды")
             await asyncio.sleep(random.randrange(2, 3, 4))  # Спим для избежания ошибки о flood
         except Exception as error:
@@ -178,8 +179,7 @@ class TGContact:
         except Exception as error:
             logger.exception(error)
 
-    @staticmethod
-    async def get_user_data(user, entities) -> None:
+    async def get_user_data(self, user, entities) -> None:
         """
         Получаем данные пользователя
 
@@ -188,12 +188,17 @@ class TGContact:
         """
         try:
             entities.append(
-                [await UserInfo().get_username(user), await UserInfo().get_user_id(user),
-                 await UserInfo().get_access_hash(user),
-                 await UserInfo().get_first_name(user), await UserInfo().get_last_name(user),
-                 await UserInfo().get_user_phone(user),
-                 await UserInfo().get_user_online_status(user),
-                 await UserInfo().get_photo_status(user),
-                 await UserInfo().get_user_premium_status(user)])
+                [
+                    await self.user_info.get_username(user),
+                    await self.user_info.get_user_id(user),
+                    await self.user_info.get_access_hash(user),
+                    await self.user_info.get_first_name(user),
+                    await self.user_info.get_last_name(user),
+                    await self.user_info.get_user_phone(user),
+                    await self.user_info.get_user_online_status(user),
+                    await self.user_info.get_photo_status(user),
+                    await self.user_info.get_user_premium_status(user)
+                ]
+            )
         except Exception as error:
             logger.exception(error)
