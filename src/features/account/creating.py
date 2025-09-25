@@ -26,6 +26,7 @@ class CreatingGroupsAndChats:
         self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
+        self.gui_program = GUIProgram()
 
     async def creating_groups_and_chats(self) -> None:
         """
@@ -100,7 +101,7 @@ class CreatingGroupsAndChats:
 
         # Добавляем элементы интерфейса на страницу
         self.page.views.append(ft.View("/creating_groups_and_chats_menu",
-                                       [await GUIProgram().key_app_bar(),
+                                       [await self.gui_program.key_app_bar(),
                                         ft.Text(spans=[
                                             ft.TextSpan(translations["ru"]["menu"]["create_groups"], ft.TextStyle(
                                                 size=20, weight=ft.FontWeight.BOLD,

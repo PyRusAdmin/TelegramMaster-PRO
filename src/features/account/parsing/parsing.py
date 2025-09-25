@@ -33,6 +33,7 @@ class ParsingGroupMembers:
         self.connect = TGConnect(page)
         self.app_logger = AppLogger(page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
+        self.gui_program = GUIProgram()
 
     async def collect_user_log_data(self, user):
         return {
@@ -228,8 +229,8 @@ class ParsingGroupMembers:
         view = ft.View(
             route="/parsing",
             controls=[
-                await GUIProgram().key_app_bar(),
-                await GUIProgram().outputs_text_gradient(),
+                await self.gui_program.key_app_bar(),
+                await self.gui_program.outputs_text_gradient(),
                 list_view,
                 ft.Column([
                     file_text,
@@ -237,9 +238,9 @@ class ParsingGroupMembers:
                     ft.Row([admin_switch, members_switch, account_groups_switch, ]),
                     ft.Row([account_group_selection_switch, active_switch, contacts_switch, ]),
                     chat_input,
-                    await GUIProgram().diver_castom(),  # Горизонтальная линия
+                    await self.gui_program.diver_castom(),  # Горизонтальная линия
                     ft.Row([limit_active_user]),
-                    await GUIProgram().diver_castom(),  # Горизонтальная линия
+                    await self.gui_program.diver_castom(),  # Горизонтальная линия
                     result_text,
                     dropdown,
                     parse_button,  # ⬅️ Кнопка для парсинга

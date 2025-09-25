@@ -25,6 +25,7 @@ class SettingPage:
     def __init__(self, page: ft.Page):
         self.page = page
         self.app_logger = AppLogger(page=page)
+        self.gui_program = GUIProgram()
 
     async def creating_the_main_window_for_proxy_data_entry(self) -> None:
         """
@@ -173,7 +174,7 @@ class SettingPage:
         self.page.views.append(
             ft.View(
                 "/settings",
-                controls=[await GUIProgram().key_app_bar(),  # Кнопка для перехода на главную страницу
+                controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
                           list_view,  # отображение логов 📝
                           ft.Column(
                               controls=fields + [
@@ -262,7 +263,7 @@ class SettingPage:
         self.page.views.append(
             ft.View(
                 "/settings",
-                controls=[await GUIProgram().key_app_bar(),  # Кнопка для перехода на главную страницу
+                controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
                           t,
                           ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
                           # Чекбоксы в колонках
