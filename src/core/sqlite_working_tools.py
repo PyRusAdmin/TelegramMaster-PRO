@@ -133,22 +133,32 @@ class AccountContacts(Model):
 
 def write_to_database_contacts_accounts(data):
     """
-    Запись данных в таблицу account_contacts
-    :param data:
-    :return:
+    Запись или обновление данных контакта в таблице account_contacts
+    :param data: словарь с данными контакта
     """
-    with db.atomic():
-        AccountContacts.get_or_create(
-            username=data["username"],
-            user_id=data["user_id"],
-            access_hash=data["access_hash"],
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            phone=data["phone"],
-            online_at=data["online_at"],
-            photo_status=data["photo_status"],
-            premium_status=data["premium_status"]
-        )
+    AccountContacts.insert(
+        user_id=data["user_id"],
+        username=data["username"],
+        access_hash=data["access_hash"],
+        first_name=data["first_name"],
+        last_name=data["last_name"],
+        phone=data["phone"],
+        online_at=data["online_at"],
+        photo_status=data["photo_status"],
+        premium_status=bool(data["premium_status"]),  # убедитесь, что bool
+    ).on_conflict(
+        conflict_target=[AccountContacts.user_id],
+        preserve=[
+            AccountContacts.username,
+            AccountContacts.access_hash,
+            AccountContacts.first_name,
+            AccountContacts.last_name,
+            AccountContacts.phone,
+            AccountContacts.online_at,
+            AccountContacts.photo_status,
+            AccountContacts.premium_status,
+        ]
+    ).execute()
 
 
 # def remove_duplicates():
