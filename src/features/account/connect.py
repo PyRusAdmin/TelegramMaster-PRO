@@ -35,6 +35,7 @@ class TGConnect:
         self.app_logger = AppLogger(page)
         self.utils = Utils(page=page)
         self.proxy = Proxy(page=page)
+        self.gui_program = GUIProgram()
 
     async def getting_account_data(self, client):
         """Получаем данные аккаунта"""
@@ -468,7 +469,7 @@ class TGConnect:
 
         self.page.views.append(
             ft.View("/account_connection_menu",
-                    [await GUIProgram().key_app_bar(),
+                    [await self.gui_program.key_app_bar(),
                      ft.Text(spans=[ft.TextSpan(
                          "Подключение аккаунта Telegram по номеру телефона.",
                          ft.TextStyle(
@@ -482,7 +483,7 @@ class TGConnect:
                      ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                        text="Получить код", on_click=connecting_number_accounts),
 
-                     await GUIProgram().diver_castom(),  # Горизонтальная линия
+                     await self.gui_program.diver_castom(),  # Горизонтальная линия
 
                      ft.Text(spans=[ft.TextSpan(
                          "Подключение session аккаунтов Telegram",

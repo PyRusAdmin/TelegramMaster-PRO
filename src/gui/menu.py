@@ -14,6 +14,7 @@ class Menu:
 
     def __init__(self, page: ft.Page):
         self.page = page
+        self.gui_program = GUIProgram()
 
     async def main_menu_program(self):
         """
@@ -32,7 +33,7 @@ class Menu:
         )
 
         self.page.views.append(
-            ft.View("/", [await GUIProgram().key_app_bar(),
+            ft.View("/", [await self.gui_program.key_app_bar(),
                           ft.Row([
                               # Левая колонка — кнопки
                               ft.Column([
@@ -161,7 +162,7 @@ class Menu:
         """
         self.page.views.append(
             ft.View("/settings",
-                    [await GUIProgram().key_app_bar(),
+                    [await self.gui_program.key_app_bar(),
                      ft.Text(spans=[ft.TextSpan(translations["ru"]["menu"]["settings"],
                                                 ft.TextStyle(size=20, weight=ft.FontWeight.BOLD, foreground=ft.Paint(
                                                     gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
@@ -189,46 +190,13 @@ class Menu:
                                            on_click=lambda _: self.page.go("/recording_reaction_link")),
                      ])]))
 
-    async def working_with_contacts_menu(self):
-        """
-        Меню 📇 Работа с контактами
-        """
-        self.page.views.append(
-            ft.View("/working_with_contacts",
-                    [await GUIProgram().key_app_bar(),
-                     ft.Text(spans=[ft.TextSpan(
-                         translations["ru"]["menu"]["contacts"],
-                         ft.TextStyle(
-                             size=20, weight=ft.FontWeight.BOLD,
-                             foreground=ft.Paint(
-                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
-                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                         # 📋 Формирование списка контактов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["contacts_menu"]["creating_a_contact_list"],
-                                           on_click=lambda _: self.page.go("/creating_contact_list")),
-                         # 👥 Показать список контактов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
-                                           on_click=lambda _: self.page.go("/show_list_contacts")),
-                         # 🗑️ Удаление контактов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["contacts_menu"]["deleting_contacts"],
-                                           on_click=lambda _: self.page.go("/deleting_contacts")),
-                         # ➕ Добавление контактов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["contacts_menu"]["adding_contacts"],
-                                           on_click=lambda _: self.page.go("/adding_contacts")),
-                     ])]))
-
     async def reactions_menu(self):
         """
         Меню ❤️ Работа с реакциями
         """
         self.page.views.append(
             ft.View("/working_with_reactions",
-                    [await GUIProgram().key_app_bar(),  # Кнопка "Назад"
+                    [await self.gui_program.key_app_bar(),  # Кнопка "Назад"
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["menu"]["reactions"],
                          ft.TextStyle(
@@ -253,7 +221,7 @@ class Menu:
         """
         self.page.views.append(
             ft.View("/account_verification_menu",
-                    [await GUIProgram().key_app_bar(),  # Добавляет кнопку назад на страницу (page)
+                    [await self.gui_program.key_app_bar(),  # Добавляет кнопку назад на страницу (page)
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["menu"]["account_check"],
                          ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,

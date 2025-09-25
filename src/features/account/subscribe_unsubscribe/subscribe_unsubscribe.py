@@ -34,6 +34,7 @@ class SubscribeUnsubscribeTelegram:
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.setting_page = SettingPage(page=page)
+        self.gui_program = GUIProgram()
 
     async def subscribe_and_unsubscribe_menu(self):
         """
@@ -141,7 +142,7 @@ class SubscribeUnsubscribeTelegram:
 
         self.page.views.append(
             ft.View("/subscribe_unsubscribe",
-                    [await GUIProgram().key_app_bar(),
+                    [await self.gui_program.key_app_bar(),
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["menu"]["subscribe_unsubscribe"],
                          ft.TextStyle(
@@ -152,7 +153,7 @@ class SubscribeUnsubscribeTelegram:
 
                      list_view,  # Отображение логов 📝
 
-                     await GUIProgram().diver_castom(),  # Горизонтальная линия
+                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                      ft.Text(
                          value="⏱ Укажите интервал времени (в секундах) между подписками на группы.\n"
                                "🤖 После каждой подписки аккаунт сделает паузу на случайное время из указанного диапазона,\n"
@@ -161,14 +162,14 @@ class SubscribeUnsubscribeTelegram:
                      ),
                      await TimeInputRowBuilder().compose_time_input_row(smaller_timex, larger_timex,
                                                                         save_button_time),
-                     await GUIProgram().diver_castom(),  # Горизонтальная линия
+                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                      ft.Text(
                          value="🔗 Укажите ссылки на группы или каналы для подписки.\n"
                                "📌 Если вы уже вводили их ранее — ввод не обязателен, данные сохранены в системе.",
                          size=14
                      ),
                      await LinkInputRowBuilder().compose_link_input_row(link_entry_field, save_button),
-                     await GUIProgram().diver_castom(),  # Горизонтальная линия
+                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🔔 Подписка
                          ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,

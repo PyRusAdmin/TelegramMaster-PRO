@@ -36,6 +36,7 @@ class SendTelegramMessages:
         self.file_extension = "json"
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
+        self.gui_program = GUIProgram()
 
     async def send_files_to_personal_chats(self) -> None:
         """
@@ -128,7 +129,7 @@ class SendTelegramMessages:
         self.page.views.append(
             ft.View("/sending_messages_via_chats_menu",
                     controls=[
-                        await GUIProgram().key_app_bar(),  # Кнопка "Назад"
+                        await self.gui_program.key_app_bar(),  # Кнопка "Назад"
                         output, sleep_time_group, t, account_limits_inputs,
                         ft.Column(  # Верхняя часть: контрольные элементы
                             controls=[
@@ -302,7 +303,7 @@ class SendTelegramMessages:
             ft.View(
                 "/sending_messages_via_chats_menu",
                 controls=[
-                    await GUIProgram().key_app_bar(),  # Кнопка "Назад"
+                    await self.gui_program.key_app_bar(),  # Кнопка "Назад"
                     ft.Text(translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"], size=18,
                             weight=ft.FontWeight.BOLD), c, ft.Row(controls=[tb_time_from, tb_time_to], spacing=20, ), t,
                     chat_list_field,

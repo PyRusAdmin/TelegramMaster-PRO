@@ -46,6 +46,7 @@ class InvitingToAGroup:
         self.utils = Utils(page=page)
         self.setting_page = SettingPage(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
+        self.gui_program = GUIProgram()
 
     async def inviting_menu(self):
         """
@@ -257,7 +258,7 @@ class InvitingToAGroup:
 
         self.page.views.append(
             ft.View("/inviting",
-                    [await GUIProgram().key_app_bar(),  # Кнопка назад
+                    [await self.gui_program.key_app_bar(),  # Кнопка назад
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["inviting_menu"]["inviting"],
                          ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
@@ -273,17 +274,17 @@ class InvitingToAGroup:
                                                                                 max_time_input=minutes_textfield,
                                                                                 save_button=save_button_time)]),
 
-                     await GUIProgram().diver_castom(),  # Горизонтальная линия
+                     await self.gui_program.diver_castom(),  # Горизонтальная линия
 
                      ft.Row([await LinkInputRowBuilder().compose_link_input_row(link_input=limits,
                                                                                 save_button=save_button_limit),
                              await LinkInputRowBuilder().compose_link_input_row(link_input=link_entry_field,
                                                                                 save_button=save_button), ]),
 
-                     await GUIProgram().diver_castom(),  # Горизонтальная линия
+                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                      ft.Text(value="📂 Выберите группу для инвайтинга"),  # Выбор группы для инвайтинга
                      dropdown,  # Выпадающий список с названиями групп
-                     await GUIProgram().diver_castom(),  # Горизонтальная линия
+                     await self.gui_program.diver_castom(),  # Горизонтальная линия
 
                      ft.Row([
                          inviting_switch,

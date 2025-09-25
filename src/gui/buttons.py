@@ -11,6 +11,7 @@ class FunctionButton:
 
     def __init__(self, page: ft.Page):
         self.page = page
+        self.gui_program = GUIProgram()
 
     def function_button_ready(self, btn_click, back_button_clicked, user_input) -> None:
         """
@@ -74,7 +75,7 @@ class FunctionButton:
             ft.View(
                 "/viewing_posts_menu",  # Маршрут для этого представления
                 [
-                    await GUIProgram().key_app_bar(),  # Кнопка "Назад"
+                    await self.gui_program.key_app_bar(),  # Кнопка "Назад"
 
                     ft.Text(spans=[ft.TextSpan(
                         translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],

@@ -24,6 +24,7 @@ class AccountBIO:
         self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
+        self.gui_program = GUIProgram()
 
     async def change_bio_profile(self, user_input):
         """
@@ -141,7 +142,7 @@ class AccountBIO:
 
         self.page.views.append(
             ft.View("/bio_editing",
-                    [await GUIProgram().key_app_bar(),
+                    [await self.gui_program.key_app_bar(),
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["menu"]["edit_bio"],
                          ft.TextStyle(
