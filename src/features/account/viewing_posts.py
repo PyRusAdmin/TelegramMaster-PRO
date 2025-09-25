@@ -11,6 +11,7 @@ from telethon.tl.functions.messages import GetMessagesViewsRequest
 from src.core.configs import path_accounts_folder
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
+from src.features.account.contact import StatusDisplay
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
@@ -34,15 +35,14 @@ class ViewingPosts:
         self.utils = Utils(page=page)
         self.function_button = FunctionButton(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
+        self.status_display = StatusDisplay(page=page)
 
     async def viewing_posts_request(self) -> None:
         """Окно с полями ввода и кнопками для накрутки просмотров."""
         try:
             list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
 
-            # Получаем количество аккаунтов
-            sessions_count = len(self.utils.find_filess(directory_path=path_accounts_folder, extension='session'))
-            list_view.controls.append(ft.Text(f"Подключенных аккаунтов {sessions_count}"))
+            sessions_count = self.status_display.display_account_count()  # Получаем количество аккаунтов
 
             # Поле для ввода ссылки на чат
             link_channel = ft.TextField(label=f"Введите ссылку на канал:", multiline=False, max_lines=1)

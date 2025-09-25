@@ -13,8 +13,25 @@ from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.parsing.parsing import UserInfo
-from src.gui.gui import AppLogger
+from src.gui.gui import AppLogger, list_view
 from src.locales.translations_loader import translations
+
+
+class StatusDisplay:
+
+    def __init__(self, page: ft.Page):
+        """
+        Инициализация экземпляра класса StatusDisplay
+        :param page: Объект страницы ft.Page
+        """
+        self.page = page
+        self.utils = Utils(page=page)
+
+    def display_account_count(self):
+        # Получаем количество аккаунтов
+        sessions_count = len(self.utils.find_filess(directory_path=path_accounts_folder, extension='session'))
+        list_view.controls.append(ft.Text(f"Подключенных аккаунтов {sessions_count}"))
+        return sessions_count
 
 
 class TGContact:
@@ -22,18 +39,28 @@ class TGContact:
     Работа с контактами Telegram
     """
 
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
+        """
+        Инициализация экземпляра класса TGContact
+        :param page: Объект страницы ft.Page
+        """
         self.page = page
         self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.user_info = UserInfo()
         self.gui_program = GUIProgram()
+        self.status_display = StatusDisplay(page=page)
 
     async def working_with_contacts_menu(self):
         """
         Меню 📇 Работа с контактами
         """
+
+        list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
+
+        sessions_count = self.status_display.display_account_count()  # Получаем количество аккаунтов
+
         self.page.views.append(
             ft.View("/working_with_contacts",
                     [await self.gui_program.key_app_bar(),
