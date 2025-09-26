@@ -1,4 +1,4 @@
-<h1 align="center">TelegramMaster 🚀 by. <a href="https://t.me/PyAdminRU" target="_blank">PyAdminRU</a></h1>
+<h1 align="center">TelegramMaster-PRO 🚀 by. <a href="https://t.me/PyAdminRU" target="_blank">PyAdminRU</a></h1>
 
 <p align="center">
   🔥 Многофункциональный инструмент для работы с Telegram  
@@ -18,19 +18,19 @@
 
 <h2>📖 Descripción</h2>
 
-- Nombre del proyecto: TelegramMaster 2.0 🚀<br>
-- Versión actual:  2.7.3 🆕<br>
-- Última fecha de actualización: 15.09.2025 📅<br > <br>
+- Nombre del proyecto: TelegramMaster-PRO 🚀<br>
+- Versión actual:  2.7.4 🆕<br>
+- Última fecha de actualización: 27.09.2025 📅<br > <br>
 
 [![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
 [![made-with-PyAdminRU](https://img.shields.io/badge/Made%20with-PyAdminRU-1f425f.svg)](https://t.me/PyAdminRU)
 
-TelegramMaster 2.0 es una poderosa herramienta para trabajar con <a href="https://telegram.org/">Telegram</a> 📨.
+TelegramMaster-PRO es una poderosa herramienta para trabajar con <a href="https://telegram.org/">Telegram</a> 📨.
 Programa
 ofrece muchas funciones para administrar cuentas, interactuar con los usuarios y automatizar procesos.
 
 <h2>💻 plataformas Soportadas </h2>
-TelegramMaster 2.0 es compatible con los siguientes sistemas operativos:<br><br>
+TelegramMaster-PRO es compatible con los siguientes sistemas operativos:<br><br>
 
 <p align="center">
 <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows Badge">
@@ -53,7 +53,7 @@ Basado en bibliotecas
 
 <h2>🚀 características Principales</h2>
 
-TelegramMaster proporciona la siguiente funcionalidad:
+TelegramMaster-PRO proporciona la siguiente funcionalidad:
 
 * 📩 Inviting (invitar a los usuarios sin límites, en horario, etc.)
 * 🔍 Análisis (recopilación de datos sobre grupos, canales y participantes)
@@ -69,13 +69,14 @@ Puede consultar la lista completa en la lista completa
 funciones: "[lista completa de funciones] (docs / Completa_funciones. md)"
 
 Con configuraciones flexibles y la capacidad de trabajar con múltiples
-a pesar de las restricciones de <code > Telegram </code><code>TelegramMaster < / code>
+a pesar de las restricciones de <code > Telegram </code><code>TelegramMaster-PRO < / code>
 tiempo y mejora la eficiencia del trabajo 💼.
 
-Además, < code>TelegramMaster < / code> proporciona conectividad
+Además, < code>TelegramMaster-PRO < / code> proporciona conectividad
 servidores proxy 🛡️.
 
-Es importante tener en cuenta que < code>TelegramMaster</code>🚀 se ha desarrollado activamente desde <B>29.01.2022< / B>
+Es importante tener en cuenta que < code>TelegramMaster-PRO</code>🚀 se ha desarrollado activamente desde <B>
+29.01.2022< / B>
 año y se actualiza regularmente y
 se complementa con nuevos
 características para satisfacer las cambiantes demandas del mercado 📈 y las necesidades de los usuarios 🤝.
@@ -99,7 +100,7 @@ características para satisfacer las cambiantes demandas del mercado 📈 y las 
 python --version
 ```
 
-2. Instalación De TelegramMaster 🚀:
+2. Instalación De TelegramMaster-PRO 🚀:
 
 * Clonar el repositorio:
 
@@ -135,7 +136,7 @@ Compruebe la instalación de Python 🐍:
 python3 --version
 ```
 
-2. Instalación De TelegramMaster 🚀:
+2. Instalación De TelegramMaster-PRO 🚀:
 
 * Clone el repositorio e instale las dependencias de manera similar a la instalación en Windows.
 
@@ -157,11 +158,11 @@ python3 --version
 
 ```
 
-2. Instalación De TelegramMaster:
+2. Instalación De TelegramMaster-PRO:
 
 * Clone el repositorio e instale las dependencias como en los sistemas anteriores.
 
-<h3>instalación de TelegramMaster 2.0</h3>
+<h3>instalación de TelegramMaster-PRO</h3>
 
 <hr/> <!-- Горизонтальная линия-->
 
@@ -169,7 +170,7 @@ python3 --version
 
 ![alt text](docs/static/images/documentation.png "Documentation")
 
-La documentación detallada sobre el trabajo con TelegramMaster se encuentra en la sección docs 📜, así como el
+La documentación detallada sobre el trabajo con TelegramMaster-PRO se encuentra en la sección docs 📜, así como el
 lanzamiento de la documentación implementado
 directamente desde el programa.
 Allí encontrará instrucciones para cada módulo y ejemplos de código para automatizar tareas 🔄.

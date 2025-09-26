@@ -9,7 +9,7 @@ from telethon.errors import SessionRevokedError, AuthKeyUnregisteredError
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.configs import path_accounts_folder
-from src.core.sqlite_working_tools import add_member_to_db, write_to_database_contacts_accounts
+from src.core.sqlite_working_tools import add_member_to_db, write_to_database_contacts_accounts, write_contact_db
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
@@ -58,7 +58,6 @@ class TGContact:
         """
         Меню 📇 Работа с контактами
         """
-
         list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
 
         sessions_count = self.status_display.display_account_count()  # Получаем количество аккаунтов
@@ -111,6 +110,28 @@ class TGContact:
             except Exception as error:
                 logger.exception(error)
 
+        async def write_contact_to_db(_) -> None:
+            """📋 Формирование списка контактов"""
+            data = input_numbers.value.strip()
+            if not data:
+                await show_notification(self.page, "⚠️ Поле пустое")
+                return
+
+            # Разделяем по переносам строк, удаляем пустые и лишние пробелы
+            phones = [line.strip() for line in data.splitlines() if line.strip()]
+
+            logger.info(f"Вставлено номеров: {len(phones)}")
+            for phone in phones:
+                write_contact_db(phone)
+
+            await show_notification(self.page, f"✅ Добавлено {len(phones)} номеров")
+
+
+        input_numbers = ft.TextField(label="Вставьте список номеров для записи в базу данных.",
+                                     label_style=ft.TextStyle(size=15), autofocus=True,
+                                     width=int(WIDTH_WIDE_BUTTON) / 2 - 5,
+                                     text_size=12)
+
         self.page.views.append(
             ft.View("/working_with_contacts",
                     [
@@ -121,13 +142,17 @@ class TGContact:
                                 size=20, weight=ft.FontWeight.BOLD,
                                 foreground=ft.Paint(
                                     gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                         ft.Colors.PURPLE])), ), ), ], ),
+                                                                                         ft.Colors.PURPLE]))))]),
                         list_view,  # Отображение логов 📝
                         ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                            # 📋 Формирование списка контактов
-                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                              text=translations["ru"]["contacts_menu"]["creating_a_contact_list"],
-                                              on_click=lambda _: self.page.go("/creating_contact_list")),
+
+                            ft.Row([input_numbers,  # Ввод номеров
+                                    # 📋 Формирование списка контактов
+                                    ft.ElevatedButton(width=int(WIDTH_WIDE_BUTTON) / 2 - 5, height=BUTTON_HEIGHT,
+                                                      text=translations["ru"]["contacts_menu"][
+                                                          "creating_a_contact_list"],
+                                                      on_click=write_contact_to_db), ]),
+
                             # 👥 Показать список контактов
                             ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                               text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
