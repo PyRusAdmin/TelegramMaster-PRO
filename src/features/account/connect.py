@@ -40,9 +40,16 @@ class TGConnect:
     async def getting_account_data(self, client):
         """Получаем данные аккаунта"""
         me = await client.get_me()
-        logger.info(f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
-        await self.app_logger.log_and_display(
-            f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
+        if me is None:
+            logger.warning("Не удалось получить данные аккаунта: get_me() вернул None")
+            await self.app_logger.log_and_display("⚠️ Не удалось получить данные аккаунта (аккаунт не авторизован или сессия недействительна)")
+            return
+        first_name = me.first_name or ""
+        last_name = me.last_name or ""
+        username = me.username or ""
+        phone = me.phone or ""
+        logger.info(f"🧾 Аккаунт: {first_name} {last_name} | @{username} | ID: {me.id} | Phone: {phone}")
+        await self.app_logger.log_and_display(f"🧾 Аккаунт: {first_name} {last_name} | @{username} | ID: {me.id} | Phone: {phone}")
 
     async def client_connect_string_session(self, session_name):
         """Подключение к Telegram аккаунту через StringSession"""
@@ -334,8 +341,7 @@ class TGConnect:
             await client.connect()
             me = await client.get_me()
             logger.info(f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
-            await self.app_logger.log_and_display(
-                f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
+            await self.app_logger.log_and_display(f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
 
             # string_session = client.session.save()
             # logger.info(f"📦 String session: {string_session}")
