@@ -89,8 +89,8 @@ class TGContact:
             try:
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                    client = await self.connect.get_telegram_client(session_name,
-                                                                    account_directory=path_accounts_folder)
+                    client = await self.connect.client_connect_string_session(session_name=session_name)
+                    await self.connect.getting_account_data(client)
                     await self.we_get_the_account_id(client)
                     client.disconnect()  # Разрываем соединение telegram
             except Exception as error:
@@ -104,8 +104,9 @@ class TGContact:
                 # Открываем базу данных для работы с аккаунтами user_data/software_database.db
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                    client = await self.connect.get_telegram_client(session_name,
-                                                                    account_directory=path_accounts_folder)
+                    client = await self.connect.client_connect_string_session(session_name=session_name)
+                    await self.connect.getting_account_data(client)
+
                     await self.add_contact_to_phone_book(client)
             except Exception as error:
                 logger.exception(error)
@@ -125,7 +126,6 @@ class TGContact:
                 write_contact_db(phone)
 
             await show_notification(self.page, f"✅ Добавлено {len(phones)} номеров")
-
 
         input_numbers = ft.TextField(label="Вставьте список номеров для записи в базу данных.",
                                      label_style=ft.TextStyle(size=15), autofocus=True,
@@ -151,8 +151,7 @@ class TGContact:
                                     ft.ElevatedButton(width=int(WIDTH_WIDE_BUTTON) / 2 - 5, height=BUTTON_HEIGHT,
                                                       text=translations["ru"]["contacts_menu"][
                                                           "creating_a_contact_list"],
-                                                      on_click=write_contact_to_db), ]),
-
+                                                      on_click=write_contact_to_db)]),
                             # 👥 Показать список контактов
                             ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                               text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],

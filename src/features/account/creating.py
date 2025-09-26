@@ -58,8 +58,8 @@ class CreatingGroupsAndChats:
                 for session_name in session_files:
                     # Извлекаем только имя файла без расширения
                     session_name = os.path.splitext(os.path.basename(session_name))[0]
-                    client = await self.connect.get_telegram_client(session_name,
-                                                                    account_directory=path_accounts_folder)
+                    client = await self.connect.client_connect_string_session(session_name=session_name)
+                    await self.connect.getting_account_data(client)
                     await client(functions.channels.CreateChannelRequest(title='My awesome title',
                                                                          about='Description for your group',
                                                                          megagroup=True))
