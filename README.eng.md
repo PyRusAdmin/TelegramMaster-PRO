@@ -1,4 +1,4 @@
-<h1 align="center">TelegramMaster 🚀 by. <a href="https://t.me/PyAdminRU" target="_blank">PyAdminRU</a></h1>
+<h1 align="center">TelegramMaster-PRO 🚀 by. <a href="https://t.me/PyAdminRU" target="_blank">PyAdminRU</a></h1>
 
 <p align="center">
   🔥 Многофункциональный инструмент для работы с Telegram  
@@ -18,18 +18,18 @@
 
 <h2>📖 Описание</h2>
 
-- Project name: TelegramMaster 2.0 🚀<br>
-- Current version:  2.7.3 🆕<br>
-- Date of last update: 15.09.2025 📅<br><br>
+- Project name: TelegramMaster-PRO 🚀<br>
+- Current version:  2.7.4 🆕<br>
+- Date of last update: 27.09.2025 📅<br><br>
 
 [![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
 [![made-with-PyAdminRU](https://img.shields.io/badge/Made%20with-PyAdminRU-1f425f.svg)](https://t.me/PyAdminRU)
 
-TelegramMaster 2.0 is a powerful tool for working with <a href="https://telegram.org/">Telegram</a> 📨. The program
+TelegramMaster-PRO is a powerful tool for working with <a href="https://telegram.org/">Telegram</a> 📨. The program
 offers many functions for account management, user interaction, and process automation.
 
 <h2>💻 Supported platforms</h2>
-TelegramMaster 2.0 is compatible with the following operating systems:<br><br>
+TelegramMaster-PRO is compatible with the following operating systems:<br><br>
 
 <p align="center">
 <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows Badge">
@@ -52,7 +52,7 @@ of: [Telethon](https://github.com/LonamiWebs/Telethon ), [Flask](https://flask.p
 
 <h2>🚀 Main features</h2>
 
-TelegramMaster provides the following functionality:
+TelegramMaster-PRO provides the following functionality:
 
 * 📩 Inviting (inviting users without limits, on a schedule, etc.)
 * 🔍 Parsing (collecting data about groups, channels and participants)
@@ -67,13 +67,13 @@ TelegramMaster provides the following functionality:
 The full list can be found in the full list of functions: "[Full list of functions](docs/full_list_of_functions)"
 
 Thanks to flexible settings and the ability to work with multiple
-accounts, despite restrictions from <code>Telegram</code> <code>TelegramMaster</code> significantly saves
+accounts, despite restrictions from <code>Telegram</code> <code>TelegramMaster-PRO</code> significantly saves
 time and increases work efficiency.
 
-In addition, <code>TelegramMaster</code> provides the ability to connect
+In addition, <code>TelegramMaster-PRO</code> provides the ability to connect
 proxy servers 🛡️.
 
-It is important to note that <code>TelegramMaster</code>🚀 has been actively developing since <b>01/29/2022</b> and is
+It is important to note that <code>TelegramMaster-PRO</code>🚀 has been actively developing since <b>01/29/2022</b> and is
 regularly updated and supplemented with new
 features to meet the changing market requirements and user needs 🤝.
 
@@ -96,7 +96,7 @@ features to meet the changing market requirements and user needs 🤝.
 python --version
 ```
 
-2. Installing the TelegramMaster 🚀:
+2. Installing the TelegramMaster-PRO 🚀:
 
 * Clone the repository:
 
@@ -130,7 +130,7 @@ Check the Python installation:
 python3 --version
 ```
 
-2. Installing the TelegramMaster 🚀:
+2. Installing the TelegramMaster-PRO 🚀:
 
 - Clone the repository and install dependencies in the same way as installing on Windows.
 
@@ -152,11 +152,11 @@ python3 --version
 
 ```
 
-2. Installing the TelegramMaster:
+2. Installing the TelegramMaster-PRO:
 
 - Clone the repository and install dependencies as in previous systems.
 
-<h3>Installing TelegramMaster 2.0</h3>
+<h3>Installing TelegramMaster-PRO</h3>
 
 <hr/> <!-- Горизонтальная линия-->
 
@@ -164,7 +164,7 @@ python3 --version
 
 ![alt text](docs/static/images/documentation.png "Documentation")
 
-Detailed documentation on working with TelegramMaster can be found in the docs section, as well as the launch of
+Detailed documentation on working with TelegramMaster-PRO can be found in the docs section, as well as the launch of
 documentation directly from the program.
 There you will find instructions for each module and code examples for automating tasks.
 

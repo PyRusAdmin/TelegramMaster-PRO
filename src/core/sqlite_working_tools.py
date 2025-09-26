@@ -139,11 +139,16 @@ class Contact(Model):
     """
     Таблица для хранения данных администраторов групп в таблице members_admin
     """
-    contact = CharField(max_length=255, null=True)
+    phone = CharField(unique=True)
 
     class Meta:
         database = db
         table_name = 'contact'
+
+
+def write_contact_db(phone: str):
+    """Запись контакта в базу данных (игнорирует дубликаты)"""
+    Contact.insert(phone=phone).on_conflict(action='IGNORE').execute()
 
 
 # TODO добавить все используемые таблицы
