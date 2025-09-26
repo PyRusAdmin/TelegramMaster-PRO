@@ -106,15 +106,15 @@ async def main(page: ft.Page):
         elif page.route == "/working_with_contacts":  # Меню "Работа с контактами"
             await tg_contact.working_with_contacts_menu()
         elif page.route == "/creating_contact_list":  # Формирование списка контактов
-            start = await app_logger.start_time()
-            logger.info("▶️ Начало Формирования списка контактов")
+            # start = await app_logger.start_time()
+            # logger.info("▶️ Начало Формирования списка контактов")
             open_and_read_data(table_name="contact")  # Удаление списка с контактами
             # TODO миграция на PEEWEE
             await setting_page.output_the_input_field(page=page, table_name="contact",
                                                       column_name="contact", route="/working_with_contacts",
                                                       into_columns="contact")
-            logger.info("🔚 Конец Формирования списка контактов")
-            await app_logger.end_time(start)
+            # logger.info("🔚 Конец Формирования списка контактов")
+            # await app_logger.end_time(start)
         # __________________________________________________________________________________________________________
         elif page.route == "/account_connection_menu":  # Подключение аккаунтов 'меню'.
             await connect.account_connection_menu()
