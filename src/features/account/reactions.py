@@ -5,7 +5,7 @@ import re
 
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger  # Импортируем библиотеку loguru для логирования
-from telethon import events, types
+from telethon import events, types, TelegramClient
 from telethon.errors import ReactionInvalidError
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import SendReactionRequest
@@ -45,8 +45,10 @@ class WorkingWithReactions:
 
             async def btn_click(_) -> None:
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                    client = await self.connect.get_telegram_client(session_name,
-                                                                    account_directory=path_accounts_folder)
+
+                    client = await self.connect.client_connect_string_session(session_name)
+                    await self.connect.getting_account_data(client)
+
                     await self.app_logger.log_and_display(f"[+] Работаем с группой: {chat.value}")
                     await self.sub_unsub_tg.subscribe_to_group_or_channel(client, chat.value, page)
                     msg_id = int(re.search(r'/(\d+)$', message.value).group(1))  # Получаем id сообщения из ссылки
@@ -96,8 +98,11 @@ class WorkingWithReactions:
             for session_name in self.utils.find_filess(directory_path="user_data/accounts/reactions_list",
                                                        # TODO переместить путь к файлу в конфиг файл
                                                        extension='session'):
-                client = await self.connect.get_telegram_client(session_name,
-                                                                account_directory="user_data/accounts/reactions_list")
+                # "user_data/accounts/reactions_list" - путь к файлу, но пусть пользователь сам выбирает аккаунт
+                # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
+                await self.connect.getting_account_data(client)
+
                 await client(JoinChannelRequest(chat))  # Подписываемся на канал / группу
                 await asyncio.sleep(5)
                 # random_value = await self.choosing_random_reaction()  # Выбираем случайное значение из списка (редакция)
@@ -120,8 +125,10 @@ class WorkingWithReactions:
         """
         try:
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                client = await self.connect.get_telegram_client(session_name,
-                                                                account_directory=path_accounts_folder)
+
+                client = await self.connect.client_connect_string_session(session_name)
+                await self.connect.getting_account_data(client)
+
                 chat = self.utils.read_json_file(filename='user_data/reactions/link_channel.json')
                 await self.app_logger.log_and_display(f"{chat}")
                 await client(JoinChannelRequest(chat))  # Подписываемся на канал / группу

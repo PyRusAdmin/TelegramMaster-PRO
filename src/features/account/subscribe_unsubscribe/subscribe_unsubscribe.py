@@ -50,8 +50,10 @@ class SubscribeUnsubscribeTelegram:
             start = await self.app_logger.start_time()
             try:
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                    client = await self.connect.get_telegram_client(session_name,
-                                                                    account_directory=path_accounts_folder)
+
+                    client = await self.connect.client_connect_string_session(session_name)
+                    await self.connect.getting_account_data(client)
+
                     dialogs = client.iter_dialogs()
                     await self.app_logger.log_and_display(f"Диалоги: {dialogs}")
                     async for dialog in dialogs:

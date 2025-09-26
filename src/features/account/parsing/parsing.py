@@ -57,7 +57,10 @@ class ParsingGroupMembers:
         """
         phone = self.page.session.get("selected_sessions") or []
         logger.debug(f"Аккаунт: {phone}")
-        client = await TGConnect(self.page).get_telegram_client(phone[0], account_directory=path_accounts_folder)
+
+        client = await self.connect.client_connect_string_session(session_name=phone[0])
+        await self.connect.getting_account_data(client)
+
         await self.app_logger.log_and_display("🔍 Ищем участников... 💾 Сохраняем в файл software_database.db...")
         try:
             all_participants: list = []
@@ -253,7 +256,10 @@ class ParsingGroupMembers:
     async def start_group_parsing(self, dropdown, result_text):
         phone = await self.load_groups(dropdown, result_text)
         logger.warning(f"🔍 Аккаунт: {phone}")
-        client = await self.connect.get_telegram_client(phone, path_accounts_folder)
+
+        client = await self.connect.client_connect_string_session(session_name=phone)
+        await self.connect.getting_account_data(client)
+
         if not dropdown.value:
             await self.app_logger.log_and_display("⚠️ Группа не выбрана")
             return
@@ -290,7 +296,10 @@ class ParsingGroupMembers:
             session_path = selected[0]
             phone = os.path.splitext(os.path.basename(session_path))[0]
             logger.warning(f"🔍 Работаем с аккаунтом {phone}")
-            client = await self.connect.get_telegram_client(phone, path_accounts_folder)
+
+            client = await self.connect.client_connect_string_session(session_name=phone)
+            await self.connect.getting_account_data(client)
+
             result = await client(
                 GetDialogsRequest(offset_date=None, offset_id=0, offset_peer=InputPeerEmpty(), limit=200, hash=0))
             groups = await self.filtering_groups(result.chats)
@@ -311,8 +320,10 @@ class ParsingGroupMembers:
             phone = self.page.session.get("selected_sessions") or []
             logger.debug(f"Аккаунт: {phone}")
             try:
-                client = await self.connect.get_telegram_client(phone[0],
-                                                                account_directory=path_accounts_folder)
+
+                client = await self.connect.client_connect_string_session(session_name=phone[0])
+                await self.connect.getting_account_data(client)
+
                 await self.app_logger.log_and_display(f"🔍 Парсинг группы: {groups}")
                 try:
                     entity = await client.get_entity(groups)  # Получаем сущность группы/канала
@@ -373,7 +384,10 @@ class ParsingGroupMembers:
         # Обрабатываем все файлы сессий по очереди 📂
         phone = self.page.session.get("selected_sessions") or []
         logger.debug(f"🔍 Парсинг групп/каналов, в которых состоит аккаунт: {phone}")
-        client = await self.connect.get_telegram_client(phone[0], account_directory=path_accounts_folder)
+
+        client = await self.connect.client_connect_string_session(session_name=phone[0])
+        await self.connect.getting_account_data(client)
+
         await self.app_logger.log_and_display(
             f"🔗 Подключение к аккаунту: {phone}\n 🔄 Парсинг групп/каналов, на которые подписан аккаунт")
         await self.forming_a_list_of_groups(client)
@@ -386,8 +400,9 @@ class ParsingGroupMembers:
         :param phone_number: номер телефона
         """
         try:
-            client = await self.connect.get_telegram_client(session_name=phone_number,
-                                                            account_directory=path_accounts_folder)
+            client = await self.connect.client_connect_string_session(session_name=phone_number)
+            await self.connect.getting_account_data(client)
+
             await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_input)
             try:
                 await asyncio.sleep(int(TIME_ACTIVITY_USER_2 or 5))

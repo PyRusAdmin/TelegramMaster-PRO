@@ -14,8 +14,7 @@ from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
-from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
-from src.core.configs import path_accounts_folder
+from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON, path_accounts_folder
 from src.core.utils import Utils
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.proxy.checking_proxy import Proxy
@@ -42,14 +41,16 @@ class TGConnect:
         me = await client.get_me()
         if me is None:
             logger.warning("Не удалось получить данные аккаунта: get_me() вернул None")
-            await self.app_logger.log_and_display("⚠️ Не удалось получить данные аккаунта (аккаунт не авторизован или сессия недействительна)")
+            await self.app_logger.log_and_display(
+                "⚠️ Не удалось получить данные аккаунта (аккаунт не авторизован или сессия недействительна)")
             return
         first_name = me.first_name or ""
         last_name = me.last_name or ""
         username = me.username or ""
         phone = me.phone or ""
         logger.info(f"🧾 Аккаунт: {first_name} {last_name} | @{username} | ID: {me.id} | Phone: {phone}")
-        await self.app_logger.log_and_display(f"🧾 Аккаунт: {first_name} {last_name} | @{username} | ID: {me.id} | Phone: {phone}")
+        await self.app_logger.log_and_display(
+            f"🧾 Аккаунт: {first_name} {last_name} | @{username} | ID: {me.id} | Phone: {phone}")
 
     async def client_connect_string_session(self, session_name):
         """Подключение к Telegram аккаунту через StringSession"""
@@ -87,8 +88,10 @@ class TGConnect:
         """
         try:
             await self.app_logger.log_and_display(f"Проверка аккаунта {session_name}")
-            client = await self.get_telegram_client(session_name=session_name,
-                                                    account_directory=path_accounts_folder)
+
+            client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
+            await self.getting_account_data(client)
+
             try:
                 await client.connect()  # Подсоединяемся к Telegram аккаунта
                 if not await client.is_user_authorized():  # Если аккаунт не авторизирован
@@ -142,8 +145,10 @@ class TGConnect:
         try:
             start = await self.app_logger.start_time()
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                client: TelegramClient = await self.get_telegram_client(session_name=session_name,
-                                                                        account_directory=path_accounts_folder)
+
+                client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
+                await self.getting_account_data(client)
+
                 try:
                     await client.send_message(entity='SpamBot',
                                               message='/start')  # Находим спам бот, и вводим команду /start
@@ -267,8 +272,8 @@ class TGConnect:
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 await self.app_logger.log_and_display(message=f"⚠️ Переименовываемый аккаунт: {session_name}")
                 # Переименовывание аккаунтов
-                client = await self.get_telegram_client(session_name=session_name,
-                                                        account_directory=path_accounts_folder)
+                client = await self.client_connect_string_session(session_name=session_name)
+                await self.getting_account_data(client)
                 try:
                     me = await client.get_me()
                     await self.rename_session_file(telegram_client=client, phone_old=session_name, phone=me.phone)
@@ -320,62 +325,63 @@ class TGConnect:
         except Exception as error:
             logger.exception(error)
 
-    async def get_telegram_client(self, session_name, account_directory):
-        """
-        Подключение к Telegram, используя файл session.
-        Имя файла сессии file[0] - session файл
-
-        :param account_directory: Путь к директории
-        :param session_name: Файл сессии (file[0] - session файл)
-        :return TelegramClient: TelegramClient
-        """
-        await self.app_logger.log_and_display(message=f"Подключение к аккаунту: {session_name}")
-        client = TelegramClient(
-            session=f"{account_directory}/{session_name}",
-            api_id=self.api_id,
-            api_hash=self.api_hash,
-            system_version="4.16.30-vxCUSTOM",
-            proxy=self.proxy.reading_proxy_data_from_the_database()
-        )
-        try:
-            await client.connect()
-            me = await client.get_me()
-            logger.info(f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
-            await self.app_logger.log_and_display(f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
-
-            # string_session = client.session.save()
-            # logger.info(f"📦 String session: {string_session}")
-
-            # if string_session is None:
-            #     client.disconnect()
-            #     working_with_accounts(f"{account_directory}/{session_name}.session",
-            #                           f"user_data/accounts/banned/{session_name}.session")
-            return client
-
-        # except FloodWaitError as e:
-        #     logger.warning(f"[{session_name}] Слишком частые запросы. Ждем {e.seconds} сек.")
-        #     await log_and_display(f"⏳ FloodWait {e.seconds} секунд для {session_name}", page)
-        #     await asyncio.sleep(e.seconds)
-        #     return None
-
-        except sqlite3.OperationalError:
-            await self.app_logger.log_and_display(message=f"❌ Аккаунт {session_name} поврежден.")
-            return None
-        except sqlite3.DatabaseError:
-            await self.app_logger.log_and_display(message=f"❌ Аккаунт {session_name} поврежден.")
-            return None
-        except AuthKeyDuplicatedError:
-            await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
-            await self.app_logger.log_and_display(message=f"❌ Аккаунт {session_name} запущен под другим ip")
-            self.utils.working_with_accounts(account_folder=f"{account_directory}/{session_name}.session",
-                                             new_account_folder=f"user_data/accounts/banned/{session_name}.session")
-            return None
-        except AttributeError as error:
-            await self.app_logger.log_and_display(message=f"❌ Ошибка: {error}")
-            return None
-        except ValueError:
-            await self.app_logger.log_and_display(message=f"❌ Ошибка подключения прокси к аккаунту {session_name}.")
-            return None
+    # async def get_telegram_client(self, session_name, account_directory):
+    #     """
+    #     Подключение к Telegram, используя файл session.
+    #     Имя файла сессии file[0] - session файл
+    #
+    #     :param account_directory: Путь к директории
+    #     :param session_name: Файл сессии (file[0] - session файл)
+    #     :return TelegramClient: TelegramClient
+    #     """
+    #     await self.app_logger.log_and_display(message=f"Подключение к аккаунту: {session_name}")
+    #     client = TelegramClient(
+    #         session=f"{account_directory}/{session_name}",
+    #         api_id=self.api_id,
+    #         api_hash=self.api_hash,
+    #         system_version="4.16.30-vxCUSTOM",
+    #         proxy=self.proxy.reading_proxy_data_from_the_database()
+    #     )
+    #     try:
+    #         await client.connect()
+    #         me = await client.get_me()
+    #         logger.info(f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
+    #         await self.app_logger.log_and_display(
+    #             f"🧾 Аккаунт: {me.first_name} {me.last_name} | @{me.username} | ID: {me.id} | Phone: {me.phone}")
+    #
+    #         # string_session = client.session.save()
+    #         # logger.info(f"📦 String session: {string_session}")
+    #
+    #         # if string_session is None:
+    #         #     client.disconnect()
+    #         #     working_with_accounts(f"{account_directory}/{session_name}.session",
+    #         #                           f"user_data/accounts/banned/{session_name}.session")
+    #         return client
+    #
+    #     # except FloodWaitError as e:
+    #     #     logger.warning(f"[{session_name}] Слишком частые запросы. Ждем {e.seconds} сек.")
+    #     #     await log_and_display(f"⏳ FloodWait {e.seconds} секунд для {session_name}", page)
+    #     #     await asyncio.sleep(e.seconds)
+    #     #     return None
+    #
+    #     except sqlite3.OperationalError:
+    #         await self.app_logger.log_and_display(message=f"❌ Аккаунт {session_name} поврежден.")
+    #         return None
+    #     except sqlite3.DatabaseError:
+    #         await self.app_logger.log_and_display(message=f"❌ Аккаунт {session_name} поврежден.")
+    #         return None
+    #     except AuthKeyDuplicatedError:
+    #         await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
+    #         await self.app_logger.log_and_display(message=f"❌ Аккаунт {session_name} запущен под другим ip")
+    #         self.utils.working_with_accounts(account_folder=f"{account_directory}/{session_name}.session",
+    #                                          new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+    #         return None
+    #     except AttributeError as error:
+    #         await self.app_logger.log_and_display(message=f"❌ Ошибка: {error}")
+    #         return None
+    #     except ValueError:
+    #         await self.app_logger.log_and_display(message=f"❌ Ошибка подключения прокси к аккаунту {session_name}.")
+    #         return None
 
     async def account_connection_menu(self):
         """

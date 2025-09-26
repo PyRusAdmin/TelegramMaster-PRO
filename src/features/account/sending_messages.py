@@ -5,7 +5,7 @@ import sys
 
 import flet as ft
 from loguru import logger
-from telethon import events
+from telethon import events, TelegramClient
 from telethon.errors import (ChannelPrivateError, ChatAdminRequiredError, ChatWriteForbiddenError, FloodWaitError,
                              PeerFloodError, SlowModeWaitError, UserBannedInChannelError, UserIdInvalidError,
                              UsernameInvalidError, UsernameNotOccupiedError, UserNotMutualContactError)
@@ -62,8 +62,11 @@ class SendTelegramMessages:
                     # Просим пользователя ввести расширение сообщения
                     for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
                                                                extension=self.account_extension):
-                        client = await self.connect.get_telegram_client(session_name,
-                                                                        account_directory=path_accounts_folder)
+
+                        # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                        client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
+                        await self.connect.getting_account_data(client)
+
                         try:
                             # Открываем parsing список user_data/software_database.db для inviting в группу
                             usernames = select_records_with_limit(limit=int(limits))
@@ -172,8 +175,11 @@ class SendTelegramMessages:
             try:
                 for session_name in self.utils.find_filess(directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
                                                            extension=self.account_extension):
-                    client = await self.connect.get_telegram_client(session_name,
-                                                                    account_directory=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE)
+
+                    # Пользователь должен сам выбрать аккаунт
+                    # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
+                    await self.connect.getting_account_data(client)
 
                     @client.on(events.NewMessage(incoming=True))  # Обработчик личных сообщений
                     async def handle_private_messages(event):
@@ -215,8 +221,10 @@ class SendTelegramMessages:
                 start = await self.app_logger.start_time()
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
                                                            extension=self.account_extension):
-                    client = await self.connect.get_telegram_client(session_name,
-                                                                    account_directory=path_accounts_folder)
+
+                    client = await self.connect.client_connect_string_session(session_name)
+                    await self.connect.getting_account_data(client)
+
                     # Открываем базу данных с группами, в которые будут рассылаться сообщения
                     await self.app_logger.log_and_display(f"Всего групп: {len(chat_list_fields)}")
                     for group_link in chat_list_fields:  # Поочередно выводим записанные группы
