@@ -5,6 +5,7 @@ import random
 import flet as ft
 from loguru import logger
 from telethon import functions, types
+from telethon.errors import SessionRevokedError, AuthKeyUnregisteredError
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.configs import path_accounts_folder
@@ -14,6 +15,7 @@ from src.features.account.connect import TGConnect
 from src.features.account.parsing.gui_elements import GUIProgram
 from src.features.account.parsing.parsing import UserInfo
 from src.gui.gui import AppLogger, list_view
+from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -67,12 +69,17 @@ class TGContact:
             Показать список контактов аккаунтов и запись результатов в файл
             """
             try:
+                start = await self.app_logger.start_time()
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                    client = await self.connect.get_telegram_client(session_name=session_name,
-                                                                    account_directory=path_accounts_folder)
+
+                    client = await self.connect.client_connect_string_session(session_name)
+                    await self.connect.getting_account_data(client)
+
                     await self.parsing_and_recording_contacts_in_the_database(client=client)
                     client.disconnect()  # Разрываем соединение telegram
+                await self.app_logger.end_time(start)
+                await show_notification(self.page, "🔚 Конец парсинга контактов")  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
 
@@ -191,9 +198,12 @@ class TGContact:
             await self.app_logger.log_and_display(f"{result}")
             all_participants.extend(result.users)
             return all_participants
+        except (SessionRevokedError, AuthKeyUnregisteredError) as e:
+            logger.warning(f"Сессия отозвана или недействительна: {e}")
+            return []  # Возвращаем пустой список вместо None
         except Exception as error:
             logger.exception(error)
-            return None
+            return []
 
     async def we_show_and_delete_the_contact_of_the_phone_book(self, client, user) -> None:
         """
