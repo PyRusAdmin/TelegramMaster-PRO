@@ -150,7 +150,7 @@ class TGContact:
                                                       text=translations["ru"]["contacts_menu"][
                                                           "creating_a_contact_list"],
                                                       on_click=write_contact_to_db)]),
-                            # 👥 Показать список контактов
+                            # 👥 Парсинг списка контактов
                             ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                               text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
                                               on_click=show_account_contact_list),
