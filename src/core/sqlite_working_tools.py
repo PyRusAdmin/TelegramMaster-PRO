@@ -135,9 +135,12 @@ def write_to_database_contacts_accounts(data):
     ).execute()
 
 
+""""Работа с таблицей contact (телефонная книга аккаунта Telegram)"""
+
+
 class Contact(Model):
     """
-    Таблица для хранения данных администраторов групп в таблице members_admin
+    Таблица для хранения номеров телефонов в таблице contact
     """
     phone = CharField(unique=True)
 
@@ -149,6 +152,20 @@ class Contact(Model):
 def write_contact_db(phone: str):
     """Запись контакта в базу данных (игнорирует дубликаты)"""
     Contact.insert(phone=phone).on_conflict(action='IGNORE').execute()
+
+
+def getting_contacts_from_database():
+    """Получение контактов (номеров телефонов) из базы данных"""
+    records = []
+    for record in Contact.select(Contact.phone):
+        records.append(record.phone)
+    logger.warning(records)
+    return records
+
+
+def delete_contact_db(phone: str):
+    """Удаление контакта из базы данных"""
+    Contact.delete().where(Contact.phone == phone).execute()
 
 
 # TODO добавить все используемые таблицы
