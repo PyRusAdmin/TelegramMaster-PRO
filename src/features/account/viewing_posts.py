@@ -63,7 +63,7 @@ class ViewingPosts:
                 for session_name in views_selected:
                     client = await self.connect.client_connect_string_session(session_name=session_name)
 
-                    list_view.controls.append(ft.Text(f"[+] Работаем с каналом: {link_channel.value}"))
+                    list_view.controls.append(ft.Text(f"➕ Работаем с каналом: {link_channel.value}"))
 
                     await self.subscribe.subscribe_to_group_or_channel(client=client, groups=link_channel.value)
 

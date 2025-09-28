@@ -254,15 +254,14 @@ class TGContact:
             for rows in records:
                 logger.info(rows)
                 # Добавляем контакт в телефонную книгу
-                await client(functions.contacts.ImportContactsRequest(contacts=[types.InputPhoneContact(client_id=0,
-                                                                                                        phone=rows,
-                                                                                                        first_name="Номер",
-                                                                                                        last_name=rows)]))
+                await client(functions.contacts.ImportContactsRequest(
+                    contacts=[types.InputPhoneContact(client_id=0, phone=rows, first_name="Номер", last_name=rows)]
+                ))
                 try:
                     # Получаем данные номера телефона https://docs.telethon.dev/en/stable/concepts/entities.html
                     contact = await client.get_entity(rows)
                     await self.get_user_data(contact, entities)
-                    await self.app_logger.log_and_display(f"[+] Контакт с добавлен в телефонную книгу!")
+                    await self.app_logger.log_and_display(f"➕ Контакт с добавлен в телефонную книгу!")
                     await asyncio.sleep(4)
                     delete_contact_db(phone=rows)  # После работы с номером телефона, программа удаляет номер со списка
                 except ValueError:
