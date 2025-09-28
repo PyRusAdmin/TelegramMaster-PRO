@@ -11,6 +11,10 @@ class CheckingProgram:
     """⛔ Проверка программы от пользователя"""
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация экземпляра класса CheckingProgram
+        :param page: Объект страницы ft.Page
+        """
         self.page = page
         self.account_extension = "session"  # Расширение файла аккаунта
         self.file_extension = "json"
