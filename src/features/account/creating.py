@@ -13,6 +13,7 @@ from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
 from src.gui.gui import AppLogger
 from src.gui.gui import list_view
+from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -45,30 +46,34 @@ class CreatingGroupsAndChats:
             self.page.update()
 
             if not selected_sessions:
-                await self.app_logger.log_and_display(translations["ru"]["errors"]["files_not_selected_warning"])
+                await self.app_logger.log_and_display(
+                    message=translations["ru"]["errors"]["files_not_selected_warning"])
                 session_files = await self.utils.find_filess(directory_path=path_accounts_folder, extension='session')
                 if not session_files:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["no_session_files"])
+                    await self.app_logger.log_and_display(message=translations["ru"]["errors"]["no_session_files"])
                     self.page.update()
                     return
             else:
                 session_files = selected_sessions
-                await self.app_logger.log_and_display(translations["ru"]["notifications"]["start_creating"])
+                await self.app_logger.log_and_display(message=translations["ru"]["notifications"]["start_creating"])
             try:
                 for session_name in session_files:
                     # Извлекаем только имя файла без расширения
                     session_name = os.path.splitext(os.path.basename(session_name))[0]
                     client = await self.connect.client_connect_string_session(session_name=session_name)
-                    await self.connect.getting_account_data(client)
+                    await self.connect.getting_account_data(client=client)
                     await client(functions.channels.CreateChannelRequest(title='My awesome title',
                                                                          about='Description for your group',
                                                                          megagroup=True))
-                    await self.app_logger.log_and_display(translations["ru"]["notifications"]["notification_creating"])
+                    await self.app_logger.log_and_display(
+                        message=translations["ru"]["notifications"]["notification_creating"])
             except TypeError:
                 pass
             except Exception as error:
                 logger.exception(error)
-            await end_time(start, self.page)
+            await self.app_logger.end_time(start=start)
+            await show_notification(page=self.page,
+                                    message="🔚 Создания групп (чатов)")  # Выводим уведомление пользователю
 
         async def btn_click(e: ft.FilePickerResultEvent) -> None:
             if e.files:
@@ -107,7 +112,7 @@ class CreatingGroupsAndChats:
                                                 size=20, weight=ft.FontWeight.BOLD,
                                                 foreground=ft.Paint(gradient=ft.PaintLinearGradient((0, 20), (150, 20),
                                                                                                     [ft.Colors.PINK,
-                                                                                                     ft.Colors.PURPLE])), ), ), ]),
+                                                                                                     ft.Colors.PURPLE]))))]),
                                         list_view, selected_files,
                                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                                           text=translations["ru"]["create_groups_menu"][
@@ -117,7 +122,5 @@ class CreatingGroupsAndChats:
                                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                                           text=translations["ru"]["buttons"]["start"],
                                                           on_click=add_items),
-                                        ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                                          text=translations["ru"]["buttons"]["back"],
-                                                          on_click=lambda _: self.page.go("/"))]))
+                                        ]))
         self.page.update()

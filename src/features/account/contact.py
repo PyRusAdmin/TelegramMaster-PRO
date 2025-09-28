@@ -78,7 +78,7 @@ class TGContact:
                     await self.recording_contacts_in_the_database(client=client)
                     client.disconnect()  # Разрываем соединение telegram
 
-                await self.app_logger.end_time(start)
+                await self.app_logger.end_time(start=start)
                 await show_notification(self.page, "🔚 Конец парсинга контактов")  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
@@ -93,12 +93,12 @@ class TGContact:
                 client = await self.connect.client_connect_string_session(session_name=session_name)
                 await self.connect.getting_account_data(client=client)
 
-                await self.we_get_the_account_id(client)
+                await self.we_get_the_account_id(client=client)
                 client.disconnect()  # Разрываем соединение telegram
 
-            await self.app_logger.end_time(start)
-            await show_notification(self.page,
-                                    "🔚 Конец удаления контактов контактов")  # Выводим уведомление пользователю
+            await self.app_logger.end_time(start=start)
+            await show_notification(page=self.page,
+                                    message="🔚 Конец удаления контактов контактов")  # Выводим уведомление пользователю
 
         async def inviting_contact(_) -> None:
             """
