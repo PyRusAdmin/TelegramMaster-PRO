@@ -203,7 +203,7 @@ class TGContact:
         for user in await self.get_and_parse_contacts(client):  # Выводим результат parsing
             await self.get_user_data(user, entities)
             await self.we_show_and_delete_the_contact_of_the_phone_book(client, user)
-        await write_parsed_chat_participants_to_db(entities)
+        # await write_parsed_chat_participants_to_db(entities)
 
     async def get_and_parse_contacts(self, client):
         """
