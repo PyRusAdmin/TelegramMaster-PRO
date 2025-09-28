@@ -64,7 +64,8 @@ class SendTelegramMessages:
                                                                extension=self.account_extension):
 
                         # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                        client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
+                        client: TelegramClient = await self.connect.client_connect_string_session(
+                            session_name=session_name)
                         await self.connect.getting_account_data(client)
 
                         try:
