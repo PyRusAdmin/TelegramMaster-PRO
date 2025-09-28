@@ -20,6 +20,10 @@ class AccountBIO:
     """
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация класса AccountBIO.
+        :param page: Объект страницы ft.Page
+        """
         self.page = page
         self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
