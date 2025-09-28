@@ -86,15 +86,13 @@ class TGContact:
             """
             Удаляем контакты с аккаунтов
             """
-            try:
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                    # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                    client = await self.connect.client_connect_string_session(session_name=session_name)
-                    await self.connect.getting_account_data(client)
-                    await self.we_get_the_account_id(client)
-                    client.disconnect()  # Разрываем соединение telegram
-            except Exception as error:
-                logger.exception(error)
+            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                client = await self.connect.client_connect_string_session(session_name=session_name)
+                await self.connect.getting_account_data(client)
+
+                await self.we_get_the_account_id(client)
+                client.disconnect()  # Разрываем соединение telegram
 
         async def inviting_contact(_) -> None:
             """
@@ -201,14 +199,11 @@ class TGContact:
 
         :param client: Телеграм клиент
         """
-        try:
-            entities: list = []  # Создаем список сущностей
-            for user in await self.get_and_parse_contacts(client):  # Выводим результат parsing
-                await self.get_user_data(user, entities)
-                await self.we_show_and_delete_the_contact_of_the_phone_book(client, user)
-            await write_parsed_chat_participants_to_db(entities)
-        except Exception as error:
-            logger.exception(error)
+        entities: list = []  # Создаем список сущностей
+        for user in await self.get_and_parse_contacts(client):  # Выводим результат parsing
+            await self.get_user_data(user, entities)
+            await self.we_show_and_delete_the_contact_of_the_phone_book(client, user)
+        await write_parsed_chat_participants_to_db(entities)
 
     async def get_and_parse_contacts(self, client):
         """
