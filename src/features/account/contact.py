@@ -8,7 +8,8 @@ from telethon.errors import SessionRevokedError, AuthKeyUnregisteredError
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.configs import path_accounts_folder
-from src.core.sqlite_working_tools import add_member_to_db, write_to_database_contacts_accounts, write_contact_db
+from src.core.sqlite_working_tools import (add_member_to_db, write_to_database_contacts_accounts, write_contact_db,
+                                           getting_contacts_from_database, delete_contact_db)
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
@@ -110,7 +111,7 @@ class TGContact:
                     client = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client=client)
 
-                    await self.add_contact_to_phone_book(client)
+                    await self.add_contact_to_phone_book(client=client)
             except Exception as error:
                 logger.exception(error)
 
@@ -246,31 +247,28 @@ class TGContact:
         :param client: Телеграм клиент
         """
         try:
-            records: list = await open_and_read_data(table_name="contact", page=self.page)
+            records: list = getting_contacts_from_database()  # Получаем список номеров из базы данных
+
             await self.app_logger.log_and_display(f"Всего номеров: {len(records)}")
             entities: list = []  # Создаем список сущностей
             for rows in records:
-                user = {"phone": rows[0]}
-                phone = user["phone"]
+                logger.info(rows)
                 # Добавляем контакт в телефонную книгу
                 await client(functions.contacts.ImportContactsRequest(contacts=[types.InputPhoneContact(client_id=0,
-                                                                                                        phone=phone,
+                                                                                                        phone=rows,
                                                                                                         first_name="Номер",
-                                                                                                        last_name=phone)]))
+                                                                                                        last_name=rows)]))
                 try:
                     # Получаем данные номера телефона https://docs.telethon.dev/en/stable/concepts/entities.html
-                    contact = await client.get_entity(phone)
+                    contact = await client.get_entity(rows)
                     await self.get_user_data(contact, entities)
                     await self.app_logger.log_and_display(f"[+] Контакт с добавлен в телефонную книгу!")
                     await asyncio.sleep(4)
-                    # Запись результатов parsing в файл members_contacts.db, для дальнейшего inviting
-                    # После работы с номером телефона, программа удаляет номер со списка
-                    await delete_row_db(table="contact", column="phone", value=user["phone"])
+                    delete_contact_db(phone=rows)  # После работы с номером телефона, программа удаляет номер со списка
                 except ValueError:
                     await self.app_logger.log_and_display(
                         translations["ru"]["errors"]["contact_not_registered_or_cannot_add"])
-                    # После работы с номером телефона, программа удаляет номер со списка
-                    await delete_row_db(table="contact", column="phone", value=user["phone"])
+                    delete_contact_db(phone=rows)  # После работы с номером телефона, программа удаляет номер со списка
             client.disconnect()  # Разрываем соединение telegram
             add_member_to_db(log_data=entities)  # Запись должна быть в таблицу members
         except Exception as error:
