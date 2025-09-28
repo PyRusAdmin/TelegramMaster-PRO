@@ -2,7 +2,7 @@
 import flet as ft  # Импортируем библиотеку flet
 
 from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
-from src.features.account.parsing.gui_elements import GUIProgram
+from src.gui.gui_elements import GUIProgram
 from src.gui.gui import list_view
 from src.locales.translations_loader import translations
 
