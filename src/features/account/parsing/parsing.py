@@ -17,7 +17,7 @@ from src.core.configs import WIDTH_WIDE_BUTTON, TIME_ACTIVITY_USER_2, BUTTON_HEI
 from src.core.sqlite_working_tools import (MembersAdmin, add_member_to_db, save_group_channel_info,
                                            administrators_entries_in_database)
 from src.features.account.connect import TGConnect
-from src.features.account.parsing.gui_elements import GUIProgram
+from src.gui.gui_elements import GUIProgram
 from src.features.account.parsing.switch_controller import ToggleController
 from src.features.account.parsing.user_info import UserInfo
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe

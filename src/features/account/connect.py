@@ -16,7 +16,7 @@ from thefuzz import fuzz
 
 from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON, path_accounts_folder
 from src.core.utils import Utils
-from src.features.account.parsing.gui_elements import GUIProgram
+from src.gui.gui_elements import GUIProgram
 from src.features.proxy.checking_proxy import Proxy
 from src.gui.gui import AppLogger
 from src.gui.notification import show_notification

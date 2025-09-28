@@ -17,7 +17,7 @@ from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON, pa
 from src.core.sqlite_working_tools import select_records_with_limit, open_and_read_data
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.features.account.parsing.gui_elements import GUIProgram
+from src.gui.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.gui import list_view, AppLogger
 from src.locales.translations_loader import translations

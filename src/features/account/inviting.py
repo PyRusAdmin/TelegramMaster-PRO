@@ -18,9 +18,9 @@ from src.core.configs import (BUTTON_HEIGHT, ConfigReader, LIMITS, WIDTH_WIDE_BU
 from src.core.sqlite_working_tools import select_records_with_limit, get_links_inviting, save_links_inviting
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.features.account.parsing.gui_elements import GUIProgram
+from src.gui.gui_elements import GUIProgram
 from src.features.account.parsing.switch_controller import ToggleController
-from src.features.account.subscribe_unsubscribe.gui_input_builders import TimeInputRowBuilder, LinkInputRowBuilder
+from src.gui.gui_input_builders import TimeInputRowBuilder, LinkInputRowBuilder
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.features.settings.setting import SettingPage

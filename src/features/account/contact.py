@@ -11,7 +11,7 @@ from src.core.configs import path_accounts_folder
 from src.core.sqlite_working_tools import add_member_to_db, write_to_database_contacts_accounts, write_contact_db
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.features.account.parsing.gui_elements import GUIProgram
+from src.gui.gui_elements import GUIProgram
 from src.features.account.parsing.parsing import UserInfo
 from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
