@@ -13,7 +13,7 @@ from telethon.tl.functions.channels import GetParticipantsRequest
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsSearch, InputPeerEmpty, InputUser
 
-from src.core.configs import WIDTH_WIDE_BUTTON, path_accounts_folder, TIME_ACTIVITY_USER_2, BUTTON_HEIGHT
+from src.core.configs import WIDTH_WIDE_BUTTON, TIME_ACTIVITY_USER_2, BUTTON_HEIGHT
 from src.core.sqlite_working_tools import (MembersAdmin, add_member_to_db, save_group_channel_info,
                                            administrators_entries_in_database)
 from src.features.account.connect import TGConnect
