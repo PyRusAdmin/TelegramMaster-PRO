@@ -42,7 +42,7 @@ class SendLog:
 
     async def loging(self):
         """
-        Логирование TelegramMaster 2.0
+        Логирование TelegramMaster-PRO
         """
         local_ip = self.get_external_ip()
         emoji, country = self.get_country_flag(local_ip)
