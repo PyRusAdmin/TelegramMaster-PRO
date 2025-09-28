@@ -49,7 +49,7 @@ class WorkingWithReactions:
                     client = await self.connect.client_connect_string_session(session_name)
                     await self.connect.getting_account_data(client)
 
-                    await self.app_logger.log_and_display(f"[+] Работаем с группой: {chat.value}")
+                    await self.app_logger.log_and_display(f"➕ Работаем с группой: {chat.value}")
                     await self.sub_unsub_tg.subscribe_to_group_or_channel(client, chat.value, page)
                     msg_id = int(re.search(r'/(\d+)$', message.value).group(1))  # Получаем id сообщения из ссылки
                     await asyncio.sleep(5)
