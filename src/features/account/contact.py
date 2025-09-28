@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import asyncio
-import random
 
 import flet as ft
 from loguru import logger
@@ -71,12 +70,13 @@ class TGContact:
                 start = await self.app_logger.start_time()
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-
                     client = await self.connect.client_connect_string_session(session_name)
                     await self.connect.getting_account_data(client)
 
-                    await self.parsing_and_recording_contacts_in_the_database(client=client)
+                    # Парсинг контактов Telegram аккаунта
+                    await self.recording_contacts_in_the_database(client=client)
                     client.disconnect()  # Разрываем соединение telegram
+
                 await self.app_logger.end_time(start)
                 await show_notification(self.page, "🔚 Конец парсинга контактов")  # Выводим уведомление пользователю
             except Exception as error:
@@ -86,13 +86,18 @@ class TGContact:
             """
             Удаляем контакты с аккаунтов
             """
+            start = await self.app_logger.start_time()
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                 # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                 client = await self.connect.client_connect_string_session(session_name=session_name)
-                await self.connect.getting_account_data(client)
+                await self.connect.getting_account_data(client=client)
 
                 await self.we_get_the_account_id(client)
                 client.disconnect()  # Разрываем соединение telegram
+
+            await self.app_logger.end_time(start)
+            await show_notification(self.page,
+                                    "🔚 Конец удаления контактов контактов")  # Выводим уведомление пользователю
 
         async def inviting_contact(_) -> None:
             """
@@ -103,7 +108,7 @@ class TGContact:
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                     client = await self.connect.client_connect_string_session(session_name=session_name)
-                    await self.connect.getting_account_data(client)
+                    await self.connect.getting_account_data(client=client)
 
                     await self.add_contact_to_phone_book(client)
             except Exception as error:
@@ -164,17 +169,26 @@ class TGContact:
                                               on_click=inviting_contact),
                         ])]))
 
-    async def parsing_and_recording_contacts_in_the_database(self, client) -> None:
+    async def parsing_contacts(self, client):
+        """
+        Парсинг контактов Telegram аккаунта
+
+        :param client: Телеграм клиент
+        """
+        entities: list = []  # Создаем список сущностей
+        for contact in await self.get_and_parse_contacts(client=client):  # Выводим результат parsing
+            await self.get_user_data(user=contact, entities=entities)
+            logger.info(contact)
+        return entities
+
+    async def recording_contacts_in_the_database(self, client) -> None:
         """
         Парсинг и запись контактов в базу данных
 
         :param client: Телеграм клиент
         """
         try:
-            entities: list = []  # Создаем список сущностей
-            for contact in await self.get_and_parse_contacts(client=client):  # Выводим результат parsing
-                await self.get_user_data(user=contact, entities=entities)
-                logger.info(contact)
+            entities = await self.parsing_contacts(client)
 
             for raw_contact in entities:
                 contact_dict = {
@@ -195,15 +209,16 @@ class TGContact:
 
     async def we_get_the_account_id(self, client) -> None:
         """
-        Получаем id аккаунта
+        Получаем id аккаунта и удаляем контакты с аккаунта
 
         :param client: Телеграм клиент
         """
-        entities: list = []  # Создаем список сущностей
-        for user in await self.get_and_parse_contacts(client):  # Выводим результат parsing
-            await self.get_user_data(user, entities)
-            await self.we_show_and_delete_the_contact_of_the_phone_book(client, user)
-        # await write_parsed_chat_participants_to_db(entities)
+        try:
+            for user in await self.get_and_parse_contacts(client):  # Выводим результат parsing
+                logger.info(f"Пользователь: {user}")
+                await client(functions.contacts.DeleteContactsRequest(id=[await self.user_info.get_user_id(user)]))
+        except Exception as error:
+            logger.exception(error)
 
     async def get_and_parse_contacts(self, client):
         """
@@ -223,20 +238,6 @@ class TGContact:
         except Exception as error:
             logger.exception(error)
             return []
-
-    async def we_show_and_delete_the_contact_of_the_phone_book(self, client, user) -> None:
-        """
-        Показываем и удаляем контакт телефонной книги
-
-        :param client: Телеграм клиент
-        :param user: Телеграм пользователя
-        """
-        try:
-            await client(functions.contacts.DeleteContactsRequest(id=[await self.user_info.get_user_id(user)]))
-            await self.app_logger.log_and_display(f"Подождите 2 - 4 секунды")
-            await asyncio.sleep(random.randrange(2, 3, 4))  # Спим для избежания ошибки о flood
-        except Exception as error:
-            logger.exception(error)
 
     async def add_contact_to_phone_book(self, client) -> None:
         """
