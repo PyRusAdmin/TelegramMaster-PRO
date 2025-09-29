@@ -6,7 +6,7 @@ from loguru import logger
 from telethon import functions, types
 from telethon.errors import SessionRevokedError, AuthKeyUnregisteredError
 
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
+from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, WIDTH_INPUT_FIELD_AND_BUTTON
 from src.core.configs import path_accounts_folder
 from src.core.sqlite_working_tools import (add_member_to_db, write_to_database_contacts_accounts, write_contact_db,
                                            getting_contacts_from_database, delete_contact_db)
@@ -152,7 +152,7 @@ class TGContact:
 
                             ft.Row([input_numbers,  # Ввод номеров
                                     # 📋 Формирование списка контактов
-                                    ft.ElevatedButton(width=int(WIDTH_WIDE_BUTTON) / 2 - 5, height=BUTTON_HEIGHT,
+                                    ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
                                                       text=translations["ru"]["contacts_menu"][
                                                           "creating_a_contact_list"],
                                                       on_click=write_contact_to_db)]),
