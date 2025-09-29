@@ -5,7 +5,7 @@ from telethon import functions  # Импортируем библиотеку te
 from telethon.errors import (AuthKeyUnregisteredError, UsernameInvalidError, UsernameOccupiedError,
                              UsernamePurchaseAvailableError)
 
-from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, path_accounts_folder
+from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, path_accounts_folder, WIDTH_INPUT_FIELD_AND_BUTTON
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
@@ -111,41 +111,41 @@ class AccountBIO:
                                  gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
                                                                                       ft.Colors.PURPLE])), ), ), ], ),
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-
                          ft.Row([
                              input_field_username_change,  # Поле для ввода username Telegram
-
                              # 🔄 Изменение username
-                             ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                             ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
                                                text=translations["ru"]["edit_bio_menu"]["changing_the_username"],
                                                on_click=change_username_profile_gui),
                          ]),
-
                          # 🖼️ Изменение фото
                          ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                            text=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
                                            on_click=lambda _: self.page.go("/edit_photo")),
+                         ft.Row([
+                             profile_description_input_field,  # Поле для ввода описания профиля Telegram
 
-                         profile_description_input_field,  # Поле для ввода описания профиля Telegram
+                             # ✏️ Изменение описания
+                             ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
+                                               text=translations["ru"]["edit_bio_menu"]["changing_the_description"],
+                                               on_click=btn_click),
+                         ]),
+                         ft.Row([
+                             profile_name_input_field,  # Поле для ввода имени профиля Telegram
 
-                         # ✏️ Изменение описания
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["edit_bio_menu"]["changing_the_description"],
-                                           on_click=btn_click),
+                             # 📝 Изменение имени
+                             ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
+                                               text=translations["ru"]["edit_bio_menu"]["name_change_n"],
+                                               on_click=change_name_profile_gui),
+                         ]),
+                         ft.Row([
+                             profile_last_name_input_field,
 
-                         profile_name_input_field,  # Поле для ввода имени профиля Telegram
-
-                         # 📝 Изменение имени
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["edit_bio_menu"]["name_change_n"],
-                                           on_click=change_name_profile_gui),
-
-                         profile_last_name_input_field,
-
-                         # 📝 Изменение фамилии
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["edit_bio_menu"]["name_change_f"],
-                                           on_click=change_last_name_profile_gui),
+                             # 📝 Изменение фамилии
+                             ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
+                                               text=translations["ru"]["edit_bio_menu"]["name_change_f"],
+                                               on_click=change_last_name_profile_gui),
+                         ]),
                      ])]))
 
     async def change_bio_profile(self, user_input):

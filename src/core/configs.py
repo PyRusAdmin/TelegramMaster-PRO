@@ -132,10 +132,12 @@ class ConfigReader:
 
 # TODO - Все переменные должны быть с главных буквы
 """Размеры кнопок WIDTH_WIDE_BUTTON - Ширина широкой кнопки"""
-WIDTH_WIDE_BUTTON = config_gui.get('line_width_button', 'line_width_button', fallback=None)
+WIDTH_WIDE_BUTTON = config_gui.get('line_width_button', 'line_width_button', fallback=None)  # Ширина кнопки
 BUTTON_HEIGHT = ConfigReader().get_line_height_button()  # Получение ширины кнопки
 SMALL_BUTTON_WIDTH = ConfigReader().get_small_button_width()  # Ширина малой кнопки
 BUTTON_WIDTH = ConfigReader().line_width()  # Ширина окна и ширина строки
+
+WIDTH_INPUT_FIELD_AND_BUTTON = int(WIDTH_WIDE_BUTTON) / 2 - 5  # Ширина кнопки (окно и поле ввода)
 
 """Текст для пользователя"""
 PROGRAM_NAME = ConfigReader().program_name()  # Имя программы
