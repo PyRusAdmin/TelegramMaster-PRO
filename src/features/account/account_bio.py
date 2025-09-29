@@ -9,7 +9,7 @@ from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, path_accounts_fol
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
-from src.gui.gui import AppLogger
+from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
@@ -56,7 +56,7 @@ class AccountBIO:
         """
         Меню ✏️ Редактирование_BIO
         """
-
+        list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
         profile_description_input_field = ft.TextField(label="Введите описание профиля, не более 70 символов: ",
                                                        multiline=True,
                                                        width=WIDTH_INPUT_FIELD_AND_BUTTON,
@@ -115,6 +115,7 @@ class AccountBIO:
                              foreground=ft.Paint(
                                  gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
                                                                                       ft.Colors.PURPLE])), ), ), ], ),
+                     list_view,  # Отображение логов 📝
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          ft.Row([
                              input_field_username_change,  # Поле для ввода username Telegram
