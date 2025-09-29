@@ -59,10 +59,13 @@ class AccountBIO:
 
         profile_description_input_field = ft.TextField(label="Введите описание профиля, не более 70 символов: ",
                                                        multiline=True,
+                                                       width=WIDTH_INPUT_FIELD_AND_BUTTON,
                                                        max_lines=19)
 
         input_field_username_change = ft.TextField(label="Введите username профиля (не более 32 символов): ",
-                                                   multiline=True, max_lines=19)
+                                                   multiline=True,
+                                                   width=WIDTH_INPUT_FIELD_AND_BUTTON,
+                                                   max_lines=19)
 
         async def change_username_profile_gui(_) -> None:
             """
@@ -80,6 +83,7 @@ class AccountBIO:
 
         profile_name_input_field = ft.TextField(label="Введите имя профиля, не более 64 символов: ",
                                                 multiline=True,
+                                                width=WIDTH_INPUT_FIELD_AND_BUTTON,
                                                 max_lines=19)
 
         async def change_name_profile_gui(_) -> None:
@@ -92,6 +96,7 @@ class AccountBIO:
 
         profile_last_name_input_field = ft.TextField(label="Введите фамилию профиля, не более 64 символов: ",
                                                      multiline=True,
+                                                     width=WIDTH_INPUT_FIELD_AND_BUTTON,
                                                      max_lines=19)
 
         async def change_last_name_profile_gui(_) -> None:
@@ -118,10 +123,7 @@ class AccountBIO:
                                                text=translations["ru"]["edit_bio_menu"]["changing_the_username"],
                                                on_click=change_username_profile_gui),
                          ]),
-                         # 🖼️ Изменение фото
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
-                                           on_click=lambda _: self.page.go("/edit_photo")),
+                         await self.gui_program.diver_castom(),  # Горизонтальная линия
                          ft.Row([
                              profile_description_input_field,  # Поле для ввода описания профиля Telegram
 
@@ -130,6 +132,7 @@ class AccountBIO:
                                                text=translations["ru"]["edit_bio_menu"]["changing_the_description"],
                                                on_click=btn_click),
                          ]),
+                         await self.gui_program.diver_castom(),  # Горизонтальная линия
                          ft.Row([
                              profile_name_input_field,  # Поле для ввода имени профиля Telegram
 
@@ -138,14 +141,19 @@ class AccountBIO:
                                                text=translations["ru"]["edit_bio_menu"]["name_change_n"],
                                                on_click=change_name_profile_gui),
                          ]),
+                         await self.gui_program.diver_castom(),  # Горизонтальная линия
                          ft.Row([
                              profile_last_name_input_field,
-
                              # 📝 Изменение фамилии
                              ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
                                                text=translations["ru"]["edit_bio_menu"]["name_change_f"],
                                                on_click=change_last_name_profile_gui),
                          ]),
+                         await self.gui_program.diver_castom(),  # Горизонтальная линия
+                         # 🖼️ Изменение фото
+                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                           text=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
+                                           on_click=lambda _: self.page.go("/edit_photo")),
                      ])]))
 
     async def change_bio_profile(self, user_input):

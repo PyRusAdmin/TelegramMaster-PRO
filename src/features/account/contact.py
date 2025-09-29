@@ -133,7 +133,7 @@ class TGContact:
 
         input_numbers = ft.TextField(label="Вставьте список номеров для записи в базу данных.",
                                      label_style=ft.TextStyle(size=15), autofocus=True,
-                                     width=int(WIDTH_WIDE_BUTTON) / 2 - 5,
+                                     width=WIDTH_INPUT_FIELD_AND_BUTTON,
                                      text_size=12)
 
         self.page.views.append(
