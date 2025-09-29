@@ -8,6 +8,7 @@ from src.core.configs import PROGRAM_NAME, DATE_OF_PROGRAM_CHANGE, PROGRAM_VERSI
 from src.gui.gui_elements import GUIProgram
 from src.gui.gui import list_view
 from src.locales.translations_loader import translations
+from flet import DecorationImage, ImageFit
 
 
 class Menu:
