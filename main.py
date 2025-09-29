@@ -5,7 +5,7 @@ from loguru import logger
 from src.core.checking_program import CheckingProgram
 from src.core.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
                               WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, time_sending_messages_2)
-from src.core.sqlite_working_tools import create_database, open_and_read_data
+from src.core.sqlite_working_tools import create_database
 from src.features.account.account_bio import AccountBIO
 from src.features.account.connect import TGConnect
 from src.features.account.contact import TGContact
@@ -124,8 +124,8 @@ async def main(page: ft.Page):
         elif page.route == "/edit_photo":  # Изменение фото
             await account_bio.change_photo_profile_gui()
             await show_notification(page=page, message="🔚 Фото изменено")  # Выводим уведомление пользователю
-        elif page.route == "/changing_username":  # Изменение username
-            await account_bio.change_username_profile_gui()
+        # elif page.route == "/changing_username":  # Изменение username
+        #     await account_bio.change_username_profile_gui()
 
         # __________________________________________________________________________________________________________
         elif page.route == "/settings":  # Меню "Настройки TelegramMaster"
