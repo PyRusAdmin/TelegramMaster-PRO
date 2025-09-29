@@ -105,7 +105,7 @@ python --version
 * Clonar el repositorio:
 
 ```sh
-https://github.com/pyadrus/TelegramMaster-2.0.git
+https://github.com/PyRusAdmin/TelegramMaster-PRO.git
 ```
 
 * Vaya a la carpeta del proyecto e instale las dependencias:

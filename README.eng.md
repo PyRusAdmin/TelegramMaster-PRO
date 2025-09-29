@@ -101,9 +101,11 @@ python --version
 * Clone the repository:
 
 ```sh
-https://github.com/pyadrus/TelegramMaster-2.0.git
-``
+https://github.com/PyRusAdmin/TelegramMaster-PRO.git
+```
+
 - Go to the project folder and install the dependencies:
+
 ```sh
 pip install -r requirements.txt
 ```

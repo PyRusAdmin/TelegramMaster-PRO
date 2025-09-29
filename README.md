@@ -102,7 +102,7 @@ python --version
 * Клонируйте репозиторий:
 
 ```sh
-https://github.com/pyadrus/TelegramMaster-2.0.git
+https://github.com/PyRusAdmin/TelegramMaster-PRO.git
 ```
 
 * Перейдите в папку проекта и установите зависимости:
