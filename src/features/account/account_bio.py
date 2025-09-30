@@ -54,9 +54,28 @@ class AccountBIO:
 
         async def change_username_profile_gui(_) -> None:
             """
-            Изменение био профиля Telegram в графическое окно Flet
+             Изменение username профиля Telegram профиля Telegram в графическое окно Flet
             """
-            await self.change_username_profile(user_input=input_field_username_change.value)
+            try:
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    await self.app_logger.log_and_display(message=f"{session_name}")
+                    client = await self.connect.client_connect_string_session(session_name=session_name)
+                    try:
+                        await client(
+                            functions.account.UpdateUsernameRequest(username=input_field_username_change.value))
+                        await show_notification(self.page, f'Работа окончена')  # Выводим уведомление пользователю
+                    except AuthKeyUnregisteredError:
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["auth_key_unregistered"])
+                    except (UsernamePurchaseAvailableError, UsernameOccupiedError):
+                        await show_notification(self.page, "❌ Никнейм уже занят")  # Выводим уведомление пользователю
+                    except UsernameInvalidError:
+                        await show_notification(self.page, "❌ Неверный никнейм")  # Выводим уведомление пользователю
+                    finally:
+                        await client.disconnect()
+            except Exception as error:
+                logger.exception(error)
+
             self.page.go("/bio_editing")  # Изменение маршрута
             self.page.update()
 
@@ -70,13 +89,11 @@ class AccountBIO:
             """
             Изменение имени профиля. Изменение био профиля Telegram в графическое окно Flet
             """
-            # await self.change_name_profile(user_input=profile_name_input_field)
             try:
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     await self.app_logger.log_and_display(message=f"{session_name}")
                     client = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
-                    # await client.connect()
                     try:
                         result = await client(
                             functions.account.UpdateProfileRequest(first_name=profile_name_input_field.value))
@@ -89,7 +106,6 @@ class AccountBIO:
                         await client.disconnect()
                     await show_notification(page=self.page,
                                             message="Работа окончена")  # Выводим уведомление пользователю
-                    # self.page.go("/bio_editing")  # переходим к основному меню изменения имени профиля 🏠
             except Exception as error:
                 logger.exception(error)
 
@@ -100,13 +116,11 @@ class AccountBIO:
             """
             Изменение фамилии профиля. Изменение био профиля Telegram в графическое окно Flet
             """
-            # await self.change_last_name_profile(user_input=profile_last_name_input_field)
             try:
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     await self.app_logger.log_and_display(message=f"{session_name}")
                     client = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
-                    # await client.connect()
                     try:
                         result = await client(
                             functions.account.UpdateProfileRequest(last_name=profile_last_name_input_field.value))
@@ -120,6 +134,29 @@ class AccountBIO:
                     await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
+
+        async def change_photo_profile_gui(_) -> None:
+            """
+            Изменение фото профиля Telegram через интерфейс Flet.
+            """
+            try:
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    await self.app_logger.log_and_display(message=f"{session_name}")
+                    client = await self.connect.client_connect_string_session(session_name=session_name)
+                    for photo_file in await self.utils.find_files(directory_path="user_data/bio", extension='jpg'):
+                        try:
+                            await client(functions.photos.UploadProfilePhotoRequest(
+                                file=await client.upload_file(f"user_data/bio/{photo_file[0]}.jpg")))
+                        except AuthKeyUnregisteredError:
+                            await self.app_logger.log_and_display(
+                                message=translations["ru"]["errors"]["auth_key_unregistered"])
+                        finally:
+                            await client.disconnect()
+            except Exception as error:
+                logger.exception(error)
+
+        await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
+        self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
 
         self.page.views.append(
             ft.View("/bio_editing",
@@ -170,7 +207,7 @@ class AccountBIO:
                          # 🖼️ Изменение фото
                          ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                            text=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
-                                           on_click=lambda _: self.page.go("/edit_photo")),
+                                           on_click=change_photo_profile_gui),
                      ])]))
 
     async def change_bio_profile(self, user_input):
@@ -187,7 +224,6 @@ class AccountBIO:
 
                 client = await self.connect.client_connect_string_session(session_name=session_name)
 
-                # await client.connect()
                 if len(user_input) > 70:
                     await show_notification(self.page, f"❌ Описание профиля превышает 70 символов ({len(user_input)}).")
                     return
@@ -203,60 +239,6 @@ class AccountBIO:
             logger.exception(error)
 
         await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
-        self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
-
-    async def change_photo_profile_gui(self) -> None:
-        """
-        Изменение фото профиля Telegram через интерфейс Flet.
-        """
-        await self.change_photo_profile()
-
-    async def change_username_profile(self, user_input) -> None:
-        """
-        Изменение username профиля Telegram
-
-        :param user_input  - новое имя пользователя
-        """
-        try:
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(message=f"{session_name}")
-                client = await self.connect.client_connect_string_session(session_name=session_name)
-                # await client.connect()
-                try:
-                    await client(functions.account.UpdateUsernameRequest(username=user_input))
-                    await show_notification(self.page, f'Работа окончена')  # Выводим уведомление пользователю
-                except AuthKeyUnregisteredError:
-                    await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
-                except (UsernamePurchaseAvailableError, UsernameOccupiedError):
-                    await show_notification(self.page, "❌ Никнейм уже занят")  # Выводим уведомление пользователю
-                except UsernameInvalidError:
-                    await show_notification(self.page, "❌ Неверный никнейм")  # Выводим уведомление пользователю
-                finally:
-                    await client.disconnect()
-        except Exception as error:
-            logger.exception(error)
-
-    async def change_photo_profile(self):
-        """Изменение фото профиля.
-        """
-        try:
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(message=f"{session_name}")
-                client = await self.connect.client_connect_string_session(session_name=session_name)
-                for photo_file in await self.utils.find_files(directory_path="user_data/bio", extension='jpg'):
-                    try:
-                        # await client.connect()
-                        await client(functions.photos.UploadProfilePhotoRequest(
-                            file=await client.upload_file(f"user_data/bio/{photo_file[0]}.jpg")))
-                    except AuthKeyUnregisteredError:
-                        await self.app_logger.log_and_display(
-                            message=translations["ru"]["errors"]["auth_key_unregistered"])
-                    finally:
-                        await client.disconnect()
-        except Exception as error:
-            logger.exception(error)
-
-        await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
         self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
 
 # 244
