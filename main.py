@@ -21,7 +21,6 @@ from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger
 from src.gui.menu import Menu
-from src.gui.notification import show_notification
 
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")  # Логирование программы
 
@@ -118,15 +117,8 @@ async def main(page: ft.Page):
         elif page.route == "/sending_files_to_personal_account_with_limits":  # Отправка сообщений в личку
             await send_telegram_messages.send_files_to_personal_chats()
         # __________________________________________________________________________________________________________
-
         elif page.route == "/bio_editing":  # Меню "Редактирование_BIO"
             await account_bio.bio_editing_menu()
-        elif page.route == "/edit_photo":  # Изменение фото
-            await account_bio.change_photo_profile_gui()
-            await show_notification(page=page, message="🔚 Фото изменено")  # Выводим уведомление пользователю
-        # elif page.route == "/changing_username":  # Изменение username
-        #     await account_bio.change_username_profile_gui()
-
         # __________________________________________________________________________________________________________
         elif page.route == "/settings":  # Меню "Настройки TelegramMaster"
             await menu.settings_menu()
