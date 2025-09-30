@@ -85,9 +85,7 @@ class AccountBIO:
                 await self.app_logger.log_and_display(message=f"Запуск смены  описания профиля")
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     await self.app_logger.log_and_display(message=f"{session_name}")
-
                     client = await self.connect.client_connect_string_session(session_name=session_name)
-
                     if len(profile_description_input_field.value) > 70:
                         await show_notification(self.page,
                                                 f"❌ Описание профиля превышает 70 символов ({len(profile_description_input_field.value)}).")
@@ -133,7 +131,6 @@ class AccountBIO:
                                             message="Работа окончена")  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
-
             self.page.go("/bio_editing")  # Изменение маршрута
             self.page.update()
 
@@ -179,9 +176,8 @@ class AccountBIO:
                             await client.disconnect()
             except Exception as error:
                 logger.exception(error)
-
-        await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
-        self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
+            await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
+            self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
 
         self.page.views.append(
             ft.View("/bio_editing",
@@ -205,7 +201,6 @@ class AccountBIO:
                          await self.gui_program.diver_castom(),  # Горизонтальная линия
                          ft.Row([
                              profile_description_input_field,  # Поле для ввода описания профиля Telegram
-
                              # ✏️ Изменение описания
                              ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
                                                text=translations["ru"]["edit_bio_menu"]["changing_the_description"],
@@ -214,7 +209,6 @@ class AccountBIO:
                          await self.gui_program.diver_castom(),  # Горизонтальная линия
                          ft.Row([
                              profile_name_input_field,  # Поле для ввода имени профиля Telegram
-
                              # 📝 Изменение имени
                              ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
                                                text=translations["ru"]["edit_bio_menu"]["name_change_n"],
