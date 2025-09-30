@@ -38,14 +38,14 @@ class AccountBIO:
         """
         try:
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(f"{session_name}")
+                await self.app_logger.log_and_display(message=f"{session_name}")
                 client = await self.connect.client_connect_string_session(session_name=session_name)
-                await client.connect()
+                # await client.connect()
                 try:
                     result = await client(functions.account.UpdateProfileRequest(last_name=user_input))
-                    await self.app_logger.log_and_display(f"{result}\nФамилия успешно обновлена!")
+                    await self.app_logger.log_and_display(message=f"{result}\nФамилия успешно обновлена!")
                 except AuthKeyUnregisteredError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                    await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
                 finally:
                     await client.disconnect()
                 await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
@@ -88,9 +88,31 @@ class AccountBIO:
 
         async def change_name_profile_gui(_) -> None:
             """
-            Изменение био профиля Telegram в графическое окно Flet
+            Изменение имени профиля. Изменение био профиля Telegram в графическое окно Flet
             """
-            await self.change_name_profile(user_input=profile_name_input_field)
+            # await self.change_name_profile(user_input=profile_name_input_field)
+            try:
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    await self.app_logger.log_and_display(message=f"{session_name}")
+                    client = await self.connect.client_connect_string_session(session_name=session_name)
+                    await self.connect.getting_account_data(client)
+                    # await client.connect()
+                    try:
+                        result = await client(
+                            functions.account.UpdateProfileRequest(first_name=profile_name_input_field.value))
+                        await self.app_logger.log_and_display(message=f"{result}\nИмя успешно обновлено!")
+                    except AuthKeyUnregisteredError:
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["auth_key_unregistered"])
+                    finally:
+                        await self.connect.getting_account_data(client)
+                        await client.disconnect()
+                    await show_notification(page=self.page,
+                                            message="Работа окончена")  # Выводим уведомление пользователю
+                    # self.page.go("/bio_editing")  # переходим к основному меню изменения имени профиля 🏠
+            except Exception as error:
+                logger.exception(error)
+
             self.page.go("/bio_editing")  # Изменение маршрута
             self.page.update()
 
@@ -114,7 +136,7 @@ class AccountBIO:
                              size=20, weight=ft.FontWeight.BOLD,
                              foreground=ft.Paint(
                                  gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
+                                                                                      ft.Colors.PURPLE]))))]),
                      list_view,  # Отображение логов 📝
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          ft.Row([
@@ -165,21 +187,21 @@ class AccountBIO:
         :return: None
         """
         try:
-            await self.app_logger.log_and_display(f"Запуск смены  описания профиля")
+            await self.app_logger.log_and_display(message=f"Запуск смены  описания профиля")
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(f"{session_name}")
+                await self.app_logger.log_and_display(message=f"{session_name}")
 
                 client = await self.connect.client_connect_string_session(session_name=session_name)
 
-                await client.connect()
+                # await client.connect()
                 if len(user_input) > 70:
                     await show_notification(self.page, f"❌ Описание профиля превышает 70 символов ({len(user_input)}).")
                     return
                 try:
                     result = await client(functions.account.UpdateProfileRequest(about=user_input))
-                    await self.app_logger.log_and_display(f"{result}\nПрофиль успешно обновлен!")
+                    await self.app_logger.log_and_display(message=f"{result}\nПрофиль успешно обновлен!")
                 except AuthKeyUnregisteredError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                    await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
                 finally:
                     await client.disconnect()
 
@@ -197,14 +219,14 @@ class AccountBIO:
         """
         try:
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(f"{session_name}")
+                await self.app_logger.log_and_display(message=f"{session_name}")
                 client = await self.connect.client_connect_string_session(session_name=session_name)
-                await client.connect()
+                # await client.connect()
                 try:
                     result = await client(functions.account.UpdateProfileRequest(first_name=user_input))
-                    await self.app_logger.log_and_display(f"{result}\nИмя успешно обновлено!")
+                    await self.app_logger.log_and_display(message=f"{result}\nИмя успешно обновлено!")
                 except AuthKeyUnregisteredError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                    await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
                 finally:
                     await client.disconnect()
                 await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
@@ -226,14 +248,14 @@ class AccountBIO:
         """
         try:
             for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(f"{session_name}")
+                await self.app_logger.log_and_display(message=f"{session_name}")
                 client = await self.connect.client_connect_string_session(session_name=session_name)
-                await client.connect()
+                # await client.connect()
                 try:
                     await client(functions.account.UpdateUsernameRequest(username=user_input))
                     await show_notification(self.page, f'Работа окончена')  # Выводим уведомление пользователю
                 except AuthKeyUnregisteredError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                    await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
                 except (UsernamePurchaseAvailableError, UsernameOccupiedError):
                     await show_notification(self.page, "❌ Никнейм уже занят")  # Выводим уведомление пользователю
                 except UsernameInvalidError:
@@ -252,11 +274,12 @@ class AccountBIO:
                 client = await self.connect.client_connect_string_session(session_name=session_name)
                 for photo_file in await self.utils.find_files(directory_path="user_data/bio", extension='jpg'):
                     try:
-                        await client.connect()
+                        # await client.connect()
                         await client(functions.photos.UploadProfilePhotoRequest(
                             file=await client.upload_file(f"user_data/bio/{photo_file[0]}.jpg")))
                     except AuthKeyUnregisteredError:
-                        await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["auth_key_unregistered"])
                     finally:
                         await client.disconnect()
         except Exception as error:
