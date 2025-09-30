@@ -30,28 +30,6 @@ class AccountBIO:
         self.utils = Utils(page=page)
         self.gui_program = GUIProgram()
 
-    # async def change_last_name_profile(self, user_input):
-    #     """
-    #     Изменение фамилии профиля
-    #
-    #     :param user_input - новое имя пользователя Telegram
-    #     """
-    #     try:
-    #         for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-    #             await self.app_logger.log_and_display(message=f"{session_name}")
-    #             client = await self.connect.client_connect_string_session(session_name=session_name)
-    #             # await client.connect()
-    #             try:
-    #                 result = await client(functions.account.UpdateProfileRequest(last_name=user_input))
-    #                 await self.app_logger.log_and_display(message=f"{result}\nФамилия успешно обновлена!")
-    #             except AuthKeyUnregisteredError:
-    #                 await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
-    #             finally:
-    #                 await client.disconnect()
-    #             await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
-    #     except Exception as error:
-    #         logger.exception(error)
-
     async def bio_editing_menu(self):
         """
         Меню ✏️ Редактирование_BIO
@@ -226,29 +204,6 @@ class AccountBIO:
 
         await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
         self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
-
-    # async def change_name_profile(self, user_input):
-    #     """
-    #     Изменение имени профиля
-    #
-    #     :param user_input - новое имя пользователя
-    #     """
-    #     try:
-    #         for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-    #             await self.app_logger.log_and_display(message=f"{session_name}")
-    #             client = await self.connect.client_connect_string_session(session_name=session_name)
-    #             # await client.connect()
-    #             try:
-    #                 result = await client(functions.account.UpdateProfileRequest(first_name=user_input))
-    #                 await self.app_logger.log_and_display(message=f"{result}\nИмя успешно обновлено!")
-    #             except AuthKeyUnregisteredError:
-    #                 await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
-    #             finally:
-    #                 await client.disconnect()
-    #             await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
-    #             self.page.go("/bio_editing")  # переходим к основному меню изменения имени профиля 🏠
-    #     except Exception as error:
-    #         logger.exception(error)
 
     async def change_photo_profile_gui(self) -> None:
         """
