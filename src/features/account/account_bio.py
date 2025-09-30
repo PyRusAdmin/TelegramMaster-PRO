@@ -76,9 +76,6 @@ class AccountBIO:
             except Exception as error:
                 logger.exception(error)
 
-            self.page.go("/bio_editing")  # Изменение маршрута
-            self.page.update()
-
         async def change_bio_profile(_) -> None:
             """Изменение описания профиля Telegram аккаунта."""
             try:
@@ -99,14 +96,9 @@ class AccountBIO:
                             message=translations["ru"]["errors"]["auth_key_unregistered"])
                     finally:
                         await client.disconnect()
-
             except Exception as error:
                 logger.exception(error)
-
             await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
-            self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
-            # self.page.go("/bio_editing")  # Изменение маршрута
-            self.page.update()
 
         async def change_name_profile_gui(_) -> None:
             """
@@ -131,8 +123,6 @@ class AccountBIO:
                                             message="Работа окончена")  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
-            self.page.go("/bio_editing")  # Изменение маршрута
-            self.page.update()
 
         async def change_last_name_profile_gui(_) -> None:
             """
@@ -177,7 +167,6 @@ class AccountBIO:
             except Exception as error:
                 logger.exception(error)
             await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
-            self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
 
         self.page.views.append(
             ft.View("/bio_editing",
