@@ -79,10 +79,35 @@ class AccountBIO:
             self.page.go("/bio_editing")  # Изменение маршрута
             self.page.update()
 
-        async def btn_click(_) -> None:
-            """Изменение описания профиля Telegram."""
-            await self.change_bio_profile(user_input=profile_description_input_field.value)
-            self.page.go("/bio_editing")  # Изменение маршрута
+        async def change_bio_profile(_) -> None:
+            """Изменение описания профиля Telegram аккаунта."""
+            try:
+                await self.app_logger.log_and_display(message=f"Запуск смены  описания профиля")
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    await self.app_logger.log_and_display(message=f"{session_name}")
+
+                    client = await self.connect.client_connect_string_session(session_name=session_name)
+
+                    if len(profile_description_input_field.value) > 70:
+                        await show_notification(self.page,
+                                                f"❌ Описание профиля превышает 70 символов ({len(profile_description_input_field.value)}).")
+                        return
+                    try:
+                        result = await client(
+                            functions.account.UpdateProfileRequest(about=profile_description_input_field.value))
+                        await self.app_logger.log_and_display(message=f"{result}\nПрофиль успешно обновлен!")
+                    except AuthKeyUnregisteredError:
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["auth_key_unregistered"])
+                    finally:
+                        await client.disconnect()
+
+            except Exception as error:
+                logger.exception(error)
+
+            await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
+            self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
+            # self.page.go("/bio_editing")  # Изменение маршрута
             self.page.update()
 
         async def change_name_profile_gui(_) -> None:
@@ -184,7 +209,7 @@ class AccountBIO:
                              # ✏️ Изменение описания
                              ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
                                                text=translations["ru"]["edit_bio_menu"]["changing_the_description"],
-                                               on_click=btn_click),
+                                               on_click=change_bio_profile),
                          ]),
                          await self.gui_program.diver_castom(),  # Горизонтальная линия
                          ft.Row([
@@ -209,36 +234,5 @@ class AccountBIO:
                                            text=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
                                            on_click=change_photo_profile_gui),
                      ])]))
-
-    async def change_bio_profile(self, user_input):
-        """
-        Изменение описания профиля Telegram аккаунта.
-
-        :param user_input - новое описание профиля Telegram
-        :return: None
-        """
-        try:
-            await self.app_logger.log_and_display(message=f"Запуск смены  описания профиля")
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(message=f"{session_name}")
-
-                client = await self.connect.client_connect_string_session(session_name=session_name)
-
-                if len(user_input) > 70:
-                    await show_notification(self.page, f"❌ Описание профиля превышает 70 символов ({len(user_input)}).")
-                    return
-                try:
-                    result = await client(functions.account.UpdateProfileRequest(about=user_input))
-                    await self.app_logger.log_and_display(message=f"{result}\nПрофиль успешно обновлен!")
-                except AuthKeyUnregisteredError:
-                    await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
-                finally:
-                    await client.disconnect()
-
-        except Exception as error:
-            logger.exception(error)
-
-        await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
-        self.page.go("/bio_editing")  # переходим к основному меню изменения описания профиля 🏠
 
 # 244
