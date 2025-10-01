@@ -42,7 +42,7 @@ class Proxy:
         """
         try:
             for proxy_dic in get_proxy_database():
-                await self.app_logger.log_and_display(f"{proxy_dic}")
+                await self.app_logger.log_and_display(message=f"{proxy_dic}")
                 # Подключение к proxy с проверкой на работоспособность
                 await self.connecting_to_proxy_with_verification(proxy_type=proxy_dic[0],
                                                                  # Тип proxy (например: SOCKS5)
@@ -71,14 +71,14 @@ class Proxy:
             # Указываем параметры прокси
             proxy = {'http': f'{proxy_type}://{username}:{password}@{addr}:{port}'}
             await self.app_logger.log_and_display(
-                f"Проверяемый прокси: {proxy_type}://{username}:{password}@{addr}:{port}.")
+                message=f"Проверяемый прокси: {proxy_type}://{username}:{password}@{addr}:{port}.")
             requests.get('http://example.org', proxies=proxy)
             await self.app_logger.log_and_display(
-                f"⚠️ Proxy: {proxy_type}://{username}:{password}@{addr}:{port} рабочий!")
+                message=f"⚠️ Proxy: {proxy_type}://{username}:{password}@{addr}:{port} рабочий!")
         # RequestException исключение возникает при ошибках, которые могут быть вызваны при запросе к веб-серверу.
         # Это может быть из-за недоступности сервера, ошибочного URL или других проблем с соединением.
         except requests.exceptions.RequestException:
-            await self.app_logger.log_and_display(f"❌ Proxy не рабочий!")
+            await self.app_logger.log_and_display(message=f"❌ Proxy не рабочий!")
             await deleting_an_invalid_proxy(proxy_type=proxy_type, addr=addr, port=port, username=username,
                                             password=password, rdns=rdns, page=self.page)
         except Exception as error:

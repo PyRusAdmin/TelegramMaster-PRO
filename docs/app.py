@@ -17,11 +17,11 @@ from src.locales.translations_loader import translations
 app = FastAPI()
 
 # Указываем путь к статическим файлам
-app.mount("/static", StaticFiles(directory="docs/static"), name="static")
+app.mount(path="/static", app=StaticFiles(directory="docs/static"), name="static")
 templates = Jinja2Templates(directory="docs/templates")  # Указываем директорию с шаблонами.
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get(path="/", response_class=HTMLResponse)
 async def index(request: Request):
     """Главная страница документации"""
     logger.info("Запущена главная страница документации")
@@ -32,7 +32,7 @@ async def index(request: Request):
         return {"error": "Failed to render template"}
 
 
-@app.get("/menu", response_class=HTMLResponse)
+@app.get(path="/menu", response_class=HTMLResponse)
 async def menu(request: Request):
     """Меню программы"""
     logger.info("Запущено меню программы")
@@ -42,7 +42,7 @@ async def menu(request: Request):
                                                     "update_date": DATE_OF_PROGRAM_CHANGE})
 
 
-@app.get("/inviting", response_class=HTMLResponse)
+@app.get(path="/inviting", response_class=HTMLResponse)
 async def inviting_page(request: Request):
     """🚀 Инвайтинг"""
     logger.info("Запущена страница инвайтинга")
@@ -54,7 +54,7 @@ async def inviting_page(request: Request):
         "inviting_every_day_ru": translations["ru"]["inviting_menu"]["inviting_every_day"]})
 
 
-@app.get("/inviting/inviting_with_limits_in_telegram_master", response_class=HTMLResponse)
+@app.get(path="/inviting/inviting_with_limits_in_telegram_master", response_class=HTMLResponse)
 async def inviting_with_limits_in_telegram_master(request: Request):
     """🚀 Инвайтинг"""
     logger.info("Запущена страница 🚀 Инвайтинг")
@@ -72,7 +72,7 @@ async def inviting_with_limits_in_telegram_master(request: Request):
                                       })
 
 
-@app.get("/inviting/inviting_1_time_per_hour", response_class=HTMLResponse)
+@app.get(path="/inviting/inviting_1_time_per_hour", response_class=HTMLResponse)
 async def inviting_1_time_per_hour(request: Request):
     """⏰ Инвайтинг 1 раз в час"""
     logger.info("Запущена страница 🚀 Инвайтинг")
@@ -86,7 +86,7 @@ async def inviting_1_time_per_hour(request: Request):
                                       })
 
 
-@app.get("/inviting/inviting_at_a_certain_time", response_class=HTMLResponse)
+@app.get(path="/inviting/inviting_at_a_certain_time", response_class=HTMLResponse)
 async def inviting_at_a_certain_time(request: Request):
     """🕒 Инвайтинг в определенное время"""
     logger.info("Запущена страница 🚀 Инвайтинг")
@@ -102,7 +102,7 @@ async def inviting_at_a_certain_time(request: Request):
                                       })
 
 
-@app.get("/inviting/inviting_every_day", response_class=HTMLResponse)
+@app.get(path="/inviting/inviting_every_day", response_class=HTMLResponse)
 async def inviting_every_day(request: Request):
     """📅 Инвайтинг каждый день"""
     logger.info("Запущена страница 🚀 Инвайтинг")
@@ -119,7 +119,7 @@ async def inviting_every_day(request: Request):
 
 
 # Рассылка сообщений по чатам, в личку
-@app.get('/sending_messages', response_class=HTMLResponse)
+@app.get(path='/sending_messages', response_class=HTMLResponse)
 async def sending_messages(request: Request):
     """💬 Рассылка сообщений"""
     try:
@@ -134,7 +134,7 @@ async def sending_messages(request: Request):
         logger.exception(error)
 
 
-@app.get('/editing_bio', response_class=HTMLResponse)
+@app.get(path='/editing_bio', response_class=HTMLResponse)
 async def editing_bio(request: Request):
     """Редактирование BIO"""
     logger.info("Запущена страница редактирования БИО")
@@ -148,7 +148,7 @@ async def editing_bio(request: Request):
     })
 
 
-@app.get('/working_with_contacts', response_class=HTMLResponse)
+@app.get(path='/working_with_contacts', response_class=HTMLResponse)
 async def working_with_contacts(request: Request):
     """Работа с контактами"""
     logger.info("Запущена страница работы с контактами")
@@ -163,7 +163,7 @@ async def working_with_contacts(request: Request):
 
 
 # Настройки
-@app.get('/settings', response_class=HTMLResponse)
+@app.get(path='/settings', response_class=HTMLResponse)
 async def settings(request: Request):
     """⚙️ Настройки"""
     logger.info("Запущена страница настроек")
@@ -189,7 +189,7 @@ async def settings(request: Request):
     })
 
 
-@app.get('/settings/choice_of_reactions', response_class=HTMLResponse)
+@app.get(path='/settings/choice_of_reactions', response_class=HTMLResponse)
 async def choice_of_reactions(request: Request):
     """👍 Выбор реакций"""
     logger.info("Запущена страница выбора реакции")
@@ -199,7 +199,7 @@ async def choice_of_reactions(request: Request):
     })
 
 
-@app.get('/settings/proxy_entry', response_class=HTMLResponse)
+@app.get(path='/settings/proxy_entry', response_class=HTMLResponse)
 async def proxy_entry(request: Request):
     """🔐 Запись proxy"""
     logger.info("Запущена страница выбора реакции")
@@ -209,7 +209,7 @@ async def proxy_entry(request: Request):
     })
 
 
-@app.get('/settings/changing_accounts', response_class=HTMLResponse)
+@app.get(path='/settings/changing_accounts', response_class=HTMLResponse)
 async def changing_accounts(request: Request):
     """🔄 Смена аккаунтов"""
     logger.info("Запущена страница 🔄 Смена аккаунтов")
@@ -219,7 +219,7 @@ async def changing_accounts(request: Request):
     })
 
 
-@app.get('/settings/recording_api_id_api_hash', response_class=HTMLResponse)
+@app.get(path='/settings/recording_api_id_api_hash', response_class=HTMLResponse)
 async def recording_api_id_api_hash(request: Request):
     """📝 Запись api_id, api_hash"""
     logger.info("Запущена страница записи api_id api_hash")
@@ -229,7 +229,7 @@ async def recording_api_id_api_hash(request: Request):
     })
 
 
-@app.get('/settings/time_between_subscriptions', response_class=HTMLResponse)
+@app.get(path='/settings/time_between_subscriptions', response_class=HTMLResponse)
 async def time_between_subscriptions(request: Request):
     """⏰ Запись времени"""
     logger.info("Запущена страница ⏰ Запись времени")
@@ -240,7 +240,7 @@ async def time_between_subscriptions(request: Request):
     })
 
 
-@app.get('/settings/message_recording', response_class=HTMLResponse)
+@app.get(path='/settings/message_recording', response_class=HTMLResponse)
 async def message_recording(request: Request):
     """✉️ Запись сообщений"""
     logger.info("Запущена страница ✉️ Запись сообщений")
@@ -250,7 +250,7 @@ async def message_recording(request: Request):
     })
 
 
-@app.get('/settings/link_entry', response_class=HTMLResponse)
+@app.get(path='/settings/link_entry', response_class=HTMLResponse)
 async def link_entry(request: Request):
     """🔗 Запись ссылки для инвайтинга"""
     logger.info("Запущена страница 🔗 Запись ссылки для инвайтинга")
@@ -260,7 +260,7 @@ async def link_entry(request: Request):
     })
 
 
-@app.get('/settings/account_limits', response_class=HTMLResponse)
+@app.get(path='/settings/account_limits', response_class=HTMLResponse)
 async def account_limits(request: Request):
     """📊 Лимиты на аккаунт"""
     logger.info("Запущена страница 📊 Лимиты на аккаунт")
@@ -270,7 +270,7 @@ async def account_limits(request: Request):
     })
 
 
-@app.get('/settings/message_limits', response_class=HTMLResponse)
+@app.get(path='/settings/message_limits', response_class=HTMLResponse)
 async def message_limits(request: Request):
     """📨 Лимиты на сообщения"""
     logger.info("Запущена страница 📨 Лимиты на сообщения")
@@ -280,7 +280,7 @@ async def message_limits(request: Request):
     })
 
 
-@app.get('/settings/time_between_subscriptionss', response_class=HTMLResponse)
+@app.get(path='/settings/time_between_subscriptionss', response_class=HTMLResponse)
 async def time_between_subscriptionss(request: Request):
     """⏳ Время между подпиской"""
     logger.info("Запущена страница ⏳ Время между подпиской")
@@ -290,7 +290,7 @@ async def time_between_subscriptionss(request: Request):
     })
 
 
-@app.get('/settings/creating_username_list', response_class=HTMLResponse)
+@app.get(path='/settings/creating_username_list', response_class=HTMLResponse)
 async def creating_username_list(request: Request):
     """📋 Формирование списка username"""
     logger.info("Запущена страница 📋 Формирование списка username")
@@ -300,7 +300,7 @@ async def creating_username_list(request: Request):
     })
 
 
-@app.get('/settings/recording_the_time_between_messages', response_class=HTMLResponse)
+@app.get(path='/settings/recording_the_time_between_messages', response_class=HTMLResponse)
 async def recording_the_time_between_messages(request: Request):
     """⏱️ Запись времени между сообщениями"""
     logger.info("Запущена страница ⏱️ Запись времени между сообщениями")
@@ -311,7 +311,7 @@ async def recording_the_time_between_messages(request: Request):
     })
 
 
-@app.get('/settings/time_between_invites_sending_messages', response_class=HTMLResponse)
+@app.get(path='/settings/time_between_invites_sending_messages', response_class=HTMLResponse)
 async def time_between_invites_sending_messages(request: Request):
     """🕒 Время между инвайтингом, рассылка сообщений"""
     logger.info("Запущена страница 🕒 Время между инвайтингом, рассылка сообщений")
@@ -322,7 +322,7 @@ async def time_between_invites_sending_messages(request: Request):
     })
 
 
-@app.get('/settings/recording_reaction_link', response_class=HTMLResponse)
+@app.get(path='/settings/recording_reaction_link', response_class=HTMLResponse)
 async def recording_reaction_link(request: Request):
     """🔗 Запись ссылки для реакций"""
     logger.info("Запущена страница 🔗 Запись ссылки для реакций")
@@ -332,7 +332,7 @@ async def recording_reaction_link(request: Request):
     })
 
 
-@app.get('/settings/forming_list_of_chats_channels', response_class=HTMLResponse)
+@app.get(path='/settings/forming_list_of_chats_channels', response_class=HTMLResponse)
 async def forming_list_of_chats_channels(request: Request):
     """📑 Формирование списка чатов / каналов"""
     logger.info("Запущена страница 📑 Формирование списка чатов / каналов")
@@ -344,7 +344,7 @@ async def forming_list_of_chats_channels(request: Request):
 
 # Работа с реакциями
 
-@app.get('/working_with_reactions', response_class=HTMLResponse)
+@app.get(path='/working_with_reactions', response_class=HTMLResponse)
 async def working_with_reactions(request: Request):
     """👍 Работа с реакциями"""
     logger.info("Запущена страница работы с реакциями")
@@ -359,7 +359,7 @@ async def working_with_reactions(request: Request):
                                               "automatic_setting_of_reactions"]})
 
 
-@app.get('/we_are_winding_up_post_views', response_class=HTMLResponse)
+@app.get(path='/we_are_winding_up_post_views', response_class=HTMLResponse)
 async def we_are_winding_up_post_views(request: Request):
     """👁️‍🗨️ Накручиваем просмотры постов"""
     logger.info("Запущена страница '👁️‍🗨️ Накручиваем просмотры постов' ")
@@ -375,7 +375,7 @@ async def we_are_winding_up_post_views(request: Request):
                                        })
 
 
-@app.get('/parsing', response_class=HTMLResponse)
+@app.get(path='/parsing', response_class=HTMLResponse)
 async def parsing(request: Request):
     """🔍 Парсинг"""
     logger.info("Запущена страница парсинга")
@@ -391,7 +391,7 @@ async def parsing(request: Request):
         "importing_a_list_of_parsed_data": translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"]})
 
 
-@app.get('/subscribe_unsubscribe', response_class=HTMLResponse)
+@app.get(path='/subscribe_unsubscribe', response_class=HTMLResponse)
 async def subscribe_unsubscribe(request: Request):
     """Подписка, отписка"""
     logger.info("Запущена страница подписки, отписки")
@@ -401,7 +401,7 @@ async def subscribe_unsubscribe(request: Request):
                                        "unsubscribe": translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"]})
 
 
-@app.get('/connect_accounts', response_class=HTMLResponse)
+@app.get(path='/connect_accounts', response_class=HTMLResponse)
 async def connect_accounts(request: Request):
     """Подключение аккаунтов"""
     logger.info("Запущена страница подключения аккаунтов")
@@ -414,7 +414,7 @@ async def connect_accounts(request: Request):
                                            "connecting_session_accounts"]})
 
 
-@app.get('/account_verification', response_class=HTMLResponse)
+@app.get(path='/account_verification', response_class=HTMLResponse)
 async def account_verification(request: Request):
     """Проверка аккаунтов"""
     logger.info("Запущена страница проверки аккаунтов")
@@ -422,7 +422,7 @@ async def account_verification(request: Request):
                                       {"request": request, "program_name": PROGRAM_NAME})
 
 
-@app.get('/creating_groups', response_class=HTMLResponse)
+@app.get(path='/creating_groups', response_class=HTMLResponse)
 async def creating_groups(request: Request):
     """Создание групп (чатов)"""
     logger.info("Запущена страница создания групп (чатов)")
@@ -430,7 +430,7 @@ async def creating_groups(request: Request):
                                       {"request": request, "program_name": PROGRAM_NAME})
 
 
-@app.get('/launch_telegrammaster', response_class=HTMLResponse)
+@app.get(path='/launch_telegrammaster', response_class=HTMLResponse)
 async def launch_telegrammaster(request: Request):
     """Запуск TelegramMaster"""
     logger.info("Запущена страница документации, о запуске TelegramMaster 2.0")
@@ -438,7 +438,7 @@ async def launch_telegrammaster(request: Request):
                                       {"request": request, "program_name": PROGRAM_NAME})
 
 
-@app.get('/working_with_errors_telegrammaster', response_class=HTMLResponse)
+@app.get(path='/working_with_errors_telegrammaster', response_class=HTMLResponse)
 async def working_with_errors_telegrammaster(request: Request):
     """Работа с ошибками TelegramMaster 2.0"""
     logger.info("Запущена страница документации, о работе с ошибками TelegramMaster 2.0")
@@ -446,7 +446,7 @@ async def working_with_errors_telegrammaster(request: Request):
                                       {"request": request, "program_name": PROGRAM_NAME})
 
 
-@app.get('/install_python_update_pip', response_class=HTMLResponse)
+@app.get(path='/install_python_update_pip', response_class=HTMLResponse)
 async def install_python_update_pip(request: Request):
     """Установка Python, обновление PIP"""
     logger.info("Запущена страница документации, о установке Python, обновлении PIP")
@@ -454,7 +454,7 @@ async def install_python_update_pip(request: Request):
                                       {"request": request, "program_name": PROGRAM_NAME})
 
 
-@app.get('/preliminary_setting_of_program_installation_of_program_by_default', response_class=HTMLResponse)
+@app.get(path='/preliminary_setting_of_program_installation_of_program_by_default', response_class=HTMLResponse)
 async def preliminary_setting_of_program_installation_of_program_by_default(request: Request):
     """Предварительная настройка программы"""
     logger.info(
@@ -463,7 +463,7 @@ async def preliminary_setting_of_program_installation_of_program_by_default(requ
                                       {"request": request, "program_name": PROGRAM_NAME})
 
 
-@app.get('/registration_api_id_api_hash', response_class=HTMLResponse)
+@app.get(path='/registration_api_id_api_hash', response_class=HTMLResponse)
 async def registration_api_id_api_hash(request: Request):
     """Получение api и hash"""
     logger.info('Запущена страница, о получении api и hash')
@@ -471,7 +471,7 @@ async def registration_api_id_api_hash(request: Request):
                                       {"request": request, "program_name": PROGRAM_NAME})
 
 
-@app.get('/telegram_limits', response_class=HTMLResponse)
+@app.get(path='/telegram_limits', response_class=HTMLResponse)
 async def telegram_limits(request: Request):
     """Лимиты Telegram"""
     logger.info("Запущена страница документации, о лимитах Telegram")
