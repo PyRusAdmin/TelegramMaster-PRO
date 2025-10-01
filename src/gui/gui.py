@@ -15,13 +15,13 @@ class AppLogger:
 
     async def start_time(self):
         start = datetime.datetime.now()  # фиксируем и выводим время старта работы кода
-        await self.log_and_display('▶️ Время старта: ' + str(start))
+        await self.log_and_display(message='▶️ Время старта: ' + str(start))
         return start
 
     async def end_time(self, start):
         finish = datetime.datetime.now()  # фиксируем и выводим время окончания работы кода
-        await self.log_and_display('⏹️ Время окончания: ' + str(finish))
-        await self.log_and_display('⏱️ Время работы: ' + str(finish - start))
+        await self.log_and_display(message='⏹️ Время окончания: ' + str(finish))
+        await self.log_and_display(message='⏱️ Время работы: ' + str(finish - start))
 
     async def log_and_display(self, message: str, level: str = "info"):
         """

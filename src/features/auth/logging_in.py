@@ -45,7 +45,7 @@ class SendLog:
         Логирование TelegramMaster-PRO
         """
         local_ip = self.get_external_ip()
-        emoji, country = self.get_country_flag(local_ip)
+        emoji, country = self.get_country_flag(ip_address=local_ip)
         bot_token = '8452256961:AAHwa8tRMoe1SGPuFtpIFGXvShBQcRoUyKU'
         client = TelegramClient('src/features/auth/log',
                                 api_id=7655060,
