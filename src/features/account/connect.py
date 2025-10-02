@@ -18,7 +18,7 @@ from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON, pat
 from src.core.utils import Utils
 from src.gui.gui_elements import GUIProgram
 from src.features.proxy.checking_proxy import Proxy
-from src.gui.gui import AppLogger
+from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
@@ -35,6 +35,209 @@ class TGConnect:
         self.utils = Utils(page=page)
         self.proxy = Proxy(page=page)
         self.gui_program = GUIProgram()
+
+    async def check_menu(self):
+        """
+        Меню 🔍 Проверка аккаунтов
+        """
+
+        list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
+
+        async def check_for_spam(_) -> None:
+            """
+            Проверка аккаунта на спам через @SpamBot
+            """
+            try:
+                start = await self.app_logger.start_time()
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+
+                    client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
+                    await self.getting_account_data(client)
+
+                    try:
+                        await client.send_message(entity='SpamBot',
+                                                  message='/start')  # Находим спам бот, и вводим команду /start
+                        for message in await client.get_messages('SpamBot'):
+                            await self.app_logger.log_and_display(message=f"{session_name} {message.message}")
+                            similarity_ratio_ru: int = fuzz.ratio(f"{message.message}",
+                                                                  "Очень жаль, что Вы с этим столкнулись. К сожалению, "
+                                                                  "иногда наша антиспам-система излишне сурово реагирует на "
+                                                                  "некоторые действия. Если Вы считаете, что Ваш аккаунт "
+                                                                  "ограничен по ошибке, пожалуйста, сообщите об этом нашим "
+                                                                  "модераторам. Пока действуют ограничения, Вы не сможете "
+                                                                  "писать тем, кто не сохранил Ваш номер в список контактов, "
+                                                                  "а также приглашать таких пользователей в группы или каналы. "
+                                                                  "Если пользователь написал Вам первым, Вы сможете ответить, "
+                                                                  "несмотря на ограничения.")
+                            if similarity_ratio_ru >= 97:
+                                await self.app_logger.log_and_display(message=f"⛔ Аккаунт заблокирован")
+                                await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
+                                await self.app_logger.log_and_display(
+                                    message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
+                                # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
+                                self.utils.working_with_accounts(
+                                    account_folder=f"user_data/accounts/{session_name}.session",
+                                    new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                            similarity_ratio_en: int = fuzz.ratio(f"{message.message}",
+                                                                  "I’m very sorry that you had to contact me. Unfortunately, "
+                                                                  "some account_actions can trigger a harsh response from our "
+                                                                  "anti-spam systems. If you think your account was limited by "
+                                                                  "mistake, you can submit a complaint to our moderators. While "
+                                                                  "the account is limited, you will not be able to send messages "
+                                                                  "to people who do not have your number in their phone contacts "
+                                                                  "or add them to groups and channels. Of course, when people "
+                                                                  "contact you first, you can always reply to them.")
+                            if similarity_ratio_en >= 97:
+                                await self.app_logger.log_and_display(message=f"⛔ Аккаунт заблокирован")
+                                await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
+                                await self.app_logger.log_and_display(
+                                    message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
+                                # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
+                                await self.app_logger.log_and_display(message=f"{session_name}")
+                                self.utils.working_with_accounts(
+                                    account_folder=f"user_data/accounts/{session_name}.session",
+                                    new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                            await self.app_logger.log_and_display(
+                                message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
+                            try:
+                                await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
+                            except sqlite3.OperationalError as e:
+                                await self.app_logger.log_and_display(
+                                    message=f"Ошибка при отключении аккаунта: {session_name}")
+                                await self.handle_banned_account(telegram_client=client, session_name=session_name,
+                                                                 exception=e)
+
+                    except YouBlockedUserError:
+                        continue  # Записываем ошибку в software_database.db и продолжаем работу
+                    except (AttributeError, AuthKeyUnregisteredError) as e:
+                        await self.app_logger.log_and_display(message=f"❌ Ошибка: {e}")
+                        continue
+                    except sqlite3.DatabaseError:
+                        await self.app_logger.log_and_display(
+                            f"❌ Ошибка базы данных, аккаунта или аккаунт заблокирован.")
+                        # Отключаем клиент, игнорируя ошибки с SQLite
+                        try:
+                            await client.disconnect()
+                        except Exception as e:
+                            await self.app_logger.log_and_display(
+                                f"⚠️ Не удалось корректно отключить {session_name}: {e}")
+
+                        # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
+                        await self.app_logger.log_and_display(message=f"{session_name}")
+                        # working_with_accounts(f"user_data/accounts/{session_name}.session",
+                        #                       f"user_data/accounts/banned/{session_name}.session")
+                        session_file = f"user_data/accounts/{session_name}.session"
+                        banned_dir = "user_data/accounts/banned"
+                        banned_file = os.path.join(banned_dir, f"{session_name}.session")
+                        # Удаляем связанный .session-journal, если он есть
+                        journal_file = session_file + "-journal"
+                        if os.path.exists(journal_file):
+                            try:
+                                os.remove(journal_file)
+                                await self.app_logger.log_and_display(f"🗑 Удалён повреждённый журнал: {journal_file}")
+                            except Exception as e:
+                                await self.app_logger.log_and_display(f"⚠️ Не удалось удалить session-journal: {e}")
+
+                        # Перемещаем основной .session файл
+                        try:
+                            shutil.move(session_file, banned_file)
+                            await self.app_logger.log_and_display(f"🚫 Аккаунт {session_name} перемещён в папку banned.")
+                        except Exception as e:
+                            await self.app_logger.log_and_display(f"❌ Не удалось переместить аккаунт: {e}")
+
+                await self.app_logger.end_time(start)
+                await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
+            except Exception as error:
+                logger.exception(error)
+
+        async def validation_check(_) -> None:
+            """
+            Проверяет все аккаунты Telegram в указанной директории.
+            """
+            try:
+                start = await self.app_logger.start_time()
+                await self.proxy.checking_the_proxy_for_work()  # Проверка proxy
+                # Сканирование каталога с аккаунтами
+                for session_file in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    await self.app_logger.log_and_display(message=f"⚠️ Проверяемый аккаунт: {session_file}")
+                    # Проверка аккаунтов
+                    await self.verify_account(session_name=session_file)
+                await self.app_logger.log_and_display(message=f"Окончание проверки аккаунтов Telegram 📁")
+                await self.app_logger.end_time(start)
+                await show_notification(self.page, "🔚 Проверка аккаунтов завершена")
+            except Exception as error:
+                logger.exception(error)
+
+        async def renaming_accounts(_):
+            """
+            Получает информацию о Telegram аккаунте.
+            """
+            try:
+                start = await self.app_logger.start_time()
+                await self.proxy.checking_the_proxy_for_work()  # Проверка proxy
+                # Сканирование каталога с аккаунтами
+                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    await self.app_logger.log_and_display(message=f"⚠️ Переименовываемый аккаунт: {session_name}")
+                    # Переименовывание аккаунтов
+                    client = await self.client_connect_string_session(session_name=session_name)
+                    await self.getting_account_data(client)
+                    try:
+                        me = await client.get_me()
+                        await self.rename_session_file(telegram_client=client, phone_old=session_name, phone=me.phone)
+                    except AttributeError:  # Если в get_me приходит NoneType (None)
+                        pass
+                    except TypeNotFoundError:
+                        await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
+                        await self.app_logger.log_and_display(
+                            message=f"⛔ Битый файл или аккаунт banned: {session_name}.session. Возможно, запущен под другим IP")
+                        self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
+                                                         new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                    except AuthKeyUnregisteredError:
+                        await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
+                        await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                        self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
+                                                         new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                await self.app_logger.end_time(start)
+                await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
+            except Exception as error:
+                logger.exception(error)
+
+        self.page.views.append(
+            ft.View("/account_verification_menu",
+                    [await self.gui_program.key_app_bar(),  # Добавляет кнопку назад на страницу (page)
+                     ft.Text(spans=[ft.TextSpan(
+                         translations["ru"]["menu"]["account_check"],
+                         ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
+                                      foreground=ft.Paint(
+                                          gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
+                                                                                               ft.Colors.PURPLE])), ), ), ], ),
+                     list_view,
+                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                         # 🤖 Проверка через спам бот
+                         ft.ElevatedButton(
+                             width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                             text=translations["ru"]["account_verification"]["spam_check"],
+                             on_click=check_for_spam
+                         ),
+                         # ✅ Проверка на валидность
+                         ft.ElevatedButton(
+                             width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                             text=translations["ru"]["account_verification"]["validation"],
+                             on_click=validation_check
+                         ),
+                         # ✏️ Переименование аккаунтов
+                         ft.ElevatedButton(
+                             width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                             text=translations["ru"]["account_verification"]["renaming"],
+                             on_click=renaming_accounts
+                         ),
+                         # 🔍 Полная проверка
+                         ft.ElevatedButton(
+                             width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                             text=translations["ru"]["account_verification"]["full_verification"],
+                             on_click=lambda _: self.page.go("/full_verification")
+                         ),
+                     ])]))
 
     async def getting_account_data(self, client):
         """Получаем данные аккаунта"""
@@ -137,163 +340,6 @@ class TGConnect:
             await telegram_client.disconnect()
             self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
                                              new_account_folder=f"user_data/accounts/banned/{session_name}.session")
-
-    async def check_for_spam(self) -> None:
-        """
-        Проверка аккаунта на спам через @SpamBot
-        """
-        try:
-            start = await self.app_logger.start_time()
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-
-                client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
-                await self.getting_account_data(client)
-
-                try:
-                    await client.send_message(entity='SpamBot',
-                                              message='/start')  # Находим спам бот, и вводим команду /start
-                    for message in await client.get_messages('SpamBot'):
-                        await self.app_logger.log_and_display(message=f"{session_name} {message.message}")
-                        similarity_ratio_ru: int = fuzz.ratio(f"{message.message}",
-                                                              "Очень жаль, что Вы с этим столкнулись. К сожалению, "
-                                                              "иногда наша антиспам-система излишне сурово реагирует на "
-                                                              "некоторые действия. Если Вы считаете, что Ваш аккаунт "
-                                                              "ограничен по ошибке, пожалуйста, сообщите об этом нашим "
-                                                              "модераторам. Пока действуют ограничения, Вы не сможете "
-                                                              "писать тем, кто не сохранил Ваш номер в список контактов, "
-                                                              "а также приглашать таких пользователей в группы или каналы. "
-                                                              "Если пользователь написал Вам первым, Вы сможете ответить, "
-                                                              "несмотря на ограничения.")
-                        if similarity_ratio_ru >= 97:
-                            await self.app_logger.log_and_display(message=f"⛔ Аккаунт заблокирован")
-                            await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
-                            await self.app_logger.log_and_display(
-                                message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
-                            # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
-                            self.utils.working_with_accounts(
-                                account_folder=f"user_data/accounts/{session_name}.session",
-                                new_account_folder=f"user_data/accounts/banned/{session_name}.session")
-                        similarity_ratio_en: int = fuzz.ratio(f"{message.message}",
-                                                              "I’m very sorry that you had to contact me. Unfortunately, "
-                                                              "some account_actions can trigger a harsh response from our "
-                                                              "anti-spam systems. If you think your account was limited by "
-                                                              "mistake, you can submit a complaint to our moderators. While "
-                                                              "the account is limited, you will not be able to send messages "
-                                                              "to people who do not have your number in their phone contacts "
-                                                              "or add them to groups and channels. Of course, when people "
-                                                              "contact you first, you can always reply to them.")
-                        if similarity_ratio_en >= 97:
-                            await self.app_logger.log_and_display(message=f"⛔ Аккаунт заблокирован")
-                            await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
-                            await self.app_logger.log_and_display(
-                                message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
-                            # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
-                            await self.app_logger.log_and_display(message=f"{session_name}")
-                            self.utils.working_with_accounts(
-                                account_folder=f"user_data/accounts/{session_name}.session",
-                                new_account_folder=f"user_data/accounts/banned/{session_name}.session")
-                        await self.app_logger.log_and_display(
-                            message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
-                        try:
-                            await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
-                        except sqlite3.OperationalError as e:
-                            await self.app_logger.log_and_display(
-                                message=f"Ошибка при отключении аккаунта: {session_name}")
-                            await self.handle_banned_account(telegram_client=client, session_name=session_name,
-                                                             exception=e)
-
-                except YouBlockedUserError:
-                    continue  # Записываем ошибку в software_database.db и продолжаем работу
-                except (AttributeError, AuthKeyUnregisteredError) as e:
-                    await self.app_logger.log_and_display(message=f"❌ Ошибка: {e}")
-                    continue
-                except sqlite3.DatabaseError:
-                    await self.app_logger.log_and_display(f"❌ Ошибка базы данных, аккаунта или аккаунт заблокирован.")
-                    # Отключаем клиент, игнорируя ошибки с SQLite
-                    try:
-                        await client.disconnect()
-                    except Exception as e:
-                        await self.app_logger.log_and_display(f"⚠️ Не удалось корректно отключить {session_name}: {e}")
-
-                    # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
-                    await self.app_logger.log_and_display(message=f"{session_name}")
-                    # working_with_accounts(f"user_data/accounts/{session_name}.session",
-                    #                       f"user_data/accounts/banned/{session_name}.session")
-                    session_file = f"user_data/accounts/{session_name}.session"
-                    banned_dir = "user_data/accounts/banned"
-                    banned_file = os.path.join(banned_dir, f"{session_name}.session")
-                    # Удаляем связанный .session-journal, если он есть
-                    journal_file = session_file + "-journal"
-                    if os.path.exists(journal_file):
-                        try:
-                            os.remove(journal_file)
-                            await self.app_logger.log_and_display(f"🗑 Удалён повреждённый журнал: {journal_file}")
-                        except Exception as e:
-                            await self.app_logger.log_and_display(f"⚠️ Не удалось удалить session-journal: {e}")
-
-                    # Перемещаем основной .session файл
-                    try:
-                        shutil.move(session_file, banned_file)
-                        await self.app_logger.log_and_display(f"🚫 Аккаунт {session_name} перемещён в папку banned.")
-                    except Exception as e:
-                        await self.app_logger.log_and_display(f"❌ Не удалось переместить аккаунт: {e}")
-
-            await self.app_logger.end_time(start)
-            await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
-        except Exception as error:
-            logger.exception(error)
-
-    async def validation_check(self) -> None:
-        """
-        Проверяет все аккаунты Telegram в указанной директории.
-        """
-        try:
-            start = await self.app_logger.start_time()
-            await self.proxy.checking_the_proxy_for_work()  # Проверка proxy
-            # Сканирование каталога с аккаунтами
-            for session_file in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(message=f"⚠️ Проверяемый аккаунт: {session_file}")
-                # Проверка аккаунтов
-                await self.verify_account(session_name=session_file)
-            await self.app_logger.log_and_display(message=f"Окончание проверки аккаунтов Telegram 📁")
-            await self.app_logger.end_time(start)
-            await show_notification(self.page, "🔚 Проверка аккаунтов завершена")
-        except Exception as error:
-            logger.exception(error)
-
-    async def renaming_accounts(self):
-        """
-        Получает информацию о Telegram аккаунте.
-        """
-        try:
-            start = await self.app_logger.start_time()
-            await self.proxy.checking_the_proxy_for_work()  # Проверка proxy
-            # Сканирование каталога с аккаунтами
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                await self.app_logger.log_and_display(message=f"⚠️ Переименовываемый аккаунт: {session_name}")
-                # Переименовывание аккаунтов
-                client = await self.client_connect_string_session(session_name=session_name)
-                await self.getting_account_data(client)
-                try:
-                    me = await client.get_me()
-                    await self.rename_session_file(telegram_client=client, phone_old=session_name, phone=me.phone)
-                except AttributeError:  # Если в get_me приходит NoneType (None)
-                    pass
-                except TypeNotFoundError:
-                    await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
-                    await self.app_logger.log_and_display(
-                        message=f"⛔ Битый файл или аккаунт banned: {session_name}.session. Возможно, запущен под другим IP")
-                    self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
-                                                     new_account_folder=f"user_data/accounts/banned/{session_name}.session")
-                except AuthKeyUnregisteredError:
-                    await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
-                    self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
-                                                     new_account_folder=f"user_data/accounts/banned/{session_name}.session")
-            await self.app_logger.end_time(start)
-            await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
-        except Exception as error:
-            logger.exception(error)
 
     async def full_verification(self) -> None:
         try:
