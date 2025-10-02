@@ -202,6 +202,17 @@ class TGConnect:
             except Exception as error:
                 logger.exception(error)
 
+        async def full_verification(_) -> None:
+            try:
+                start = await self.app_logger.start_time()
+                await validation_check(_)  # Проверка валидности аккаунтов
+                await renaming_accounts(_)  # Переименование аккаунтов
+                await check_for_spam(_)  # Проверка на спам ботов
+                await self.app_logger.end_time(start)
+                await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
+            except Exception as error:
+                logger.exception(error)
+
         self.page.views.append(
             ft.View("/account_verification_menu",
                     [await self.gui_program.key_app_bar(),  # Добавляет кнопку назад на страницу (page)
@@ -235,7 +246,7 @@ class TGConnect:
                          ft.ElevatedButton(
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                              text=translations["ru"]["account_verification"]["full_verification"],
-                             on_click=lambda _: self.page.go("/full_verification")
+                             on_click=full_verification
                          ),
                      ])]))
 
@@ -340,17 +351,6 @@ class TGConnect:
             await telegram_client.disconnect()
             self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
                                              new_account_folder=f"user_data/accounts/banned/{session_name}.session")
-
-    async def full_verification(self) -> None:
-        try:
-            start = await self.app_logger.start_time()
-            await self.validation_check()  # Проверка валидности аккаунтов
-            await self.renaming_accounts()  # Переименование аккаунтов
-            await self.check_for_spam()  # Проверка на спам ботов
-            await self.app_logger.end_time(start)
-            await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
-        except Exception as error:
-            logger.exception(error)
 
     async def rename_session_file(self, telegram_client, phone_old, phone) -> None:
         """

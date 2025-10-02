@@ -72,8 +72,8 @@ async def main(page: ft.Page):
         #     await connect.validation_check()
         # elif page.route == "/renaming_accounts":  # ✏️ Переименование аккаунтов
         #     await connect.renaming_accounts()
-        elif page.route == "/full_verification":  # 🔍 Полная проверка
-            await connect.full_verification()
+        # elif page.route == "/full_verification":  # 🔍 Полная проверка
+        #     await connect.full_verification()
         # ______________________________________________________________________________________________________________
         elif page.route == "/subscribe_unsubscribe":  # Меню "Подписка и отписка"
             await subscribe_unsubscribe_telegram.subscribe_and_unsubscribe_menu()
