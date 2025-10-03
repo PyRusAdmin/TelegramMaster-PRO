@@ -8,7 +8,6 @@ from loguru import logger  # Импортируем библиотеку loguru 
 from telethon.errors import SessionRevokedError
 from telethon.tl.functions.messages import GetMessagesViewsRequest
 
-from src.core.configs import path_accounts_folder
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.contact import StatusDisplay

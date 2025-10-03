@@ -7,7 +7,7 @@ import flet as ft
 from loguru import logger
 from telethon import functions
 
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_folder
+from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram

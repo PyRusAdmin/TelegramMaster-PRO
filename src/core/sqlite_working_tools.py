@@ -135,6 +135,31 @@ def write_to_database_contacts_accounts(data):
     ).execute()
 
 
+"""Работа с аккаунтами"""
+
+
+class Account(Model):
+    session_string = CharField(unique=True)  # уникальность для защиты от дубликатов
+
+    class Meta:
+        database = db
+        table_name = 'account'
+
+
+def write_account_to_db(session_string):
+    """
+    Запись аккаунта в базу данных
+    :param session_string: Строка сессии
+    """
+    Account.insert(session_string=session_string).on_conflict(action='IGNORE').execute()
+
+def getting_account():
+    records = []
+    for record in Account.select(Account.session_string):
+        records.append(record.session_string)
+    logger.warning(records)
+    return records
+
 """"Работа с таблицей contact (телефонная книга аккаунта Telegram)"""
 
 
@@ -193,6 +218,7 @@ def create_database():
     db.create_tables([MembersGroups])  # Создаем таблицу для хранения спарсенных пользователей
     db.create_tables([Contact])  # Создаем таблицу для хранения контактов
     db.create_tables([Proxy])  # Создаем таблицу для хранения прокси
+    db.create_tables([Account])
 
 
 """Работа с таблицей members"""

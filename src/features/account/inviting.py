@@ -13,7 +13,7 @@ from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, Sessio
                              FloodWaitError, AuthKeyUnregisteredError, PeerFloodError)
 from telethon.tl.functions.channels import InviteToChannelRequest
 
-from src.core.configs import (BUTTON_HEIGHT, ConfigReader, LIMITS, WIDTH_WIDE_BUTTON, path_accounts_folder,
+from src.core.configs import (BUTTON_HEIGHT, ConfigReader, LIMITS, WIDTH_WIDE_BUTTON,
                               TIME_INVITING_1, TIME_INVITING_2)
 from src.core.sqlite_working_tools import select_records_with_limit, get_links_inviting, save_links_inviting
 from src.core.utils import Utils
@@ -259,8 +259,7 @@ class InvitingToAGroup:
         self.page.views.append(
             ft.View("/inviting",
                     [await self.gui_program.key_app_bar(),  # Кнопка назад
-                     ft.Text(spans=[ft.TextSpan(
-                         translations["ru"]["inviting_menu"]["inviting"],
+                     ft.Text(spans=[ft.TextSpan(translations["ru"]["inviting_menu"]["inviting"],
                          ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
                                       foreground=ft.Paint(
                                           gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,

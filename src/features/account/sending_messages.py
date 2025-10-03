@@ -10,7 +10,7 @@ from telethon.errors import (ChannelPrivateError, ChatAdminRequiredError, ChatWr
                              PeerFloodError, SlowModeWaitError, UserBannedInChannelError, UserIdInvalidError,
                              UsernameInvalidError, UsernameNotOccupiedError, UserNotMutualContactError)
 
-from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON, path_accounts_folder,
+from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON,
                               path_folder_with_messages, PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
                               path_send_message_folder_answering_machine_message, TIME_SENDING_MESSAGES_1,
                               time_sending_messages_2, time_subscription_1, time_subscription_2)

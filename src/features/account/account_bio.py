@@ -5,7 +5,7 @@ from telethon import functions  # Импортируем библиотеку te
 from telethon.errors import (AuthKeyUnregisteredError, UsernameInvalidError, UsernameOccupiedError,
                              UsernamePurchaseAvailableError)
 
-from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, path_accounts_folder, WIDTH_INPUT_FIELD_AND_BUTTON
+from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, WIDTH_INPUT_FIELD_AND_BUTTON
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
