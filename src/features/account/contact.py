@@ -7,7 +7,6 @@ from telethon import functions, types
 from telethon.errors import SessionRevokedError, AuthKeyUnregisteredError
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, WIDTH_INPUT_FIELD_AND_BUTTON
-from src.core.configs import path_accounts_folder
 from src.core.sqlite_working_tools import (add_member_to_db, write_to_database_contacts_accounts, write_contact_db,
                                            getting_contacts_from_database, delete_contact_db)
 from src.core.utils import Utils

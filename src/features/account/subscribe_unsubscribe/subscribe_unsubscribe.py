@@ -13,7 +13,7 @@ from telethon.sync import TelegramClient
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
-from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_accounts_folder, time_subscription_1,
+from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1,
                               time_subscription_2)
 from src.core.sqlite_working_tools import get_writing_group_links, write_writing_group_links_to_db
 from src.core.utils import Utils

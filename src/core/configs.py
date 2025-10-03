@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import configparser
 
-path_accounts_folder = "user_data/accounts"  # Папка для аккаунтов
+# path_accounts_folder = "user_data/accounts"  # Папка для аккаунтов
 
 config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
 config.read(filenames='user_data/config/config.ini', encoding='utf-8')

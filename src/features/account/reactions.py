@@ -10,7 +10,6 @@ from telethon.errors import ReactionInvalidError
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import SendReactionRequest
 
-from src.core.configs import path_accounts_folder
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
