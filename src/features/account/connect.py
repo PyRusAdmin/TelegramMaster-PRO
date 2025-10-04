@@ -108,7 +108,6 @@ class TGConnect:
                                     new_account_folder=f"user_data/accounts/banned/{session_name}.session")
                             await self.app_logger.log_and_display(
                                 message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
-                            # try:
                             await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
                             # except sqlite3.OperationalError as e:
                             #     await self.app_logger.log_and_display(
@@ -528,7 +527,7 @@ class TGConnect:
                                                     foreground=ft.Paint(
                                                         gradient=ft.PaintLinearGradient((0, 20), (150, 20),
                                                                                         [ft.Colors.PINK,
-                                                                                         ft.Colors.PURPLE])), ), ), ], ),
+                                                                                         ft.Colors.PURPLE]))))]),
                      list_view,  # Отображение логов 📝
                      phone_number,
                      # 📞 Подключение аккаунтов по номеру телефона
@@ -544,7 +543,7 @@ class TGConnect:
                              weight=ft.FontWeight.BOLD,
                              foreground=ft.Paint(
                                  gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
+                                                                                      ft.Colors.PURPLE]))))]),
 
                      ft.Text(f"Выберите session файл\n", size=15),
                      selected_files,  # Поле для отображения выбранного файла
