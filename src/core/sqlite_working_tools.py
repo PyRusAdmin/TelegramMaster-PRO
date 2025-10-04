@@ -153,12 +153,14 @@ def write_account_to_db(session_string):
     """
     Account.insert(session_string=session_string).on_conflict(action='IGNORE').execute()
 
+
 def getting_account():
     records = []
     for record in Account.select(Account.session_string):
         records.append(record.session_string)
     logger.warning(records)
     return records
+
 
 """"Работа с таблицей contact (телефонная книга аккаунта Telegram)"""
 
