@@ -489,56 +489,25 @@ class TGConnect:
                     selected_files.value = f"Выбран session файл: {file_name}"
                     logger.info(f"Выбранный файл: {selected_files.value}")
                     selected_files.update()
-                    # Определяем целевой путь для копирования файла
-                    # target_path = os.path.join(path_accounts_folder, file_name)
-                    # Создаем директорию, если она не существует
-                    # os.makedirs(path_accounts_folder, exist_ok=True)
-                    # Копируем файл
-                    # shutil.copy(file_path, target_path)
-                    # selected_files.value = f"Файл скопирован в: {target_path}"
-
                     session_path = os.path.splitext(file_path)[0]  # путь без .session
                     logger.info(f"Путь без .session: {session_path}")
                     client = TelegramClient(session=f"{session_path}", api_id=self.api_id, api_hash=self.api_hash,
                                             system_version="4.16.30-vxCUSTOM")
                     await client.connect()
                     logger.info(f"✨ STRING SESSION: {StringSession.save(client.session)}")
-
                     session_string = StringSession.save(client.session)
                     await client.disconnect()
-
                     client = TelegramClient(StringSession(session_string), api_id=self.api_id, api_hash=self.api_hash,
                                             system_version="4.16.30-vxCUSTOM")
                     await client.connect()
-
                     me = await client.get_me()
-                    phone = me.phone or ""
-                    logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-                    # await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-                    # client = await self.client_connect_string_session(session_name=file_name)
-                    await client.disconnect()
-                    # await self.getting_account_data(client)
-                    write_account_to_db(session_string=session_string)  # Запись строки сессии в базу данных
-                    # await client.disconnect()
-
-                    session_string = getting_account()
-                    for record in session_string:
-                        logger.info(f"✨ STRING SESSION: {record}")
-                        client = TelegramClient(StringSession(record), api_id=self.api_id, api_hash=self.api_hash,
-                                                system_version="4.16.30-vxCUSTOM")
-                        await client.connect()
-                        me = await client.get_me()
+                    try:
                         phone = me.phone or ""
                         logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
                         await client.disconnect()
-                    #     me = await client.get_me()
-                    #     phone = me.phone or ""
-                    #     logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-                    # await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-                    # client = await self.client_connect_string_session(session_name=file_name)
-                    # await client.disconnect()
-                    # await self.getting_account_data(client)
-
+                        write_account_to_db(session_string=session_string)  # Запись строки сессии в базу данных
+                    except AttributeError:
+                        await show_notification(page=self.page, message="Не валидный аккаунт")
                 else:
                     selected_files.value = "Выбранный файл не является session файлом"
             else:
@@ -585,3 +554,4 @@ class TGConnect:
                                            text=translations["ru"]["create_groups_menu"]["choose_session_files"],
                                            on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
                      ])]))
+#557
