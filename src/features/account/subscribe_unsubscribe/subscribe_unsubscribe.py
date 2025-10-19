@@ -13,7 +13,7 @@ from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelReque
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
 from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1,
-                              time_subscription_2)
+                              time_subscription_2, width_2_input_fields, width_1_input_fields)
 from src.core.sqlite_working_tools import get_writing_group_links, write_writing_group_links_to_db, getting_account
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
@@ -49,17 +49,14 @@ class SubscribeUnsubscribeTelegram:
             """
             start = await self.app_logger.start_time()
             try:
-                # session_string = getting_account()
                 for session_name in self.session_string:
                     client = await self.connect.connect_string_session(session_name=session_name)
-                    # for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                    # client = await self.connect.client_connect_string_session(session_name)
                     await self.connect.getting_account_data(client)
 
                     dialogs = client.iter_dialogs()
-                    await self.app_logger.log_and_display(f"Диалоги: {dialogs}")
+                    await self.app_logger.log_and_display(message=f"Диалоги: {dialogs}")
                     async for dialog in dialogs:
-                        await self.app_logger.log_and_display(f"{dialog.name}, {dialog.id}")
+                        await self.app_logger.log_and_display(message=f"{dialog.name}, {dialog.id}")
                         await client.delete_dialog(dialog)
                     await client.disconnect()
             except Exception as error:
@@ -71,31 +68,17 @@ class SubscribeUnsubscribeTelegram:
             start = await self.app_logger.start_time()
             for session_name in self.session_string:
                 client = await self.connect.connect_string_session(session_name=session_name)
-                # session_string = await self.connect.get_string_session(session_name)
-                # Создаем клиент, используя StringSession и вашу строку
-                # client = TelegramClient(
-                #     StringSession(session_string),  # <-- Используем StringSession
-                #     api_id=7655060,
-                #     api_hash="cc1290cd733c1f1d407598e5a31be4a8",
-                #     system_version="4.16.30-vxCUSTOM",
-                # )
-                # await client.connect()
-                # await self.connect.getting_account_data(client)
                 if client is None:
                     logger.error("❌ Не удалось подключиться к Telegram")
-
                 # Получение ссылки
                 links_inviting: list = get_writing_group_links()  # Открываем базу данных
-                await self.app_logger.log_and_display(f"Ссылка для подписки и проверки:  {links_inviting}")
+                await self.app_logger.log_and_display(message=f"Ссылка для подписки и проверки:  {links_inviting}")
                 for link_tuple in links_inviting:
-                    await self.app_logger.log_and_display(f"Ссылка для подписки и проверки:  {link_tuple}")
+                    await self.app_logger.log_and_display(message=f"Ссылка для подписки и проверки:  {link_tuple}")
                     # Проверка ссылок для подписки и подписка на группу или канал
                     logger.info(f"Работа с аккаунтом {session_name}")
                     await self.checking_links(client, link_tuple)
-                # try:
                 await client.disconnect()
-                # except sqlite3.DatabaseError:
-                #     logger.error("❌ Не удалось подписаться на канал / группу, так как файл аккаунта повреждён")
             await self.app_logger.end_time(start)
 
         async def save(_):
@@ -121,7 +104,6 @@ class SubscribeUnsubscribeTelegram:
                                                                       variable="time_subscription"))
                     list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
                     await show_notification(self.page, "Данные успешно записаны!")
-                    # page.go("/settings")  # Изменение маршрута в представлении существующих настроек
                 else:
                     list_view.controls.append(ft.Text("Ошибка: первое время должно быть меньше второго!"))
             except ValueError:
@@ -137,7 +119,7 @@ class SubscribeUnsubscribeTelegram:
         link_entry_field, save_button = await LinkInputRowBuilder().build_link_input_with_save_button(
             on_save_click=save,
             label_text="Введите ссылки для подписки на группы и каналы",
-            width=500
+            width=width_1_input_fields  # Ширина поля ввода и кнопки сохранения
         )
 
         # Два поля ввода для времени и кнопка сохранить
@@ -145,7 +127,7 @@ class SubscribeUnsubscribeTelegram:
             btn_click,
             label_min="Время в секундах (меньшее)",
             label_max="Время в секундах (большее)",
-            width=344
+            width=width_2_input_fields  # Ширина полей ввода и кнопки сохранения
         )
 
         self.page.views.append(
@@ -156,9 +138,8 @@ class SubscribeUnsubscribeTelegram:
                          ft.TextStyle(
                              size=20, weight=ft.FontWeight.BOLD,
                              foreground=ft.Paint(
-                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
-
+                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20),
+                                                                 [ft.Colors.PINK, ft.Colors.PURPLE]))))]),
                      list_view,  # Отображение логов 📝
 
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
@@ -168,8 +149,8 @@ class SubscribeUnsubscribeTelegram:
                                "🔁 затем продолжит подписку на следующую группу.",
                          size=14
                      ),
-                     await TimeInputRowBuilder().compose_time_input_row(smaller_timex, larger_timex,
-                                                                        save_button_time),
+                     await TimeInputRowBuilder().compose_time_input_row(smaller_timex, larger_timex, save_button_time),
+
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
                      ft.Text(
                          value="🔗 Укажите ссылки на группы или каналы для подписки.\n"
@@ -217,33 +198,34 @@ class SubscribeUnsubscribeTelegram:
                     result = await client(functions.messages.CheckChatInviteRequest(hash=link_hash))
                     if isinstance(result, types.ChatInvite):
                         await self.app_logger.log_and_display(
-                            f"Ссылка валидна: {link}, Название группы: {result.title}, "
-                            f"Количество участников: {result.participants_count}, "
-                            f"Мега-группа: {'Да' if result.megagroup else 'Нет'}, Описание: {result.about or 'Нет описания'}")
+                            message=f"Ссылка валидна: {link}, Название группы: {result.title}, "
+                                    f"Количество участников: {result.participants_count}, "
+                                    f"Мега-группа: {'Да' if result.megagroup else 'Нет'}, Описание: {result.about or 'Нет описания'}")
                         try:
                             await self.app_logger.log_and_display(
-                                f"Подписка на группу / канал по ссылке приглашению {link}")
+                                message=f"Подписка на группу / канал по ссылке приглашению {link}")
                             try:
                                 await client(ImportChatInviteRequest(
                                     link_hash))  # Подписка на группу / канал по ссылке приглашению
                             except InviteHashInvalidError:
                                 await self.app_logger.log_and_display(
-                                    translations["ru"]["errors"]["invite_request_sent"])
+                                    message=translations["ru"]["errors"]["invite_request_sent"])
                         except InviteHashExpiredError:
-                            await self.app_logger.log_and_display(translations["ru"]["errors"]["subscribe_error"])
+                            await self.app_logger.log_and_display(
+                                message=translations["ru"]["errors"]["subscribe_error"])
                             try:
                                 await client(ImportChatInviteRequest(
                                     link_hash))  # Подписка на группу / канал по ссылке приглашению
                                 await self.app_logger.log_and_display(
-                                    f"Подписка на группу / канал по ссылке приглашению {link_hash}")
+                                    message=f"Подписка на группу / канал по ссылке приглашению {link_hash}")
                             except InviteHashInvalidError:
                                 await self.app_logger.log_and_display(
-                                    translations["ru"]["errors"]["invite_request_sent"])
+                                    message=translations["ru"]["errors"]["invite_request_sent"])
                     elif isinstance(result, types.ChatInviteAlready):
                         await self.app_logger.log_and_display(
-                            f"Вы уже состоите в группе: {link}, Название группы: {result.chat.title}")
+                            message=f"Вы уже состоите в группе: {link}, Название группы: {result.chat.title}")
                 except FloodWaitError as e:
-                    await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}",
+                    await self.app_logger.log_and_display(message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                                           level="error")
 
             elif link.startswith("https://t.me/"):
@@ -254,17 +236,17 @@ class SubscribeUnsubscribeTelegram:
                     chat = result.chats[0] if result.chats else None
                     if chat:
                         await self.app_logger.log_and_display(
-                            f"Публичная группа/канал: {link}, Название: {chat.title}, "
-                            f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
-                            f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
+                            message=f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                                    f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
+                                    f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
                         logger.info(f"Подписка на группу / канал по ссылке {link}")
                         try:
                             await client(JoinChannelRequest(link))
                         except ChannelsTooMuchError:
                             await self.app_logger.log_and_display(
-                                translations["ru"]["errors"]["user_channels_too_much"])
+                                message=translations["ru"]["errors"]["user_channels_too_much"])
                     else:
-                        await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
+                        await self.app_logger.log_and_display(message=f"Не удалось найти публичный чат: {link}")
                 except UsernameInvalidError:
                     logger.error(f"Неверная ссылка: {link}. Переводим в формат https://t.me/...")
                     parts = link.rstrip("/").split("/")
@@ -273,9 +255,9 @@ class SubscribeUnsubscribeTelegram:
                     chat = result.chats[0] if result.chats else None
                     if chat:
                         await self.app_logger.log_and_display(
-                            f"Публичная группа/канал: {link}, Название: {chat.title}, "
-                            f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
-                            f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
+                            message=f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                                    f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
+                                    f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
                     else:
                         await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
             else:
@@ -284,29 +266,29 @@ class SubscribeUnsubscribeTelegram:
                     result = await client(functions.messages.CheckChatInviteRequest(hash=link))
                     if isinstance(result, types.ChatInvite):
                         await self.app_logger.log_and_display(
-                            f"Ссылка валидна: {link}, Название группы: {result.title}, "
-                            f"Количество участников: {result.participants_count}, "
-                            f"Мега-группа: {'Да' if result.megagroup else 'Нет'}, "
-                            f"Описание: {result.about or 'Нет описания'}")
+                            message=f"Ссылка валидна: {link}, Название группы: {result.title}, "
+                                    f"Количество участников: {result.participants_count}, "
+                                    f"Мега-группа: {'Да' if result.megagroup else 'Нет'}, "
+                                    f"Описание: {result.about or 'Нет описания'}")
                         await client(JoinChannelRequest(link))
                     elif isinstance(result, types.ChatInviteAlready):
                         await self.app_logger.log_and_display(
-                            f"Вы уже состоите в группе: {link}, Название группы: {result.chat.title}")
+                            message=f"Вы уже состоите в группе: {link}, Название группы: {result.chat.title}")
                 except FloodWaitError as e:
-                    await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}",
+                    await self.app_logger.log_and_display(message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                                           level="error")
                 except InviteHashExpiredError:
-                    await self.app_logger.log_and_display(f"Повторная проверка ссылки: {link}")
+                    await self.app_logger.log_and_display(message=f"Повторная проверка ссылки: {link}")
                     try:
                         result = await client(functions.contacts.ResolveUsernameRequest(username=link))
                         chat = result.chats[0] if result.chats else None
                         if chat:
                             await self.app_logger.log_and_display(
-                                f"Публичная группа/канал: {link}, Название: {chat.title}, "
-                                f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
-                                f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
+                                message=f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                                        f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
+                                        f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
                         else:
-                            await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
+                            await self.app_logger.log_and_display(message=f"Не удалось найти публичный чат: {link}")
                     except UsernameInvalidError:
                         logger.error(f"Неверная ссылка: {link}. Переводим в формат https://t.me/...")
                         username = link.split("@")[-1]
@@ -316,64 +298,30 @@ class SubscribeUnsubscribeTelegram:
                         chat = result.chats[0] if result.chats else None
                         if chat:
                             await self.app_logger.log_and_display(
-                                f"Публичная группа/канал: {link}, Название: {chat.title}, "
-                                f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
-                                f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
+                                message=f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                                        f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
+                                        f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
                         else:
-                            await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
+                            await self.app_logger.log_and_display(message=f"Не удалось найти публичный чат: {link}")
 
                 except AuthKeyUnregisteredError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                    await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
                     await asyncio.sleep(2)
                 except SessionPasswordNeededError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["two_factor_required"])
+                    await self.app_logger.log_and_display(message=translations["ru"]["errors"]["two_factor_required"])
                     await asyncio.sleep(2)
 
         except FloodWaitError as e:
-            await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
+            await self.app_logger.log_and_display(message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
+                                                  level="error")
         except InviteRequestSentError:
-            await self.app_logger.log_and_display(translations["ru"]["errors"]["invite_request_sent"])
+            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["invite_request_sent"])
         except AuthKeyUnregisteredError:
-            await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
             await asyncio.sleep(2)
         except SessionPasswordNeededError:
-            await self.app_logger.log_and_display(translations["ru"]["errors"]["two_factor_required"])
+            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["two_factor_required"])
             await asyncio.sleep(2)
-
-    # async def subscribe_telegram(self, page: ft.Page) -> None:
-    #     """
-    #     Подписка на группы / каналы Telegram
-    #
-    #     :param page: Страница интерфейса Flet для отображения элементов управления.
-    #     """
-    #
-    #     # TODO реализовать проверку ссылок перед подпиской, что бы пользователи не подсовывали программе не рабочие
-    #     #  ссылки или ссылки которые не являются группой или каналом
-    #
-    #     async def back_button_clicked(_):
-    #         """
-    #         ⬅️ Обрабатывает нажатие кнопки "Назад", возвращая в меню подписки на группы / каналы Telegram.
-    #         """
-    #         page.go("/subscribe_unsubscribe")  # Переходим к основному меню подписки на группы / каналы Telegram. 🏠
-    #
-    #     # Добавляем кнопки и другие элементы управления на страницу
-    #     page.views.append(
-    #         ft.View(
-    #             "/subscription_all",
-    #             [
-    #                 ft.Text(value="Подписка на группы / каналы Telegram"),  # Выбор группы для инвайтинга
-    #                 list_view,  # Отображение логов 📝
-    #                 ft.Column(),  # Резерв для приветствия или других элементов интерфейса
-    #                 # ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT, text="🚀 Начать подписку",
-    #                 #                   on_click=add_items),  # Кнопка "🚀 Начать подписку"
-    #                 ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-    #                                   text=translations["ru"]["buttons"]["back"],
-    #                                   on_click=back_button_clicked)  # Кнопка "⬅️ Назад"
-    #             ],
-    #         )
-    #     )
-    #
-    #     page.update()  # обновляем страницу после добавления элементов управления 🔄
 
     async def unsubscribe_from_the_group(self, client, group_link) -> None:
         """
@@ -387,22 +335,18 @@ class SubscribeUnsubscribeTelegram:
             entity = await client.get_entity(group_link)
             if entity:
                 await client(LeaveChannelRequest(entity))
-            # await client.disconnect()  # Разрываем соединение с Telegram
+
         except ChannelPrivateError:  # Аккаунт Telegram не может отписаться так как не имеет доступа
-            await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
+            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["channel_private"])
         except UserNotParticipantError:
-            await self.app_logger.log_and_display(translations["ru"]["errors"]["unsubscribe_not_member"])
+            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["unsubscribe_not_member"])
         except SessionRevokedError:
-            await self.app_logger.log_and_display(translations["ru"]["errors"]["invalid_auth_session_terminated"])
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["invalid_auth_session_terminated"])
         except sqlite3.DatabaseError:
             await self.app_logger.log_and_display(
-                f"❌ Попытка подписки на группу / канал {group_link}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")
+                message=f"❌ Попытка подписки на группу / канал {group_link}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")
         except ConnectionError:
-            await self.app_logger.log_and_display("Ошибка соединения с Telegram")
-        # except Exception as error:
-        #     logger.exception(error)
-
-        # finally:
-        #     await client.disconnect()  # Разрываем соединение с Telegram
+            await self.app_logger.log_and_display(message="Ошибка соединения с Telegram")
 
 # 409

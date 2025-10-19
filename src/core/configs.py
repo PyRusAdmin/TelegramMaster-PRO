@@ -161,3 +161,9 @@ TIME_ACTIVITY_USER_2 = ConfigReader().time_activity_user_2()
 TIME_SENDING_MESSAGES_1, time_sending_messages_2 = ConfigReader().get_time_inviting()  # Время между сообщениями
 TIME_INVITING_1, TIME_INVITING_2 = ConfigReader().get_time_inviting()  # Время между инвайтингом, рассылка сообщений
 time_subscription_1, time_subscription_2 = ConfigReader().get_time_subscription()
+
+"""Настройки внешнего вида программы"""
+# Размер 2-х полей ввода и кнопки «Сохранить» справа.
+width_2_input_fields = int(460)
+# Размер 1 поля ввода и кнопки «Сохранить» справа.
+width_1_input_fields = int(width_2_input_fields * 2 +15)
