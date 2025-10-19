@@ -8,20 +8,18 @@ from telethon import functions, types
 from telethon.errors import (AuthKeyUnregisteredError, ChannelPrivateError, ChannelsTooMuchError, FloodWaitError,
                              InviteHashExpiredError, InviteHashInvalidError, InviteRequestSentError,
                              SessionPasswordNeededError, SessionRevokedError, UserNotParticipantError)
-from telethon.sessions import StringSession
-from telethon.sync import TelegramClient
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
 from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1,
                               time_subscription_2)
-from src.core.sqlite_working_tools import get_writing_group_links, write_writing_group_links_to_db
+from src.core.sqlite_working_tools import get_writing_group_links, write_writing_group_links_to_db, getting_account
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.gui.gui_elements import GUIProgram
-from src.gui.gui_input_builders import LinkInputRowBuilder, TimeInputRowBuilder
 from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger, list_view
+from src.gui.gui_elements import GUIProgram
+from src.gui.gui_input_builders import LinkInputRowBuilder, TimeInputRowBuilder
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
@@ -35,6 +33,7 @@ class SubscribeUnsubscribeTelegram:
         self.utils = Utils(page=page)
         self.setting_page = SettingPage(page=page)
         self.gui_program = GUIProgram()
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def subscribe_and_unsubscribe_menu(self):
         """
@@ -49,9 +48,11 @@ class SubscribeUnsubscribeTelegram:
             """
             start = await self.app_logger.start_time()
             try:
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-
-                    client = await self.connect.client_connect_string_session(session_name)
+                # session_string = getting_account()
+                for session_name in self.session_string:
+                    client = await self.connect.connect_string_session(session_name=session_name)
+                    # for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                    # client = await self.connect.client_connect_string_session(session_name)
                     await self.connect.getting_account_data(client)
 
                     dialogs = client.iter_dialogs()
@@ -67,20 +68,21 @@ class SubscribeUnsubscribeTelegram:
         async def add_items(_):
             """Подписываемся на группы и каналы"""
             start = await self.app_logger.start_time()
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
-                session_string = await self.connect.get_string_session(session_name)
+            for session_name in self.session_string:
+                client = await self.connect.connect_string_session(session_name=session_name)
+                # session_string = await self.connect.get_string_session(session_name)
                 # Создаем клиент, используя StringSession и вашу строку
-                client = TelegramClient(
-                    StringSession(session_string),  # <-- Используем StringSession
-                    api_id=7655060,
-                    api_hash="cc1290cd733c1f1d407598e5a31be4a8",
-                    system_version="4.16.30-vxCUSTOM",
-                )
-                await client.connect()
-                await self.connect.getting_account_data(client)
-
+                # client = TelegramClient(
+                #     StringSession(session_string),  # <-- Используем StringSession
+                #     api_id=7655060,
+                #     api_hash="cc1290cd733c1f1d407598e5a31be4a8",
+                #     system_version="4.16.30-vxCUSTOM",
+                # )
+                # await client.connect()
+                # await self.connect.getting_account_data(client)
                 if client is None:
                     logger.error("❌ Не удалось подключиться к Telegram")
+
                 # Получение ссылки
                 links_inviting: list = get_writing_group_links()  # Открываем базу данных
                 await self.app_logger.log_and_display(f"Ссылка для подписки и проверки:  {links_inviting}")
@@ -89,10 +91,10 @@ class SubscribeUnsubscribeTelegram:
                     # Проверка ссылок для подписки и подписка на группу или канал
                     logger.info(f"Работа с аккаунтом {session_name}")
                     await self.checking_links(client, link_tuple)
-                try:
-                    await client.disconnect()
-                except sqlite3.DatabaseError:
-                    logger.error("❌ Не удалось подписаться на канал / группу, так как файл аккаунта повреждён")
+                # try:
+                await client.disconnect()
+                # except sqlite3.DatabaseError:
+                #     logger.error("❌ Не удалось подписаться на канал / группу, так как файл аккаунта повреждён")
             await self.app_logger.end_time(start)
 
         async def save(_):
@@ -131,9 +133,12 @@ class SubscribeUnsubscribeTelegram:
             ft.Text(f"Записанные данные в файле {time_range_message}"))  # отображаем сообщение в ListView
 
         # Поле ввода ссылок и кнопка сохранения для подписки
-        link_entry_field, save_button = await LinkInputRowBuilder().build_link_input_with_save_button(save,
-                                                                                                      "Введите ссылки для подписки на группы и каналы",
-                                                                                                      width=500)
+        link_entry_field, save_button = await LinkInputRowBuilder().build_link_input_with_save_button(
+            on_save_click=save,
+            label_text="Введите ссылки для подписки на группы и каналы",
+            width=500
+        )
+
         # Два поля ввода для времени и кнопка сохранить
         smaller_timex, larger_timex, save_button_time = await TimeInputRowBuilder().build_time_inputs_with_save_button(
             btn_click,
