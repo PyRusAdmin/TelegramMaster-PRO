@@ -7,7 +7,8 @@ from loguru import logger
 from telethon import functions, types
 from telethon.errors import (AuthKeyUnregisteredError, ChannelPrivateError, ChannelsTooMuchError, FloodWaitError,
                              InviteHashExpiredError, InviteHashInvalidError, InviteRequestSentError,
-                             SessionPasswordNeededError, SessionRevokedError, UserNotParticipantError)
+                             SessionPasswordNeededError, SessionRevokedError, UserNotParticipantError,
+                             UsernameInvalidError)
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
@@ -248,21 +249,35 @@ class SubscribeUnsubscribeTelegram:
             elif link.startswith("https://t.me/"):
                 # Извлекаем имя пользователя или группы
                 username = link.split("/")[-1]
-
-                result = await client(functions.contacts.ResolveUsernameRequest(username=username))
-                chat = result.chats[0] if result.chats else None
-                if chat:
-                    await self.app_logger.log_and_display(f"Публичная группа/канал: {link}, Название: {chat.title}, "
-                                                          f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
-                                                          f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
-                    logger.info(f"Подписка на группу / канал по ссылке {link}")
-                    try:
-                        await client(JoinChannelRequest(link))
-                    except ChannelsTooMuchError:
-                        await self.app_logger.log_and_display(translations["ru"]["errors"]["user_channels_too_much"])
-                else:
-                    await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
-
+                try:
+                    result = await client(functions.contacts.ResolveUsernameRequest(username=username))
+                    chat = result.chats[0] if result.chats else None
+                    if chat:
+                        await self.app_logger.log_and_display(
+                            f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                            f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
+                            f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
+                        logger.info(f"Подписка на группу / канал по ссылке {link}")
+                        try:
+                            await client(JoinChannelRequest(link))
+                        except ChannelsTooMuchError:
+                            await self.app_logger.log_and_display(
+                                translations["ru"]["errors"]["user_channels_too_much"])
+                    else:
+                        await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
+                except UsernameInvalidError:
+                    logger.error(f"Неверная ссылка: {link}. Переводим в формат https://t.me/...")
+                    parts = link.rstrip("/").split("/")
+                    link = parts[-2] if len(parts) >= 2 else None
+                    result = await client(functions.contacts.ResolveUsernameRequest(username=link))
+                    chat = result.chats[0] if result.chats else None
+                    if chat:
+                        await self.app_logger.log_and_display(
+                            f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                            f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
+                            f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
+                    else:
+                        await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
             else:
                 # Считаем, что это просто хэш
                 try:
@@ -282,15 +297,30 @@ class SubscribeUnsubscribeTelegram:
                                                           level="error")
                 except InviteHashExpiredError:
                     await self.app_logger.log_and_display(f"Повторная проверка ссылки: {link}")
-                    result = await client(functions.contacts.ResolveUsernameRequest(username=link))
-                    chat = result.chats[0] if result.chats else None
-                    if chat:
-                        await self.app_logger.log_and_display(
-                            f"Публичная группа/канал: {link}, Название: {chat.title}, "
-                            f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
-                            f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
-                    else:
-                        await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
+                    try:
+                        result = await client(functions.contacts.ResolveUsernameRequest(username=link))
+                        chat = result.chats[0] if result.chats else None
+                        if chat:
+                            await self.app_logger.log_and_display(
+                                f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                                f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
+                                f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
+                        else:
+                            await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
+                    except UsernameInvalidError:
+                        logger.error(f"Неверная ссылка: {link}. Переводим в формат https://t.me/...")
+                        username = link.split("@")[-1]
+                        # link = f"https://t.me/{username}"
+                        logger.info(f"Ссылка после перевода: {username}")
+                        result = await client(functions.contacts.ResolveUsernameRequest(username=username))
+                        chat = result.chats[0] if result.chats else None
+                        if chat:
+                            await self.app_logger.log_and_display(
+                                f"Публичная группа/канал: {link}, Название: {chat.title}, "
+                                f"Количество участников: {chat.participants_count if hasattr(chat, 'participants_count') else 'Неизвестно'}, "
+                                f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
+                        else:
+                            await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
 
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
