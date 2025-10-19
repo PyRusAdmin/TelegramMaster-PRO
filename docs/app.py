@@ -36,10 +36,15 @@ async def index(request: Request):
 async def menu(request: Request):
     """Меню программы"""
     logger.info("Запущено меню программы")
-    return templates.TemplateResponse("menu.html", {"request": request,
-                                                    "program_name": PROGRAM_NAME,
-                                                    "program_version": PROGRAM_VERSION,
-                                                    "update_date": DATE_OF_PROGRAM_CHANGE})
+    return templates.TemplateResponse(
+        "menu.html", {
+            "request": request,
+            "program_name": PROGRAM_NAME,
+            "program_version": PROGRAM_VERSION,
+            "update_date": DATE_OF_PROGRAM_CHANGE,
+            "subscribe_unsubscribe": translations["ru"]["menu"]["subscribe_unsubscribe"],
+        }
+    )
 
 
 @app.get(path="/inviting", response_class=HTMLResponse)
@@ -395,10 +400,16 @@ async def parsing(request: Request):
 async def subscribe_unsubscribe(request: Request):
     """Подписка, отписка"""
     logger.info("Запущена страница подписки, отписки")
-    return templates.TemplateResponse('subscribe_unsubscribe.html',
-                                      {"request": request, "program_name": PROGRAM_NAME,
-                                       "subscription": translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
-                                       "unsubscribe": translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"]})
+    return templates.TemplateResponse(
+        'subscribe_unsubscribe.html',
+        {
+            "request": request,
+            "program_name": PROGRAM_NAME,
+            "subscription": translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
+            "unsubscribe": translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"],
+            "subscribe_unsubscribe": translations["ru"]["menu"]["subscribe_unsubscribe"],
+        }
+    )
 
 
 @app.get(path='/connect_accounts', response_class=HTMLResponse)
