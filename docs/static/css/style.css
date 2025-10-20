@@ -55,3 +55,59 @@ h1, h2 {
     text-align: center;
     color: #00A6ED; /* Измените на желаемый цвет */
 }
+
+/* Список */
+
+ol {
+    list-style-type: none;
+    counter-reset: num;
+    position: relative;
+    margin: 0 0 0 60px;
+    padding: 15px 0 5px 0;
+    font-size: 16px;
+}
+ol li {
+    position: relative;
+    margin: 0 0 0 0;
+    padding: 0 0 10px 0;
+    line-height: 1.4;
+}
+ol li:after {
+    content: counter(num);
+    counter-increment: num;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: -45px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    background: #fff;
+    color: #000;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 50%;
+    border: 1px solid #ef6780;
+}
+
+/* Вертикальная линия */
+ol:before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    bottom: 15px;
+    left: -30px;
+    width: 1px;
+    border-left: 1px solid #ef6780;
+}
+/* Скрытие линии у последнего li */
+ol li:last-child:before {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -38px;
+    width: 28px;
+    background: #fff;
+}
