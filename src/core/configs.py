@@ -51,18 +51,6 @@ class ConfigReader:
         """
         return self.config_gui.get('height_button', 'height_button', fallback=None)
 
-    def get_small_button_width(self) -> str | None:
-        """
-        Получение ширины мало малой кнопки
-        """
-        return self.config_gui.get('small_button_width', 'small_button_width', fallback=None)
-
-    def line_width(self) -> str | None:
-        """
-        Ширина окна и ширина строки
-        """
-        return self.config_gui.get('line_width', 'line_width', fallback=None)
-
     def program_name(self) -> str | None:
         """
         Имя программы
@@ -132,8 +120,6 @@ class ConfigReader:
 """Размеры кнопок WIDTH_WIDE_BUTTON - Ширина широкой кнопки"""
 WIDTH_WIDE_BUTTON = config_gui.get('line_width_button', 'line_width_button', fallback=None)  # Ширина кнопки
 BUTTON_HEIGHT = ConfigReader().get_line_height_button()  # Получение ширины кнопки
-SMALL_BUTTON_WIDTH = ConfigReader().get_small_button_width()  # Ширина малой кнопки
-BUTTON_WIDTH = ConfigReader().line_width()  # Ширина окна и ширина строки
 
 WIDTH_INPUT_FIELD_AND_BUTTON = int(WIDTH_WIDE_BUTTON) / 2 - 5  # Ширина кнопки (окно и поле ввода)
 
@@ -154,7 +140,6 @@ path_folder_with_messages = ConfigReader().path_folder_with_messages()  # Пут
 path_folder_database = ConfigReader().path_folder_database()  # Путь к папке с базой данных
 
 """Настройки времени, лимитов и прочего"""
-# LIMITS = ConfigReader().get_limits()  # Лимиты
 TIME_ACTIVITY_USER_2 = ConfigReader().time_activity_user_2()
 TIME_SENDING_MESSAGES_1, time_sending_messages_2 = ConfigReader().get_time_inviting()  # Время между сообщениями
 time_subscription_1, time_subscription_2 = ConfigReader().get_time_subscription()
