@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import flet as ft
 
-from src.core.configs import LIMITS
 from src.core.sqlite_working_tools import select_records_with_limit
 from src.core.utils import Utils
 from src.gui.notification import show_notification
