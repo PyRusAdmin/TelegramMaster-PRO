@@ -149,3 +149,6 @@ time_subscription_1, time_subscription_2 = ConfigReader().get_time_subscription(
 width_2_input_fields = int(460)
 # Размер 1 поля ввода и кнопки «Сохранить» справа.
 width_1_input_fields = int(width_2_input_fields * 2 + 15)
+
+width_one_input = 500  # 2 поля ввода (без кнопки сохранить)
+width_tvo_input = 245  # 4 поля ввода (без кнопки сохранить)
