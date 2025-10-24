@@ -53,9 +53,6 @@ class InvitingToAGroup:
         self.config_reader = ConfigReader()
         self.hour, self.minutes = self.config_reader.get_hour_minutes_every_day()
         self.scheduler = Scheduler()  # Создаем экземпляр планировщика
-        self.api_id_api_hash = self.config_reader.get_api_id_data_api_hash_data()
-        self.api_id = self.api_id_api_hash[0]
-        self.api_hash = self.api_id_api_hash[1]
         self.links_inviting = get_links_inviting()  # Получаем список ссылок на группы для инвайтинга из базы данных
         self.app_logger = AppLogger(page=page)
         self.connect = TGConnect(page=page)
@@ -232,10 +229,6 @@ class InvitingToAGroup:
             """Записывает время между сном во время ивайтинга"""
             await self.setting_page.create_main_window(variable="time_inviting", smaller_timex=smaller_timex,
                                                        larger_timex=larger_timex)
-
-        async def write_limit_account_inviting(_):
-            """Записывает лимит на аккаунт для инвайтинга"""
-            await self.setting_page.record_setting(limit_type="account_limits", limits=limits)
 
         async def start_inviting_grup(_):
             """
