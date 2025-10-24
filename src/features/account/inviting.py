@@ -29,6 +29,8 @@ from src.gui.gui import list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
+width_one_input = 490  # 2 поля ввода (без кнопки сохранить)
+
 
 def get_limit(limits):
     """
@@ -62,6 +64,7 @@ class InvitingToAGroup:
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram()
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
+        self.subscribe_unsubscribe_telegram = SubscribeUnsubscribeTelegram(page=page)
 
     async def inviting_menu(self):
         """
@@ -79,59 +82,95 @@ class InvitingToAGroup:
             )
         )
 
+        async def get_invitation_links():
+            """
+            Получает ссылки для инвайтинга: сначала пытается взять из поля ввода,
+            если оно пустое — использует значение из выпадающего списка.
+            """
+            input_links = link_entry_field.value.strip()
+            if input_links:
+                links = input_links.split()
+                logger.info(f"Пользователь ввёл ссылки: {links}")
+                # Сохраняем в БД
+                data_to_save = {"links_inviting": links}
+                save_links_inviting(data=data_to_save)
+                logger.success(f"Сохранено в базу данных: {data_to_save}")
+                await self.app_logger.log_and_display(message="✅ Ссылки успешно сохранены.")
+                return links[0]
+            else:
+                # Берём из dropdown, если ввод пуст
+                links = dropdown.value
+                if not links:
+                    logger.warning("Не указаны ссылки для инвайтинга.")
+                    await self.app_logger.log_and_display(
+                        message="⚠️ Не указаны ссылки для инвайтинга.", level="warning"
+                    )
+                    return None
+                if isinstance(links, str):
+                    links = [links]  # Приводим к списку, если нужно
+                logger.info(f"Используем ссылки из dropdown: {links}")
+                return links[0]
+
         async def general_invitation_to_the_group(_):
             """
-            Основной метод для инвайтинга
+            Основной метод для выполнения инвайтинга пользователей в указанные группы.
             """
+
+            links = await get_invitation_links()
+            if not links:
+                return  # Нет ссылок — завершаем выполнение
+
             start = await self.app_logger.start_time()
             self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
+
+            limit = get_limit(limits)  # Получаем лимит введенный пользователем
+
+            usernames = select_records_with_limit(limit=limit)
+            logger.info(f"Список usernames: {usernames}\n\nЛимит на аккаунт {limit}")
+
+            if not usernames:
+                await self.app_logger.log_and_display(
+                    message="В таблице members нет пользователей для инвайтинга."
+                )
+                await show_notification(page=self.page, message="🔚 Нет пользователей для инвайтинга")
+                self.page.go("/inviting")
+                return
 
             for session_name in self.session_string:
                 client = await self.connect.client_connect_string_session(session_name)
                 await self.connect.getting_account_data(client)
 
-                await self.subscribe.subscribe_to_group_or_channel(client=client, groups=dropdown.value)
-                logger.info(f"Подписка на группу {dropdown.value} выполнена")
-                await self.app_logger.log_and_display(message=f"{dropdown.value}")
+                # Подписываемся на группы
+                await self.subscribe.subscribe_to_group_or_channel(client=client, groups=links)
+                await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {links}")
 
-                usernames = select_records_with_limit(limit=get_limit(limits))
-                logger.info(f"Список usernames: {usernames}\n\nЛимит на аккаунт {get_limit(limits)}")
                 if len(usernames) == 0:
                     await self.app_logger.log_and_display(message=f"В таблице members нет пользователей для инвайтинга")
-                    await SubscribeUnsubscribeTelegram(self.page).unsubscribe_from_the_group(client, dropdown.value)
+                    await self.subscribe_unsubscribe_telegram.unsubscribe_from_the_group(client, links)
                     break  # Прерываем работу и меняем аккаунт
+
                 for username in usernames:
-                    logger.info(f"Пользователь: {username}")
+                    logger.info(f"Приглашение пользователя: {username}")
                     await self.app_logger.log_and_display(message=f"Пользователь username: {username}")
                     # Инвайтинг в группу по полученному списку
                     try:
-                        await self.add_user_test(client, dropdown.value, username)
+                        await self.add_user_test(
+                            client=client,
+                            username_group=links,
+                            username=username
+                        )
                     except KeyboardInterrupt:  # Закрытие окна программы
                         await self.app_logger.log_and_display(message=translations["ru"]["errors"]["script_stopped"],
                                                               level="error")
-                await SubscribeUnsubscribeTelegram(self.page).unsubscribe_from_the_group(client, dropdown.value)
+                await self.subscribe_unsubscribe_telegram.unsubscribe_from_the_group(
+                    client=client,
+                    group_link=links
+                )
                 await self.app_logger.log_and_display(message=f"[!] Инвайтинг окончен!")
-            await self.app_logger.end_time(start)
-            await show_notification(self.page, "🔚 Конец инвайтинга")  # Выводим уведомление пользователю
+
+            await self.app_logger.end_time(start=start)
+            await show_notification(page=self.page, message="🔚 Конец инвайтинга")  # Выводим уведомление пользователю
             self.page.go("/inviting")  # переходим к основному меню инвайтинга 🏠
-
-        async def save(_):
-            """Запись ссылки для инвайтинга в базу данных"""
-            links = link_entry_field.value.strip().split()
-
-            logger.info(f"Пользователь ввел ссылку(и): {links}")
-            data_to_save = {
-                "links_inviting": links,
-            }
-            save_links_inviting(data=data_to_save)
-            logger.success(f"Сохранено в базу данных: {data_to_save}")
-            await self.app_logger.log_and_display(message="✅ Ссылки успешно сохранены.")
-
-            # 🔄 Обновляем список в выпадающем списке
-            updated_links = get_links_inviting()
-            dropdown.options = [ft.dropdown.Option(link) for link in updated_links]
-            dropdown.value = links[0] if links else None  # Автоматически выбрать первую новую ссылку (если нужно)
-            self.page.update()  # Обновляем интерфейс
 
         async def launching_an_invite_once_an_hour(_):
             """
@@ -202,7 +241,6 @@ class InvitingToAGroup:
             """
             ⚙️ Метод для запуска инвайтинга
             """
-
             if inviting_switch.value:  # Инвайтинг
                 await general_invitation_to_the_group(_)
             if inviting_1_time_per_hour_switch.value:
@@ -217,7 +255,6 @@ class InvitingToAGroup:
                                options=[ft.DropdownOption(link) for link in self.links_inviting],
                                autofocus=True)
         width_tvo_input = 215
-        width_one_input = 440
 
         # Два поля ввода для времени и кнопка сохранить
         smaller_timex, larger_timex, save_button_timex = await TimeInputRowBuilder().build_time_inputs_with_save_button(
@@ -234,15 +271,20 @@ class InvitingToAGroup:
             width=width_tvo_input
         )
 
-        # Поле ввода, для ссылок для инвайтинга
-        limits, save_button_limit = await LinkInputRowBuilder().build_link_input_with_save_button(
-            on_save_click=write_limit_account_inviting,
-            label_text="Введите лимит на аккаунт", width=width_one_input)
+        """
+        Пользователь вводит лимит на аккаунт и вводит ссылку для инвайтинга, нечего сохранять не нужно, что бы не 
+        усложнять проект.
+        """
 
-        link_entry_field, save_button = await LinkInputRowBuilder().build_link_input_with_save_button(
-            on_save_click=save,
+        # Поле ввода, для ссылок для инвайтинга
+        limits = await LinkInputRowBuilder().build_link_input_with_save_button(
+            label_text="Введите лимит на аккаунт",
+            width=width_one_input
+        )
+        link_entry_field = await LinkInputRowBuilder().build_link_input_with_save_button(
             label_text="Введите ссылку на группу для инвайтинга",
-            width=width_one_input)
+            width=width_one_input
+        )
 
         # Кнопки-переключатели
         inviting_switch = ft.CupertinoSwitch(label=translations["ru"]["inviting_menu"]["inviting"], value=False,
@@ -292,10 +334,13 @@ class InvitingToAGroup:
 
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
 
-                     ft.Row([await LinkInputRowBuilder().compose_link_input_row(link_input=limits,
-                                                                                save_button=save_button_limit),
-                             await LinkInputRowBuilder().compose_link_input_row(link_input=link_entry_field,
-                                                                                save_button=save_button), ]),
+                     ft.Row([await LinkInputRowBuilder().compose_link_input_row(
+                         link_input=limits,
+                     ),
+                             await LinkInputRowBuilder().compose_link_input_row(
+                                 link_input=link_entry_field,
+                             ),
+                             ]),
 
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
                      ft.Text(value="📂 Выберите группу для инвайтинга"),  # Выбор группы для инвайтинга
