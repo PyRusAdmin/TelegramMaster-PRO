@@ -80,25 +80,24 @@ class InvitingToAGroup:
             input_links = link_entry_field.value.strip()
             if input_links:
                 links = input_links.split()
-                logger.info(f"Пользователь ввёл ссылки: {links}")
+                await self.app_logger.log_and_display(message=f"Пользователь ввёл ссылки: {links}")
                 # Сохраняем в БД
                 data_to_save = {"links_inviting": links}
                 save_links_inviting(data=data_to_save)
-                logger.success(f"Сохранено в базу данных: {data_to_save}")
+                await self.app_logger.log_and_display(message=f"Сохранено в базу данных: {data_to_save}")
                 await self.app_logger.log_and_display(message="✅ Ссылки успешно сохранены.")
                 return links[0]
             else:
                 # Берём из dropdown, если ввод пуст
                 links = dropdown.value
                 if not links:
-                    logger.warning("Не указаны ссылки для инвайтинга.")
                     await self.app_logger.log_and_display(
                         message="⚠️ Не указаны ссылки для инвайтинга.", level="warning"
                     )
                     return None
                 if isinstance(links, str):
                     links = [links]  # Приводим к списку, если нужно
-                logger.info(f"Используем ссылки из dropdown: {links}")
+                await self.app_logger.log_and_display(message=f"Используем ссылки из dropdown: {links}")
                 return links[0]
 
         async def general_invitation_to_the_group(_):
@@ -128,7 +127,7 @@ class InvitingToAGroup:
             limit = get_limit(limits)  # Получаем лимит введенный пользователем
 
             usernames = select_records_with_limit(limit=limit)
-            logger.info(f"Список usernames: {usernames}\n\nЛимит на аккаунт {limit}")
+            await self.app_logger.log_and_display(message=f"Список usernames: {usernames}\n\nЛимит на аккаунт {limit}")
 
             if not usernames:
                 await self.app_logger.log_and_display(
@@ -152,8 +151,7 @@ class InvitingToAGroup:
                     break  # Прерываем работу и меняем аккаунт
 
                 for username in usernames:
-                    logger.info(f"Приглашение пользователя: {username}")
-                    await self.app_logger.log_and_display(message=f"Пользователь username: {username}")
+                    await self.app_logger.log_and_display(message=f"Приглашение пользователя: {username}")
                     # Инвайтинг в группу по полученному списку
 
                     try:
