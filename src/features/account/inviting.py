@@ -50,13 +50,11 @@ class InvitingToAGroup:
 
     def __init__(self, page: ft.Page):
         self.page = page
-        self.config_reader = ConfigReader()
         self.scheduler = Scheduler()  # Создаем экземпляр планировщика
         self.links_inviting = get_links_inviting()  # Получаем список ссылок на группы для инвайтинга из базы данных
         self.app_logger = AppLogger(page=page)
         self.connect = TGConnect(page=page)
         self.utils = Utils(page=page)
-        self.setting_page = SettingPage(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram()
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
