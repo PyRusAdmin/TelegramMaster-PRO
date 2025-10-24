@@ -13,7 +13,7 @@ from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, Sessio
                              FloodWaitError, AuthKeyUnregisteredError, PeerFloodError)
 from telethon.tl.functions.channels import InviteToChannelRequest
 
-from src.core.configs import (BUTTON_HEIGHT, ConfigReader, LIMITS, WIDTH_WIDE_BUTTON, TIME_INVITING_1, TIME_INVITING_2)
+from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON, TIME_INVITING_1, TIME_INVITING_2)
 from src.core.sqlite_working_tools import (select_records_with_limit, get_links_inviting, save_links_inviting,
                                            getting_account)
 from src.core.utils import Utils
@@ -28,6 +28,20 @@ from src.gui.gui import AppLogger
 from src.gui.gui import list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
+
+
+def get_limit(limits):
+    """
+    Извлекает и преобразует пользовательский ввод лимита в целое число.
+
+    :param limits: Объект, содержащий поле `value` с введённым пользователем значением.
+    :return LIMITS: Целое число — установленный лимит, если значение предоставлено и не пустое; иначе — None.
+    """
+    if limits.value:
+        limits = int(limits.value)  # Преобразуем в число, если значение есть
+    else:
+        limits = None  # Оставляем LIMITS без изменений
+    return limits
 
 
 class InvitingToAGroup:
@@ -58,9 +72,12 @@ class InvitingToAGroup:
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
         # Отображение информации о настройках инвайтинга
-        await self.app_logger.log_and_display(message=f"Лимит на аккаунт: {LIMITS}\n"
-                                                      f"Всего usernames: {len(select_records_with_limit(limit=None))}\n"
-                                                      f"Всего подключенных аккаунтов: {len(self.session_string)}\n")
+        await self.app_logger.log_and_display(
+            message=(
+                f"Всего usernames: {len(select_records_with_limit(limit=None))}\n"
+                f"Всего подключенных аккаунтов: {len(self.session_string)}\n"
+            )
+        )
 
         async def general_invitation_to_the_group(_):
             """
@@ -77,13 +94,8 @@ class InvitingToAGroup:
                 logger.info(f"Подписка на группу {dropdown.value} выполнена")
                 await self.app_logger.log_and_display(message=f"{dropdown.value}")
 
-                if limits.value:
-                    LIMITS = int(limits.value)  # Преобразуем в число, если значение есть
-                else:
-                    pass  # Оставляем LIMITS без изменений
-
-                usernames = select_records_with_limit(limit=LIMITS)
-                logger.info(f"Список usernames: {usernames}")
+                usernames = select_records_with_limit(limit=get_limit(limits))
+                logger.info(f"Список usernames: {usernames}\n\nЛимит на аккаунт {get_limit(limits)}")
                 if len(usernames) == 0:
                     await self.app_logger.log_and_display(message=f"В таблице members нет пользователей для инвайтинга")
                     await SubscribeUnsubscribeTelegram(self.page).unsubscribe_from_the_group(client, dropdown.value)

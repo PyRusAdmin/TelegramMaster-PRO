@@ -223,14 +223,7 @@ class TGConnect:
         """Получаем данные аккаунта"""
         await client.connect()
         me = await client.get_me()
-
-        # first_name = me.first_name or ""
-        # last_name = me.last_name or ""
-        # username = me.username or ""
-        phone = await me.phone or ""
-        # logger.info(f"🧾 Аккаунт: {first_name} {last_name} | @{username} | ID: {me.id} | Phone: {phone}")
-        # await self.app_logger.log_and_display(message=f"🧾 Аккаунт: {first_name} {last_name} | @{username} | ID: {me.id} | Phone: {phone}")
-
+        phone = me.phone or ""
         logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
         await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
 
@@ -239,9 +232,8 @@ class TGConnect:
         Подключение к Telegram аккаунту через StringSession
         :param session_name: Имя аккаунта для подключения (файл .session)
         """
-        session_string = await self.get_string_session(session_name)
         # Создаем клиент, используя StringSession и вашу строку
-        client = TelegramClient(StringSession(session_string), api_id=self.api_id, api_hash=self.api_hash,
+        client = TelegramClient(StringSession(session_name), api_id=self.api_id, api_hash=self.api_hash,
                                 system_version="4.16.30-vxCUSTOM")
         await client.connect()
 
