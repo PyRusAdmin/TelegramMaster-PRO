@@ -24,12 +24,12 @@ from src.gui.gui_input_builders import TimeInputRowBuilder, LinkInputRowBuilder
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.features.settings.setting import SettingPage
-from src.gui.gui import AppLogger
-from src.gui.gui import list_view
+from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
-width_one_input = 490  # 2 поля ввода (без кнопки сохранить)
+width_one_input = 500  # 2 поля ввода (без кнопки сохранить)
+width_tvo_input = 245
 
 
 def get_limit(limits):
@@ -247,18 +247,19 @@ class InvitingToAGroup:
         dropdown = ft.Dropdown(width=WIDTH_WIDE_BUTTON,
                                options=[ft.DropdownOption(link) for link in self.links_inviting],
                                autofocus=True)
-        width_tvo_input = 215
+
+        """
+        Пользователь вводит время задержки между инвайтингом (приглашениями в группу)
+        """
 
         # Два поля ввода для времени и кнопка сохранить
-        smaller_timex, larger_timex, save_button_timex = await TimeInputRowBuilder().build_time_inputs_with_save_button(
-            on_save_click=write_limit_account_inviting_timex,
+        smaller_timex, larger_timex = await TimeInputRowBuilder().build_time_inputs_with_save_button(
             label_min="Мин. задержка (сек)",
             label_max="Макс. задержка (сек)",
             width=width_tvo_input
         )
         # Два поля ввода для времени и кнопка сохранить
-        hour_textfield, minutes_textfield, save_button_time = await TimeInputRowBuilder().build_time_inputs_with_save_button(
-            on_save_click=write_tame_start_inviting,
+        hour_textfield, minutes_textfield = await TimeInputRowBuilder().build_time_inputs_with_save_button(
             label_min="Час запуска (0–23)",
             label_max="Минуты (0–59)",
             width=width_tvo_input
@@ -318,12 +319,12 @@ class InvitingToAGroup:
                                                                                                   ft.Colors.PURPLE])), ), ), ], ),
                      list_view,  # Отображение логов 📝
 
-                     ft.Row([await TimeInputRowBuilder().compose_time_input_row(min_time_input=smaller_timex,
-                                                                                max_time_input=larger_timex,
-                                                                                save_button=save_button_timex),
+                     ft.Row([await TimeInputRowBuilder().compose_time_input_row(
+                         min_time_input=smaller_timex,
+                         max_time_input=larger_timex,
+                     ),
                              await TimeInputRowBuilder().compose_time_input_row(min_time_input=hour_textfield,
-                                                                                max_time_input=minutes_textfield,
-                                                                                save_button=save_button_time)]),
+                                                                                max_time_input=minutes_textfield)]),
 
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
 
