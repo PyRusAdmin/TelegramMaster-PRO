@@ -68,8 +68,8 @@ class InvitingToAGroup:
             """
             start = await self.app_logger.start_time()
             self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
 
+            for session_name in self.session_string:
                 client = await self.connect.client_connect_string_session(session_name)
                 await self.connect.getting_account_data(client)
 
