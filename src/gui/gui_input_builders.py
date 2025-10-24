@@ -6,13 +6,12 @@ import flet as ft  # Импортируем библиотеку flet
 
 class TimeInputRowBuilder:
 
-    async def build_time_inputs_with_save_button(self, on_save_click, label_min, label_max, width):
+    async def build_time_inputs_with_save_button(self, label_min, label_max, width):
         """
         Создаёт текстовое поле для ввода данных (ссылок, времени и.т.д.) и кнопку сохранения.
 
         :param label_max: Выводимый текст на поле ввода
         :param label_min: Выводимый текст на поле ввода
-        :param on_save_click: Функция-обработчик, вызываемая при нажатии на кнопку сохранения.
         :param width: Ширина поля ввода.
         :return: Кортеж из двух элементов: ft.TextField и ft.IconButton.
         https://flet.dev/docs/controls/textfield/
@@ -21,27 +20,22 @@ class TimeInputRowBuilder:
                                       text_size=12)
         max_time_input = ft.TextField(label=label_max, label_style=ft.TextStyle(size=15), autofocus=True, width=width,
                                       text_size=12)
-        save_button = ft.IconButton(
-            visible=True,
-            icon=ft.Icons.SAVE,
-            on_click=on_save_click,
-            icon_size=40
-        )
-        return min_time_input, max_time_input, save_button
+        return min_time_input, max_time_input
 
-    async def compose_time_input_row(self, min_time_input: ft.TextField, max_time_input: ft.TextField,
-                                     save_button: ft.IconButton):
+    async def compose_time_input_row(self, min_time_input: ft.TextField, max_time_input: ft.TextField):
         """
         Создаёт горизонтальный контейнер (строку) с полем ввода и кнопкой.
 
         :param min_time_input: Текстовое поле для ввода минимального времени.
         :param max_time_input: Текстовое поле для ввода максимального времени.
-        :param save_button: Кнопка сохранения.
         :return: Компонент ft.Row с размещёнными элементами.
         https://flet.dev/docs/cookbook/large-lists/#gridview
         """
         return ft.Row(
-            controls=[min_time_input, max_time_input, save_button],
+            controls=[
+                min_time_input,
+                max_time_input,
+            ],
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN  # или .START
         )
 
