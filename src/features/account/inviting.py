@@ -13,9 +13,9 @@ from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, Sessio
                              FloodWaitError, AuthKeyUnregisteredError, PeerFloodError)
 from telethon.tl.functions.channels import InviteToChannelRequest
 
-from src.core.configs import (BUTTON_HEIGHT, ConfigReader, LIMITS, WIDTH_WIDE_BUTTON,
-                              TIME_INVITING_1, TIME_INVITING_2)
-from src.core.sqlite_working_tools import select_records_with_limit, get_links_inviting, save_links_inviting
+from src.core.configs import (BUTTON_HEIGHT, ConfigReader, LIMITS, WIDTH_WIDE_BUTTON, TIME_INVITING_1, TIME_INVITING_2)
+from src.core.sqlite_working_tools import (select_records_with_limit, get_links_inviting, save_links_inviting,
+                                           getting_account)
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
@@ -47,6 +47,7 @@ class InvitingToAGroup:
         self.setting_page = SettingPage(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram()
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def inviting_menu(self):
         """
@@ -56,7 +57,10 @@ class InvitingToAGroup:
         self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
-        await self.data_for_inviting()  # Отображение информации о настройках инвайтинга
+        # Отображение информации о настройках инвайтинга
+        await self.app_logger.log_and_display(message=f"Лимит на аккаунт: {LIMITS}\n"
+                                                      f"Всего usernames: {len(select_records_with_limit(limit=None))}\n"
+                                                      f"Всего подключенных аккаунтов: {len(self.session_string)}\n")
 
         async def general_invitation_to_the_group(_):
             """
@@ -260,10 +264,11 @@ class InvitingToAGroup:
             ft.View("/inviting",
                     [await self.gui_program.key_app_bar(),  # Кнопка назад
                      ft.Text(spans=[ft.TextSpan(translations["ru"]["inviting_menu"]["inviting"],
-                         ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
-                                      foreground=ft.Paint(
-                                          gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                               ft.Colors.PURPLE])), ), ), ], ),
+                                                ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
+                                                             foreground=ft.Paint(
+                                                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20),
+                                                                                                 [ft.Colors.PINK,
+                                                                                                  ft.Colors.PURPLE])), ), ), ], ),
                      list_view,  # Отображение логов 📝
 
                      ft.Row([await TimeInputRowBuilder().compose_time_input_row(min_time_input=smaller_timex,
@@ -296,18 +301,6 @@ class InvitingToAGroup:
                          start_inviting,
                      ])]))
         self.page.update()  # обновляем страницу после добавления элементов управления 🔄
-
-    async def data_for_inviting(self):
-        """"
-        Получение данных для инвайтинга
-        """
-        usernames = select_records_with_limit(limit=None)
-        logger.info(usernames)
-        find_filesss = self.utils.find_filess(directory_path=path_accounts_folder, extension='session')
-        await self.app_logger.log_and_display(message=f"Лимит на аккаунт: {LIMITS}\n"
-                                                      f"Всего usernames: {len(usernames)}\n"
-                                                      f"Подключенные аккаунты {find_filesss}\n"
-                                                      f"Всего подключенных аккаунтов: {len(find_filesss)}\n")
 
     async def add_user_test(self, client, username_group, username):
         try:
