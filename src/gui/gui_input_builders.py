@@ -52,13 +52,13 @@ class LinkInputRowBuilder:
     Используется для ввода ссылок на Telegram-группы и каналы, на которые необходимо подписаться.
     """
 
-    async def build_link_input_with_save_button(self, on_save_click, label_text, width):
+    async def build_link_input_with_save_button(self, label_text, width):
         """
         Создаёт текстовое поле для ввода ссылок и кнопку сохранения.
 
+        :param width: Ширина поля ввода
         :param label_text:  Текст, отображаемый над полем ввода.
-        :param on_save_click: Функция-обработчик, вызываемая при нажатии на кнопку сохранения.
-        :return: Кортеж из двух элементов: ft.TextField и ft.IconButton.
+        :return: Кортеж из двух элементов: ft.TextField
         https://flet.dev/docs/controls/textfield/
         """
         # Поле ввода, для ссылок для подписки
@@ -67,24 +67,19 @@ class LinkInputRowBuilder:
             label_style=ft.TextStyle(color=ft.Colors.GREY_400),
             width=width
         )
-        save_button = ft.IconButton(
-            visible=True,
-            icon=ft.Icons.SAVE,
-            on_click=on_save_click,
-            icon_size=40
-        )
-        return link_input, save_button
+        return link_input
 
-    async def compose_link_input_row(self, link_input: ft.TextField, save_button: ft.IconButton):
+    async def compose_link_input_row(self, link_input: ft.TextField):
         """
         Создаёт горизонтальный контейнер (строку) с полем ввода и кнопкой.
 
         :param link_input: Текстовое поле для ввода ссылок.
-        :param save_button: Кнопка сохранения.
         :return: Компонент ft.Row с размещёнными элементами.
         https://flet.dev/docs/cookbook/large-lists/#gridview
         """
         return ft.Row(
-            controls=[link_input, save_button],
+            controls=[
+                link_input,
+            ],
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN
         )

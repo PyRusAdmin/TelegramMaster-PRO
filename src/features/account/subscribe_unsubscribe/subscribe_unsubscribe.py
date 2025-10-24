@@ -117,7 +117,6 @@ class SubscribeUnsubscribeTelegram:
 
         # Поле ввода ссылок и кнопка сохранения для подписки
         link_entry_field, save_button = await LinkInputRowBuilder().build_link_input_with_save_button(
-            on_save_click=save,
             label_text="Введите ссылки для подписки на группы и каналы",
             width=width_1_input_fields  # Ширина поля ввода и кнопки сохранения
         )
@@ -157,7 +156,7 @@ class SubscribeUnsubscribeTelegram:
                                "📌 Если вы уже вводили их ранее — ввод не обязателен, данные сохранены в системе.",
                          size=14
                      ),
-                     await LinkInputRowBuilder().compose_link_input_row(link_entry_field, save_button),
+                     await LinkInputRowBuilder().compose_link_input_row(link_entry_field),
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🔔 Подписка
