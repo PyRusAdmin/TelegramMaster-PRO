@@ -157,7 +157,6 @@ path_folder_database = ConfigReader().path_folder_database()  # Путь к па
 # LIMITS = ConfigReader().get_limits()  # Лимиты
 TIME_ACTIVITY_USER_2 = ConfigReader().time_activity_user_2()
 TIME_SENDING_MESSAGES_1, time_sending_messages_2 = ConfigReader().get_time_inviting()  # Время между сообщениями
-TIME_INVITING_1, TIME_INVITING_2 = ConfigReader().get_time_inviting()  # Время между инвайтингом, рассылка сообщений
 time_subscription_1, time_subscription_2 = ConfigReader().get_time_subscription()
 
 """Настройки внешнего вида программы"""
