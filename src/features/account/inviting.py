@@ -116,6 +116,18 @@ class InvitingToAGroup:
             if not links:
                 return  # Нет ссылок — завершаем выполнение
 
+            time_inviting_1 = TIME_INVITING_1.value
+            if time_inviting_1 == "":
+                await show_notification(page=self.page, message="Время должно быть больше 0")
+                self.page.go("/inviting")
+                return
+
+            time_inviting_2 = TIME_INVITING_2.value
+            if time_inviting_2 == "":
+                await show_notification(page=self.page, message="Время должно быть больше 0")
+                self.page.go("/inviting")
+                return
+
             start = await self.app_logger.start_time()
             self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
 
@@ -149,6 +161,7 @@ class InvitingToAGroup:
                     logger.info(f"Приглашение пользователя: {username}")
                     await self.app_logger.log_and_display(message=f"Пользователь username: {username}")
                     # Инвайтинг в группу по полученному списку
+
                     try:
                         await self.add_user_test(
                             client=client,
