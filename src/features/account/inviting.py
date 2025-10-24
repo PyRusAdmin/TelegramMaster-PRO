@@ -13,23 +13,21 @@ from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, Sessio
                              FloodWaitError, AuthKeyUnregisteredError, PeerFloodError)
 from telethon.tl.functions.channels import InviteToChannelRequest
 
-from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
+from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.sqlite_working_tools import (select_records_with_limit, get_links_inviting, save_links_inviting,
                                            getting_account)
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.gui.gui_elements import GUIProgram
 from src.features.account.parsing.switch_controller import ToggleController
-from src.gui.gui_input_builders import TimeInputRowBuilder, LinkInputRowBuilder
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
-from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger, list_view
+from src.gui.gui_elements import GUIProgram
+from src.gui.gui_input_builders import TimeInputRowBuilder, LinkInputRowBuilder
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
-width_one_input = 500  # 2 поля ввода (без кнопки сохранить)
-width_tvo_input = 245
+
 
 
 def get_limit(limits):
