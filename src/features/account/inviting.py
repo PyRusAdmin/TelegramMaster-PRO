@@ -13,7 +13,7 @@ from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, Sessio
                              FloodWaitError, AuthKeyUnregisteredError, PeerFloodError)
 from telethon.tl.functions.channels import InviteToChannelRequest
 
-from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON, TIME_INVITING_1, TIME_INVITING_2)
+from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
 from src.core.sqlite_working_tools import (select_records_with_limit, get_links_inviting, save_links_inviting,
                                            getting_account)
 from src.core.utils import Utils
@@ -51,7 +51,6 @@ class InvitingToAGroup:
     def __init__(self, page: ft.Page):
         self.page = page
         self.config_reader = ConfigReader()
-        self.hour, self.minutes = self.config_reader.get_hour_minutes_every_day()
         self.scheduler = Scheduler()  # Создаем экземпляр планировщика
         self.links_inviting = get_links_inviting()  # Получаем список ссылок на группы для инвайтинга из базы данных
         self.app_logger = AppLogger(page=page)
@@ -154,7 +153,9 @@ class InvitingToAGroup:
                         await self.add_user_test(
                             client=client,
                             username_group=links,
-                            username=username
+                            username=username,
+                            time_inviting_1=TIME_INVITING_1.value,
+                            time_inviting_2=TIME_INVITING_2.value
                         )
                     except KeyboardInterrupt:  # Закрытие окна программы
                         await self.app_logger.log_and_display(message=translations["ru"]["errors"]["script_stopped"],
@@ -196,8 +197,8 @@ class InvitingToAGroup:
                     await general_invitation_to_the_group(_)
 
                 await self.app_logger.log_and_display(
-                    message=f"Скрипт будет запускаться каждый день в {hour_textfield.value}:{minutes_textfield.value}")
-                self.scheduler.once(dt.time(hour=int(hour_textfield.value), minute=int(minutes_textfield.value)),
+                    message=f"Скрипт будет запускаться каждый день в {hour.value}:{minutes.value}")
+                self.scheduler.once(dt.time(hour=int(hour.value), minute=int(minutes.value)),
                                     general_invitation_group_scheduler)
                 while True:
                     await asyncio.sleep(1)
@@ -214,21 +215,11 @@ class InvitingToAGroup:
                 await general_invitation_to_the_group(_)
 
             await self.app_logger.log_and_display(
-                message=f"Скрипт будет запускаться каждый день в {hour_textfield.value}:{self.minutes}")
-            self.scheduler.daily(dt.time(hour=int(hour_textfield.value), minute=int(minutes_textfield.value)),
+                message=f"Скрипт будет запускаться каждый день в {hour.value}:{self.minutes}")
+            self.scheduler.daily(dt.time(hour=int(hour.value), minute=int(minutes.value)),
                                  general_invitation_group_scheduler)
             while True:
                 await asyncio.sleep(1)
-
-        async def write_tame_start_inviting(_):
-            """Записывает время запуска инвайтинга по времени. Час запуска и минуты запуска"""
-            await self.setting_page.recording_the_time_to_launch_an_invite_every_day(hour_textfield=hour_textfield,
-                                                                                     minutes_textfield=minutes_textfield)
-
-        async def write_limit_account_inviting_timex(_):
-            """Записывает время между сном во время ивайтинга"""
-            await self.setting_page.create_main_window(variable="time_inviting", smaller_timex=smaller_timex,
-                                                       larger_timex=larger_timex)
 
         async def start_inviting_grup(_):
             """
@@ -253,13 +244,13 @@ class InvitingToAGroup:
         """
 
         # Два поля ввода для времени и кнопка сохранить
-        smaller_timex, larger_timex = await TimeInputRowBuilder().build_time_inputs_with_save_button(
+        TIME_INVITING_1, TIME_INVITING_2 = await TimeInputRowBuilder().build_time_inputs_with_save_button(
             label_min="Мин. задержка (сек)",
             label_max="Макс. задержка (сек)",
             width=width_tvo_input
         )
         # Два поля ввода для времени и кнопка сохранить
-        hour_textfield, minutes_textfield = await TimeInputRowBuilder().build_time_inputs_with_save_button(
+        hour, minutes = await TimeInputRowBuilder().build_time_inputs_with_save_button(
             label_min="Час запуска (0–23)",
             label_max="Минуты (0–59)",
             width=width_tvo_input
@@ -320,11 +311,11 @@ class InvitingToAGroup:
                      list_view,  # Отображение логов 📝
 
                      ft.Row([await TimeInputRowBuilder().compose_time_input_row(
-                         min_time_input=smaller_timex,
-                         max_time_input=larger_timex,
+                         min_time_input=TIME_INVITING_1,
+                         max_time_input=TIME_INVITING_2,
                      ),
-                             await TimeInputRowBuilder().compose_time_input_row(min_time_input=hour_textfield,
-                                                                                max_time_input=minutes_textfield)]),
+                             await TimeInputRowBuilder().compose_time_input_row(min_time_input=hour,
+                                                                                max_time_input=minutes)]),
 
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
 
@@ -353,7 +344,16 @@ class InvitingToAGroup:
                      ])]))
         self.page.update()  # обновляем страницу после добавления элементов управления 🔄
 
-    async def add_user_test(self, client, username_group, username):
+    async def add_user_test(self, client, username_group, username, time_inviting_1, time_inviting_2):
+        """
+        Метод для приглашения участников в группу.
+        :param client:
+        :param username_group:
+        :param username:
+        :param time_inviting_1:
+        :param time_inviting_2:
+        :return:
+        """
         try:
             await self.app_logger.log_and_display(message=f"Попытка приглашения {username} в группу {username_group}.")
             await client.connect()
@@ -361,42 +361,42 @@ class InvitingToAGroup:
             # Выполняем приглашение
             await client(InviteToChannelRequest(username_group, [username]))
             await self.app_logger.log_and_display(
-                message=f"✅  Участник {username} добавлен, если не состоит в чате {username_group}. Спим от {TIME_INVITING_1} до {TIME_INVITING_2}")
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+                message=f"✅  Участник {username} добавлен, если не состоит в чате {username_group}. Спим от {time_inviting_1} до {time_inviting_2}")
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
         except UserChannelsTooMuchError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["user_channels_too_much"])
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
         except (ChannelPrivateError, TypeNotFoundError, AuthKeyDuplicatedError, UserBannedInChannelError,
                 SessionRevokedError):
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"])
-            await self.utils.record_and_interrupt(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2)
+            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
             await client.disconnect()
         except UserNotMutualContactError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["user_not_mutual_contact"])
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
         except (UserKickedError, UserDeactivatedBanError):
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["user_kicked_or_banned"])
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
         except (UserIdInvalidError, UsernameNotOccupiedError, ValueError, UsernameInvalidError):
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["invalid_username"])
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
         except ChatAdminRequiredError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["admin_rights_required"])
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
         except UserPrivacyRestrictedError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["user_privacy_restricted"])
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
         except BotGroupsBlockedError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["bot_group_blocked"])
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
         except (TypeError, UnboundLocalError):
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["type_or_scope"])
@@ -406,24 +406,24 @@ class InvitingToAGroup:
         # Ошибка инвайтинга прерываем работу
         except ChatWriteForbiddenError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["chat_write_forbidden"])
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
             await client.disconnect()  # Прерываем работу и меняем аккаунт
         except InviteRequestSentError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["invite_request_sent"])
-            await self.utils.record_inviting_results(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2,
+            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
             await client.disconnect()  # Прерываем работу и меняем аккаунт
         except FloodWaitError as e:
             await self.app_logger.log_and_display(message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                                   level="error")
-            await self.utils.record_and_interrupt(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2)
+            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
             await client.disconnect()  # Прерываем работу и меняем аккаунт
         except AuthKeyUnregisteredError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
-            await self.utils.record_and_interrupt(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2)
+            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
             await client.disconnect()
         except PeerFloodError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["peer_flood"], level="error")
-            await self.utils.record_and_interrupt(time_range_1=TIME_INVITING_1, time_range_2=TIME_INVITING_2)
+            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
             await client.disconnect()  # Прерываем работу и меняем аккаунт
