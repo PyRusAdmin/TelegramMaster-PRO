@@ -73,6 +73,54 @@
 
         <!-- Основной контент -->
 
+        <h2>▶️ Запуск инвайтинга</h2>
+
+        <p>Если ранее вы выполнили все необходимые действия по настройке {{program_name}}, выполните следующие шаги:
+
+        <ol>
+            <li>
+                Запустить {{program_name}} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск {{program_name}}</a>).
+                <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master" width="60%"></p>
+            </li>
+            <li>
+                🔄 Подключите аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение аккаунтов Telegram к {{program_name}})</a>.
+            </li>
+            <li>
+                <strong>📋 Перейдите в меню "Инвайтинг"</strong>.
+                <p style="text-align: center;"><img src="/static/images/inviting/inviting_menu.png" alt="Telegram Master" width="60%"></p>
+            </li>
+            <li>
+                <strong>🚀 Запустите функцию "Инвайтинг"</strong>.
+                <p style="text-align: center;"><img src="/static/images/inviting/inviting_ru.png" alt="Telegram Master" width="40%"></p>
+                <p>В окне программы вы увидите все ранее настроенные функции программы для {{inviting_ru}}.</p>
+                <p>Например, такие, как:</p>
+                <blockquote>
+                    * Лимит на аккаунт<br>
+                    * Всего username в базе данных<br>
+                    * Подключенные аккаунты<br>
+                    * Количество подключенных аккаунтов<br>
+                </blockquote>
+            </li>
+            <li>
+                Выберите в выпадающем списке группу, в которую вы хотите инвайтить.
+                <p style="text-align: center;"><img src="/static/images/inviting/group_selection.png" alt="Telegram Master" width="50%"></p>
+            </li>
+            <li>
+                Нажмите кнопку "{{start_inviting_button}}".
+                <p style="text-align: center;"><img src="/static/images/inviting/inviting_start.png" width="50%" alt="Telegram Master"></p>
+            </li>
+            <li>
+                <p>После окончания инвайтинга, программа выдаст уведомление об окончании инвайтинга.<br></p>
+                <p style="text-align: center;"><img src="/static/images/inviting/notification_about_the_end_of_invitation.png" width="40%" alt="Telegram Master"></p>
+            </li>
+        </ol>
+
+
+
+
+
+
+
         <!-- ⏰ Инвайтинг 1 раз в час -->
         <h1 style="text-align: center;">{{ invitation_1_time_per_hour_ru }}</h1>
 
@@ -352,47 +400,9 @@
 
             <hr>
 
-            <h2>▶️ Запуск инвайтинга</h2>
 
-            <p>Если ранее вы выполнили все необходимые действия по настройке {{program_name}}, выполните следующие шаги:
 
-            <ol>
-                <li>
-                    Запустить {{program_name}} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск {{program_name}}</a>).
-                    <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master" width="60%"></p>
-                </li>
-            <li>
-                🔄 Подключите аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение аккаунтов Telegram к {{program_name}})</a>.
-            </li>
-                <li>
-                    <strong>📋 Перейдите в меню "Инвайтинг"</strong>.
-                    <p style="text-align: center;"><img src="/static/images/inviting/inviting_menu.png" alt="Telegram Master" width="60%"></p>
-                </li>
-                <li>
-                    <strong>🚀 Запустите функцию "Инвайтинг"</strong>.
-                    <p style="text-align: center;"><img src="/static/images/inviting/inviting_ru.png" alt="Telegram Master" width="40%"></p>
-                    <p>В окне программы вы увидите все ранее настроенные функции программы для {{inviting_ru}}.</p>
-                    <p>Например, такие, как:</p>
-                    <blockquote>
-                        * Лимит на аккаунт<br>
-                        * Всего username в базе данных<br>
-                        * Подключенные аккаунты<br>
-                        * Количество подключенных аккаунтов<br>
-                    </blockquote>
-                </li>
-                <li>
-                    Выберите в выпадающем списке группу, в которую вы хотите инвайтить.
-                    <p style="text-align: center;"><img src="/static/images/inviting/group_selection.png" alt="Telegram Master" width="50%"></p>
-                </li>
-                <li>
-                    Нажмите кнопку "{{start_inviting_button}}".
-                    <p style="text-align: center;"><img src="/static/images/inviting/inviting_start.png" width="50%" alt="Telegram Master"></p>
-                </li>
-                <li>
-                    <p>После окончания инвайтинга, программа выдаст уведомление об окончании инвайтинга.<br></p>
-                    <p style="text-align: center;"><img src="/static/images/inviting/notification_about_the_end_of_invitation.png" width="40%" alt="Telegram Master"></p>
-                </li>
-            </ol>
+
             <a href="#" id="to-top" title="Вверх"><i class="fas fa-chevron-up" aria-hidden="true"></i></a>
     </div>
 </div>
