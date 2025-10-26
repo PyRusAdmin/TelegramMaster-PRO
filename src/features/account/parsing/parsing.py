@@ -19,7 +19,7 @@ from src.core.database.database import (MembersAdmin, add_member_to_db, save_gro
                                         administrators_entries_in_database)
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
-from src.features.account.parsing.switch_controller import ToggleController
+from src.features.account.switch_controller import ToggleController
 from src.features.account.parsing.user_info import UserInfo
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.gui.gui import AppLogger, list_view
@@ -35,7 +35,7 @@ class ParsingGroupMembers:
         self.app_logger = AppLogger(page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram()
-        self.accounts = get_account_list()  # Получаем список аккаунтов из базы данных
+        self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
 
     async def account_selection_menu(self):
         """Меню парсинга групп"""
@@ -50,12 +50,17 @@ class ParsingGroupMembers:
         """
         chat_input = ft.TextField(label="🔗 Введите ссылку на чат...", disabled=True)
 
+        # Создаём опции: текст — номер, ключ — session_string
+        account_options = [
+            ft.DropdownOption(text=phone, key=session_str)
+            for phone, session_str in self.account_data
+        ]
         # Создаем выпадающий список с названиями групп
         account_drop_down_list = ft.Dropdown(
-            value="📂 Выберите .session файл",
-            width=WIDTH_WIDE_BUTTON,
-            options=[ft.DropdownOption(account) for account in self.accounts],
-            autofocus=True
+            label="📂 Выберите аккаунт",  # ✅ Название выпадающего списка
+            width=WIDTH_WIDE_BUTTON,  # ✅ Ширина выпадающего списка
+            options=account_options,  # ✅ Опции выпадающего списка
+            autofocus=True  # ✅ Автозаполнение
         )
 
         async def btn_click_file_picker(e: ft.FilePickerResultEvent):
@@ -129,7 +134,7 @@ class ParsingGroupMembers:
                             await self.obtaining_administrators(groups)
                     if members_switch.value:  # Парсинг участников
                         for groups in data:
-                            await self.parse_group(groups)
+                            await parse_group(groups)
                     if active_switch.value:  # Парсинг активных пользователей
                         await self.start_active_parsing(link_chat=chat_input.value,
                                                         number_messages=limit_active_user.value)
@@ -139,6 +144,68 @@ class ParsingGroupMembers:
                     await self.app_logger.end_time(start)
                 except Exception as error:
                     logger.exception(error)
+            except Exception as error:
+                logger.exception(error)
+
+        async def parse_group(groups_wr) -> None:
+            """
+            Выполняет парсинг групп, на которые пользователь подписался. Аргумент phone используется декоратором
+            @handle_exceptions для отлавливания ошибок и записи их в базу данных user_data/software_database.db.
+
+            :param groups_wr: Ссылка на группу
+            """
+            logger.debug(f"Аккаунт: {account_drop_down_list.value}")
+
+            client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
+            await self.connect.getting_account_data(client)
+
+            await self.app_logger.log_and_display("🔍 Ищем участников... 💾 Сохраняем в файл software_database.db...")
+            try:
+                all_participants: list = []
+                while_condition = True
+                my_filter = ChannelParticipantsSearch("")
+                offset = 0
+                while while_condition:
+                    try:
+                        logger.warning(f"🔍 Получаем участников группы: {groups_wr}")
+                        participants = await client(
+                            GetParticipantsRequest(channel=groups_wr, offset=offset, filter=my_filter, limit=200,
+                                                   hash=0, ))
+                        all_participants.extend(participants.users)
+                        offset += len(participants.users)
+                        if len(participants.users) < 1:
+                            while_condition = False
+                    except TypeError:
+                        await self.app_logger.log_and_display(f"❌ Ошибка: {groups_wr} не является группой / каналом.",
+                                                              level="error")
+                        await asyncio.sleep(2)
+                        break
+                    except ChatAdminRequiredError:
+                        await self.app_logger.log_and_display(translations["ru"]["errors"]["admin_rights_required"])
+                        await asyncio.sleep(2)
+                        break
+                    except ChannelPrivateError:
+                        await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
+                        await asyncio.sleep(2)
+                        break
+                    except AuthKeyUnregisteredError:
+                        await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                        await asyncio.sleep(2)
+                        break
+                    except sqlite3.DatabaseError:  # TODO Обработка ошибок базы данных (придумать универсальнео наименование)
+                        await self.app_logger.log_and_display("Ошибка базы данных аккаунта")
+                        await asyncio.sleep(2)
+                        break
+
+                for user in all_participants:
+                    await self.app_logger.log_and_display(f"Полученные данные: {user}")
+                    logger.info(f"Полученные данные: {user}")
+                    log_data = await self.collect_user_log_data(user)
+                    add_member_to_db(log_data=log_data)
+
+            except TypeError as error:
+                logger.exception(f"❌ Ошибка: {error}")
+                return []  # Возвращаем пустой список в случае ошибки
             except Exception as error:
                 logger.exception(error)
 
@@ -207,69 +274,6 @@ class ParsingGroupMembers:
             "photos_id": await UserInfo().get_photo_status(user),
             "user_premium": await UserInfo().get_user_premium_status(user),
         }
-
-    async def parse_group(self, groups_wr) -> None:
-        """
-        Выполняет парсинг групп, на которые пользователь подписался. Аргумент phone используется декоратором
-        @handle_exceptions для отлавливания ошибок и записи их в базу данных user_data/software_database.db.
-
-        :param groups_wr: Ссылка на группу
-        """
-        phone = self.page.session.get("selected_sessions") or []
-        logger.debug(f"Аккаунт: {phone}")
-
-        client = await self.connect.client_connect_string_session(session_name=phone[0])
-        await self.connect.getting_account_data(client)
-
-        await self.app_logger.log_and_display("🔍 Ищем участников... 💾 Сохраняем в файл software_database.db...")
-        try:
-            all_participants: list = []
-            while_condition = True
-            my_filter = ChannelParticipantsSearch("")
-            offset = 0
-            while while_condition:
-                try:
-                    logger.warning(f"🔍 Получаем участников группы: {groups_wr}")
-                    participants = await client(
-                        GetParticipantsRequest(channel=groups_wr, offset=offset, filter=my_filter, limit=200, hash=0, ))
-                    all_participants.extend(participants.users)
-                    offset += len(participants.users)
-                    if len(participants.users) < 1:
-                        while_condition = False
-                except TypeError:
-                    await self.app_logger.log_and_display(f"❌ Ошибка: {groups_wr} не является группой / каналом.",
-                                                          level="error")
-                    await asyncio.sleep(2)
-                    break
-                except ChatAdminRequiredError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["admin_rights_required"])
-                    await asyncio.sleep(2)
-                    break
-                except ChannelPrivateError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
-                    await asyncio.sleep(2)
-                    break
-                except AuthKeyUnregisteredError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
-                    await asyncio.sleep(2)
-                    break
-                except sqlite3.DatabaseError:  # TODO Обработка ошибок базы данных (придумать универсальнео наименование)
-                    await self.app_logger.log_and_display("Ошибка базы данных аккаунта")
-                    await asyncio.sleep(2)
-                    break
-
-            for user in all_participants:
-                await self.app_logger.log_and_display(f"Полученные данные: {user}")
-                logger.info(f"Полученные данные: {user}")
-                # user_premium = "Пользователь с premium" if user.premium else "Обычный пользователь"
-                log_data = await self.collect_user_log_data(user)
-                add_member_to_db(log_data=log_data)
-
-        except TypeError as error:
-            logger.exception(f"❌ Ошибка: {error}")
-            return []  # Возвращаем пустой список в случае ошибки
-        except Exception as error:
-            logger.exception(error)
 
     async def start_group_parsing(self, dropdown, result_text):
         phone = await self.load_groups(dropdown, result_text)

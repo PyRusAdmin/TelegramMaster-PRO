@@ -40,9 +40,9 @@ def getting_account():
 
 
 def get_account_list():
-    """Получаем подключенные аккаунты"""
+    """Получаем подключенные аккаунты: возвращаем список кортежей (phone, session_string)"""
     accounts = []
-    for account in Account.select(Account.session_string):
-        accounts.append(account.session_string)
-    logger.warning(accounts)
-    return accounts
+    for account in Account.select(Account.phone_number, Account.session_string):
+        accounts.append((account.phone_number, account.session_string))
+    logger.info(f"Загружено аккаунтов: {len(accounts)}")
+    return accounts  # Список аккаунтов

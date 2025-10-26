@@ -18,7 +18,7 @@ from src.core.database.account import getting_account
 from src.core.database.database import (select_records_with_limit, get_links_inviting, save_links_inviting)
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.features.account.parsing.switch_controller import ToggleController
+from src.features.account.switch_controller import ToggleController
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.gui import AppLogger, list_view
@@ -354,11 +354,11 @@ class InvitingToAGroup:
     async def add_user_test(self, client, username_group, username, time_inviting_1, time_inviting_2):
         """
         Метод для приглашения участников в группу.
-        :param client:
-        :param username_group:
-        :param username:
-        :param time_inviting_1:
-        :param time_inviting_2:
+        :param client: Телеграм-клиент
+        :param username_group: Ссылка на группу
+        :param username: Имя пользователя (username)
+        :param time_inviting_1: Время ожидания начальное
+        :param time_inviting_2: Время ожидания конечное
         :return:
         """
         try:

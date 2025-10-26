@@ -430,7 +430,8 @@ class TGConnect:
                         phone = me.phone or ""
                         logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
                         await client.disconnect()
-                        write_account_to_db(session_string=session_string)  # Запись строки сессии в базу данных
+                        write_account_to_db(session_string=session_string,
+                                            phone_number=phone)  # Запись строки сессии в базу данных
                     except AttributeError:
                         await show_notification(page=self.page, message="Не валидный аккаунт")
                 else:
