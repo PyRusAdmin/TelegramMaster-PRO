@@ -424,6 +424,15 @@ def get_links_inviting():
     return links_inviting
 
 
+def get_account_list():
+    """Получаем подключенные аккаунты"""
+    accounts = []
+    for account in Account.select(Account.session_string):
+        accounts.append(account.session_string)
+    logger.warning(accounts)
+    return accounts
+
+
 def save_links_inviting(data) -> None:
     """
     Запись данных links_inviting в базу данных. Добавлена проверка на уникальность ссылки. Дубликаты игнорируются и не

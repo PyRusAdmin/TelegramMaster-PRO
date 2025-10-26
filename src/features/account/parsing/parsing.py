@@ -15,7 +15,7 @@ from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsSear
 
 from src.core.configs import WIDTH_WIDE_BUTTON, TIME_ACTIVITY_USER_2, BUTTON_HEIGHT
 from src.core.database import (MembersAdmin, add_member_to_db, save_group_channel_info,
-                               administrators_entries_in_database)
+                               administrators_entries_in_database, get_account_list)
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
 from src.features.account.parsing.switch_controller import ToggleController
@@ -34,6 +34,7 @@ class ParsingGroupMembers:
         self.app_logger = AppLogger(page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram()
+        self.accounts = get_account_list()  # Получаем список аккаунтов из базы данных
 
     async def account_selection_menu(self):
         """Меню парсинга групп"""
@@ -44,17 +45,25 @@ class ParsingGroupMembers:
 
         chat_input = ft.TextField(label="🔗 Введите ссылку на чат...", disabled=True)
 
+        # Создаем выпадающий список с названиями групп
+        account_drop_down_list = ft.Dropdown(
+            value="📂 Выберите .session файл",
+            width=WIDTH_WIDE_BUTTON,
+            options=[ft.DropdownOption(account) for account in self.accounts],
+            autofocus=True
+        )
+
         async def btn_click_file_picker(e: ft.FilePickerResultEvent):
             if not e.files:
-                file_text.value = "❌ Файл не выбран"
-                file_text.color = ft.Colors.RED
+                account_drop_down_list.value = "❌ Файл не выбран"
+                account_drop_down_list.color = ft.Colors.RED
                 self.page.update()
                 return
 
             file = e.files[0]
             if not file.name.endswith(".session"):
-                file_text.value = f"❌ Неверный файл: {file.name}"
-                file_text.color = ft.Colors.RED
+                account_drop_down_list.value = f"❌ Неверный файл: {file.name}"
+                account_drop_down_list.color = ft.Colors.RED
                 self.page.update()
                 return
 
@@ -64,8 +73,8 @@ class ParsingGroupMembers:
             self.page.session.set("selected_sessions", [phone])
 
             # Показываем успешный выбор
-            file_text.value = f"✅ Аккаунт выбран: {phone}"
-            file_text.color = ft.Colors.GREEN
+            account_drop_down_list.value = f"✅ Аккаунт выбран: {phone}"
+            account_drop_down_list.color = ft.Colors.GREEN
 
             # 🔓 Разблокируем интерфейс
             admin_switch.disabled = False
@@ -81,8 +90,6 @@ class ParsingGroupMembers:
 
             self.page.update()
 
-        # Создание элементов управления
-        file_text = ft.Text(value="📂 Выберите .session файл", size=14)
         file_picker = ft.FilePicker(on_result=btn_click_file_picker)
         self.page.overlay.append(file_picker)
         pick_button = ft.ElevatedButton(text="📁 Выбрать session файл", width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
@@ -166,7 +173,7 @@ class ParsingGroupMembers:
                 await self.gui_program.outputs_text_gradient(),
                 list_view,
                 ft.Column([
-                    file_text,
+                    account_drop_down_list,
                     pick_button,
                     ft.Row([admin_switch, members_switch, account_groups_switch, ]),
                     ft.Row([account_group_selection_switch, active_switch, contacts_switch, ]),

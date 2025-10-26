@@ -240,9 +240,11 @@ class InvitingToAGroup:
                 await launching_invite_every_day_certain_time(_)
 
         # Создаем выпадающий список с названиями групп
-        dropdown = ft.Dropdown(width=WIDTH_WIDE_BUTTON,
-                               options=[ft.DropdownOption(link) for link in self.links_inviting],
-                               autofocus=True)
+        dropdown = ft.Dropdown(
+            width=WIDTH_WIDE_BUTTON,
+            options=[ft.DropdownOption(link) for link in self.links_inviting],
+            autofocus=True
+        )
 
         """
         Пользователь вводит время задержки между инвайтингом (приглашениями в группу)
