@@ -43,6 +43,22 @@ body {
 /*    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); *//* Тень для выделения контента */
 }
 
+.content img,
+.content iframe,
+.content video {
+    max-width: 100%;
+    height: auto;
+}
+
+.content p,
+.content li,
+.content h1,
+.content h2 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
 .banner {
     width: auto;
     height: auto;
