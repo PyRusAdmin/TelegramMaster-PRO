@@ -5,7 +5,7 @@ import flet as ft
 import requests
 from loguru import logger
 
-from src.core.sqlite_working_tools import deleting_an_invalid_proxy, get_proxy_database
+from src.core.database import deleting_an_invalid_proxy, get_proxy_database
 from src.gui.gui import AppLogger
 
 

@@ -15,7 +15,7 @@ from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
 from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
-from src.core.sqlite_working_tools import write_account_to_db, getting_account
+from src.core.database import write_account_to_db, getting_account
 from src.core.utils import Utils
 from src.features.proxy.checking_proxy import Proxy
 from src.gui.gui import AppLogger, list_view

@@ -8,7 +8,7 @@ import sys
 import flet as ft  # Импортируем библиотеку flet
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
-from src.core.sqlite_working_tools import save_proxy_data_to_db
+from src.core.database import save_proxy_data_to_db
 from src.gui.gui_elements import GUIProgram
 from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
