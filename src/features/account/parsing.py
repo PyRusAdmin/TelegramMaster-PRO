@@ -16,9 +16,9 @@ from src.core.database.account import get_account_list
 from src.core.database.database import (MembersAdmin, add_member_to_db, save_group_channel_info,
                                         administrators_entries_in_database)
 from src.features.account.connect import TGConnect
-from src.features.account.parsing.user_info import UserInfo
 from src.features.account.subscribe import Subscribe
 from src.features.account.switch_controller import ToggleController
+from src.features.account.user_info import UserInfo
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
