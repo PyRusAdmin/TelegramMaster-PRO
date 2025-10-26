@@ -36,6 +36,11 @@ class ParsingGroupMembers:
         self.gui_program = GUIProgram()
 
     async def account_selection_menu(self):
+        """Меню парсинга групп"""
+
+        list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
+        self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
+        self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
         chat_input = ft.TextField(label="🔗 Введите ссылку на чат...", disabled=True)
 
