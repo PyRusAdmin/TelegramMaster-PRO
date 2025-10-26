@@ -103,9 +103,6 @@ class ParsingGroupMembers:
         file_picker = ft.FilePicker(on_result=btn_click_file_picker)
         self.page.overlay.append(file_picker)
 
-        # pick_button = ft.ElevatedButton(text="📁 Выбрать session файл", width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-        #                                 on_click=lambda _: file_picker.pick_files(allow_multiple=False))
-
         # Кнопки-переключатели
         account_groups_switch = ft.CupertinoSwitch(label="Группы аккаунта", value=False, disabled=True)
         admin_switch = ft.CupertinoSwitch(label="Администраторов", value=False, disabled=True)
@@ -113,8 +110,6 @@ class ParsingGroupMembers:
         # Todo добавить работу
         active_switch = ft.CupertinoSwitch(label="Активные", value=False, disabled=True)
         account_group_selection_switch = ft.CupertinoSwitch(label="Выбрать группу", value=False, disabled=True)
-        # Todo добавить работу
-        contacts_switch = ft.CupertinoSwitch(label="Контакты", value=False, disabled=True)
 
         ToggleController(admin_switch, account_groups_switch, members_switch, account_group_selection_switch,
                          active_switch).element_handler(self.page)
@@ -243,7 +238,6 @@ class ParsingGroupMembers:
 
         account_group_selection_switch.expand = True
         active_switch.expand = True
-        contacts_switch.expand = True
         self.page.update()
 
         # Представление (View)
@@ -255,8 +249,8 @@ class ParsingGroupMembers:
                 list_view,
                 ft.Column([
                     account_drop_down_list,  # ⬅️ Выбор аккаунта из выпадающего списка
-                    ft.Row([admin_switch, members_switch, account_groups_switch, ]),
-                    ft.Row([account_group_selection_switch, active_switch, contacts_switch, ]),
+                    ft.Row([admin_switch, members_switch, account_groups_switch, account_group_selection_switch,
+                            active_switch]),
                     chat_input,
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     ft.Row([limit_active_user]),
