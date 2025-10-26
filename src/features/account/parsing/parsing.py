@@ -135,16 +135,21 @@ class ParsingGroupMembers:
                 self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
                 try:
                     if account_groups_switch.value:  # Парсинг групп, на которые подписан аккаунт
-                        await self.parsing_account_groups()
+                        await self.parsing_account_groups(client=client)
                     if admin_switch.value:  # Если выбрано парсить администраторов, выполняем парсинг администраторов 👤
                         for groups in data:
                             await self.obtaining_administrators(client=client, groups=groups)
                     if members_switch.value:  # Парсинг участников
                         for groups in data:
                             await parse_group(client=client, groups_wr=groups)
-                    if active_switch.value:  # Парсинг активных пользователей
-                        await self.start_active_parsing(link_chat=chat_input.value,
-                                                        number_messages=limit_active_user.value)
+                    if active_switch.value:  # ⚠️ Парсинг активных пользователей
+                        await self.app_logger.log_and_display(
+                            f"🔍 Сканируем чат: {chat_input.value} на {limit_active_user.value} сообщений")
+                        await self.parse_active_users(
+                            chat_input=chat_input.value,
+                            limit_active_user=int(limit_active_user.value),
+                            client=client
+                        )
                     if account_group_selection_switch.value:  # Парсинг выбранной группы
                         await self.load_groups(dropdown, result_text)  # ⬅️ Подгружаем группы
                         await self.start_group_parsing(dropdown, result_text)
@@ -294,23 +299,6 @@ class ParsingGroupMembers:
         await client.disconnect()
         await self.app_logger.log_and_display("🔚 Парсинг завершен")
 
-    async def start_active_parsing(self, link_chat, number_messages):
-        """
-        ⚠️ Парсинг активных пользователей
-        :param link_chat: ссылка на чат
-        :param number_messages: кол-во сообщений
-        """
-        selected = self.page.session.get("selected_sessions") or []
-        if not selected:
-            await self.app_logger.log_and_display("⚠️ Сначала выберите аккаунт")
-            return
-
-        phone = self.page.session.get("selected_sessions") or []
-        logger.debug(f"Аккаунт: {phone}")
-
-        await self.app_logger.log_and_display(f"🔍 Сканируем чат: {link_chat} на {number_messages} сообщений")
-        await self.parse_active_users(link_chat, int(number_messages), phone[0])
-
     async def load_groups(self, dropdown, result_text):
         try:
             selected = self.page.session.get("selected_sessions") or []
@@ -400,29 +388,25 @@ class ParsingGroupMembers:
         except Exception as error:
             logger.exception(error)
 
-    async def parsing_account_groups(self):
-        # Обрабатываем все файлы сессий по очереди 📂
-        phone = self.page.session.get("selected_sessions") or []
-        logger.debug(f"🔍 Парсинг групп/каналов, в которых состоит аккаунт: {phone}")
+    async def parsing_account_groups(self, client):
+        """
+        Парсит группы на которые подписан аккаунт
+        :param client: Клиент Telethon
+        """
 
-        client = await self.connect.client_connect_string_session(session_name=phone[0])
+        # Обрабатываем все файлы сессий по очереди 📂
         await self.connect.getting_account_data(client)
 
-        await self.app_logger.log_and_display(
-            f"🔗 Подключение к аккаунту: {phone}\n 🔄 Парсинг групп/каналов, на которые подписан аккаунт")
         await self.forming_a_list_of_groups(client)
 
-    async def parse_active_users(self, chat_input, limit_active_user, phone_number) -> None:
+    async def parse_active_users(self, chat_input, limit_active_user, client) -> None:
         """
         Парсинг активных пользователей в чате.
+        :param client: Клиент Telethon
         :param chat_input: ссылка на чат
         :param limit_active_user: лимит сообщений
-        :param phone_number: номер телефона
         """
         try:
-            client = await self.connect.client_connect_string_session(session_name=phone_number)
-            await self.connect.getting_account_data(client)
-
             await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_input)
             try:
                 await asyncio.sleep(int(TIME_ACTIVITY_USER_2 or 5))
@@ -530,8 +514,9 @@ class ParsingGroupMembers:
                     # Логируем информацию
                     await self.app_logger.log_and_display(
                         f"{dialog.id}, {title}, {link or 'без ссылки'}, {participants_count}")
-                    await save_group_channel_info(dialog=dialog, title=title, about=about, link=link,
-                                                  participants_count=participants_count)
+                    await save_group_channel_info(
+                        dialog=dialog, title=title, about=about, link=link,
+                        participants_count=participants_count)
                 except TypeError as te:
                     logger.warning(f"❌ TypeError при обработке диалога {dialog.id}: {te}")
                     continue
