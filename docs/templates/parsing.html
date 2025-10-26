@@ -73,9 +73,7 @@
         <!-- Изображение с центровкой <p style="text-align: center;"> -->
         <!-- Пример правильного пути к изображению <img src="/static/images/TelegramMaster_2.png" alt="Telegram Master" width="40%"> -->
 
-        <!-- 🔎 Парсинг одной группы - групп -->
-        <h2 id="parsing_one_group" style="text-align: center;">{{ parse_single_or_multiple_groups }}</h2>
-        <p>Для формирования списка пользователей (username), выполните следующие действия:<br></p>
+        <h2>🔧 Подготовка к парсингу</h2>
         <ol>
             <li>
                 Запустить {{ program_name }} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск {{
@@ -87,6 +85,12 @@
                 🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
                 аккаунтов Telegram к {{program_name}})</a>.
             </li>
+        </ol>
+
+        <!-- 🔎 Парсинг одной группы - групп -->
+        <h2 id="parsing_one_group" style="text-align: center;">{{ parse_single_or_multiple_groups }}</h2>
+        <p>Для формирования списка пользователей (username), выполните следующие действия:<br></p>
+        <ol>
             <li>
                 Перейти в Настройки.
                 <p style="text-align: center;"><img src="/static/images/settings/settings.png" alt="Telegram Master"
@@ -121,16 +125,6 @@
         </p>
         <ol>
             <li>
-                Запустить {{ program_name }} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск
-                {{ program_name }}</a>).<br>
-                <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                    width="40%"></p>
-            </li>
-            <li>
-                🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
-                аккаунтов Telegram к {{program_name}})</a>.
-            </li>
-            <li>
                 Перейти в раздел <a href="{{ url_for('parsing') }}">🔍 Парсинг</a><br>
                 <p style="text-align: center;">
                     <img src="/static/images/parsing.png" alt="Telegram Master" width="40%">
@@ -163,14 +157,8 @@
             Для формирования списка пользователей <b>(username)</b>, выполните следующие действия:<br>
         </p>
         <blockquote>
-            1️⃣ Запустить {{ program_name }} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск {{
-            program_name }}</a>).<br>
-            <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                width="40%"></p>
-            <li>
-                🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
-                аккаунтов Telegram к {{program_name}})</a>.
-            </li>
+
+
             3️⃣ Перейти в раздел «Парсинг»<br>
             <p style="text-align: center;"><img src="/static/images/parsing.png" alt="Telegram Master" width="40%"></p>
             4️⃣ Выбрать функцию «<a href="{{ url_for('parsing') }}">🔍 Парсинг активных участников группы</a>».<br>
@@ -194,14 +182,6 @@
             выполните следующие действия:
         </p>
         <blockquote>
-            1️⃣ Запустить {{ program_name }} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск
-            {{ program_name }}</a>).<br>
-            <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                width="40%"></p>
-            <li>
-                🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
-                аккаунтов Telegram к {{program_name}})</a>.
-            </li>
             3️⃣ Перейти в раздел «Парсинг».<br>
             <p style="text-align: center;"><img src="/static/images/parsing.png" alt="Telegram Master" width="40%"></p>
             4️⃣ Выбрать функцию «Парсинг выбранной группы из подписанных пользователем».<br>
@@ -220,10 +200,7 @@
             Для очистки списка от ранее собранных данных (username), выполните следующие действия:<br>
         </p>
         <blockquote>
-            1️⃣ Запустить {{ program_name }} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск
-            {{ program_name }}</a>).<br>
-            <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                width="40%"></p>
+
             2️⃣ Перейти в раздел «<a href="{{ url_for('parsing') }}">🔍 Парсинг</a>»<br>
             <p style="text-align: center;"><img src="/static/images/parsing.png" alt="Telegram Master" width="40%"></p>
             3️⃣ Выбрать функцию «Очистка списка от ранее спарсенных данных».<br>
@@ -240,10 +217,7 @@
             Для импорта списка ранее собранных данных (username), выполните следующие действия:<br>
         </p>
         <blockquote>
-            1️⃣ Запустить {{ program_name }} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск {{
-            program_name }}</a>).<br>
-            <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                width="40%"></p>
+
             2️⃣ Перейти в раздел «<a href="{{ url_for('parsing') }}">🔍 Парсинг</a>»<br>
             <p style="text-align: center;"><img src="/static/images/parsing.png" alt="Telegram Master" width="40%"></p>
             3️⃣ Выбрать функцию «📋 Импорт списка от ранее спарсенных данных».<br>
