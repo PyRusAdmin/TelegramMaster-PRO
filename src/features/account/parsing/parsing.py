@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import asyncio
-import os
-import os.path
 import sqlite3
 
 import flet as ft  # Импортируем библиотеку flet
@@ -18,11 +16,11 @@ from src.core.database.account import get_account_list
 from src.core.database.database import (MembersAdmin, add_member_to_db, save_group_channel_info,
                                         administrators_entries_in_database)
 from src.features.account.connect import TGConnect
-from src.gui.gui_elements import GUIProgram
-from src.features.account.switch_controller import ToggleController
 from src.features.account.parsing.user_info import UserInfo
 from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
+from src.features.account.switch_controller import ToggleController
 from src.gui.gui import AppLogger, list_view
+from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 
@@ -63,51 +61,10 @@ class ParsingGroupMembers:
             autofocus=True  # ✅ Автозаполнение
         )
 
-        async def btn_click_file_picker(e: ft.FilePickerResultEvent):
-            if not e.files:
-                account_drop_down_list.value = "❌ Файл не выбран"
-                account_drop_down_list.color = ft.Colors.RED
-                self.page.update()
-                return
-
-            file = e.files[0]
-            if not file.name.endswith(".session"):
-                account_drop_down_list.value = f"❌ Неверный файл: {file.name}"
-                account_drop_down_list.color = ft.Colors.RED
-                self.page.update()
-                return
-
-            # Просто сохраняем путь к session-файлу
-            phone = os.path.splitext(os.path.basename(file.name))[0]  # например, "77076324730"
-            # Сохраняем название session-файла
-            self.page.session.set("selected_sessions", [phone])
-
-            # Показываем успешный выбор
-            account_drop_down_list.value = f"✅ Аккаунт выбран: {phone}"
-            account_drop_down_list.color = ft.Colors.GREEN
-
-            # 🔓 Разблокируем интерфейс
-            admin_switch.disabled = False
-            members_switch.disabled = False
-            account_groups_switch.disabled = False
-            active_switch.disabled = False
-
-            chat_input.disabled = False
-            limit_active_user.disabled = False
-
-            dropdown.disabled = False
-            parse_button.disabled = False
-
-            self.page.update()
-
-        file_picker = ft.FilePicker(on_result=btn_click_file_picker)
-        self.page.overlay.append(file_picker)
-
         # Кнопки-переключатели
         account_groups_switch = ft.CupertinoSwitch(label="Группы аккаунта", value=False, disabled=True)
         admin_switch = ft.CupertinoSwitch(label="Администраторов", value=False, disabled=True)
         members_switch = ft.CupertinoSwitch(label="Участников", value=False, disabled=True)
-        # Todo добавить работу
         active_switch = ft.CupertinoSwitch(label="Активные", value=False, disabled=True)
         account_group_selection_switch = ft.CupertinoSwitch(label="Выбрать группу", value=False, disabled=True)
 
@@ -122,6 +79,8 @@ class ParsingGroupMembers:
 
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 await self.connect.getting_account_data(client)
+
+                await self.load_groups(dropdown, result_text)  # ⬅️ Подгружаем группы
 
                 data = chat_input.value.split()
                 logger.info(f"Полученные данные: {data}")  # Отладка
@@ -147,12 +106,31 @@ class ParsingGroupMembers:
                         )
                     if account_group_selection_switch.value:  # Парсинг выбранной группы
                         await self.load_groups(dropdown, result_text)  # ⬅️ Подгружаем группы
-                        await self.start_group_parsing(dropdown, result_text)
+                        await start_group_parsing(client=client, dropdown=dropdown, result_text=result_text)
                     await self.app_logger.end_time(start)
                 except Exception as error:
                     logger.exception(error)
             except Exception as error:
                 logger.exception(error)
+
+        async def start_group_parsing(client, dropdown, result_text):
+            """
+            🚀 Запускает процесс парсинга группы и отображает статус в интерфейсе.
+            :param client: Сессия Telethon
+            :param dropdown: Выпадающий список
+            :param result_text: Текст
+            """
+
+            await self.load_groups(client=client, dropdown=dropdown, result_text=result_text)
+
+            if not dropdown.value:
+                await self.app_logger.log_and_display("⚠️ Группа не выбрана")
+                return
+            await self.app_logger.log_and_display(f"▶️ Парсинг группы: {dropdown.value}")
+            logger.warning(f"🔍 Парсим группу: {dropdown.value}")
+            await parse_group(client=client, groups_wr=dropdown.value)
+            await client.disconnect()
+            await self.app_logger.log_and_display("🔚 Парсинг завершен")
 
         async def parse_group(client, groups_wr) -> None:
             """
@@ -277,36 +255,15 @@ class ParsingGroupMembers:
             "user_premium": await UserInfo().get_user_premium_status(user),
         }
 
-    async def start_group_parsing(self, dropdown, result_text):
-        phone = await self.load_groups(dropdown, result_text)
-        logger.warning(f"🔍 Аккаунт: {phone}")
+    async def load_groups(self, client, dropdown, result_text):
+        """
+        Выводит список групп, на которые подписан аккаунт.
 
-        client = await self.connect.client_connect_string_session(session_name=phone)
-        await self.connect.getting_account_data(client)
-
-        if not dropdown.value:
-            await self.app_logger.log_and_display("⚠️ Группа не выбрана")
-            return
-        await self.app_logger.log_and_display(f"▶️ Парсинг группы: {dropdown.value}")
-        logger.warning(f"🔍 Парсим группу: {dropdown.value}")
-        await self.parse_group(dropdown.value)
-        await client.disconnect()
-        await self.app_logger.log_and_display("🔚 Парсинг завершен")
-
-    async def load_groups(self, dropdown, result_text):
+        :param client: Сессия Telethon
+        :param dropdown: Выпадающий список
+        :param result_text: Текст
+        """
         try:
-            selected = self.page.session.get("selected_sessions") or []
-            if not selected:
-                await self.app_logger.log_and_display("⚠️ Сначала выберите аккаунт")
-                return
-
-            session_path = selected[0]
-            phone = os.path.splitext(os.path.basename(session_path))[0]
-            logger.warning(f"🔍 Работаем с аккаунтом {phone}")
-
-            client = await self.connect.client_connect_string_session(session_name=phone)
-            await self.connect.getting_account_data(client)
-
             result = await client(
                 GetDialogsRequest(offset_date=None, offset_id=0, offset_peer=InputPeerEmpty(), limit=200, hash=0))
             groups = await self.filtering_groups(result.chats)
@@ -314,7 +271,7 @@ class ParsingGroupMembers:
             dropdown.options = [ft.dropdown.Option(t) for t in titles]
             result_text.value = f"🔽 Найдено групп: {len(titles)}"
             self.page.update()
-            return phone
+            # return phone
         except Exception as e:
             logger.exception(e)
             return None
@@ -387,7 +344,6 @@ class ParsingGroupMembers:
         Парсит группы на которые подписан аккаунт
         :param client: Клиент Telethon
         """
-
         # Обрабатываем все файлы сессий по очереди 📂
         await self.connect.getting_account_data(client)
 
