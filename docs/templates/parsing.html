@@ -96,12 +96,12 @@
                 Сформировать список групп в разделе «Формирование списка чатов каналов»
             </li>
             <li>
-                5️⃣ Перейти в раздел «Парсинг»
+                Перейти в раздел «Парсинг»
                 <p style="text-align: center;"><img src="/static/images/parsing.png" alt="Telegram Master" width="40%">
                 </p>
             </li>
             <li>
-                6️⃣ Выбрать функцию «Парсинг одной группы - групп».
+                Выбрать функцию «Парсинг одной группы - групп».
             </li>
         </ol>
 
@@ -119,25 +119,34 @@
             Для парсинга выбранной группы из подписанных пользователем - на которые подписан аккаунт(ы), выполните
             следующие действия:
         </p>
-        <blockquote>
-            1️⃣ Запустить {{ program_name }} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск
-            {{ program_name }}</a>).<br>
-            <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                width="40%"></p>
+        <ol>
+            <li>
+                Запустить {{ program_name }} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск
+                {{ program_name }}</a>).<br>
+                <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
+                                                    width="40%"></p>
+            </li>
             <li>
                 🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
                 аккаунтов Telegram к {{program_name}})</a>.
             </li>
-            3️⃣ Перейти в раздел <a href="{{ url_for('parsing') }}">🔍 Парсинг</a><br>
-            <p style="text-align: center;">
-                <img src="/static/images/parsing.png" alt="Telegram Master" width="40%">
-            </p>
-            4️⃣ Выбрать функцию <a href="{{ url_for('parsing') }}">📂 Парсинг выбранной группы из подписанных
-            пользователем</a><br>
-            5️⃣ Выбрать группу из выпадающего списка.<br>
-            <p style="text-align: center;"><img src="/static/images/parsing_1.png" alt="Telegram Master" width="40%">
-            </p>
-        </blockquote>
+            <li>
+                Перейти в раздел <a href="{{ url_for('parsing') }}">🔍 Парсинг</a><br>
+                <p style="text-align: center;">
+                    <img src="/static/images/parsing.png" alt="Telegram Master" width="40%">
+                </p>
+            </li>
+            <li>
+                Выбрать функцию <a href="{{ url_for('parsing') }}">📂 Парсинг выбранной группы из подписанных
+                пользователем</a><br>
+            </li>
+            <li>
+                Выбрать группу из выпадающего списка.<br>
+                <p style="text-align: center;"><img src="/static/images/parsing_1.png" alt="Telegram Master"
+                                                    width="40%">
+                </p>
+            </li>
+        </ol>
         <div
                 style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
             <p style="color: #721c24; margin: 0; font-size: 16px;">
@@ -251,5 +260,4 @@
     </div>
 </div>
 </body>
-
 </html>
