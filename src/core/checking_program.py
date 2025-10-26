@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import flet as ft
 
-from src.core.database import select_records_with_limit
+from src.core.database.database import select_records_with_limit
 from src.core.utils import Utils
 from src.gui.notification import show_notification
 

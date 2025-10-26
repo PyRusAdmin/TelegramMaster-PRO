@@ -14,8 +14,9 @@ from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsSearch, InputPeerEmpty, InputUser
 
 from src.core.configs import WIDTH_WIDE_BUTTON, TIME_ACTIVITY_USER_2, BUTTON_HEIGHT
-from src.core.database import (MembersAdmin, add_member_to_db, save_group_channel_info,
-                               administrators_entries_in_database, get_account_list)
+from src.core.database.account import get_account_list
+from src.core.database.database import (MembersAdmin, add_member_to_db, save_group_channel_info,
+                                        administrators_entries_in_database)
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
 from src.features.account.parsing.switch_controller import ToggleController
@@ -43,6 +44,10 @@ class ParsingGroupMembers:
         self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
+        """
+        TextField - поле для ввода ссылки на чат
+        Dropdown - выпадающий список с названиями групп , аккаунтами
+        """
         chat_input = ft.TextField(label="🔗 Введите ссылку на чат...", disabled=True)
 
         # Создаем выпадающий список с названиями групп

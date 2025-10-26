@@ -14,8 +14,8 @@ from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, Sessio
 from telethon.tl.functions.channels import InviteToChannelRequest
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, width_tvo_input, width_one_input
-from src.core.database import (select_records_with_limit, get_links_inviting, save_links_inviting,
-                               getting_account)
+from src.core.database.account import getting_account
+from src.core.database.database import (select_records_with_limit, get_links_inviting, save_links_inviting)
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.parsing.switch_controller import ToggleController

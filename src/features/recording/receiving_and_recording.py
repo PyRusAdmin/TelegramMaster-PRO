@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import openpyxl
 
-from src.core.database import read_parsed_chat_participants_from_db
+from src.core.database.database import read_parsed_chat_participants_from_db
 
 
 class ReceivingAndRecording:

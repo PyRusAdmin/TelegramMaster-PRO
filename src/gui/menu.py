@@ -215,5 +215,3 @@ class Menu:
                                            text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
                                            on_click=lambda _: self.page.go("/automatic_setting_of_reactions")),
                      ])]))
-
-

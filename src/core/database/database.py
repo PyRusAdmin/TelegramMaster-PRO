@@ -135,39 +135,6 @@ def write_to_database_contacts_accounts(data):
     ).execute()
 
 
-"""Работа с аккаунтами"""
-
-
-class Account(Model):
-    session_string = CharField(unique=True)  # уникальность для защиты от дубликатов
-
-    class Meta:
-        database = db
-        table_name = 'account'
-
-
-def write_account_to_db(session_string):
-    """
-    Запись аккаунта в базу данных
-    :param session_string: Строка сессии
-    """
-    Account.insert(session_string=session_string).on_conflict(action='IGNORE').execute()
-
-
-def getting_account():
-    """
-    Получение аккаунтов из базы данных
-    :return: Список аккаунтов из базы данных
-    """
-
-    records = []
-    for record in Account.select(Account.session_string):
-        records.append(record.session_string)
-
-    logger.warning(records)
-    return records
-
-
 """"Работа с таблицей contact (телефонная книга аккаунта Telegram)"""
 
 
@@ -215,18 +182,6 @@ def cleaning_db(table_name):
         WritingGroupLinks.delete().execute()
     if table_name == 'links_inviting':  # Удаляем все записи из таблицы links_inviting
         LinksInviting.delete().execute()
-
-
-def create_database():
-    """Создает все таблицы в базе данных"""
-    db.connect()
-    db.create_tables([AccountContacts])  # Создаем таблицу для хранения контактов аккаунтов
-    db.create_tables([WritingGroupLinks, GroupsAndChannels, MembersAdmin])
-    db.create_tables([LinksInviting])  # Создаем таблицу для хранения ссылок для инвайтинга
-    db.create_tables([MembersGroups])  # Создаем таблицу для хранения спарсенных пользователей
-    db.create_tables([Contact])  # Создаем таблицу для хранения контактов
-    db.create_tables([Proxy])  # Создаем таблицу для хранения прокси
-    db.create_tables([Account])
 
 
 """Работа с таблицей members"""
@@ -422,15 +377,6 @@ def get_links_inviting():
         links_inviting.append(link.links_inviting)
     logger.warning(links_inviting)
     return links_inviting
-
-
-def get_account_list():
-    """Получаем подключенные аккаунты"""
-    accounts = []
-    for account in Account.select(Account.session_string):
-        accounts.append(account.session_string)
-    logger.warning(accounts)
-    return accounts
 
 
 def save_links_inviting(data) -> None:
