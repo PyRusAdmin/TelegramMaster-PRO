@@ -61,19 +61,13 @@ async def main(page: ft.Page):
         await menu.main_menu_program()  # Главное меню программы
         # ______________________________________________________________________________________________________________
         if page.route == "/inviting":  # Меню "🚀 Инвайтинг"
-            # TODO миграция на Peewee. вернуть проверку на наличие аккаунтов, username, ссылки на инвайтинг
             await InvitingToAGroup(page=page).inviting_menu()
+        # ______________________________________________________________________________________________________________
+        elif page.route == "/parsing":  # Меню "Парсинг"
+            await parsing_group_members.account_selection_menu()
         # ______________________________________________________________________________________________________________
         elif page.route == "/account_verification_menu":  # 🔍 Проверка аккаунтов
             await connect.check_menu()
-        # elif page.route == "/checking_for_spam_bots":  # 🤖 Проверка через спам бот
-        #     await connect.check_for_spam()
-        # elif page.route == "/validation_check":  # ✅ Проверка на валидность
-        #     await connect.validation_check()
-        # elif page.route == "/renaming_accounts":  # ✏️ Переименование аккаунтов
-        #     await connect.renaming_accounts()
-        # elif page.route == "/full_verification":  # 🔍 Полная проверка
-        #     await connect.full_verification()
         # ______________________________________________________________________________________________________________
         elif page.route == "/subscribe_unsubscribe":  # Меню "Подписка и отписка"
             await subscribe_unsubscribe_telegram.subscribe_and_unsubscribe_menu()
@@ -95,9 +89,6 @@ async def main(page: ft.Page):
         # ______________________________________________________________________________________________________________
         elif page.route == "/viewing_posts_menu":  # ️‍🗨️ Накручиваем просмотры постов
             await viewing_posts.viewing_posts_request()
-        # ______________________________________________________________________________________________________________
-        elif page.route == "/parsing":  # Меню "Парсинг"
-            await parsing_group_members.account_selection_menu()
         # ______________________________________________________________________________________________________________
         elif page.route == "/importing_a_list_of_parsed_data":  # 📋 Импорт списка от ранее спарсенных данных
             await receiving_and_recording.write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
