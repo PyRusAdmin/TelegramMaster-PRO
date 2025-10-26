@@ -18,7 +18,7 @@ from src.core.database.database import select_records_with_limit, open_and_read_
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
-from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
+from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.gui import list_view, AppLogger
 from src.locales.translations_loader import translations
 

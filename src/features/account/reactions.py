@@ -12,7 +12,7 @@ from telethon.tl.functions.messages import SendReactionRequest
 
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
+from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations

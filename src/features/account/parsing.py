@@ -17,7 +17,7 @@ from src.core.database.database import (MembersAdmin, add_member_to_db, save_gro
                                         administrators_entries_in_database)
 from src.features.account.connect import TGConnect
 from src.features.account.parsing.user_info import UserInfo
-from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
+from src.features.account.subscribe import Subscribe
 from src.features.account.switch_controller import ToggleController
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
@@ -34,6 +34,7 @@ class ParsingGroupMembers:
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram()
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
+        self.group_map = {}
 
     async def account_selection_menu(self):
         """Меню парсинга групп"""
@@ -71,6 +72,19 @@ class ParsingGroupMembers:
         ToggleController(admin_switch, account_groups_switch, members_switch, account_group_selection_switch,
                          active_switch).element_handler(self.page)
 
+        async def on_account_change(e):
+            if account_drop_down_list.value:
+                client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
+                await self.connect.getting_account_data(client)
+                await self.load_groups(client, dropdown, result_text)
+                await client.disconnect()
+            else:
+                dropdown.options = []
+                result_text.value = "📂 Выберите аккаунт"
+                self.page.update()
+
+        account_drop_down_list.on_change = on_account_change
+
         async def add_items(_):
             """🚀 Запускает процесс парсинга групп и отображает статус в интерфейсе."""
             try:
@@ -80,7 +94,8 @@ class ParsingGroupMembers:
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 await self.connect.getting_account_data(client)
 
-                await self.load_groups(dropdown, result_text)  # ⬅️ Подгружаем группы
+                # await self.load_groups(client=client, dropdown=dropdown,
+                #                        result_text=result_text)  # ⬅️ Подгружаем группы
 
                 data = chat_input.value.split()
                 logger.info(f"Полученные данные: {data}")  # Отладка
@@ -105,32 +120,32 @@ class ParsingGroupMembers:
                             client=client
                         )
                     if account_group_selection_switch.value:  # Парсинг выбранной группы
-                        await self.load_groups(dropdown, result_text)  # ⬅️ Подгружаем группы
-                        await start_group_parsing(client=client, dropdown=dropdown, result_text=result_text)
+                        # await self.load_groups(client, dropdown, result_text)  # ⬅️ Подгружаем группы
+                        await start_group_parsing(client=client, dropdown=dropdown)
                     await self.app_logger.end_time(start)
                 except Exception as error:
                     logger.exception(error)
             except Exception as error:
                 logger.exception(error)
 
-        async def start_group_parsing(client, dropdown, result_text):
+        async def start_group_parsing(client, dropdown):
             """
-            🚀 Запускает процесс парсинга группы и отображает статус в интерфейсе.
-            :param client: Сессия Telethon
-            :param dropdown: Выпадающий список
-            :param result_text: Текст
+            Парсит выбранную группу.
+            :param client: клиент сессии телеграм
+            :param dropdown: выпадающий список
             """
-
-            await self.load_groups(client=client, dropdown=dropdown, result_text=result_text)
-
             if not dropdown.value:
                 await self.app_logger.log_and_display("⚠️ Группа не выбрана")
                 return
+
+            group_entity = self.group_map.get(dropdown.value)
+            if not group_entity:
+                await self.app_logger.log_and_display("❌ Не удалось найти группу")
+                return
+
             await self.app_logger.log_and_display(f"▶️ Парсинг группы: {dropdown.value}")
-            logger.warning(f"🔍 Парсим группу: {dropdown.value}")
-            await parse_group(client=client, groups_wr=dropdown.value)
-            await client.disconnect()
-            await self.app_logger.log_and_display("🔚 Парсинг завершен")
+            await parse_group(client=client, groups_wr=group_entity)  # ← передаём entity
+            await self.app_logger.log_and_display("🔚 Парсинг завершён")
 
         async def parse_group(client, groups_wr) -> None:
             """
@@ -257,24 +272,33 @@ class ParsingGroupMembers:
 
     async def load_groups(self, client, dropdown, result_text):
         """
-        Выводит список групп, на которые подписан аккаунт.
-
+        Загружает группы, на которые подписан аккаунт, и сохраняет их в self.group_map.
         :param client: Сессия Telethon
         :param dropdown: Выпадающий список
         :param result_text: Текст
         """
         try:
-            result = await client(
-                GetDialogsRequest(offset_date=None, offset_id=0, offset_peer=InputPeerEmpty(), limit=200, hash=0))
-            groups = await self.filtering_groups(result.chats)
-            titles = await self.name_of_the_groups(groups)
-            dropdown.options = [ft.dropdown.Option(t) for t in titles]
+            result = await client(GetDialogsRequest(
+                offset_date=None,
+                offset_id=0,
+                offset_peer=InputPeerEmpty(),
+                limit=200,
+                hash=0
+            ))
+            groups = [chat for chat in result.chats if getattr(chat, 'megagroup', False)]
+            titles = [group.title for group in groups]
+
+            # Сохраняем соответствие название → сущность
+            self.group_map = {group.title: group for group in groups}
+
+            dropdown.options = [ft.dropdown.Option(title) for title in titles]
             result_text.value = f"🔽 Найдено групп: {len(titles)}"
             self.page.update()
-            # return phone
         except Exception as e:
-            logger.exception(e)
-            return None
+            logger.exception("Ошибка при загрузке групп")
+            result_text.value = "❌ Ошибка загрузки групп"
+            dropdown.options = []
+            self.page.update()
 
     async def obtaining_administrators(self, client, groups):
         """
@@ -399,36 +423,6 @@ class ParsingGroupMembers:
                     await self.app_logger.log_and_display(f"Сообщение {message.id} не имеет действительного from_id.")
         except Exception as error:
             logger.exception(error)
-
-    @staticmethod
-    async def filtering_groups(chats):
-        """
-        Фильтрация чатов для получения только групп.
-
-        :param chats: Список чатов.
-        :return: Список групп.
-        """
-        groups = []
-        for chat in chats:
-            try:
-                if chat.megagroup:
-                    groups.append(chat)
-            except AttributeError:
-                continue  # Игнорируем объекты без атрибута megagroup
-        return groups
-
-    @staticmethod
-    async def name_of_the_groups(groups):
-        """
-        Получение названий групп.
-
-        :param groups: Список групп.
-        :return: Список названий групп.
-        """
-        group_names = []  # Создаем новый список для названий групп
-        for group in groups:
-            group_names.append(group.title)  # Добавляем название группы в список
-        return group_names
 
     async def forming_a_list_of_groups(self, client) -> None:
         """

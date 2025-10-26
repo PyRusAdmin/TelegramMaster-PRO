@@ -11,8 +11,8 @@ from telethon.tl.functions.messages import GetMessagesViewsRequest
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.contact import StatusDisplay
-from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
-from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
+from src.features.account.subscribe import Subscribe
+from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger, list_view
 

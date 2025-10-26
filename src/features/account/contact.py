@@ -12,7 +12,7 @@ from src.core.database.database import (add_member_to_db, write_to_database_cont
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
-from src.features.account.parsing.parsing import UserInfo
+from src.features.account.parsing import UserInfo
 from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations

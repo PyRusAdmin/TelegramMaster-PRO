@@ -19,8 +19,8 @@ from src.core.database.database import (select_records_with_limit, get_links_inv
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.switch_controller import ToggleController
-from src.features.account.subscribe_unsubscribe.subscribe import Subscribe
-from src.features.account.subscribe_unsubscribe.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
+from src.features.account.subscribe import Subscribe
+from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.gui.gui_input_builders import TimeInputRowBuilder, LinkInputRowBuilder
