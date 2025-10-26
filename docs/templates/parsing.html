@@ -19,7 +19,7 @@
     <div id="menu-placeholder"></div>
     <!-- Основной контент -->
     <div class="content">
-        <h1 style="text-align: center;">🔎 Парсинг ({{ program_name }})</h1>
+        <h1 style="text-align: center;">🔎 Парсинг</h1>
         <!-- Меню навигации -->
         <div class="card-container">
             <div class="card">
@@ -84,6 +84,11 @@
             <li>
                 🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
                 аккаунтов Telegram к {{program_name}})</a>.
+            </li>
+            <li>
+                Перейти в раздел «Парсинг»<br>
+                <p style="text-align: center;"><img src="/static/images/parsing.png" alt="Telegram Master" width="40%">
+                </p>
             </li>
         </ol>
 
@@ -159,8 +164,6 @@
         <blockquote>
 
 
-            3️⃣ Перейти в раздел «Парсинг»<br>
-            <p style="text-align: center;"><img src="/static/images/parsing.png" alt="Telegram Master" width="40%"></p>
             4️⃣ Выбрать функцию «<a href="{{ url_for('parsing') }}">🔍 Парсинг активных участников группы</a>».<br>
             5️⃣ Ввести ссылку в графическое меню на чат с которого будет происходить сбор "<b>активных
             участников</b>".<br>
