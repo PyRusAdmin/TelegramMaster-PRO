@@ -16,7 +16,6 @@ from src.features.account.reactions import WorkingWithReactions
 from src.features.account.sending_messages import SendTelegramMessages
 from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.features.account.viewing_posts import ViewingPosts
-from src.features.auth.logging_in import SendLog
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger
@@ -32,7 +31,6 @@ async def main(page: ft.Page):
     Аргументы:
     :param page: Страница интерфейса Flet для отображения элементов управления.
     """
-    await SendLog(page=page).loging()
 
     create_database()  # Создание базы данных со всеми таблицами
 

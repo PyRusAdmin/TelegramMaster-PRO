@@ -46,12 +46,6 @@
                 <p>{{ parse_account_subscribed_groups_channels }}</p>
                 <button class="card-button"><a href="#parsing_selected_group">Перейти</a></button>
             </div>
-            <div class="card">
-                <!-- 📜 Парсинг групп / каналов на которые подписан аккаунт -->
-                <p class="heading">🗑️ Очистка</p>
-                <p>{{ clear_previously_parsed_data_list }}</p>
-                <button class="card-button"><a href="#clear_list">Перейти</a></button>
-            </div>
         </div>
         <div style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
             <h3 style="color: #721c24; margin: 0 0 10px;">ПРИМЕЧАНИЕ:</h3>
@@ -179,19 +173,6 @@
             Во время парсинга результаты записываются в базу данных (в файл
             <code>{{ program_name }}/user_data/software_database.db</code> в таблицу members)<br>
             Если вы уже выполняли Парсинг ранее, программа добавит участников в ранее созданный список (в файл
-            <code>{{ program_name }}/user_data/software_database.db</code> в таблицу members).<br>
-        </p>
-        <hr/> <!-- Горизонтальная линия-->
-        <!-- 🗑️ Очистка списка от ранее спарсенных данных -->
-        <h2 id="clear_list" style="text-align: center;">{{ clear_previously_parsed_data_list }}</h2>
-        <p>
-            Для очистки списка от ранее собранных данных (username), выполните следующие действия:<br>
-        </p>
-        <blockquote>
-            3️⃣ Выбрать функцию «Очистка списка от ранее спарсенных данных».<br>
-        </blockquote>
-        <p>
-            После выполненных действий {{ program_name }} очистит базу данных (файл
             <code>{{ program_name }}/user_data/software_database.db</code> в таблицу members).<br>
         </p>
         <!-- Кнопка "Вверх" -->

@@ -458,7 +458,7 @@ class ParsingGroupMembers:
                     # Логируем информацию
                     await self.app_logger.log_and_display(
                         f"{dialog.id}, {title}, {link or 'без ссылки'}, {participants_count}")
-                    await save_group_channel_info(
+                    save_group_channel_info(
                         dialog=dialog, title=title, about=about, link=link,
                         participants_count=participants_count)
                 except TypeError as te:
