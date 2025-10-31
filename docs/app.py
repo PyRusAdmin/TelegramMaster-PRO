@@ -43,6 +43,7 @@ async def menu(request: Request):
             "program_version": PROGRAM_VERSION,
             "update_date": DATE_OF_PROGRAM_CHANGE,
             "subscribe_unsubscribe": translations["ru"]["menu"]["subscribe_unsubscribe"],
+            "importing_a_list_of_parsed_data": translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"]
         }
     )
 
@@ -487,6 +488,16 @@ async def telegram_limits(request: Request):
     """Лимиты Telegram"""
     logger.info("Запущена страница документации, о лимитах Telegram")
     return templates.TemplateResponse('telegram_limits.html', {"request": request, "program_name": PROGRAM_NAME})
+
+
+@app.get(path='/importing_a_list_of_parsed_data', response_class=HTMLResponse)
+async def importing_a_list_of_parsed_data(request: Request):
+    """📋 Импорт списка от ранее спарсенных данных"""
+    logger.info("Запущена страница 📋 Импорт списка от ранее спарсенных данных")
+    return templates.TemplateResponse('importing_a_list_of_parsed_data.html', {
+        "request": request, "program_name": PROGRAM_NAME,
+        "importing_a_list_of_parsed_data": translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
+    })
 
 
 def run_uvicorn():

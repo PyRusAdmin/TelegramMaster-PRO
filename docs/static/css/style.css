@@ -7,17 +7,16 @@ body {
 
 .container {
     display: flex;
+    min-height: 100vh; /* чтобы контейнер тянулся до низа экрана */
 }
 
 .sidebar {
-    width: auto;
+    width: 240px; /* или другая фиксированная ширина */
     padding: 15px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    height: 100vh; /* Меню растянуто на всю высоту экрана */
-    overflow: auto;
-    font-size: 13px;
     background-color: #f4f5f8; /* Цвет фона */
+    font-size: 13px;
+    overflow-y: auto; /* прокрутка, если меню длинное */
+    flex-shrink: 0; /* ← запрещает сжиматься */
 }
 
 .sidebar a {
@@ -33,14 +32,12 @@ body {
 }
 
 .content {
-    margin-left: 270px;
+    flex: 1; /* ← занимает всё оставшееся пространство */
     padding: 20px;
-    position: relative;
-    z-index: 30;
     background-color: #ffffff; /* Белый фон для документации */
     color: #000000; /* Черный цвет текста */
-/*    border-radius: 8px;*/
-/*    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); *//* Тень для выделения контента */
+    position: relative;
+    z-index: 30;
 }
 
 .content img,
@@ -49,15 +46,6 @@ body {
     max-width: 100%;
     height: auto;
 }
-
-.content p,
-.content li,
-.content h1,
-.content h2 {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
 
 .banner {
     width: auto;
