@@ -72,13 +72,6 @@ async def main(page: ft.Page):
         # ______________________________________________________________________________________________________________
         elif page.route == "/working_with_reactions":  # Меню "Работа с реакциями"
             await working_with_reactions.reactions_menu()
-
-        elif page.route == "/automatic_setting_of_reactions":  # Автоматическое выставление реакций
-            start = await app_logger.start_time()
-            logger.info("▶️ Начало Автоматического выставления реакций")
-            await working_with_reactions.setting_reactions()
-            logger.info("🔚 Конец Автоматического выставления реакций")
-            await app_logger.end_time(start)
         # ______________________________________________________________________________________________________________
         elif page.route == "/viewing_posts_menu":  # ️‍🗨️ Накручиваем просмотры постов
             await viewing_posts.viewing_posts_request()

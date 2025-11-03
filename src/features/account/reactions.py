@@ -98,6 +98,38 @@ class WorkingWithReactions:
             logger.info("🔚 Конец Проставления реакций")
             await self.app_logger.end_time(start)
 
+        async def setting_reactions(_) -> None:
+            """
+            Выставление реакций на новые посты
+            """
+            start = await self.app_logger.start_time()
+            logger.info("▶️ Начало Автоматического выставления реакций")
+            try:
+                for session_name in self.session_string:
+
+                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
+                    await self.connect.getting_account_data(client)
+
+                    chat = self.utils.read_json_file(filename='user_data/reactions/link_channel.json')
+                    await self.app_logger.log_and_display(f"{chat}")
+                    await client(JoinChannelRequest(chat))  # Подписываемся на канал / группу
+
+                    @client.on(events.NewMessage(chats=chat))
+                    async def handler(event):
+                        message = event.message  # Получаем сообщение из события
+                        message_id = message.id  # Получаем id сообщение
+                        await self.app_logger.log_and_display(f"Идентификатор сообщения: {message_id}, {message}")
+                        # Проверяем, является ли сообщение постом и не является ли оно нашим
+                        if message.post and not message.out:
+                            await self.reactions_for_groups_and_messages_test(message_id, chat)
+
+                    await client.run_until_disconnected()  # Запуск клиента в режиме ожидания событий
+            except Exception as error:
+                logger.exception(error)
+
+            logger.info("🔚 Конец Автоматического выставления реакций")
+            await self.app_logger.end_time(start)
+
         self.page.views.append(
             ft.View("/working_with_reactions",
                     [await self.gui_program.key_app_bar(),  # Кнопка "Назад"
@@ -121,7 +153,7 @@ class WorkingWithReactions:
                          # 🤖 Автоматическое выставление реакций
                          ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                            text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
-                                           on_click=lambda _: self.page.go("/automatic_setting_of_reactions")),
+                                           on_click=setting_reactions),
                      ])]))
 
     async def choosing_random_reaction(self):
@@ -162,32 +194,5 @@ class WorkingWithReactions:
                     await self.app_logger.log_and_display(translations["ru"]["errors"]["invalid_reaction"])
                     await asyncio.sleep(1)
                     await client.disconnect()
-        except Exception as error:
-            logger.exception(error)
-
-    async def setting_reactions(self) -> None:
-        """
-        Выставление реакций на новые посты
-        """
-        try:
-            for session_name in self.session_string:
-
-                client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
-                await self.connect.getting_account_data(client)
-
-                chat = self.utils.read_json_file(filename='user_data/reactions/link_channel.json')
-                await self.app_logger.log_and_display(f"{chat}")
-                await client(JoinChannelRequest(chat))  # Подписываемся на канал / группу
-
-                @client.on(events.NewMessage(chats=chat))
-                async def handler(event):
-                    message = event.message  # Получаем сообщение из события
-                    message_id = message.id  # Получаем id сообщение
-                    await self.app_logger.log_and_display(f"Идентификатор сообщения: {message_id}, {message}")
-                    # Проверяем, является ли сообщение постом и не является ли оно нашим
-                    if message.post and not message.out:
-                        await self.reactions_for_groups_and_messages_test(message_id, chat)
-
-                await client.run_until_disconnected()  # Запуск клиента в режиме ожидания событий
         except Exception as error:
             logger.exception(error)
