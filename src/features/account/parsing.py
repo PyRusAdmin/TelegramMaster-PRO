@@ -32,7 +32,7 @@ class ParsingGroupMembers:
         self.connect = TGConnect(page)
         self.app_logger = AppLogger(page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram()  # Инициализация экземпляра класса GUIProgram
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
         self.group_map = {}
 

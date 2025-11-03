@@ -3,12 +3,9 @@ import base64
 
 import flet as ft
 
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
-from src.core.configs import PROGRAM_NAME, DATE_OF_PROGRAM_CHANGE, PROGRAM_VERSION
+from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, PROGRAM_NAME, DATE_OF_PROGRAM_CHANGE, PROGRAM_VERSION
 from src.gui.gui_elements import GUIProgram
-from src.gui.gui import list_view
 from src.locales.translations_loader import translations
-from flet import DecorationImage, ImageFit
 
 
 class Menu:
@@ -191,27 +188,4 @@ class Menu:
                                            on_click=lambda _: self.page.go("/recording_reaction_link")),
                      ])]))
 
-    async def reactions_menu(self):
-        """
-        Меню ❤️ Работа с реакциями
-        """
-        self.page.views.append(
-            ft.View("/working_with_reactions",
-                    [await self.gui_program.key_app_bar(),  # Кнопка "Назад"
-                     ft.Text(spans=[ft.TextSpan(
-                         translations["ru"]["menu"]["reactions"],
-                         ft.TextStyle(
-                             size=20, weight=ft.FontWeight.BOLD,
-                             foreground=ft.Paint(
-                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
-                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                         # 👍 Ставим реакции
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["reactions_menu"]["setting_reactions"],
-                                           on_click=lambda _: self.page.go("/setting_reactions")),
-                         # 🤖 Автоматическое выставление реакций
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
-                                           on_click=lambda _: self.page.go("/automatic_setting_of_reactions")),
-                     ])]))
+

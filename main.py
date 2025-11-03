@@ -71,7 +71,10 @@ async def main(page: ft.Page):
             await subscribe_unsubscribe_telegram.subscribe_and_unsubscribe_menu()
         # ______________________________________________________________________________________________________________
         elif page.route == "/working_with_reactions":  # Меню "Работа с реакциями"
-            await menu.reactions_menu()
+            await working_with_reactions.reactions_menu()
+
+
+
         elif page.route == "/setting_reactions":  # Ставим реакции
             start = await app_logger.start_time()
             logger.info("▶️ Начало Проставления реакций")

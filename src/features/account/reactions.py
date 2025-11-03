@@ -10,13 +10,17 @@ from telethon.errors import ReactionInvalidError
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import SendReactionRequest
 
+from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
 from src.core.database.account import getting_account
+from src.core.database.database import select_records_with_limit
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
+from src.gui.gui import list_view
+from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 
@@ -34,15 +38,59 @@ class WorkingWithReactions:
         self.function_button = FunctionButton(page=page)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
+        self.gui_program = GUIProgram()  # Инициализация экземпляра класса GUIProgram
+
+    async def reactions_menu(self):
+        """
+        Меню ❤️ Работа с реакциями
+        """
+
+        list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
+        self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
+        self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
+
+        # Отображение информации о настройках инвайтинга
+        await self.app_logger.log_and_display(
+            message=(
+                f"Всего подключенных аккаунтов: {len(self.session_string)}\n"
+            )
+        )
+
+        # Поле для ввода ссылки на чат
+        chat = ft.TextField(label="Введите ссылку на группу / чат:", multiline=False, max_lines=1)
+        message = ft.TextField(label="Введите ссылку на сообщение или пост:", multiline=False, max_lines=1)
+
+        self.page.views.append(
+            ft.View("/working_with_reactions",
+                    [await self.gui_program.key_app_bar(),  # Кнопка "Назад"
+                     ft.Text(spans=[ft.TextSpan(
+                         translations["ru"]["menu"]["reactions"],
+                         ft.TextStyle(
+                             size=20, weight=ft.FontWeight.BOLD,
+                             foreground=ft.Paint(
+                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
+                                                                                      ft.Colors.PURPLE])), ), ), ], ),
+                     list_view,  # Отображение логов 📝
+
+                     chat,  # Поле ввода ссылки на чат
+                     message,  # Поле ввода ссылки пост
+
+                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                         # 👍 Ставим реакции
+                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                           text=translations["ru"]["reactions_menu"]["setting_reactions"],
+                                           on_click=lambda _: self.page.go("/setting_reactions")),
+                         # 🤖 Автоматическое выставление реакций
+                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                           text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
+                                           on_click=lambda _: self.page.go("/automatic_setting_of_reactions")),
+                     ])]))
 
     async def send_reaction_request(self) -> None:
         """
         Ставим реакции на сообщения
         """
         try:
-            # Поле для ввода ссылки на чат
-            chat = ft.TextField(label="Введите ссылку на группу / чат:", multiline=False, max_lines=1)
-            message = ft.TextField(label="Введите ссылку на сообщение или пост:", multiline=False, max_lines=1)
 
             async def btn_click(_) -> None:
 
@@ -68,14 +116,6 @@ class WorkingWithReactions:
                     # Изменение маршрута на новый (если необходимо)
                     self.page.go("/working_with_reactions")
                     self.page.update()  # Обновление страницы для отображения изменений
-
-            def back_button_clicked(_) -> None:
-                """Кнопка возврата в меню проставления реакций"""
-                self.page.go("/working_with_reactions")
-
-            self.function_button.function_button_ready_reactions(btn_click=btn_click,
-                                                                 back_button_clicked=back_button_clicked, chat=chat,
-                                                                 message=message)
 
         except Exception as error:
             logger.exception(error)
