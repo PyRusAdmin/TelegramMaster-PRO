@@ -12,7 +12,6 @@ from telethon.tl.functions.messages import SendReactionRequest
 
 from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
 from src.core.database.account import getting_account
-from src.core.database.database import select_records_with_limit
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
@@ -39,6 +38,7 @@ class WorkingWithReactions:
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram()  # Инициализация экземпляра класса GUIProgram
+        self.app_logger = AppLogger(page=page)
 
     async def reactions_menu(self):
         """
@@ -60,42 +60,17 @@ class WorkingWithReactions:
         chat = ft.TextField(label="Введите ссылку на группу / чат:", multiline=False, max_lines=1)
         message = ft.TextField(label="Введите ссылку на сообщение или пост:", multiline=False, max_lines=1)
 
-        self.page.views.append(
-            ft.View("/working_with_reactions",
-                    [await self.gui_program.key_app_bar(),  # Кнопка "Назад"
-                     ft.Text(spans=[ft.TextSpan(
-                         translations["ru"]["menu"]["reactions"],
-                         ft.TextStyle(
-                             size=20, weight=ft.FontWeight.BOLD,
-                             foreground=ft.Paint(
-                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
-                     list_view,  # Отображение логов 📝
+        async def send_reaction_request(_) -> None:
+            """
+            Ставим реакции на сообщения
+            """
+            start = await self.app_logger.start_time()
+            logger.info("▶️ Начало Проставления реакций")
 
-                     chat,  # Поле ввода ссылки на чат
-                     message,  # Поле ввода ссылки пост
-
-                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                         # 👍 Ставим реакции
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["reactions_menu"]["setting_reactions"],
-                                           on_click=lambda _: self.page.go("/setting_reactions")),
-                         # 🤖 Автоматическое выставление реакций
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
-                                           on_click=lambda _: self.page.go("/automatic_setting_of_reactions")),
-                     ])]))
-
-    async def send_reaction_request(self) -> None:
-        """
-        Ставим реакции на сообщения
-        """
-        try:
-
-            async def btn_click(_) -> None:
-
+            try:
                 for session_name in self.session_string:
-                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
+                    client: TelegramClient = await self.connect.client_connect_string_session(
+                        session_name=session_name)
                     await self.connect.getting_account_data(client)
 
                     await self.app_logger.log_and_display(f"➕ Работаем с группой: {chat.value}")
@@ -117,8 +92,37 @@ class WorkingWithReactions:
                     self.page.go("/working_with_reactions")
                     self.page.update()  # Обновление страницы для отображения изменений
 
-        except Exception as error:
-            logger.exception(error)
+            except Exception as error:
+                logger.exception(error)
+
+            logger.info("🔚 Конец Проставления реакций")
+            await self.app_logger.end_time(start)
+
+        self.page.views.append(
+            ft.View("/working_with_reactions",
+                    [await self.gui_program.key_app_bar(),  # Кнопка "Назад"
+                     ft.Text(spans=[ft.TextSpan(
+                         translations["ru"]["menu"]["reactions"],
+                         ft.TextStyle(
+                             size=20, weight=ft.FontWeight.BOLD,
+                             foreground=ft.Paint(
+                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
+                                                                                      ft.Colors.PURPLE])), ), ), ], ),
+                     list_view,  # Отображение логов 📝
+
+                     chat,  # Поле ввода ссылки на чат
+                     message,  # Поле ввода ссылки пост
+
+                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                         # 👍 Ставим реакции
+                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                           text=translations["ru"]["reactions_menu"]["setting_reactions"],
+                                           on_click=send_reaction_request),
+                         # 🤖 Автоматическое выставление реакций
+                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                           text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
+                                           on_click=lambda _: self.page.go("/automatic_setting_of_reactions")),
+                     ])]))
 
     async def choosing_random_reaction(self):
         """Выбираем случайное значение из списка (реакция)"""
@@ -148,7 +152,6 @@ class WorkingWithReactions:
 
                 await client(JoinChannelRequest(chat))  # Подписываемся на канал / группу
                 await asyncio.sleep(5)
-                # random_value = await self.choosing_random_reaction()  # Выбираем случайное значение из списка (редакция)
                 try:
                     await client(SendReactionRequest(peer=chat, msg_id=int(number),
                                                      reaction=[types.ReactionEmoji(
