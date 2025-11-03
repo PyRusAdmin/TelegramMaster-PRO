@@ -7,7 +7,6 @@ import flet as ft  # Импортируем библиотеку flet
 from loguru import logger  # Импортируем библиотеку loguru для логирования
 from telethon import events, types, TelegramClient
 from telethon.errors import ReactionInvalidError
-from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import SendReactionRequest
 
 from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
@@ -20,6 +19,7 @@ from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
 from src.gui.gui import list_view
 from src.gui.gui_elements import GUIProgram
+from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -100,35 +100,58 @@ class WorkingWithReactions:
 
         async def setting_reactions(_) -> None:
             """
-            Выставление реакций на новые посты
+            Выставление реакций на новые посты и сообщения в автоматическом режиме
             """
             start = await self.app_logger.start_time()
-            logger.info("▶️ Начало Автоматического выставления реакций")
             try:
                 for session_name in self.session_string:
 
                     client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
 
-                    chat = self.utils.read_json_file(filename='user_data/reactions/link_channel.json')
-                    await self.app_logger.log_and_display(f"{chat}")
-                    await client(JoinChannelRequest(chat))  # Подписываемся на канал / группу
+                    # Сохраняем ссылку на чат заранее
+                    chat_link = chat.value
+                    if not chat_link:
+                        await self.app_logger.log_and_display("Ошибка: не указана ссылка на чат")
+                        continue
 
-                    @client.on(events.NewMessage(chats=chat))
+                    await self.app_logger.log_and_display(f"Подписка и прослушивание чата: {chat_link}")
+                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_link)
+
+                    @client.on(events.NewMessage(chats=chat_link))
                     async def handler(event):
                         message = event.message  # Получаем сообщение из события
                         message_id = message.id  # Получаем id сообщение
                         await self.app_logger.log_and_display(f"Идентификатор сообщения: {message_id}, {message}")
                         # Проверяем, является ли сообщение постом и не является ли оно нашим
                         if message.post and not message.out:
-                            await self.reactions_for_groups_and_messages_test(message_id, chat)
+
+                            for session_name_reactions in self.session_string:
+
+                                if session_name == session_name_reactions:
+                                    pass
+                                else:
+
+                                    client: TelegramClient = await self.connect.client_connect_string_session(
+                                        session_name=session_name_reactions)
+                                    await self.connect.getting_account_data(client)
+                                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_link)
+
+                                    try:
+                                        await client(SendReactionRequest(peer=chat_link, msg_id=int(message_id),
+                                                                         reaction=[types.ReactionEmoji(
+                                                                             emoticon=f'{await self.choosing_random_reaction()}')]))
+                                    except ReactionInvalidError:
+                                        await self.app_logger.log_and_display(
+                                            translations["ru"]["errors"]["invalid_reaction"])
 
                     await client.run_until_disconnected()  # Запуск клиента в режиме ожидания событий
+
             except Exception as error:
                 logger.exception(error)
-
-            logger.info("🔚 Конец Автоматического выставления реакций")
-            await self.app_logger.end_time(start)
+            await self.app_logger.end_time(start=start)
+            await show_notification(page=self.page,
+                                    message="🔚 Конец Автоматического выставления реакций")  # Выводим уведомление пользователю
 
         self.page.views.append(
             ft.View("/working_with_reactions",
@@ -166,33 +189,4 @@ class WorkingWithReactions:
             logger.exception(error)
             return None
 
-    async def reactions_for_groups_and_messages_test(self, number, chat) -> None:
-        """
-        Вводим ссылку на группу и ссылку на сообщение
-
-        :param number: Ссылка на сообщение
-        :param chat: Ссылка на группу
-        """
-        try:
-            for session_name in self.utils.find_filess(directory_path="user_data/accounts/reactions_list",
-                                                       # TODO переместить путь к файлу в конфиг файл
-                                                       extension='session'):
-                # "user_data/accounts/reactions_list" - путь к файлу, но пусть пользователь сам выбирает аккаунт
-                # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
-                await self.connect.getting_account_data(client)
-
-                await client(JoinChannelRequest(chat))  # Подписываемся на канал / группу
-                await asyncio.sleep(5)
-                try:
-                    await client(SendReactionRequest(peer=chat, msg_id=int(number),
-                                                     reaction=[types.ReactionEmoji(
-                                                         emoticon=f'{self.choosing_random_reaction()}')]))
-                    await asyncio.sleep(1)
-                    await client.disconnect()
-                except ReactionInvalidError:
-                    await self.app_logger.log_and_display(translations["ru"]["errors"]["invalid_reaction"])
-                    await asyncio.sleep(1)
-                    await client.disconnect()
-        except Exception as error:
-            logger.exception(error)
+# 204
