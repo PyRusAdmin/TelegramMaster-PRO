@@ -12,8 +12,8 @@ from telethon.errors import (AuthKeyUnregisteredError, ChannelPrivateError, Chan
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
-from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1,
-                              time_subscription_2, width_2_input_fields, width_1_input_fields)
+from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1, time_subscription_2,
+                              width_one_input)
 from src.core.database.account import getting_account
 from src.core.database.database import get_writing_group_links, write_writing_group_links_to_db
 from src.core.utils import Utils
@@ -117,16 +117,16 @@ class SubscribeUnsubscribeTelegram:
             ft.Text(f"Записанные данные в файле {time_range_message}"))  # отображаем сообщение в ListView
 
         # Поле ввода ссылок и кнопка сохранения для подписки
-        link_entry_field, save_button = await LinkInputRowBuilder().build_link_input_with_save_button(
+        link_entry_field = await LinkInputRowBuilder().build_link_input_with_save_button(
             label_text="Введите ссылки для подписки на группы и каналы",
-            width=width_1_input_fields  # Ширина поля ввода и кнопки сохранения
+            width=WIDTH_WIDE_BUTTON  # Ширина поля ввода и кнопки сохранения
         )
 
         # Два поля ввода для времени и кнопка сохранить
-        smaller_timex, larger_timex, save_button_time = await TimeInputRowBuilder().build_time_inputs_with_save_button(
+        smaller_timex, larger_timex = await TimeInputRowBuilder().build_time_inputs_with_save_button(
             label_min="Время в секундах (меньшее)",
             label_max="Время в секундах (большее)",
-            width=width_2_input_fields  # Ширина полей ввода и кнопки сохранения
+            width=width_one_input  # Ширина полей ввода и кнопки сохранения
         )
 
         self.page.views.append(
