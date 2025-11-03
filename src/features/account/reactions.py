@@ -57,7 +57,7 @@ class WorkingWithReactions:
                     try:
                         await client(SendReactionRequest(
                             peer=chat.value, msg_id=msg_id,
-                            reaction=[types.ReactionEmoji(emoticon=f'{self.choosing_random_reaction()}')]))
+                            reaction=[types.ReactionEmoji(emoticon=f'{await self.choosing_random_reaction()}')]))
                         await asyncio.sleep(1)
                         await client.disconnect()
                     except ReactionInvalidError:
@@ -66,14 +66,16 @@ class WorkingWithReactions:
                         await client.disconnect()
 
                     # Изменение маршрута на новый (если необходимо)
-                    page.go("/working_with_reactions")
-                    page.update()  # Обновление страницы для отображения изменений
+                    self.page.go("/working_with_reactions")
+                    self.page.update()  # Обновление страницы для отображения изменений
 
             def back_button_clicked(_) -> None:
                 """Кнопка возврата в меню проставления реакций"""
-                page.go("/working_with_reactions")
+                self.page.go("/working_with_reactions")
 
-            self.function_button.function_button_ready_reactions(btn_click, back_button_clicked, chat, message)
+            self.function_button.function_button_ready_reactions(btn_click=btn_click,
+                                                                 back_button_clicked=back_button_clicked, chat=chat,
+                                                                 message=message)
 
         except Exception as error:
             logger.exception(error)

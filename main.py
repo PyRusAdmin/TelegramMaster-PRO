@@ -75,7 +75,7 @@ async def main(page: ft.Page):
         elif page.route == "/setting_reactions":  # Ставим реакции
             start = await app_logger.start_time()
             logger.info("▶️ Начало Проставления реакций")
-            await working_with_reactions.send_reaction_request(page=page)
+            await working_with_reactions.send_reaction_request()
             logger.info("🔚 Конец Проставления реакций")
             await app_logger.end_time(start)
         elif page.route == "/automatic_setting_of_reactions":  # Автоматическое выставление реакций

@@ -5,6 +5,7 @@ import datetime as dt
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from scheduler.asyncio import Scheduler
+from telethon import TelegramClient
 from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, SessionRevokedError, TypeNotFoundError,
                              UserBannedInChannelError, UserChannelsTooMuchError, UserNotMutualContactError,
                              UserKickedError, UserDeactivatedBanError, UsernameInvalidError, UsernameNotOccupiedError,
@@ -18,9 +19,9 @@ from src.core.database.account import getting_account
 from src.core.database.database import (select_records_with_limit, get_links_inviting, save_links_inviting)
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.features.account.switch_controller import ToggleController
 from src.features.account.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
+from src.features.account.switch_controller import ToggleController
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.gui.gui_input_builders import TimeInputRowBuilder, LinkInputRowBuilder
