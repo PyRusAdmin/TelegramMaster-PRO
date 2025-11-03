@@ -7,32 +7,16 @@ from telethon import functions, types
 from telethon.errors import SessionRevokedError, AuthKeyUnregisteredError
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, WIDTH_INPUT_FIELD_AND_BUTTON
+from src.core.database.account import getting_account
 from src.core.database.database import (add_member_to_db, write_to_database_contacts_accounts, write_contact_db,
                                         getting_contacts_from_database, delete_contact_db)
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.gui.gui_elements import GUIProgram
 from src.features.account.parsing import UserInfo
 from src.gui.gui import AppLogger, list_view
+from src.gui.gui_elements import GUIProgram
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
-
-
-class StatusDisplay:
-
-    def __init__(self, page: ft.Page):
-        """
-        Инициализация экземпляра класса StatusDisplay
-        :param page: Объект страницы ft.Page
-        """
-        self.page = page
-        self.utils = Utils(page=page)
-
-    def display_account_count(self):
-        # Получаем количество аккаунтов
-        sessions_count = len(self.utils.find_filess(directory_path=path_accounts_folder, extension='session'))
-        list_view.controls.append(ft.Text(f"Подключенных аккаунтов {sessions_count}"))
-        return sessions_count
 
 
 class TGContact:
@@ -51,7 +35,7 @@ class TGContact:
         self.utils = Utils(page=page)
         self.user_info = UserInfo()
         self.gui_program = GUIProgram()
-        self.status_display = StatusDisplay(page=page)
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def working_with_contacts_menu(self):
         """
@@ -59,8 +43,11 @@ class TGContact:
         """
         list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
 
-        sessions_count = self.status_display.display_account_count()  # Получаем количество аккаунтов
-        logger.info(f"Подключенных аккаунтов {sessions_count}")
+        await self.app_logger.log_and_display(
+            message=(
+                f"Всего подключенных аккаунтов: {len(self.session_string)}\n"
+            )
+        )
 
         async def show_account_contact_list(_) -> None:
             """
@@ -68,7 +55,7 @@ class TGContact:
             """
             try:
                 start = await self.app_logger.start_time()
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                for session_name in self.session_string:  # Перебор всех сессий
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                     client = await self.connect.client_connect_string_session(session_name)
                     await self.connect.getting_account_data(client)
@@ -87,7 +74,7 @@ class TGContact:
             Удаляем контакты с аккаунтов
             """
             start = await self.app_logger.start_time()
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+            for session_name in self.session_string:  # Перебор всех сессий
                 # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                 client = await self.connect.client_connect_string_session(session_name=session_name)
                 await self.connect.getting_account_data(client=client)
@@ -105,7 +92,7 @@ class TGContact:
             """
             try:
                 # Открываем базу данных для работы с аккаунтами user_data/software_database.db
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                for session_name in self.session_string:  # Перебор всех сессий
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                     client = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client=client)

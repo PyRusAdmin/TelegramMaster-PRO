@@ -8,9 +8,9 @@ from loguru import logger  # Импортируем библиотеку loguru 
 from telethon.errors import SessionRevokedError
 from telethon.tl.functions.messages import GetMessagesViewsRequest
 
+from src.core.database.account import getting_account
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.features.account.contact import StatusDisplay
 from src.features.account.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
@@ -34,19 +34,23 @@ class ViewingPosts:
         self.utils = Utils(page=page)
         self.function_button = FunctionButton(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
-        self.status_display = StatusDisplay(page=page)
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def viewing_posts_request(self) -> None:
         """Окно с полями ввода и кнопками для накрутки просмотров."""
         try:
             list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
 
-            sessions_count = self.status_display.display_account_count()  # Получаем количество аккаунтов
+            await self.app_logger.log_and_display(
+                message=(
+                    f"Всего подключенных аккаунтов: {len(self.session_string)}\n"
+                )
+            )
 
             # Поле для ввода ссылки на чат
             link_channel = ft.TextField(label=f"Введите ссылку на канал:", multiline=False, max_lines=1)
             link_post = ft.TextField(label=f"Введите ссылку на пост:", multiline=False, max_lines=1)
-            number_views = ft.TextField(label=f"Введите количество просмотров от 1 до {sessions_count}:",
+            number_views = ft.TextField(label=f"Введите количество просмотров от 1 до {len(self.session_string)}:",
                                         multiline=False, max_lines=1)
 
             async def btn_click(_) -> None:

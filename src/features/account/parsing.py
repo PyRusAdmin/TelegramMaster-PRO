@@ -94,9 +94,6 @@ class ParsingGroupMembers:
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 await self.connect.getting_account_data(client)
 
-                # await self.load_groups(client=client, dropdown=dropdown,
-                #                        result_text=result_text)  # ⬅️ Подгружаем группы
-
                 data = chat_input.value.split()
                 logger.info(f"Полученные данные: {data}")  # Отладка
                 # Удаляем дубликаты ссылок введенных пользователем
@@ -120,7 +117,6 @@ class ParsingGroupMembers:
                             client=client
                         )
                     if account_group_selection_switch.value:  # Парсинг выбранной группы
-                        # await self.load_groups(client, dropdown, result_text)  # ⬅️ Подгружаем группы
                         await start_group_parsing(client=client, dropdown=dropdown)
                     await self.app_logger.end_time(start)
                 except Exception as error:
