@@ -138,7 +138,7 @@ class InvitingToAGroup:
                 return
 
             for session_name in self.session_string:
-                client = await self.connect.client_connect_string_session(session_name)
+                client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                 await self.connect.getting_account_data(client)
 
                 # Подписываемся на группы

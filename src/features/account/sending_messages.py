@@ -17,9 +17,9 @@ from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON,
 from src.core.database.database import select_records_with_limit, open_and_read_data
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.gui.gui_elements import GUIProgram
 from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.gui import list_view, AppLogger
+from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 
@@ -223,7 +223,7 @@ class SendTelegramMessages:
                 for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
                                                            extension=self.account_extension):
 
-                    client = await self.connect.client_connect_string_session(session_name)
+                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
 
                     # Открываем базу данных с группами, в которые будут рассылаться сообщения

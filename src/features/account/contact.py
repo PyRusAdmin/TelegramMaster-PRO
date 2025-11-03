@@ -3,7 +3,8 @@ import asyncio
 
 import flet as ft
 from loguru import logger
-from telethon import functions, types
+from telethon import functions
+from telethon import types, TelegramClient
 from telethon.errors import SessionRevokedError, AuthKeyUnregisteredError
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, WIDTH_INPUT_FIELD_AND_BUTTON
@@ -57,7 +58,7 @@ class TGContact:
                 start = await self.app_logger.start_time()
                 for session_name in self.session_string:  # Перебор всех сессий
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                    client = await self.connect.client_connect_string_session(session_name)
+                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
 
                     # Парсинг контактов Telegram аккаунта

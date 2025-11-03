@@ -10,8 +10,10 @@ from telethon.errors import ReactionInvalidError
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import SendReactionRequest
 
+from src.core.database.account import getting_account
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
+from src.features.account.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger
@@ -23,19 +25,19 @@ class WorkingWithReactions:
     Класс для работы с реакциями
     """
 
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
         self.page = page
         self.connect = TGConnect(page=page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.function_button = FunctionButton(page=page)
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
+        self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
 
-    async def send_reaction_request(self, page: ft.Page) -> None:
+    async def send_reaction_request(self) -> None:
         """
         Ставим реакции на сообщения
-
-        :param page: Страница интерфейса Flet для отображения элементов управления.
         """
         try:
             # Поле для ввода ссылки на чат
@@ -43,13 +45,13 @@ class WorkingWithReactions:
             message = ft.TextField(label="Введите ссылку на сообщение или пост:", multiline=False, max_lines=1)
 
             async def btn_click(_) -> None:
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
 
-                    client = await self.connect.client_connect_string_session(session_name)
+                for session_name in self.session_string:
+                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
 
                     await self.app_logger.log_and_display(f"➕ Работаем с группой: {chat.value}")
-                    await self.sub_unsub_tg.subscribe_to_group_or_channel(client, chat.value, page)
+                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat.value)
                     msg_id = int(re.search(r'/(\d+)$', message.value).group(1))  # Получаем id сообщения из ссылки
                     await asyncio.sleep(5)
                     try:
@@ -123,9 +125,9 @@ class WorkingWithReactions:
         Выставление реакций на новые посты
         """
         try:
-            for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+            for session_name in self.session_string:
 
-                client = await self.connect.client_connect_string_session(session_name)
+                client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                 await self.connect.getting_account_data(client)
 
                 chat = self.utils.read_json_file(filename='user_data/reactions/link_channel.json')
