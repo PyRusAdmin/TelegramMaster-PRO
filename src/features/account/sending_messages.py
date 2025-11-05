@@ -171,7 +171,7 @@ class SendTelegramMessages:
 
         if checs == True:
             try:
-                for session_name in self.utils.find_filess(directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
+                for session_name in await self.utils.find_filess(directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
                                                            extension=self.account_extension):
 
                     # Пользователь должен сам выбрать аккаунт
@@ -377,8 +377,8 @@ class SendTelegramMessages:
         """
         Находит все файлы в папке с сообщениями и папке с файлами для отправки.
         """
-        messages = self.utils.find_files(directory_path=path_folder_with_messages, extension=self.file_extension)
-        files = self.utils.all_find_files(directory_path="user_data/files_to_send")
+        messages = await self.utils.find_files(directory_path=path_folder_with_messages, extension=self.file_extension)
+        files = await self.utils.all_find_files(directory_path="user_data/files_to_send")
         return messages, files
 
     async def random_dream(self):
@@ -404,7 +404,7 @@ class SendTelegramMessages:
                 # Выбираем рандомный файл для чтения
                 random_file = random.choice(entities)  # Выбираем случайный файл для чтения из списка файлов
                 await self.app_logger.log_and_display(f"Выбран файл для чтения: {random_file[0]}.json")
-                data = self.utils.read_json_file(filename=f"user_data/{folder}/{random_file[0]}.json")
+                data = await self.utils.read_json_file(filename=f"user_data/{folder}/{random_file[0]}.json")
             return data  # Возвращаем данные из файла
         except Exception as error:
             logger.exception(error)

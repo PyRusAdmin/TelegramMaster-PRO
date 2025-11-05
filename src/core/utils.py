@@ -17,7 +17,7 @@ class Utils:
         self.page = page
         self.app_logger = AppLogger(self.page)
 
-    def read_json_file(self, filename):
+    async def read_json_file(self, filename):
         """
         Чтение данных из файла JSON.
 
@@ -28,7 +28,7 @@ class Utils:
             data = json.load(file)
         return data
 
-    def all_find_files(self, directory_path) -> list:
+    async def all_find_files(self, directory_path) -> list:
         """
         Поиск файлов в директории.
 
@@ -41,7 +41,7 @@ class Utils:
                 entities.append(x)  # Добавляем имя файла в список
         return entities  # Возвращаем список файлов
 
-    def find_filess(self, directory_path, extension):
+    async def find_filess(self, directory_path, extension):
         """
         Поиск файлов с определенным расширением в директории. Расширение файла должно быть указанно без точки.
 
@@ -74,7 +74,7 @@ class Utils:
 
         return entities  # Возвращаем список json файлов
 
-    def working_with_accounts(self, account_folder, new_account_folder) -> None:
+    async def working_with_accounts(self, account_folder, new_account_folder) -> None:
         """
         Работа с аккаунтами
 

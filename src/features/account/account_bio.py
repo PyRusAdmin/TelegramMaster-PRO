@@ -57,7 +57,7 @@ class AccountBIO:
              Изменение username профиля Telegram профиля Telegram в графическое окно Flet
             """
             try:
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                for session_name in await self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     await self.app_logger.log_and_display(message=f"{session_name}")
                     client = await self.connect.client_connect_string_session(session_name=session_name)
                     try:
@@ -80,7 +80,7 @@ class AccountBIO:
             """Изменение описания профиля Telegram аккаунта."""
             try:
                 await self.app_logger.log_and_display(message=f"Запуск смены  описания профиля")
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                for session_name in await self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     await self.app_logger.log_and_display(message=f"{session_name}")
                     client = await self.connect.client_connect_string_session(session_name=session_name)
                     if len(profile_description_input_field.value) > 70:
@@ -105,7 +105,7 @@ class AccountBIO:
             Изменение имени профиля. Изменение био профиля Telegram в графическое окно Flet
             """
             try:
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                for session_name in await self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     await self.app_logger.log_and_display(message=f"{session_name}")
                     client = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
@@ -129,7 +129,7 @@ class AccountBIO:
             Изменение фамилии профиля. Изменение био профиля Telegram в графическое окно Flet
             """
             try:
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                for session_name in await self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     await self.app_logger.log_and_display(message=f"{session_name}")
                     client = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
@@ -152,7 +152,7 @@ class AccountBIO:
             Изменение фото профиля Telegram через интерфейс Flet.
             """
             try:
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
+                for session_name in await self.utils.find_filess(directory_path=path_accounts_folder, extension='session'):
                     await self.app_logger.log_and_display(message=f"{session_name}")
                     client = await self.connect.client_connect_string_session(session_name=session_name)
                     for photo_file in await self.utils.find_files(directory_path="user_data/bio", extension='jpg'):

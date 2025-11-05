@@ -55,7 +55,7 @@ class ViewingPosts:
 
             async def btn_click(_) -> None:
 
-                session = self.utils.find_filess(directory_path=path_accounts_folder, extension='session')
+                session = await self.utils.find_filess(directory_path=path_accounts_folder, extension='session')
                 number_session = number_views.value
                 list_view.controls.append(ft.Text(f"Выбрано просмотров: {number_session}"))
                 views_selected = session[:int(number_session)]

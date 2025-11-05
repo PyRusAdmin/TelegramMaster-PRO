@@ -182,7 +182,7 @@ class WorkingWithReactions:
     async def choosing_random_reaction(self):
         """Выбираем случайное значение из списка (реакция)"""
         try:
-            random_value = random.choice(self.utils.read_json_file(filename='user_data/reactions/reactions.json'))
+            random_value = random.choice(await self.utils.read_json_file(filename='user_data/reactions/reactions.json'))
             await self.app_logger.log_and_display(f"{random_value}")
             return random_value
         except Exception as error:
