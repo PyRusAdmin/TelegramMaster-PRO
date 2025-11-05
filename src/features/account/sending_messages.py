@@ -15,7 +15,7 @@ from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON,
                               path_send_message_folder_answering_machine_message, TIME_SENDING_MESSAGES_1,
                               time_sending_messages_2, time_subscription_1, time_subscription_2, width_one_input)
 from src.core.database.account import getting_account
-from src.core.database.database import select_records_with_limit, open_and_read_data
+from src.core.database.database import select_records_with_limit, get_writing_group_links
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
@@ -306,8 +306,9 @@ class SendTelegramMessages:
                 chat_list_fields = chat_list_input.split()  # Разделяем строку по пробелам
             else:
                 # Если поле пустое, используем данные из базы данных
-                db_chat_list = await open_and_read_data(table_name="writing_group_links", page=self.page)
-                chat_list_fields = [group[0] for group in db_chat_list]  # Извлекаем только ссылки из кортежей
+                links: list = get_writing_group_links()  # Открываем базу данных # Получение ссылки
+
+                chat_list_fields = [group[0] for group in links]  # Извлекаем только ссылки из кортежей
             if tb_time_from.value or TIME_SENDING_MESSAGES_1 < tb_time_to.value or time_sending_messages_2:
                 await self.performing_the_operation(c.value, chat_list_fields)
             else:
@@ -327,6 +328,7 @@ class SendTelegramMessages:
                         size=18,
                         weight=ft.FontWeight.BOLD
                     ),
+                    list_view,  # Отображение логов 📝
                     c,
                     ft.Row(
                         controls=[tb_time_from, tb_time_to],
