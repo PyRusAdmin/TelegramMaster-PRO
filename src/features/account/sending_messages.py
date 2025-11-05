@@ -185,21 +185,11 @@ class SendTelegramMessages:
                             reply_text = auto_reply_text or "Спасибо за сообщение! Мы ответим позже."
                             await event.respond(reply_text)
                             await self.app_logger.log_and_display(f"🤖 Ответ отправлен: {reply_text}")
-                            
-                            # entities = await self.utils.find_files(
-                            #     directory_path=path_send_message_folder_answering_machine_message,
-                            #     extension=self.file_extension)
-                            # await self.app_logger.log_and_display(message=f"{entities}")
-                            # data = await self.select_and_read_random_file(entities=entities,
-                            #                                               folder="answering_machine")
-                            # await self.app_logger.log_and_display(message=f"{data}")
-                            # await event.respond(f'{data}')  # Отвечаем на входящее сообщение
 
                     # Получаем список чатов, которым нужно отправить сообщение
                     await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
                     for group_link in chat_list_fields:
                         try:
-
                             # Подписываемся на группы
                             await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
                             await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
