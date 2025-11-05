@@ -185,7 +185,7 @@ class SendTelegramMessages:
                         if event.is_private:  # Проверяем, является ли сообщение личным
                             await self.app_logger.log_and_display(
                                 message=f"Входящее сообщение: {event.message.message}")
-                            entities = self.utils.find_files(
+                            entities = await self.utils.find_files(
                                 directory_path=path_send_message_folder_answering_machine_message,
                                 extension=self.file_extension)
                             await self.app_logger.log_and_display(message=f"{entities}")
