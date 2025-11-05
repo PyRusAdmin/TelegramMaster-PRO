@@ -13,11 +13,12 @@ from telethon.errors import (ChannelPrivateError, ChatAdminRequiredError, ChatWr
 from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON,
                               path_folder_with_messages, PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
                               path_send_message_folder_answering_machine_message, TIME_SENDING_MESSAGES_1,
-                              time_sending_messages_2, time_subscription_1, time_subscription_2)
+                              time_sending_messages_2, time_subscription_1, time_subscription_2, width_one_input)
+from src.core.database.account import getting_account
 from src.core.database.database import select_records_with_limit, open_and_read_data
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
+from src.features.account.subscribe import Subscribe
 from src.gui.gui import list_view, AppLogger
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
@@ -30,13 +31,14 @@ class SendTelegramMessages:
 
     def __init__(self, page: ft.Page):
         self.page = page
-        self.connect = TGConnect(page)
-        self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page)
+        self.connect = TGConnect(page=page)
         self.account_extension = "session"  # Расширение файла аккаунта
         self.file_extension = "json"
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.gui_program = GUIProgram()
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
+        self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
 
     async def send_files_to_personal_chats(self) -> None:
         """
@@ -60,9 +62,7 @@ class SendTelegramMessages:
             if time_from < time_to:
                 try:
                     # Просим пользователя ввести расширение сообщения
-                    for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
-                                                               extension=self.account_extension):
-
+                    for session_name in self.session_string:  # Перебор всех сессий
                         # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                         client: TelegramClient = await self.connect.client_connect_string_session(
                             session_name=session_name)
@@ -118,10 +118,14 @@ class SendTelegramMessages:
 
         # GUI элементы
 
-        tb_time_from, tb_time_to = await self.sleep_selection_input()
+        # Группа полей ввода для времени сна
+        tb_time_from = ft.TextField(label="Время сна от", width=width_one_input, hint_text="Введите время",
+                                    border_radius=5, )
+        tb_time_to = ft.TextField(label="Время сна до", width=width_one_input, hint_text="Введите время",
+                                  border_radius=5, )
         sleep_time_group = ft.Row(controls=[tb_time_from, tb_time_to], spacing=20, )
         # Поле для формирования списка чатов
-        account_limits_inputs = ft.TextField(label="Введите лимит на сообщения", multiline=True, max_lines=12)
+        account_limits_inputs = ft.TextField(label="Введите лимит на сообщения")
 
         # Кнопка "Готово"
         button_done = ft.ElevatedButton(text=translations["ru"]["buttons"]["done"], width=WIDTH_WIDE_BUTTON,
@@ -140,13 +144,6 @@ class SendTelegramMessages:
                                 button_done,
                             ],
                         ), ], ))
-
-    @staticmethod
-    async def sleep_selection_input():
-        # Группа полей ввода для времени сна
-        tb_time_from = ft.TextField(label="Время сна от", width=297, hint_text="Введите время", border_radius=5, )
-        tb_time_to = ft.TextField(label="Время сна до", width=297, hint_text="Введите время", border_radius=5, )
-        return tb_time_from, tb_time_to
 
     async def performing_the_operation(self, checs, chat_list_fields) -> None:
         """
@@ -201,7 +198,11 @@ class SendTelegramMessages:
                     self.page.update()
                     for group_link in chat_list_fields:
                         try:
-                            await self.sub_unsub_tg.subscribe_to_group_or_channel(client, group_link, self.page)
+
+                            # Подписываемся на группы
+                            await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
+                            await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
+
                             # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
                             messages, files = await self.all_find_and_all_files()
                             # Отправляем сообщения и файлы в группу
@@ -220,17 +221,21 @@ class SendTelegramMessages:
         else:
             try:
                 start = await self.app_logger.start_time()
-                for session_name in self.utils.find_filess(directory_path=path_accounts_folder,
-                                                           extension=self.account_extension):
-
+                for session_name in self.session_string:  # Перебор всех сессий
                     client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
 
                     # Открываем базу данных с группами, в которые будут рассылаться сообщения
-                    await self.app_logger.log_and_display(f"Всего групп: {len(chat_list_fields)}")
+                    await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
                     for group_link in chat_list_fields:  # Поочередно выводим записанные группы
                         try:
-                            await self.sub_unsub_tg.subscribe_to_group_or_channel(client, group_link, self.page)
+
+                            # Подписываемся на группы
+                            await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
+                            await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
+
+                            # await self.sub_unsub_tg.subscribe_to_group_or_channel(client, group_link, self.page)
+
                             # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
                             messages, files = await self.all_find_and_all_files()
                             # Отправляем сообщения и файлы в группу
@@ -252,10 +257,12 @@ class SendTelegramMessages:
                                                                   time_range_2=time_subscription_2)
                             break  # Прерываем работу и меняем аккаунт
                         except ChatAdminRequiredError:
-                            await self.app_logger.log_and_display(translations["ru"]["errors"]["admin_rights_required"])
+                            await self.app_logger.log_and_display(
+                                message=translations["ru"]["errors"]["admin_rights_required"])
                             break
                         except ChatWriteForbiddenError:
-                            await self.app_logger.log_and_display(translations["ru"]["errors"]["chat_write_forbidden"])
+                            await self.app_logger.log_and_display(
+                                message=translations["ru"]["errors"]["chat_write_forbidden"])
                             await self.utils.record_and_interrupt(time_range_1=time_subscription_1,
                                                                   time_range_2=time_subscription_2)
                             break  # Прерываем работу и меняем аккаунт
@@ -279,8 +286,17 @@ class SendTelegramMessages:
 
     async def sending_messages_files_via_chats(self) -> None:
         """
-        Рассылка сообщений + файлов по чатам
+        Рассылает сообщений + файлов по чатам Telegram
         """
+        # Чекбокс для работы с автоответчиком
+        c = ft.Checkbox(label="Работа с автоответчиком")
+        # Группа полей ввода для времени сна
+        tb_time_from = ft.TextField(label="Время сна от", width=width_one_input, hint_text="Введите время",
+                                    border_radius=5)
+        tb_time_to = ft.TextField(label="Время сна до", width=width_one_input, hint_text="Введите время",
+                                  border_radius=5)
+        # Поле для формирования списка чатов
+        chat_list_field = ft.TextField(label="Формирование списка чатов")
 
         # Обработчик кнопки "Готово"
         async def button_clicked(_):
@@ -290,8 +306,7 @@ class SendTelegramMessages:
                 chat_list_fields = chat_list_input.split()  # Разделяем строку по пробелам
             else:
                 # Если поле пустое, используем данные из базы данных
-                db_chat_list = await open_and_read_data(table_name="writing_group_links",
-                                                        page=self.page)
+                db_chat_list = await open_and_read_data(table_name="writing_group_links", page=self.page)
                 chat_list_fields = [group[0] for group in db_chat_list]  # Извлекаем только ссылки из кортежей
             if tb_time_from.value or TIME_SENDING_MESSAGES_1 < tb_time_to.value or time_sending_messages_2:
                 await self.performing_the_operation(c.value, chat_list_fields)
@@ -300,29 +315,38 @@ class SendTelegramMessages:
                 t.update()
             self.page.update()
 
-        # Чекбокс для работы с автоответчиком
-        c = ft.Checkbox(label="Работа с автоответчиком")
-        tb_time_from, tb_time_to = await self.sleep_selection_input()
-        # Поле для формирования списка чатов
-        chat_list_field = ft.TextField(label="Формирование списка чатов", multiline=True, max_lines=12)
-
         t = ft.Text()
         # Разделение интерфейса на верхнюю и нижнюю части
         self.page.views.append(
             ft.View(
-                "/sending_messages_via_chats_menu",
+                route="/sending_messages_via_chats_menu",
                 controls=[
                     await self.gui_program.key_app_bar(),  # Кнопка "Назад"
-                    ft.Text(translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"], size=18,
-                            weight=ft.FontWeight.BOLD), c, ft.Row(controls=[tb_time_from, tb_time_to], spacing=20, ), t,
+                    ft.Text(
+                        translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"],
+                        size=18,
+                        weight=ft.FontWeight.BOLD
+                    ),
+                    c,
+                    ft.Row(
+                        controls=[tb_time_from, tb_time_to],
+                        spacing=20,
+                    ),
+                    t,
                     chat_list_field,
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
-                            ft.ElevatedButton(text=translations["ru"]["buttons"]["done"], width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=button_clicked, ),
+                            ft.ElevatedButton(
+                                text=translations["ru"]["buttons"]["done"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=button_clicked,
+                            ),
                         ],
-                    ), ], ))
+                    ),
+                ],
+            )
+        )
 
     async def send_content(self, client, target, messages, files):
         """
@@ -383,3 +407,5 @@ class SendTelegramMessages:
         except Exception as error:
             logger.exception(error)
             return None
+
+# 397

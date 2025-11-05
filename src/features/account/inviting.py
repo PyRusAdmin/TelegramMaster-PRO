@@ -308,48 +308,49 @@ class InvitingToAGroup:
         start_inviting.disabled = False
 
         self.page.views.append(
-            ft.View("/inviting",
-                    [await self.gui_program.key_app_bar(),  # Кнопка назад
-                     ft.Text(spans=[ft.TextSpan(translations["ru"]["inviting_menu"]["inviting"],
-                                                ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
-                                                             foreground=ft.Paint(
-                                                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20),
-                                                                                                 [ft.Colors.PINK,
-                                                                                                  ft.Colors.PURPLE])), ), ), ], ),
-                     list_view,  # Отображение логов 📝
+            ft.View(route="/inviting",
+                    controls=[await self.gui_program.key_app_bar(),  # Кнопка назад
+                              ft.Text(spans=[ft.TextSpan(translations["ru"]["inviting_menu"]["inviting"],
+                                                         ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
+                                                                      foreground=ft.Paint(
+                                                                          gradient=ft.PaintLinearGradient((0, 20),
+                                                                                                          (150, 20),
+                                                                                                          [ft.Colors.PINK,
+                                                                                                           ft.Colors.PURPLE])), ), ), ], ),
+                              list_view,  # Отображение логов 📝
 
-                     ft.Row([await TimeInputRowBuilder().compose_time_input_row(
-                         min_time_input=TIME_INVITING_1,
-                         max_time_input=TIME_INVITING_2,
-                     ),
-                             await TimeInputRowBuilder().compose_time_input_row(min_time_input=hour,
-                                                                                max_time_input=minutes)]),
+                              ft.Row([await TimeInputRowBuilder().compose_time_input_row(
+                                  min_time_input=TIME_INVITING_1,
+                                  max_time_input=TIME_INVITING_2,
+                              ),
+                                      await TimeInputRowBuilder().compose_time_input_row(min_time_input=hour,
+                                                                                         max_time_input=minutes)]),
 
-                     await self.gui_program.diver_castom(),  # Горизонтальная линия
+                              await self.gui_program.diver_castom(),  # Горизонтальная линия
 
-                     ft.Row([await LinkInputRowBuilder().compose_link_input_row(
-                         link_input=limits,
-                     ),
-                             await LinkInputRowBuilder().compose_link_input_row(
-                                 link_input=link_entry_field,
-                             ),
-                             ]),
+                              ft.Row([await LinkInputRowBuilder().compose_link_input_row(
+                                  link_input=limits,
+                              ),
+                                      await LinkInputRowBuilder().compose_link_input_row(
+                                          link_input=link_entry_field,
+                                      ),
+                                      ]),
 
-                     await self.gui_program.diver_castom(),  # Горизонтальная линия
-                     ft.Text(value="📂 Выберите группу для инвайтинга"),  # Выбор группы для инвайтинга
-                     dropdown,  # Выпадающий список с названиями групп
-                     await self.gui_program.diver_castom(),  # Горизонтальная линия
+                              await self.gui_program.diver_castom(),  # Горизонтальная линия
+                              ft.Text(value="📂 Выберите группу для инвайтинга"),  # Выбор группы для инвайтинга
+                              dropdown,  # Выпадающий список с названиями групп
+                              await self.gui_program.diver_castom(),  # Горизонтальная линия
 
-                     ft.Row([
-                         inviting_switch,
-                         inviting_1_time_per_hour_switch,
-                         inviting_at_a_certain_time_switch,
-                         inviting_every_day_switch
-                     ]),
+                              ft.Row([
+                                  inviting_switch,
+                                  inviting_1_time_per_hour_switch,
+                                  inviting_at_a_certain_time_switch,
+                                  inviting_every_day_switch
+                              ]),
 
-                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                         start_inviting,
-                     ])]))
+                              ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                                  start_inviting,
+                              ])]))
         self.page.update()  # обновляем страницу после добавления элементов управления 🔄
 
     async def add_user_test(self, client, username_group, username, time_inviting_1, time_inviting_2):

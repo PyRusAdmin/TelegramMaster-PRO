@@ -2,7 +2,6 @@
 import flet as ft
 from loguru import logger
 
-from src.core.checking_program import CheckingProgram
 from src.core.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
                               WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, time_sending_messages_2)
 from src.core.database.create_database import create_database
@@ -18,7 +17,6 @@ from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTeleg
 from src.features.account.viewing_posts import ViewingPosts
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage
-from src.gui.gui import AppLogger
 from src.gui.menu import Menu
 
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")  # Логирование программы
@@ -38,7 +36,6 @@ async def main(page: ft.Page):
     page.window.width = WINDOW_WIDTH  # Ширина окна
     page.window.height = WINDOW_HEIGHT  # Высота окна
     page.window.resizable = WINDOW_RESIZABLE  # Разрешение изменения размера окна
-    app_logger = AppLogger(page=page)
     setting_page = SettingPage(page=page)
     account_bio = AccountBIO(page=page)
     menu = Menu(page=page)
@@ -51,7 +48,6 @@ async def main(page: ft.Page):
     receiving_and_recording = ReceivingAndRecording()
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
-    checking_program = CheckingProgram(page=page)
 
     async def route_change(_):
         page.views.clear()
@@ -89,8 +85,8 @@ async def main(page: ft.Page):
             await creating_groups_and_chats.creating_groups_and_chats()
         # ______________________________________________________________________________________________________________
         elif page.route == "/sending_messages_files_via_chats":  # 💬 Рассылка сообщений по чатам
-            await checking_program.check_before_sending_messages_via_chats()
             await send_telegram_messages.sending_messages_files_via_chats()
+        # ______________________________________________________________________________________________________________
         elif page.route == "/sending_files_to_personal_account_with_limits":  # Отправка сообщений в личку
             await send_telegram_messages.send_files_to_personal_chats()
         # ______________________________________________________________________________________________________________
