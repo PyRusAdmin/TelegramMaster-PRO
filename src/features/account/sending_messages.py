@@ -151,28 +151,11 @@ class SendTelegramMessages:
         :param chat_list_fields: список ссылок на группы
         :param checs: значение чекбокса
         """
-        # Создаем ListView для отображения логов
-        self.page.views.clear()
-        self.page.update()
-        self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
-        # Кнопка "Назад"
-        button_back = ft.ElevatedButton(text=translations["ru"]["buttons"]["back"], width=WIDTH_WIDE_BUTTON,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=lambda _: self.page.go("/sending_messages_via_chats_menu"))
-        # Создание View с элементами
-        self.page.views.append(
-            ft.View(
-                "/sending_messages_via_chats_menu",
-                controls=[
-                    list_view,  # отображение логов 📝
-                    ft.Column(
-                        controls=[button_back]
-                    )]))
-
         if checs == True:
             try:
-                for session_name in await self.utils.find_filess(directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
-                                                           extension=self.account_extension):
+                for session_name in await self.utils.find_filess(
+                        directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
+                        extension=self.account_extension):
 
                     # Пользователь должен сам выбрать аккаунт
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
@@ -233,8 +216,6 @@ class SendTelegramMessages:
                             # Подписываемся на группы
                             await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
                             await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
-
-                            # await self.sub_unsub_tg.subscribe_to_group_or_channel(client, group_link, self.page)
 
                             # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
                             messages, files = await self.all_find_and_all_files()
@@ -323,11 +304,13 @@ class SendTelegramMessages:
                 route="/sending_messages_via_chats_menu",
                 controls=[
                     await self.gui_program.key_app_bar(),  # Кнопка "Назад"
-                    ft.Text(
-                        translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"],
-                        size=18,
-                        weight=ft.FontWeight.BOLD
-                    ),
+                    ft.Text(spans=[ft.TextSpan(translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"],
+                                               ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
+                                                            foreground=ft.Paint(
+                                                                gradient=ft.PaintLinearGradient((0, 20),
+                                                                                                (150, 20),
+                                                                                                [ft.Colors.PINK,
+                                                                                                 ft.Colors.PURPLE])), ), ), ], ),
                     list_view,  # Отображение логов 📝
                     c,
                     ft.Row(
