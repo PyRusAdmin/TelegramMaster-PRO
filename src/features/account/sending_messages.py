@@ -8,13 +8,13 @@ from loguru import logger
 from telethon import events, TelegramClient
 from telethon.errors import (ChannelPrivateError, ChatAdminRequiredError, ChatWriteForbiddenError, FloodWaitError,
                              PeerFloodError, SlowModeWaitError, UserBannedInChannelError, UserIdInvalidError,
-                             UsernameInvalidError, UsernameNotOccupiedError, UserNotMutualContactError)
+                             UsernameInvalidError, UsernameNotOccupiedError, UserNotMutualContactError, ForbiddenError)
 
 from src.core.configs import (BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON,
-                              path_folder_with_messages, PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
-                              path_send_message_folder_answering_machine_message, TIME_SENDING_MESSAGES_1,
+                              path_folder_with_messages, path_send_message_folder_answering_machine_message,
+                              TIME_SENDING_MESSAGES_1,
                               time_sending_messages_2, time_subscription_1, time_subscription_2, width_one_input)
-from src.core.database.account import getting_account
+from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import select_records_with_limit, get_writing_group_links
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
@@ -32,13 +32,13 @@ class SendTelegramMessages:
     def __init__(self, page: ft.Page):
         self.page = page
         self.connect = TGConnect(page=page)
-        self.account_extension = "session"  # Расширение файла аккаунта
         self.file_extension = "json"
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.gui_program = GUIProgram()
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
+        self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
 
     async def send_files_to_personal_chats(self) -> None:
         """
@@ -145,18 +145,32 @@ class SendTelegramMessages:
                             ],
                         ), ], ))
 
-    async def performing_the_operation(self, checs, chat_list_fields) -> None:
+    async def performing_the_operation(self, checs: bool, chat_list_fields: list, selected_account: str = None,
+                                       auto_reply_text: str = None) -> None:
         """
         Рассылка сообщений по чатам
+        :param auto_reply_text: текст для автоответчика
+        :param selected_account: выбранный аккаунт
         :param chat_list_fields: список ссылок на группы
         :param checs: значение чекбокса
         """
-        if checs == True:
-            try:
-                for session_name in await self.utils.find_filess(
-                        directory_path=PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE,
-                        extension=self.account_extension):
 
+        # Определяем, какие сессии использовать
+        if checs and selected_account:
+            # Режим автоответчика: только один выбранный аккаунт
+            sessions_to_use = [selected_account]
+        else:
+            # Обычный режим: все аккаунты
+            sessions_to_use = self.session_string
+
+        if not sessions_to_use:
+            await self.app_logger.log_and_display("❌ Нет доступных аккаунтов для работы.")
+            return
+
+        if checs:
+            # === РЕЖИМ АВТООТВЕТЧИКА ===
+            try:
+                for session_name in sessions_to_use:  # Перебор всех сессий
                     # Пользователь должен сам выбрать аккаунт
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                     client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
@@ -167,18 +181,22 @@ class SendTelegramMessages:
                         """Обрабатывает входящие личные сообщения"""
                         if event.is_private:  # Проверяем, является ли сообщение личным
                             await self.app_logger.log_and_display(
-                                message=f"Входящее сообщение: {event.message.message}")
-                            entities = await self.utils.find_files(
-                                directory_path=path_send_message_folder_answering_machine_message,
-                                extension=self.file_extension)
-                            await self.app_logger.log_and_display(message=f"{entities}")
-                            data = await self.select_and_read_random_file(entities=entities, folder="answering_machine")
-                            await self.app_logger.log_and_display(message=f"{data}")
-                            await event.respond(f'{data}')  # Отвечаем на входящее сообщение
+                                message=f"📩 Входящее сообщение: {event.message.message}")
+                            reply_text = auto_reply_text or "Спасибо за сообщение! Мы ответим позже."
+                            await event.respond(reply_text)
+                            await self.app_logger.log_and_display(f"🤖 Ответ отправлен: {reply_text}")
+                            
+                            # entities = await self.utils.find_files(
+                            #     directory_path=path_send_message_folder_answering_machine_message,
+                            #     extension=self.file_extension)
+                            # await self.app_logger.log_and_display(message=f"{entities}")
+                            # data = await self.select_and_read_random_file(entities=entities,
+                            #                                               folder="answering_machine")
+                            # await self.app_logger.log_and_display(message=f"{data}")
+                            # await event.respond(f'{data}')  # Отвечаем на входящее сообщение
 
                     # Получаем список чатов, которым нужно отправить сообщение
                     await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
-                    self.page.update()
                     for group_link in chat_list_fields:
                         try:
 
@@ -192,19 +210,20 @@ class SendTelegramMessages:
                             await self.send_content(client, group_link, messages, files)
                         except UserBannedInChannelError:
                             await self.app_logger.log_and_display(
-                                message=f"Вам запрещено отправлять сообщения в супергруппах/каналах (вызвано запросом SendMessageRequest)")
+                                message=f"❌ Запрещено отправлять сообщения в супергруппы/каналы.")
                         except ValueError:
                             await self.app_logger.log_and_display(
-                                message=f"❌ Ошибка рассылки, проверьте ссылку  на группу: {group_link}")
+                                message=f"❌ Ошибка рассылки, проверьте ссылку: {group_link}")
                             break
                         await self.random_dream()  # Прерываем работу и меняем аккаунт
                     await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
             except Exception as error:
                 logger.exception(error)
         else:
+            # === ОБЫЧНЫЙ РЕЖИМ РАССЫЛКИ ===
             try:
                 start = await self.app_logger.start_time()
-                for session_name in self.session_string:  # Перебор всех сессий
+                for session_name in self.sessions_to_use:  # Перебор всех сессий
                     client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                     await self.connect.getting_account_data(client)
 
@@ -223,7 +242,7 @@ class SendTelegramMessages:
                             await self.send_content(client, group_link, messages, files)
                         except ChannelPrivateError:
                             await self.app_logger.log_and_display(
-                                message=f"Группа {group_link} приватная или подписка запрещена.")
+                                message=f"🔒 Группа {group_link} приватная или недоступна.")
                         except PeerFloodError:
                             await self.utils.record_and_interrupt(time_range_1=time_subscription_1,
                                                                   time_range_2=time_subscription_2)
@@ -279,6 +298,29 @@ class SendTelegramMessages:
         # Поле для формирования списка чатов
         chat_list_field = ft.TextField(label="Формирование списка чатов")
 
+        # Поле для текста автоответчика
+        auto_reply_text_field = ft.TextField(
+            label="Автоответчик: текст ответа",
+            multiline=True,
+            min_lines=2,
+            max_lines=5,
+            width=WIDTH_WIDE_BUTTON,
+            hint_text="Введите сообщение для автоответа...",
+        )
+
+        # Создаём опции: текст — номер, ключ — session_string
+        account_options = [
+            ft.DropdownOption(text=phone, key=session_str)
+            for phone, session_str in self.account_data
+        ]
+        # Создаем выпадающий список с названиями групп
+        account_drop_down_list = ft.Dropdown(
+            label="📂 Выберите аккаунт",  # ✅ Название выпадающего списка
+            width=WIDTH_WIDE_BUTTON,  # ✅ Ширина выпадающего списка
+            options=account_options,  # ✅ Опции выпадающего списка
+            autofocus=True  # ✅ Автозаполнение
+        )
+
         # Обработчик кнопки "Готово"
         async def button_clicked(_):
             # Получаем значение третьего поля и разделяем его на список по пробелам
@@ -288,10 +330,17 @@ class SendTelegramMessages:
             else:
                 # Если поле пустое, используем данные из базы данных
                 links: list = get_writing_group_links()  # Открываем базу данных # Получение ссылки
-
-                chat_list_fields = [group[0] for group in links]  # Извлекаем только ссылки из кортежей
+                logger.info(links)
+                chat_list_fields = [group for group in links]  # Извлекаем только ссылки из кортежей
+                logger.info(chat_list_fields)
             if tb_time_from.value or TIME_SENDING_MESSAGES_1 < tb_time_to.value or time_sending_messages_2:
-                await self.performing_the_operation(c.value, chat_list_fields)
+                selected_account = account_drop_down_list.value  # ← Получаем key выбранного аккаунта
+                await self.performing_the_operation(
+                    checs=c.value,
+                    chat_list_fields=chat_list_fields,
+                    selected_account=selected_account,
+                    auto_reply_text=auto_reply_text_field.value
+                )
             else:
                 t.value = f"Время сна: Некорректный диапазон, введите корректные значения"
                 t.update()
@@ -304,14 +353,17 @@ class SendTelegramMessages:
                 route="/sending_messages_via_chats_menu",
                 controls=[
                     await self.gui_program.key_app_bar(),  # Кнопка "Назад"
-                    ft.Text(spans=[ft.TextSpan(translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"],
-                                               ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
-                                                            foreground=ft.Paint(
-                                                                gradient=ft.PaintLinearGradient((0, 20),
-                                                                                                (150, 20),
-                                                                                                [ft.Colors.PINK,
-                                                                                                 ft.Colors.PURPLE])), ), ), ], ),
+                    ft.Text(spans=[
+                        ft.TextSpan(translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"],
+                                    ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
+                                                 foreground=ft.Paint(
+                                                     gradient=ft.PaintLinearGradient((0, 20),
+                                                                                     (150, 20),
+                                                                                     [ft.Colors.PINK,
+                                                                                      ft.Colors.PURPLE])), ), ), ], ),
                     list_view,  # Отображение логов 📝
+                    account_drop_down_list,  # Выпадающий список с аккаунтами
+                    auto_reply_text_field,  # Поле для текста автоответчика
                     c,
                     ft.Row(
                         controls=[tb_time_from, tb_time_to],
@@ -349,7 +401,14 @@ class SendTelegramMessages:
         else:
             message = await self.select_and_read_random_file(messages, folder="message")
             if not files:
-                await client.send_message(entity=target, message=message)
+                try:
+                    await client.send_message(entity=target, message=message)
+                except ForbiddenError as e:
+                    if "ALLOW_PAYMENT_REQUIRED" in str(e):
+                        await self.app_logger.log_and_display(
+                            f"❌ Невозможно отправить сообщение: пользователь закрыл личку от незнакомцев.",
+                            level="warning"
+                        )
             else:
                 for file in files:
                     await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
@@ -377,19 +436,30 @@ class SendTelegramMessages:
 
     async def select_and_read_random_file(self, entities, folder):
         """
-        Выбираем рандомный файл для чтения
+        Выбираем случайный файл и читаем из него данные.
 
-        :param entities: список файлов для чтения
-        :param folder: папка для сохранения файлов
+        :param entities: список имён файлов (без расширения) для чтения
+        :param folder: подпапка внутри user_data (например, "message" или "answering_machine")
+        :return: содержимое JSON-файла или None, если файлы отсутствуют или произошла ошибка
         """
         try:
-            if entities:  # Проверяем, что список не пустой, если он не пустой
-                # Выбираем рандомный файл для чтения
-                random_file = random.choice(entities)  # Выбираем случайный файл для чтения из списка файлов
-                await self.app_logger.log_and_display(f"Выбран файл для чтения: {random_file[0]}.json")
-                data = await self.utils.read_json_file(filename=f"user_data/{folder}/{random_file[0]}.json")
-            return data  # Возвращаем данные из файла
+            if not entities:
+                await self.app_logger.log_and_display(f"📁 Папка 'user_data/{folder}' пуста. Нет файлов для выбора.")
+                return None
+
+            random_file = random.choice(entities)
+            filename = f"user_data/{folder}/{random_file[0]}.json"
+
+            logger.info(f"Выбран файл для чтения: {filename}")
+
+            await self.app_logger.log_and_display(f"Выбран файл для чтения: {random_file[0]}.json")
+
+            data = await self.utils.read_json_file(filename=filename)
+            return data
+
         except Exception as error:
+            await self.app_logger.log_and_display(f"⚠️ Ошибка при чтении файла из папки {folder}: {error}",
+                                                  level="error")
             logger.exception(error)
             return None
 
