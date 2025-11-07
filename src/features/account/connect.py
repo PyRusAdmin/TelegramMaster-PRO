@@ -26,7 +26,7 @@ from src.locales.translations_loader import translations
 
 class TGConnect:
 
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
         self.config_reader = ConfigReader()
         self.api_id_api_hash = self.config_reader.get_api_id_data_api_hash_data()
@@ -36,6 +36,7 @@ class TGConnect:
         self.utils = Utils(page=page)
         self.proxy = Proxy(page=page)
         self.gui_program = GUIProgram()
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def connect_string_session(self, session_name: str) -> TelegramClient:
         """Подключение к Telegram через StringSession"""
@@ -144,8 +145,7 @@ class TGConnect:
                 start = await self.app_logger.start_time()
                 await self.proxy.checking_the_proxy_for_work()  # Проверка proxy
                 # Сканирование каталога с аккаунтами
-                for session_name in await self.utils.find_filess(directory_path=path_accounts_folder,
-                                                                 extension='session'):
+                for session_name in self.session_string:  # Перебор всех сессий
                     await self.app_logger.log_and_display(message=f"⚠️ Переименовываемый аккаунт: {session_name}")
                     # Переименовывание аккаунтов
                     client = await self.client_connect_string_session(session_name=session_name)

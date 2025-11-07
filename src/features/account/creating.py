@@ -8,11 +8,11 @@ from loguru import logger
 from telethon import functions
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
+from src.core.database.account import getting_account
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
-from src.gui.gui import AppLogger
-from src.gui.gui import list_view
+from src.gui.gui import AppLogger, list_view
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
@@ -28,6 +28,7 @@ class CreatingGroupsAndChats:
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.gui_program = GUIProgram()
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def creating_groups_and_chats(self) -> None:
         """
@@ -48,8 +49,8 @@ class CreatingGroupsAndChats:
             if not selected_sessions:
                 await self.app_logger.log_and_display(
                     message=translations["ru"]["errors"]["files_not_selected_warning"])
-                session_files = await self.utils.find_filess(directory_path=path_accounts_folder, extension='session')
-                if not session_files:
+
+                if not session_string:
                     await self.app_logger.log_and_display(message=translations["ru"]["errors"]["no_session_files"])
                     self.page.update()
                     return
