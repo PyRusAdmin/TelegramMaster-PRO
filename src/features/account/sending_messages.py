@@ -112,11 +112,8 @@ class SendTelegramMessages:
                     logger.exception(error)
             else:
                 await self.app_logger.log_and_display(f"Время сна: Некорректный диапазон, введите корректные значения")
-                # t.value = f"Время сна: Некорректный диапазон, введите корректные значения"
-                # t.update()
             self.page.update()
 
-        # t = ft.Text()
         # Разделение интерфейса на верхнюю и нижнюю части
         self.page.views.append(
             ft.View(
@@ -126,7 +123,6 @@ class SendTelegramMessages:
                     ft.Text("Отправка сообщений в личку", size=18, weight=ft.FontWeight.BOLD),
                     list_view,  # Отображение логов 📝
                     ft.Row(controls=[self.tb_time_from, self.tb_time_to], spacing=20, ),
-                    # t,
                     limits,
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
