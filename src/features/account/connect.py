@@ -2,7 +2,7 @@
 import asyncio
 import os
 import os.path
-import sqlite3
+# import sqlite3
 
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
@@ -15,7 +15,7 @@ from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
 from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
-from src.core.database.account import getting_account, write_account_to_db
+from src.core.database.account import getting_account, write_account_to_db, delete_account_from_db
 from src.core.utils import Utils
 from src.features.proxy.checking_proxy import Proxy
 from src.gui.gui import AppLogger, list_view
@@ -38,15 +38,15 @@ class TGConnect:
         self.gui_program = GUIProgram()
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
-    async def connect_string_session(self, session_name: str) -> TelegramClient:
-        """Подключение к Telegram через StringSession"""
-        client = TelegramClient(StringSession(session_name), api_id=self.api_id, api_hash=self.api_hash,
-                                system_version="4.16.30-vxCUSTOM")
-        await client.connect()
-        me = await client.get_me()
-        phone = me.phone or ""
-        logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-        return client
+    # async def connect_string_session(self, session_name: str) -> TelegramClient:
+    #     """Подключение к Telegram через StringSession"""
+    #     client = TelegramClient(StringSession(session_name), api_id=self.api_id, api_hash=self.api_hash,
+    #                             system_version="4.16.30-vxCUSTOM")
+    #     await client.connect()
+    #     me = await client.get_me()
+    #     phone = me.phone or ""
+    #     logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
+    #     return client
 
     async def check_menu(self):
         """
@@ -63,7 +63,7 @@ class TGConnect:
                 start = await self.app_logger.start_time()  # Запуск таймера
                 session_string = getting_account()
                 for session_name in session_string:
-                    client = await self.connect_string_session(session_name=session_name)
+                    client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
                     try:
                         await client.send_message(entity='SpamBot',
                                                   message='/start')  # Находим спам бот, и вводим команду /start
@@ -84,10 +84,10 @@ class TGConnect:
                                 await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
                                 await self.app_logger.log_and_display(
                                     message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
+
                                 # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
-                                await self.utils.working_with_accounts(
-                                    account_folder=f"user_data/accounts/{session_name}.session",
-                                    new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                                # await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session", new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+
                             similarity_ratio_en: int = fuzz.ratio(f"{message.message}",
                                                                   "I’m very sorry that you had to contact me. Unfortunately, "
                                                                   "some account_actions can trigger a harsh response from our "
@@ -104,16 +104,19 @@ class TGConnect:
                                     message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
                                 # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
                                 await self.app_logger.log_and_display(message=f"{session_name}")
-                                await self.utils.working_with_accounts(
-                                    account_folder=f"user_data/accounts/{session_name}.session",
-                                    new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+
+                                # await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session", new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+
                             await self.app_logger.log_and_display(
                                 message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
                             await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
+
                     except (AttributeError, AuthKeyUnregisteredError, YouBlockedUserError) as e:
                         await self.app_logger.log_and_display(message=f"❌ Ошибка: {e}")
+
                     except SessionRevokedError as e:
                         await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
+
                 await self.app_logger.end_time(start)
                 await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
             except Exception as error:
@@ -149,26 +152,30 @@ class TGConnect:
                     await self.app_logger.log_and_display(message=f"⚠️ Переименовываемый аккаунт: {session_name}")
                     # Переименовывание аккаунтов
                     client = await self.client_connect_string_session(session_name=session_name)
-                    await self.getting_account_data(client)
+                    # await self.getting_account_data(client)
                     try:
                         me = await client.get_me()
-                        await self.rename_session_file(telegram_client=client, phone_old=session_name, phone=me.phone)
+
+
+                        # await self.rename_session_file(telegram_client=client, phone_old=session_name, phone=me.phone)
+
                     except AttributeError:  # Если в get_me приходит NoneType (None)
                         pass
-                    except TypeNotFoundError:
+                    except TypeNotFoundError as e:
                         await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
-                        await self.app_logger.log_and_display(
-                            message=f"⛔ Битый файл или аккаунт banned: {session_name}.session. Возможно, запущен под другим IP")
-                        await self.utils.working_with_accounts(
-                            account_folder=f"user_data/accounts/{session_name}.session",
-                            new_account_folder=f"user_data/accounts/banned/{session_name}.session")
-                    except AuthKeyUnregisteredError:
+                        await self.app_logger.log_and_display(message=f"⛔ Битый файл или аккаунт banned: {session_name}.session. Возможно, запущен под другим IP")
+
+                        # await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session", new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                        await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
+
+                    except AuthKeyUnregisteredError as e:
                         await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
                         await self.app_logger.log_and_display(
                             message=translations["ru"]["errors"]["auth_key_unregistered"])
-                        await self.utils.working_with_accounts(
-                            account_folder=f"user_data/accounts/{session_name}.session",
-                            new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+
+                        # await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session", new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                        await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
+
                 await self.app_logger.end_time(start)
                 await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
             except Exception as error:
@@ -230,7 +237,7 @@ class TGConnect:
         logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
         await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
 
-    async def client_connect_string_session(self, session_name):
+    async def client_connect_string_session(self, session_name) -> TelegramClient:
         """
         Подключение к Telegram аккаунту через StringSession
         :param session_name: Имя аккаунта для подключения (файл .session)
@@ -259,19 +266,21 @@ class TGConnect:
         """
         try:
             await self.app_logger.log_and_display(message=f"Проверка аккаунта {session_name}")
-            client = await self.connect_string_session(session_name=session_name)
+            # client = await self.connect_string_session(session_name=session_name)
+            client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
             try:
                 if not await client.is_user_authorized():  # Если аккаунт не авторизирован
                     await client.disconnect()
                     await asyncio.sleep(5)
-                    await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
-                                                           new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                    # await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session", new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+                    await delete_account_from_db(session_string=session_name, app_logger=self.app_logger)
                 else:
                     await self.app_logger.log_and_display(message=f"Аккаунт {session_name} авторизован")
                     await client.disconnect()  # Отключаемся после проверки
             except (PhoneNumberBannedError, UserDeactivatedBanError, AuthKeyNotFound,
                     AuthKeyUnregisteredError, AuthKeyDuplicatedError) as e:
-                await self.handle_banned_account(client, session_name, e)
+                # await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
+                await delete_account_from_db(session_string=session_name, app_logger=self.app_logger)
             except TimedOutError as error:
                 await self.app_logger.log_and_display(message=f"❌ Ошибка таймаута: {error}")
                 await asyncio.sleep(2)
@@ -291,33 +300,32 @@ class TGConnect:
         :param session_name: Имя аккаунта
         :param exception: Расширение файла
         """
-        try:
-            await self.app_logger.log_and_display(message=f"⛔ Аккаунт banned: {session_name}. {str(exception)}")
-            await telegram_client.disconnect()
-            await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
-                                                   new_account_folder=f"user_data/accounts/banned/{session_name}.session")
-        except sqlite3.OperationalError:
-            await telegram_client.disconnect()
-            await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session",
-                                                   new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+        # try:
+        await self.app_logger.log_and_display(message=f"⛔ Аккаунт banned: {session_name}. {str(exception)}")
+        await telegram_client.disconnect()
+        # await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session new_account_folder=f"user_data/accounts/banned/{session_name}.session")
+        await delete_account_from_db(session_string=session_name, app_logger=self.app_logger)
+        # except sqlite3.OperationalError:
+        #     await telegram_client.disconnect()
+        #     await self.utils.working_with_accounts(account_folder=f"user_data/accounts/{session_name}.session", new_account_folder=f"user_data/accounts/banned/{session_name}.session")
 
-    async def rename_session_file(self, telegram_client, phone_old, phone) -> None:
-        """
-        Переименовывает session файлы.
-
-        :param telegram_client: Клиент для работы с Telegram
-        :param phone_old: Номер телефона для переименования
-        :param phone: Номер телефона для переименования (новое название для session файла)
-        """
-        await telegram_client.disconnect()  # Отключаемся от аккаунта для освобождения session файла
-        try:
+    # async def rename_session_file(self, telegram_client, phone_old, phone) -> None:
+    #     """
+    #     Переименовывает session файлы.
+    #
+    #     :param telegram_client: Клиент для работы с Telegram
+    #     :param phone_old: Номер телефона для переименования
+    #     :param phone: Номер телефона для переименования (новое название для session файла)
+    #     """
+    #     await telegram_client.disconnect()  # Отключаемся от аккаунта для освобождения session файла
+        # try:
             # Переименование session файла
-            os.rename(f"user_data/accounts/{phone_old}.session", f"user_data/accounts/{phone}.session", )
-        except FileExistsError:
+            # os.rename(f"user_data/accounts/{phone_old}.session", f"user_data/accounts/{phone}.session", )
+        # except FileExistsError:
             # Если файл существует, то удаляем дубликат
-            os.remove(f"user_data/accounts/{phone_old}.session")
-        except Exception as error:
-            logger.exception(error)
+            # os.remove(f"user_data/accounts/{phone_old}.session")
+        # except Exception as error:
+        #     logger.exception(error)
 
     async def account_connection_menu(self):
         """
@@ -483,4 +491,4 @@ class TGConnect:
                                            text=translations["ru"]["create_groups_menu"]["choose_session_files"],
                                            on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
                      ])]))
-# 557
+# 486
