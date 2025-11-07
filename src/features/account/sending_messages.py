@@ -62,10 +62,12 @@ class SendTelegramMessages:
                     # Просим пользователя ввести расширение сообщения
                     for session_name in self.session_string:  # Перебор всех сессий
                         # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                        client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
+                        client: TelegramClient = await self.connect.client_connect_string_session(
+                            session_name=session_name)
                         await self.connect.getting_account_data(client)
                         try:
-                            for username in await select_records_with_limit(limit=int(limits.value), app_logger=self.app_logger):
+                            for username in await select_records_with_limit(limit=int(limits.value),
+                                                                            app_logger=self.app_logger):
                                 logger.info(f"Отправляем сообщение в личку {username}")
                                 await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
                                 try:
@@ -108,7 +110,8 @@ class SendTelegramMessages:
                         except KeyError:
                             sys.exit(1)
                     await self.app_logger.end_time(start=start)
-                    await show_notification(page=self.page, message="🔚 Конец рассылки сообщений")  # Выводим уведомление пользователю
+                    await show_notification(page=self.page,
+                                            message="🔚 Конец рассылки сообщений")  # Выводим уведомление пользователю
                 except Exception as error:
                     logger.exception(error)
             else:
