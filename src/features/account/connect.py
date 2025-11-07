@@ -15,7 +15,7 @@ from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
 from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
-from src.core.database.account import getting_account, write_account_to_db, delete_account_from_db
+from src.core.database.account import getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session
 from src.core.utils import Utils
 from src.features.proxy.checking_proxy import Proxy
 from src.gui.gui import AppLogger, list_view
@@ -156,7 +156,11 @@ class TGConnect:
                     try:
                         me = await client.get_me()
 
-
+                        await update_phone_by_session(
+                            session_string=session_name,
+                            new_phone=me.phone,
+                            app_logger=self.app_logger
+                        )
                         # await self.rename_session_file(telegram_client=client, phone_old=session_name, phone=me.phone)
 
                     except AttributeError:  # Если в get_me приходит NoneType (None)

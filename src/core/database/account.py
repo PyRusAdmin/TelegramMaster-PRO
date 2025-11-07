@@ -74,3 +74,29 @@ def get_account_list():
         accounts.append((account.phone_number, account.session_string))
     logger.info(f"Загружено аккаунтов: {len(accounts)}")
     return accounts  # Список аккаунтов
+
+
+async def update_phone_by_session(session_string: str, new_phone: str, app_logger) -> bool:
+    """
+    Обновляет номер телефона аккаунта в базе по session_string.
+
+    :param session_string: Строка сессии
+    :param new_phone: Новый номер телефона
+    :param app_logger: Логгер
+    :return: True при успехе, False при ошибке
+    """
+    try:
+        rows_updated = (Account
+                        .update(phone_number=new_phone)
+                        .where(Account.session_string == session_string)
+                        .execute())
+        if rows_updated > 0:
+            await app_logger.log_and_display(f"✅ Номер аккаунта обновлён: {new_phone}")
+            return True
+        else:
+            await app_logger.log_and_display(f"⚠️ Аккаунт с session_string='{session_string}' не найден для обновления")
+            return False
+    except Exception as e:
+        logger.exception("Ошибка при обновлении номера")
+        await app_logger.log_and_display(f"❌ Ошибка обновления номера: {e}")
+        return False
