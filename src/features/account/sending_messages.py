@@ -38,18 +38,22 @@ class SendTelegramMessages:
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
+        self.tb_time_from = ft.TextField(label="Время сна от", width=width_one_input, hint_text="Введите время",
+                                         border_radius=5)
+        self.tb_time_to = ft.TextField(label="Время сна до", width=width_one_input, hint_text="Введите время",
+                                       border_radius=5)
 
     async def send_files_to_personal_chats(self) -> None:
         """
         Отправка файлов в личку
         """
 
-        output = ft.Text("Отправка сообщений в личку", size=18, weight=ft.FontWeight.BOLD)
+        # Группа полей ввода для времени сна
 
         async def button_clicked(_):
             """Обработчик кнопки "Готово" """
-            time_from = tb_time_from.value or TIME_SENDING_MESSAGES_1  # Получаем значение первого поля
-            time_to = tb_time_to.value or time_sending_messages_2  # Получаем значение второго поля
+            time_from = self.tb_time_from.value or TIME_SENDING_MESSAGES_1  # Получаем значение первого поля
+            time_to = self.tb_time_to.value or time_sending_messages_2  # Получаем значение второго поля
 
             # Получаем значение третьего поля и разделяем его на список по пробелам
             account_limits_input = account_limits_inputs.value  # Удаляем лишние пробелы
@@ -116,33 +120,30 @@ class SendTelegramMessages:
             self.page.update()
 
         # GUI элементы
-
-        # Группа полей ввода для времени сна
-        tb_time_from = ft.TextField(label="Время сна от", width=width_one_input, hint_text="Введите время",
-                                    border_radius=5, )
-        tb_time_to = ft.TextField(label="Время сна до", width=width_one_input, hint_text="Введите время",
-                                  border_radius=5, )
-        sleep_time_group = ft.Row(controls=[tb_time_from, tb_time_to], spacing=20, )
         # Поле для формирования списка чатов
         account_limits_inputs = ft.TextField(label="Введите лимит на сообщения")
-
-        # Кнопка "Готово"
-        button_done = ft.ElevatedButton(text=translations["ru"]["buttons"]["done"], width=WIDTH_WIDE_BUTTON,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=button_clicked, )
 
         t = ft.Text()
         # Разделение интерфейса на верхнюю и нижнюю части
         self.page.views.append(
-            ft.View("/sending_messages_via_chats_menu",
-                    controls=[
-                        await self.gui_program.key_app_bar(),  # Кнопка "Назад"
-                        output, sleep_time_group, t, account_limits_inputs,
-                        ft.Column(  # Верхняя часть: контрольные элементы
-                            controls=[
-                                button_done,
-                            ],
-                        ), ], ))
+            ft.View(
+                route="/sending_messages_via_chats_menu",
+                controls=[
+                    await self.gui_program.key_app_bar(),  # Кнопка "Назад"
+                    ft.Text("Отправка сообщений в личку", size=18, weight=ft.FontWeight.BOLD),
+                    list_view,  # Отображение логов 📝
+                    ft.Row(controls=[self.tb_time_from, self.tb_time_to], spacing=20, ),
+                    t,
+                    account_limits_inputs,
+                    ft.Column(  # Верхняя часть: контрольные элементы
+                        controls=[
+                            ft.ElevatedButton(
+                                text=translations["ru"]["buttons"]["done"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=button_clicked, ),
+                        ],
+                    ), ], ))
 
     async def performing_the_operation(self, checs: bool, chat_list_fields: list, selected_account: str = None,
                                        auto_reply_text: str = None) -> None:
@@ -279,11 +280,6 @@ class SendTelegramMessages:
         """
         # Чекбокс для работы с автоответчиком
         c = ft.Checkbox(label="Работа с автоответчиком")
-        # Группа полей ввода для времени сна
-        tb_time_from = ft.TextField(label="Время сна от", width=width_one_input, hint_text="Введите время",
-                                    border_radius=5)
-        tb_time_to = ft.TextField(label="Время сна до", width=width_one_input, hint_text="Введите время",
-                                  border_radius=5)
         # Поле для формирования списка чатов
         chat_list_field = ft.TextField(label="Формирование списка чатов")
 
@@ -322,7 +318,7 @@ class SendTelegramMessages:
                 logger.info(links)
                 chat_list_fields = [group for group in links]  # Извлекаем только ссылки из кортежей
                 logger.info(chat_list_fields)
-            if tb_time_from.value or TIME_SENDING_MESSAGES_1 < tb_time_to.value or time_sending_messages_2:
+            if self.tb_time_from.value or TIME_SENDING_MESSAGES_1 < self.tb_time_to.value or time_sending_messages_2:
                 selected_account = account_drop_down_list.value  # ← Получаем key выбранного аккаунта
                 await self.performing_the_operation(
                     checs=c.value,
@@ -355,7 +351,7 @@ class SendTelegramMessages:
                     auto_reply_text_field,  # Поле для текста автоответчика
                     c,
                     ft.Row(
-                        controls=[tb_time_from, tb_time_to],
+                        controls=[self.tb_time_from, self.tb_time_to],
                         spacing=20,
                     ),
                     t,
@@ -408,9 +404,8 @@ class SendTelegramMessages:
         """
         Находит все файлы в папке с сообщениями и папке с файлами для отправки.
         """
-        messages = await self.utils.find_files(directory_path=path_folder_with_messages, extension=self.file_extension)
-        files = await self.utils.all_find_files(directory_path="user_data/files_to_send")
-        return messages, files
+        return (await self.utils.find_files(directory_path=path_folder_with_messages, extension=self.file_extension),
+                await self.utils.all_find_files(directory_path="user_data/files_to_send"))
 
     async def random_dream(self):
         """
@@ -443,8 +438,7 @@ class SendTelegramMessages:
 
             await self.app_logger.log_and_display(f"Выбран файл для чтения: {random_file[0]}.json")
 
-            data = await self.utils.read_json_file(filename=filename)
-            return data
+            return await self.utils.read_json_file(filename=filename)
 
         except Exception as error:
             await self.app_logger.log_and_display(f"⚠️ Ошибка при чтении файла из папки {folder}: {error}",
@@ -452,4 +446,4 @@ class SendTelegramMessages:
             logger.exception(error)
             return None
 
-# 397
+# 455
