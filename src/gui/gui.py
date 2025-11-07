@@ -23,7 +23,7 @@ class AppLogger:
         await self.log_and_display(message='⏹️ Время окончания: ' + str(finish))
         await self.log_and_display(message='⏱️ Время работы: ' + str(finish - start))
 
-    async def log_and_display(self, message: str, level: str = "info"):
+    async def log_and_display(self, message: str, level: str = "INFO"):
         """
         Выводит сообщение в GUI и записывает лог с указанным уровнем с помощью loguru.
 
@@ -34,4 +34,5 @@ class AppLogger:
             logger.error(message)
         else:
             self.list_view.controls.append(ft.Text(message))
+            logger.info(message)
         self.page.update()

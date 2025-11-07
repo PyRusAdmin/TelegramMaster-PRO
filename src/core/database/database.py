@@ -206,8 +206,12 @@ class MembersGroups(Model):
         table_name = 'members'
 
 
-def select_records_with_limit(limit):
-    """Возвращает список usernames и user_id из таблицы members"""
+async def select_records_with_limit(limit, app_logger):
+    """
+    Возвращает список usernames и user_id из таблицы members
+    :param limit: Количество записей для возврата
+    :param app_logger: Экземпляр класса AppLogger для логирования
+    """
     usernames = []
     query = MembersGroups.select(MembersGroups.username, MembersGroups.user_id)
     for row in query:
@@ -217,6 +221,8 @@ def select_records_with_limit(limit):
         else:
             # logger.info(f"Username: {row.username}, User ID: {row.user_id}", )
             usernames.append(row.username)
+
+    await app_logger.log_and_display(message=f"Всего username: {len(usernames)}")
 
     if limit is None:  # Если limit не указан, возвращаем все записи
         return usernames

@@ -2,6 +2,7 @@
 import asyncio
 import random
 import sys
+import time
 
 import flet as ft
 from loguru import logger
@@ -20,6 +21,7 @@ from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
 from src.gui.gui import list_view, AppLogger
 from src.gui.gui_elements import GUIProgram
+from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -56,21 +58,15 @@ class SendTelegramMessages:
 
             if self.tb_time_from.value < self.tb_time_to.value:
                 try:
+                    start = await self.app_logger.start_time()
                     # Просим пользователя ввести расширение сообщения
                     for session_name in self.session_string:  # Перебор всех сессий
                         # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                        client: TelegramClient = await self.connect.client_connect_string_session(
-                            session_name=session_name)
+                        client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                         await self.connect.getting_account_data(client)
-
                         try:
-                            # Открываем parsing список user_data/software_database.db для inviting в группу
-                            usernames = select_records_with_limit(limit=int(limits.value))
-                            # Количество аккаунтов на данный момент в работе
-                            await self.app_logger.log_and_display(message=f"Всего username: {len(usernames)}")
-                            for rows in usernames:
-                                username = rows[
-                                    0]  # Получаем имя аккаунта из базы данных user_data/software_database.db
+                            for username in await select_records_with_limit(limit=int(limits.value), app_logger=self.app_logger):
+                                logger.info(f"Отправляем сообщение в личку {username}")
                                 await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
                                 try:
                                     user_to_add = await client.get_input_entity(username)
@@ -80,7 +76,10 @@ class SendTelegramMessages:
                                         message=f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
                                     await self.utils.record_inviting_results(time_range_1=int(self.tb_time_from.value),
                                                                              time_range_2=int(self.tb_time_to.value),
-                                                                             username=rows)
+                                                                             username=username)
+                                    await self.app_logger.log_and_display(message=f"Смена аккаунта, ожидайте 8 секунд")
+                                    time.sleep(8)
+
                                 except FloodWaitError as e:
                                     await self.app_logger.log_and_display(
                                         message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
@@ -108,6 +107,8 @@ class SendTelegramMessages:
                                     continue  # Записываем ошибку в software_database.db и продолжаем работу
                         except KeyError:
                             sys.exit(1)
+                    await self.app_logger.end_time(start=start)
+                    await show_notification(page=self.page, message="🔚 Конец рассылки сообщений")  # Выводим уведомление пользователю
                 except Exception as error:
                     logger.exception(error)
             else:

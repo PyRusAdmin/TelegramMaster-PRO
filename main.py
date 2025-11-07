@@ -19,6 +19,7 @@ from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage
 from src.gui.menu import Menu
 
+logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")  # Логирование программы
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")  # Логирование программы
 
 
