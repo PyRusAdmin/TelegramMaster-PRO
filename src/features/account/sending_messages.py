@@ -47,22 +47,14 @@ class SendTelegramMessages:
         """
         Отправка файлов в личку
         """
+        limits = ft.TextField(label="Введите лимит на сообщения")
 
         # Группа полей ввода для времени сна
 
         async def button_clicked(_):
             """Обработчик кнопки "Готово" """
-            time_from = self.tb_time_from.value or TIME_SENDING_MESSAGES_1  # Получаем значение первого поля
-            time_to = self.tb_time_to.value or time_sending_messages_2  # Получаем значение второго поля
 
-            # Получаем значение третьего поля и разделяем его на список по пробелам
-            account_limits_input = account_limits_inputs.value  # Удаляем лишние пробелы
-            if account_limits_input:  # Если поле не пустое
-                limits = account_limits_input  # Разделяем строку по пробелам
-                await self.app_logger.log_and_display(message=f"{limits}")
-            else:
-                limits = ConfigReader().get_limits()
-            if time_from < time_to:
+            if self.tb_time_from.value < self.tb_time_to.value:
                 try:
                     # Просим пользователя ввести расширение сообщения
                     for session_name in self.session_string:  # Перебор всех сессий
@@ -73,7 +65,7 @@ class SendTelegramMessages:
 
                         try:
                             # Открываем parsing список user_data/software_database.db для inviting в группу
-                            usernames = select_records_with_limit(limit=int(limits))
+                            usernames = select_records_with_limit(limit=int(limits.value))
                             # Количество аккаунтов на данный момент в работе
                             await self.app_logger.log_and_display(message=f"Всего username: {len(usernames)}")
                             for rows in usernames:
@@ -86,16 +78,19 @@ class SendTelegramMessages:
                                     await self.send_content(client, user_to_add, messages, files)
                                     await self.app_logger.log_and_display(
                                         message=f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
-                                    await self.utils.record_inviting_results(time_range_1=time_from,
-                                                                             time_range_2=time_to, username=rows)
+                                    await self.utils.record_inviting_results(time_range_1=int(self.tb_time_from.value),
+                                                                             time_range_2=int(self.tb_time_to.value),
+                                                                             username=rows)
                                 except FloodWaitError as e:
                                     await self.app_logger.log_and_display(
                                         message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                         level="error")
-                                    await self.utils.record_and_interrupt(time_range_1=time_from, time_range_2=time_to)
+                                    await self.utils.record_and_interrupt(time_range_1=self.tb_time_from.value,
+                                                                          time_range_2=self.tb_time_to.value)
                                     break  # Прерываем работу и меняем аккаунт
                                 except PeerFloodError:
-                                    await self.utils.record_and_interrupt(time_range_1=time_from, time_range_2=time_to)
+                                    await self.utils.record_and_interrupt(time_range_1=self.tb_time_from.value,
+                                                                          time_range_2=self.tb_time_to.value)
                                     break  # Прерываем работу и меняем аккаунт
                                 except UserNotMutualContactError:
                                     await self.app_logger.log_and_display(
@@ -106,7 +101,8 @@ class SendTelegramMessages:
                                 except ChatWriteForbiddenError:
                                     await self.app_logger.log_and_display(
                                         message=translations["ru"]["errors"]["chat_write_forbidden"])
-                                    await self.utils.record_and_interrupt(time_range_1=time_from, time_range_2=time_to)
+                                    await self.utils.record_and_interrupt(time_range_1=self.tb_time_from.value,
+                                                                          time_range_2=self.tb_time_to.value)
                                     break  # Прерываем работу и меняем аккаунт
                                 except (TypeError, UnboundLocalError):
                                     continue  # Записываем ошибку в software_database.db и продолжаем работу
@@ -115,15 +111,12 @@ class SendTelegramMessages:
                 except Exception as error:
                     logger.exception(error)
             else:
-                t.value = f"Время сна: Некорректный диапазон, введите корректные значения"
-                t.update()
+                await self.app_logger.log_and_display(f"Время сна: Некорректный диапазон, введите корректные значения")
+                # t.value = f"Время сна: Некорректный диапазон, введите корректные значения"
+                # t.update()
             self.page.update()
 
-        # GUI элементы
-        # Поле для формирования списка чатов
-        account_limits_inputs = ft.TextField(label="Введите лимит на сообщения")
-
-        t = ft.Text()
+        # t = ft.Text()
         # Разделение интерфейса на верхнюю и нижнюю части
         self.page.views.append(
             ft.View(
@@ -133,8 +126,8 @@ class SendTelegramMessages:
                     ft.Text("Отправка сообщений в личку", size=18, weight=ft.FontWeight.BOLD),
                     list_view,  # Отображение логов 📝
                     ft.Row(controls=[self.tb_time_from, self.tb_time_to], spacing=20, ),
-                    t,
-                    account_limits_inputs,
+                    # t,
+                    limits,
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
                             ft.ElevatedButton(
