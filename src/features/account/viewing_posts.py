@@ -35,6 +35,7 @@ class ViewingPosts:
         self.function_button = FunctionButton(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def viewing_posts_request(self) -> None:
         """Окно с полями ввода и кнопками для накрутки просмотров."""
@@ -55,10 +56,10 @@ class ViewingPosts:
 
             async def btn_click(_) -> None:
 
-                session = await self.utils.find_filess(directory_path=path_accounts_folder, extension='session')
+                # session = await self.utils.find_filess(directory_path=path_accounts_folder, extension='session')
                 number_session = number_views.value
                 list_view.controls.append(ft.Text(f"Выбрано просмотров: {number_session}"))
-                views_selected = session[:int(number_session)]
+                views_selected = self.session_string[:int(number_session)]
 
                 start = await self.app_logger.start_time()  # Запуск таймера
                 self.page.update()  # Обновление страницы, чтобы сразу показать сообщение 🔄
