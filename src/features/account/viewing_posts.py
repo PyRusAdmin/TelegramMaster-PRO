@@ -35,7 +35,6 @@ class ViewingPosts:
         self.function_button = FunctionButton(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
-        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def viewing_posts_request(self) -> None:
         """Окно с полями ввода и кнопками для накрутки просмотров."""
