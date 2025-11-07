@@ -187,5 +187,3 @@ class Menu:
                                            text=translations["ru"]["menu_settings"]["recording_reaction_link"],
                                            on_click=lambda _: self.page.go("/recording_reaction_link")),
                      ])]))
-
-
