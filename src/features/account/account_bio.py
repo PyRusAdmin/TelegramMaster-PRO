@@ -6,7 +6,7 @@ from telethon.errors import (AuthKeyUnregisteredError, UsernameInvalidError, Use
                              UsernamePurchaseAvailableError)
 
 from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, WIDTH_INPUT_FIELD_AND_BUTTON
-from src.core.database.account import getting_account
+from src.core.database.account import getting_account, get_account_list
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
@@ -31,12 +31,27 @@ class AccountBIO:
         self.utils = Utils(page=page)
         self.gui_program = GUIProgram()
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
+        self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
 
     async def bio_editing_menu(self):
         """
         Меню ✏️ Редактирование_BIO
         """
         list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
+
+        # Создаём опции: текст — номер, ключ — session_string
+        account_options = [
+            ft.DropdownOption(text=phone, key=session_str)
+            for phone, session_str in self.account_data
+        ]
+        # Создаем выпадающий список с названиями групп
+        account_drop_down_list = ft.Dropdown(
+            label="📂 Выберите аккаунт",  # ✅ Название выпадающего списка
+            width=WIDTH_WIDE_BUTTON,  # ✅ Ширина выпадающего списка
+            options=account_options,  # ✅ Опции выпадающего списка
+            autofocus=True  # ✅ Автозаполнение
+        )
+
         profile_description_input_field = ft.TextField(label="Введите описание профиля, не более 70 символов: ",
                                                        multiline=True,
                                                        width=WIDTH_INPUT_FIELD_AND_BUTTON,
@@ -59,22 +74,22 @@ class AccountBIO:
              Изменение username профиля Telegram профиля Telegram в графическое окно Flet
             """
             try:
-                for session_name in self.session_string:  # Перебор всех сессий
-                    await self.app_logger.log_and_display(message=f"{session_name}")
-                    client = await self.connect.client_connect_string_session(session_name=session_name)
-                    try:
-                        await client(
-                            functions.account.UpdateUsernameRequest(username=input_field_username_change.value))
-                        await show_notification(self.page, f'Работа окончена')  # Выводим уведомление пользователю
-                    except AuthKeyUnregisteredError:
-                        await self.app_logger.log_and_display(
-                            message=translations["ru"]["errors"]["auth_key_unregistered"])
-                    except (UsernamePurchaseAvailableError, UsernameOccupiedError):
-                        await show_notification(self.page, "❌ Никнейм уже занят")  # Выводим уведомление пользователю
-                    except UsernameInvalidError:
-                        await show_notification(self.page, "❌ Неверный никнейм")  # Выводим уведомление пользователю
-                    finally:
-                        await client.disconnect()
+                # for session_name in self.session_string:  # Перебор всех сессий
+                await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
+                client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
+                try:
+                    await client(
+                        functions.account.UpdateUsernameRequest(username=input_field_username_change.value))
+                    await show_notification(self.page, f'Работа окончена')  # Выводим уведомление пользователю
+                except AuthKeyUnregisteredError:
+                    await self.app_logger.log_and_display(
+                        message=translations["ru"]["errors"]["auth_key_unregistered"])
+                except (UsernamePurchaseAvailableError, UsernameOccupiedError):
+                    await show_notification(self.page, "❌ Никнейм уже занят")  # Выводим уведомление пользователю
+                except UsernameInvalidError:
+                    await show_notification(self.page, "❌ Неверный никнейм")  # Выводим уведомление пользователю
+                finally:
+                    await client.disconnect()
             except Exception as error:
                 logger.exception(error)
 
@@ -82,22 +97,22 @@ class AccountBIO:
             """Изменение описания профиля Telegram аккаунта."""
             try:
                 await self.app_logger.log_and_display(message=f"Запуск смены  описания профиля")
-                for session_name in self.session_string:  # Перебор всех сессий
-                    await self.app_logger.log_and_display(message=f"{session_name}")
-                    client = await self.connect.client_connect_string_session(session_name=session_name)
-                    if len(profile_description_input_field.value) > 70:
-                        await show_notification(self.page,
-                                                f"❌ Описание профиля превышает 70 символов ({len(profile_description_input_field.value)}).")
-                        return
-                    try:
-                        result = await client(
-                            functions.account.UpdateProfileRequest(about=profile_description_input_field.value))
-                        await self.app_logger.log_and_display(message=f"{result}\nПрофиль успешно обновлен!")
-                    except AuthKeyUnregisteredError:
-                        await self.app_logger.log_and_display(
-                            message=translations["ru"]["errors"]["auth_key_unregistered"])
-                    finally:
-                        await client.disconnect()
+                # for session_name in self.session_string:  # Перебор всех сессий
+                await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
+                client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
+                if len(profile_description_input_field.value) > 70:
+                    await show_notification(self.page,
+                                            f"❌ Описание профиля превышает 70 символов ({len(profile_description_input_field.value)}).")
+                    return
+                try:
+                    result = await client(
+                        functions.account.UpdateProfileRequest(about=profile_description_input_field.value))
+                    await self.app_logger.log_and_display(message=f"{result}\nПрофиль успешно обновлен!")
+                except AuthKeyUnregisteredError:
+                    await self.app_logger.log_and_display(
+                        message=translations["ru"]["errors"]["auth_key_unregistered"])
+                finally:
+                    await client.disconnect()
             except Exception as error:
                 logger.exception(error)
             await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
@@ -107,22 +122,22 @@ class AccountBIO:
             Изменение имени профиля. Изменение био профиля Telegram в графическое окно Flet
             """
             try:
-                for session_name in self.session_string:  # Перебор всех сессий
-                    await self.app_logger.log_and_display(message=f"{session_name}")
-                    client = await self.connect.client_connect_string_session(session_name=session_name)
+                # for session_name in self.session_string:  # Перебор всех сессий
+                await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
+                client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
+                await self.connect.getting_account_data(client)
+                try:
+                    result = await client(
+                        functions.account.UpdateProfileRequest(first_name=profile_name_input_field.value))
+                    await self.app_logger.log_and_display(message=f"{result}\nИмя успешно обновлено!")
+                except AuthKeyUnregisteredError:
+                    await self.app_logger.log_and_display(
+                        message=translations["ru"]["errors"]["auth_key_unregistered"])
+                finally:
                     await self.connect.getting_account_data(client)
-                    try:
-                        result = await client(
-                            functions.account.UpdateProfileRequest(first_name=profile_name_input_field.value))
-                        await self.app_logger.log_and_display(message=f"{result}\nИмя успешно обновлено!")
-                    except AuthKeyUnregisteredError:
-                        await self.app_logger.log_and_display(
-                            message=translations["ru"]["errors"]["auth_key_unregistered"])
-                    finally:
-                        await self.connect.getting_account_data(client)
-                        await client.disconnect()
-                    await show_notification(page=self.page,
-                                            message="Работа окончена")  # Выводим уведомление пользователю
+                    await client.disconnect()
+                await show_notification(page=self.page,
+                                        message="Работа окончена")  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
 
@@ -131,21 +146,21 @@ class AccountBIO:
             Изменение фамилии профиля. Изменение био профиля Telegram в графическое окно Flet
             """
             try:
-                for session_name in self.session_string:  # Перебор всех сессий
-                    await self.app_logger.log_and_display(message=f"{session_name}")
-                    client = await self.connect.client_connect_string_session(session_name=session_name)
+                # for session_name in self.session_string:  # Перебор всех сессий
+                await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
+                client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
+                await self.connect.getting_account_data(client)
+                try:
+                    result = await client(
+                        functions.account.UpdateProfileRequest(last_name=profile_last_name_input_field.value))
+                    await self.app_logger.log_and_display(message=f"{result}\nФамилия успешно обновлена!")
+                except AuthKeyUnregisteredError:
+                    await self.app_logger.log_and_display(
+                        message=translations["ru"]["errors"]["auth_key_unregistered"])
+                finally:
                     await self.connect.getting_account_data(client)
-                    try:
-                        result = await client(
-                            functions.account.UpdateProfileRequest(last_name=profile_last_name_input_field.value))
-                        await self.app_logger.log_and_display(message=f"{result}\nФамилия успешно обновлена!")
-                    except AuthKeyUnregisteredError:
-                        await self.app_logger.log_and_display(
-                            message=translations["ru"]["errors"]["auth_key_unregistered"])
-                    finally:
-                        await self.connect.getting_account_data(client)
-                        await client.disconnect()
-                    await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
+                    await client.disconnect()
+                await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
 
@@ -154,18 +169,18 @@ class AccountBIO:
             Изменение фото профиля Telegram через интерфейс Flet.
             """
             try:
-                for session_name in self.session_string:  # Перебор всех сессий
-                    await self.app_logger.log_and_display(message=f"{session_name}")
-                    client = await self.connect.client_connect_string_session(session_name=session_name)
-                    for photo_file in await self.utils.find_files(directory_path="user_data/bio", extension='jpg'):
-                        try:
-                            await client(functions.photos.UploadProfilePhotoRequest(
-                                file=await client.upload_file(f"user_data/bio/{photo_file[0]}.jpg")))
-                        except AuthKeyUnregisteredError:
-                            await self.app_logger.log_and_display(
-                                message=translations["ru"]["errors"]["auth_key_unregistered"])
-                        finally:
-                            await client.disconnect()
+                # for session_name in self.session_string:  # Перебор всех сессий
+                await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
+                client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
+                for photo_file in await self.utils.find_files(directory_path="user_data/bio", extension='jpg'):
+                    try:
+                        await client(functions.photos.UploadProfilePhotoRequest(
+                            file=await client.upload_file(f"user_data/bio/{photo_file[0]}.jpg")))
+                    except AuthKeyUnregisteredError:
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["auth_key_unregistered"])
+                    finally:
+                        await client.disconnect()
             except Exception as error:
                 logger.exception(error)
             await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
@@ -181,6 +196,7 @@ class AccountBIO:
                                  gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
                                                                                       ft.Colors.PURPLE]))))]),
                      list_view,  # Отображение логов 📝
+                     account_drop_down_list,  # Выпадающий список с аккаунтами
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          ft.Row([
                              input_field_username_change,  # Поле для ввода username Telegram
