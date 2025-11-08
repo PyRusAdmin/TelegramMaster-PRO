@@ -65,13 +65,13 @@ class InvitingToAGroup:
         self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
-        # Отображение информации о настройках инвайтинга
         await self.app_logger.log_and_display(
             message=(
-                f"Всего usernames: {len(select_records_with_limit(limit=None))}\n"
                 f"Всего подключенных аккаунтов: {len(self.session_string)}\n"
             )
         )
+        # Отображение информации о настройках инвайтинга
+        await select_records_with_limit(limit=None, app_logger=self.app_logger)
 
         async def get_invitation_links():
             """

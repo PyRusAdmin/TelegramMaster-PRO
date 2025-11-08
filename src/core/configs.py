@@ -8,6 +8,14 @@ time_changing_accounts_2 = config.get('time_changing_accounts', 'time_changing_a
 
 config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
 config_gui.read(filenames='user_data/config/config_gui.ini', encoding='utf-8')
+BUTTON_HEIGHT = config_gui.get('height_button', 'height_button', fallback=None)  # Получение ширины кнопки
+PROGRAM_NAME = config_gui.get('program_name', 'program_name', fallback=None)  # Имя программы
+PROGRAM_VERSION = config_gui.get('program_version', 'program_version', fallback=None)  # Версия программы
+DATE_OF_PROGRAM_CHANGE = config_gui.get('date_of_program_change', 'date_of_program_change',
+                                        fallback=None)  # Дата изменения (обновления)
+WINDOW_WIDTH = config_gui.get('window_width', 'window_width', fallback=None)  # Ширина программы
+WINDOW_HEIGHT = config_gui.get('window_height', 'window_height', fallback=None)  # Высота программы
+WINDOW_RESIZABLE = config_gui.get('window_resizable', 'window_resizable', fallback=None)  # Ширина программы
 
 
 class ConfigReader:
@@ -15,9 +23,6 @@ class ConfigReader:
     def __init__(self):
         self.config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
         self.config.read(filenames='user_data/config/config.ini', encoding='utf-8')
-
-        self.config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-        self.config_gui.read(filenames='user_data/config/config_gui.ini', encoding='utf-8')
 
         self.config_path = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
         self.config_path.read(filenames='user_data/config/config_path.ini', encoding='utf-8')
@@ -30,9 +35,6 @@ class ConfigReader:
         return (self.config.getint('time_inviting', 'time_inviting_1', fallback=None),
                 self.config.getint('time_inviting', 'time_inviting_2', fallback=None))
 
-    def get_limits(self):
-        return self.config.getint('account_limits', 'account_limits', fallback=None)
-
     def time_activity_user_2(self):
         """   """
         return self.config.get('time_activity_user', 'time_activity_user_2', fallback=None)
@@ -40,66 +42,6 @@ class ConfigReader:
     def get_api_id_data_api_hash_data(self):
         return (self.config.get('telegram_settings', 'id', fallback=None),
                 self.config.get('telegram_settings', 'hash', fallback=None))
-
-    def get_hour_minutes_every_day(self):
-        return (self.config.get('hour_minutes_every_day', 'hour', fallback=None),
-                self.config.get('hour_minutes_every_day', 'minutes', fallback=None))
-
-    def get_line_height_button(self) -> str | None:
-        """
-        Получение высоты кнопки
-        """
-        return self.config_gui.get('height_button', 'height_button', fallback=None)
-
-    def program_name(self) -> str | None:
-        """
-        Имя программы
-        """
-        return self.config_gui.get('program_name', 'program_name', fallback=None)
-
-    def program_version(self) -> str | None:
-        """
-        Версия программы
-        """
-        return self.config_gui.get('program_version', 'program_version', fallback=None)
-
-    def date_of_program_change(self) -> str | None:
-        """
-        Дата изменения
-        """
-        return self.config_gui.get('date_of_program_change', 'date_of_program_change', fallback=None)
-
-    def window_width(self) -> str | None:
-        """
-        Ширина программы
-        """
-        return self.config_gui.get('window_width', 'window_width', fallback=None)
-
-    def window_height(self) -> str | None:
-        """
-        Высота программы
-        """
-        return self.config_gui.get('window_height', 'window_height', fallback=None)
-
-    def window_resizable(self) -> str | None:
-        """
-        Разрешение на изменение размера программы, если False, то запрещено изменять размер программы
-        """
-        return self.config_gui.get('window_resizable', 'window_resizable', fallback=None)
-
-    def path_send_message_folder_answering_machine(self) -> str | None:
-        """
-        Путь к папке для автоответчика (путь к config файлу user_data/config/config_path.ini)
-        """
-        return self.config_path.get('path_send_message_folder_answering_machine',
-                                    'path_send_message_folder_answering_machine', fallback=None)
-
-    def path_send_message_folder_answering_machine_message(self) -> str | None:
-        """
-        Путь к папке с сообщениями для автоответчика (путь к config файлу user_data/config/config_path.ini)
-        """
-        return self.config_path.get('path_send_message_folder_answering_machine_message',
-                                    'path_send_message_folder_answering_machine_message', fallback=None)
 
     def path_folder_with_messages(self) -> str | None:
         """
@@ -119,23 +61,10 @@ class ConfigReader:
 # TODO - Все переменные должны быть с главных буквы
 """Размеры кнопок WIDTH_WIDE_BUTTON - Ширина широкой кнопки"""
 WIDTH_WIDE_BUTTON = config_gui.get('line_width_button', 'line_width_button', fallback=None)  # Ширина кнопки
-BUTTON_HEIGHT = ConfigReader().get_line_height_button()  # Получение ширины кнопки
 
 WIDTH_INPUT_FIELD_AND_BUTTON = int(WIDTH_WIDE_BUTTON) / 2 - 5  # Ширина кнопки (окно и поле ввода)
 
-"""Текст для пользователя"""
-PROGRAM_NAME = ConfigReader().program_name()  # Имя программы
-PROGRAM_VERSION = ConfigReader().program_version()  # Версия программы
-DATE_OF_PROGRAM_CHANGE = ConfigReader().date_of_program_change()  # Дата изменения (обновления)
-
-"""Общие размеры программы"""
-WINDOW_WIDTH = ConfigReader().window_width()  # Ширина программы
-WINDOW_HEIGHT = ConfigReader().window_height()  # Ширина программы
-WINDOW_RESIZABLE = ConfigReader().window_resizable()  # Ширина программы
-
 """Путь к папкам"""
-PATH_SEND_MESSAGE_FOLDER_ANSWERING_MACHINE = ConfigReader().path_send_message_folder_answering_machine()  # Путь к папке для аккаунтов с автоответчиком
-path_send_message_folder_answering_machine_message = ConfigReader().path_send_message_folder_answering_machine_message()  # Путь к папке c сообщениями для автоответчика
 path_folder_with_messages = ConfigReader().path_folder_with_messages()  # Путь к папке с сообщениями
 path_folder_database = ConfigReader().path_folder_database()  # Путь к папке с базой данных
 
@@ -145,10 +74,8 @@ TIME_SENDING_MESSAGES_1, time_sending_messages_2 = ConfigReader().get_time_invit
 time_subscription_1, time_subscription_2 = ConfigReader().get_time_subscription()
 
 """Настройки внешнего вида программы"""
-# Размер 2-х полей ввода и кнопки «Сохранить» справа.
-width_2_input_fields = int(460)
-# Размер 1 поля ввода и кнопки «Сохранить» справа.
-width_1_input_fields = int(width_2_input_fields * 2 + 15)
 
 width_one_input = 500  # 2 поля ввода (без кнопки сохранить)
 width_tvo_input = 245  # 4 поля ввода (без кнопки сохранить)
+
+# 117
