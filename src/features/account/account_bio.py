@@ -74,7 +74,6 @@ class AccountBIO:
              Изменение username профиля Telegram профиля Telegram в графическое окно Flet
             """
             try:
-                # for session_name in self.session_string:  # Перебор всех сессий
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 try:
@@ -97,7 +96,6 @@ class AccountBIO:
             """Изменение описания профиля Telegram аккаунта."""
             try:
                 await self.app_logger.log_and_display(message=f"Запуск смены  описания профиля")
-                # for session_name in self.session_string:  # Перебор всех сессий
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 if len(profile_description_input_field.value) > 70:
@@ -122,7 +120,6 @@ class AccountBIO:
             Изменение имени профиля. Изменение био профиля Telegram в графическое окно Flet
             """
             try:
-                # for session_name in self.session_string:  # Перебор всех сессий
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 await self.connect.getting_account_data(client)
@@ -146,7 +143,6 @@ class AccountBIO:
             Изменение фамилии профиля. Изменение био профиля Telegram в графическое окно Flet
             """
             try:
-                # for session_name in self.session_string:  # Перебор всех сессий
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 await self.connect.getting_account_data(client)
@@ -169,7 +165,6 @@ class AccountBIO:
             Изменение фото профиля Telegram через интерфейс Flet.
             """
             try:
-                # for session_name in self.session_string:  # Перебор всех сессий
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 for photo_file in await self.utils.find_files(directory_path="user_data/bio", extension='jpg'):
