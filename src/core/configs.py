@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import configparser
 
+"""Настройки программы"""
 config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
 config.read(filenames='user_data/config/config.ini', encoding='utf-8')
-# TIME_CHANGING_ACCOUNTS_1 = config.get('time_changing_accounts', 'time_changing_accounts_1', fallback=None)
-# time_changing_accounts_2 = config.get('time_changing_accounts', 'time_changing_accounts_2', fallback=None)
 TIME_ACTIVITY_USER_2 = config.get('time_activity_user', 'time_activity_user_2', fallback=None)
 TIME_SENDING_MESSAGES_1 = config.get('time_inviting', 'time_inviting_1', fallback=None)
-time_sending_messages_2 = config.get('time_inviting', 'time_inviting_2', fallback=None)
+TIME_SENDING_MESSAGES_2 = config.get('time_inviting', 'time_inviting_2', fallback=None)
 time_subscription_1 = config.get('time_subscription', 'time_subscription_1', fallback=None)
 time_subscription_2 = config.get('time_subscription', 'time_subscription_2', fallback=None)
 api_id = config.get('telegram_settings', 'id', fallback=None)

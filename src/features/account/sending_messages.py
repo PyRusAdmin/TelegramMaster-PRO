@@ -12,7 +12,7 @@ from telethon.errors import (ChannelPrivateError, ChatAdminRequiredError, ChatWr
                              UsernameInvalidError, UsernameNotOccupiedError, UserNotMutualContactError, ForbiddenError)
 
 from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages,
-                              TIME_SENDING_MESSAGES_1, time_sending_messages_2, time_subscription_1,
+                              TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2, time_subscription_1,
                               time_subscription_2, width_one_input)
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import select_records_with_limit, get_writing_group_links
@@ -311,7 +311,7 @@ class SendTelegramMessages:
                 logger.info(links)
                 chat_list_fields = [group for group in links]  # Извлекаем только ссылки из кортежей
                 logger.info(chat_list_fields)
-            if self.tb_time_from.value or TIME_SENDING_MESSAGES_1 < self.tb_time_to.value or time_sending_messages_2:
+            if self.tb_time_from.value or TIME_SENDING_MESSAGES_1 < self.tb_time_to.value or TIME_SENDING_MESSAGES_2:
                 selected_account = account_drop_down_list.value  # ← Получаем key выбранного аккаунта
                 await self.performing_the_operation(
                     checs=c.value,
@@ -405,7 +405,7 @@ class SendTelegramMessages:
         Рандомный сон
         """
         try:
-            time_in_seconds = random.randrange(TIME_SENDING_MESSAGES_1, time_sending_messages_2)
+            time_in_seconds = random.randrange(TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
             await self.app_logger.log_and_display(f"Спим {time_in_seconds} секунд...")
             await asyncio.sleep(time_in_seconds)  # Спим 1 секунду
         except Exception as error:

@@ -3,7 +3,7 @@ import flet as ft
 from loguru import logger
 
 from src.core.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
-                              WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, time_sending_messages_2)
+                              WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
 from src.core.database.create_database import create_database
 from src.features.account.account_bio import AccountBIO
 from src.features.account.connect import TGConnect
@@ -112,7 +112,7 @@ async def main(page: ft.Page):
         elif page.route == "/recording_the_time_between_messages":  # Запись времени между сообщениями
             await setting_page.create_main_window(variable="time_sending_messages",
                                                   smaller_timex=TIME_SENDING_MESSAGES_1,
-                                                  larger_timex=time_sending_messages_2)
+                                                  larger_timex=TIME_SENDING_MESSAGES_2)
         page.update()
 
     def view_pop(_):
