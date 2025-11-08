@@ -13,8 +13,9 @@ from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
-from src.core.configs import BUTTON_HEIGHT, ConfigReader, WIDTH_WIDE_BUTTON
-from src.core.database.account import getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session
+from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, api_id, api_hash
+from src.core.database.account import (getting_account, write_account_to_db, delete_account_from_db,
+                                       update_phone_by_session)
 from src.core.utils import Utils
 from src.features.proxy.checking_proxy import Proxy
 from src.gui.gui import AppLogger, list_view
@@ -27,10 +28,6 @@ class TGConnect:
 
     def __init__(self, page: ft.Page):
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
-        self.config_reader = ConfigReader()
-        self.api_id_api_hash = self.config_reader.get_api_id_data_api_hash_data()
-        self.api_id = self.api_id_api_hash[0]
-        self.api_hash = self.api_id_api_hash[1]
         self.app_logger = AppLogger(page)
         self.utils = Utils(page=page)
         self.proxy = Proxy(page=page)
@@ -148,7 +145,8 @@ class TGConnect:
                         pass
                     except TypeNotFoundError as e:
                         await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
-                        await self.app_logger.log_and_display(message=f"⛔ Битый файл или аккаунт banned: {session_name}.session. Возможно, запущен под другим IP")
+                        await self.app_logger.log_and_display(
+                            message=f"⛔ Битый файл или аккаунт banned: {session_name}.session. Возможно, запущен под другим IP")
                         await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
                     except AuthKeyUnregisteredError as e:
                         await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
@@ -180,7 +178,7 @@ class TGConnect:
                          ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
                                       foreground=ft.Paint(
                                           gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                               ft.Colors.PURPLE])),),),],),
+                                                                                               ft.Colors.PURPLE])), ), ), ], ),
                      list_view,
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🤖 Проверка через спам бот
@@ -223,7 +221,7 @@ class TGConnect:
         :param session_name: Имя аккаунта для подключения (файл .session)
         """
         # Создаем клиент, используя StringSession и вашу строку
-        client = TelegramClient(StringSession(session_name), api_id=self.api_id, api_hash=self.api_hash,
+        client = TelegramClient(StringSession(session_name), api_id=api_id, api_hash=api_hash,
                                 system_version="4.16.30-vxCUSTOM")
         await client.connect()
 
@@ -283,7 +281,6 @@ class TGConnect:
         await telegram_client.disconnect()
         await delete_account_from_db(session_string=session_name, app_logger=self.app_logger)
 
-
     async def account_connection_menu(self):
         """
         Меню подключения аккаунтов (по телефону и по session)
@@ -298,7 +295,7 @@ class TGConnect:
             await self.app_logger.log_and_display(message=f"Номер телефона: {phone_number_value}")
 
             # Дальнейшая обработка после записи номера телефона
-            client = TelegramClient(f"{phone_number_value}", api_id=self.api_id, api_hash=self.api_hash,
+            client = TelegramClient(f"{phone_number_value}", api_id=api_id, api_hash=api_hash,
                                     system_version="4.16.30-vxCUSTOM",
                                     proxy=self.proxy.reading_proxy_data_from_the_database())
             await client.connect()  # Подключаемся к Telegram
@@ -374,13 +371,13 @@ class TGConnect:
                     selected_files.update()
                     session_path = os.path.splitext(file_path)[0]  # путь без .session
                     logger.info(f"Путь без .session: {session_path}")
-                    client = TelegramClient(session=f"{session_path}", api_id=self.api_id, api_hash=self.api_hash,
+                    client = TelegramClient(session=f"{session_path}", api_id=api_id, api_hash=api_hash,
                                             system_version="4.16.30-vxCUSTOM")
                     await client.connect()
                     logger.info(f"✨ STRING SESSION: {StringSession.save(client.session)}")
                     session_string = StringSession.save(client.session)
                     await client.disconnect()
-                    client = TelegramClient(StringSession(session_string), api_id=self.api_id, api_hash=self.api_hash,
+                    client = TelegramClient(StringSession(session_string), api_id=api_id, api_hash=api_hash,
                                             system_version="4.16.30-vxCUSTOM")
                     await client.connect()
                     me = await client.get_me()
