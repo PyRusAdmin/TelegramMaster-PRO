@@ -95,7 +95,7 @@ class AccountBIO:
         async def change_bio_profile(_) -> None:
             """Изменение описания профиля Telegram аккаунта."""
             try:
-                await self.app_logger.log_and_display(message=f"Запуск смены  описания профиля")
+                await self.app_logger.log_and_display(message="Запуск смены описания профиля.")
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 if len(profile_description_input_field.value) > 70:

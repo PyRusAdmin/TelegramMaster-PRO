@@ -215,7 +215,7 @@ class TGConnect:
         logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
         await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
 
-    async def client_connect_string_session(self, session_name) -> TelegramClient:
+    async def client_connect_string_session(self, session_name: str) -> TelegramClient:
         """
         Подключение к Telegram аккаунту через StringSession
         :param session_name: Имя аккаунта для подключения (файл .session)
