@@ -148,20 +148,21 @@
         <p style="color: #0c5460; font-size: 16px; line-height: 1.6;">
             Все действия записываются в лог-файл: <code>{{ program_name }}/user_data/log/log.log</code>.
         </p>
-        <div
-                style="border: 2px solid #f0c14b; background-color: #fff8dc; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <div style="border: 2px solid #f0c14b; background-color: #fff8dc; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
             <h3 style="color: #9c6500; margin: 0 0 15px; font-size: 18px;">📝 Предупреждения:</h3>
             <ul style="color: #7a4f00; margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.6;">
-                <li>При превышении лимитов Telegram может временно заблокировать аккаунт или удалить аккаунт.</li>
-                <li>Если нет свободных аккаунтов для продолжения рассылки, программа завершит работу и уведомит
+                <li>
+                    При превышении лимитов Telegram может временно заблокировать аккаунт или удалить аккаунт.
+                </li>
+                <li>
+                    Если нет свободных аккаунтов для продолжения рассылки, программа завершит работу и уведомит
                     пользователя.
                 </li>
             </ul>
         </div>
         <hr/>
         <!-- Отправка сообщений в личку -->
-        <h2 id="sending_personal_messages_with_limits_ru"
-            style="text-align: center; color: #0c5460; font-size: 24px;">
+        <h2 id="sending_personal_messages_with_limits_ru" style="text-align: center; color: #0c5460; font-size: 24px;">
             {{ sending_personal_messages_with_limits_ru }}</h2>
         <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Описание</h3>
         <p style="color: #0c5460; font-size: 16px; line-height: 1.6;">
@@ -169,33 +170,23 @@
             сообщения / файлы пользователям Telegram по ранее спарсенному или сформированному списку username.
         </p>
         <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Подготовка перед запуском</h3>
-        <div
-                style="border: 2px solid #d4edda; background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <p style="color: #0c5460; font-size: 18px; margin: 0 0 15px;">📝 Перед началом работы убедитесь, что
-                выполнены следующие шаги:</p>
+        <div style="border: 2px solid #d4edda; background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <p style="color: #0c5460; font-size: 18px; margin: 0 0 15px;">📝 Перед началом работы убедитесь, что выполнены следующие шаги:</p>
             <ol style="color: #0c5460; font-size: 16px; line-height: 1.6; padding-left: 20px;">
                 <li><a href="{{ url_for('launch_telegrammaster') }}"
-                       style="color: #138496; text-decoration: none;">Запустите
-                    {{ program_name }}</a></li>
+                       style="color: #138496; text-decoration: none;">Запустите {{ program_name }}</a></li>
                 <li>
                     <a href="{{ url_for('connect_accounts') }}"
-                       style="color: #138496; text-decoration: none;">Подключите
-                        аккаунты к {{ program_name }}</a> или скопируйте session файл аккаунта в папку:
-                    <code
-                            style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
-                        }}/user_data/accounts/send_message</code>
+                       style="color: #138496; text-decoration: none;">Подключите аккаунты к {{program_name}}</a> или скопируйте session файл аккаунта в папку:
+                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name }}/user_data/accounts/send_message</code>
                 </li>
-                <li><a href="#recording_messages_for_distribution"
-                       style="color: #138496; text-decoration: none;">Запишите
+                <li><a href="#recording_messages_for_distribution" style="color: #138496; text-decoration: none;">Запишите
                     сообщения для рассылки.</a></li>
-                <li><a href="{{ url_for('parsing') }}" style="color: #138496; text-decoration: none;">Выполните
-                    парсинг
+                <li><a href="{{ url_for('parsing') }}" style="color: #138496; text-decoration: none;">Выполните парсинг
                     участников группы для последующей рассылки сообщений в личку.</a></li>
                 <li>
                     Поместите файл для отправки в папку:
-                    <code
-                            style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
-                        }}/user_data/files_to_send</code>
+                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{program_name}}/user_data/files_to_send</code>
                 </li>
             </ol>
         </div>
@@ -204,14 +195,11 @@
             <ol>
                 <li>
                     Перейдите в раздел <b>«Рассылка сообщений»</b>.
-                    <p style="text-align: center;"><img src="/static/images/sending_messages.png"
-                                                        alt="Telegram Master" width="40%"></p>
+                    <p style="text-align: center;"><img src="/static/images/sending_messages.png" alt="Telegram Master" width="40%"></p>
                 </li>
                 <li>
                     Выберите функцию <b>«📨 Отправка сообщений в личку»</b>.
-                    <p style="text-align: center;"><img
-                            src="/static/images/sending_personal_messages_with_limits_ru.png" alt="Telegram Master"
-                            width="40%"></p>
+                    <p style="text-align: center;"><img src="/static/images/sending_personal_messages_with_limits_ru.png" alt="Telegram Master" width="40%"></p>
                 </li>
                 <li>Запишите лимит на аккаунт в поле ввода в виде числа (например: 3).</li>
                 <li>Введите время сна в поле ввода от и до. (Если данные введены не правильно, то программа выдаст
