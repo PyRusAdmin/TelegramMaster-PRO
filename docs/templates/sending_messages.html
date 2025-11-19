@@ -67,7 +67,8 @@
                 <li id="step-1">
                     Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
                     {{program_name}}</a>).
-                    <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master" width="60%"></p>
+                    <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
+                                                        width="60%"></p>
                 </li>
                 <!-- 2 -->
                 <li id="step-2">
@@ -76,51 +77,64 @@
                 </li>
                 <!-- 3 -->
                 <li id="step-3">
-                    <a href="{{ url_for('message_recording') }}" style="color: #138496; text-decoration: none;">🔄 Запишите сообщения для рассылки.</a>
+                    <a href="{{ url_for('message_recording') }}" style="color: #138496; text-decoration: none;">🔄
+                        Запишите сообщения для рассылки.</a>
                 </li>
                 <!-- 4 -->
                 <li id="step-4">
                     Запустить {{sending_messages_via_chats_ru}}.
-                    <p style="text-align: center;"><img src="/static/images/sending_messages_via_chats_ru.png" alt="Telegram Master" width="60%"></p>
+                    <p style="text-align: center;"><img src="/static/images/sending_messages_via_chats_ru.png"
+                                                        alt="Telegram Master" width="60%"></p>
                 </li>
                 <!-- 5 -->
                 <li id="step-5">
                     Выберите аккаунт из выпадающего списка.
-                    <p style="text-align: center;"><img src="/static/images/sending_messages_via_chats_ru_1.png" alt="Telegram Master" width="60%"></p>
+                    <p style="text-align: center;"><img src="/static/images/sending_messages_via_chats_ru_1.png"
+                                                        alt="Telegram Master" width="60%"></p>
                 </li>
                 <!-- 6 -->
                 <li id="step-6">
                     Сформируйте список групп (чатов)
-                    <p style="text-align: center;"><img src="/static/images/sending_messages_via_chats_ru_2.png" alt="Telegram Master" width="60%"></p>
+                    <p style="text-align: center;"><img src="/static/images/sending_messages_via_chats_ru_2.png"
+                                                        alt="Telegram Master" width="60%"></p>
                 </li>
                 <!-- 7 -->
                 <li id="step-7">
                     Введите время сна от и до (время в секундах между сообщениями)
-                    <p style="text-align: center;"><img src="/static/images/sending_messages_via_chats_ru_3.png" alt="Telegram Master" width="60%"></p>
+                    <p style="text-align: center;"><img src="/static/images/sending_messages_via_chats_ru_3.png"
+                                                        alt="Telegram Master" width="60%"></p>
                 </li>
-
-
 
 
                 <li>
                     Если потребуется использование автоответчика, запишите сообщения для автоответчика,
                     <ol>
-                        <li>📂 Перейдите в папку
-                            <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{
-                                program_name }}/user_data/answering_machine</code>.
-                        </li>
-                        <li>📄 Откройте файл
-                            <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">answering_machine_messages.json</code>.
-                        </li>
-                        <li>🖋️ Введите сообщение, которое будет использоваться в автоответе вашего аккаунта,
+
+                        <li>️🖋️ Введите сообщение, которое будет использоваться в автоответе вашего аккаунта,
                             рассылавшего сообщения. Сообщение должно быть в кавычках, например:
                             <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">"Сообщение"</code>.
+                            <p style="text-align: center;"><img src="/static/images/sending_messages_via_chats_ru_4.png"
+                                                                alt="Telegram Master" width="60%"></p>
+                            <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{program_name}}/user_data/answering_machine</code>.
                         </li>
+
+                        <li>
+                            Установите чекбокс чтобы использовать автоответчик.
+                        </li>
+                        <!-- Важное примечание -->
+                        <div style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
+                            <h3>ПРИМЕЧАНИЕ:</h3>
+                            <p style="color: #721c24; margin: 0; font-size: 16px;">
+                                💡 Важно!<br>
+                                Сообщение записываается в файл
+                                {{program_name}}/user_data/answering_machine/answering_machine_messages.json
+                        </div>
+
                     </ol>
                 </li>
 
                 <li>
-                    Подготовка перед отправкой файлов
+                    Если планируется отправка файлов:
                     <ol>
                         <li>Перейдите в папку
                             <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{
@@ -131,37 +145,45 @@
                         </li>
                     </ol>
                 </li>
-            </ol>
-        </blockquote>
-        <h2 id="sending_messages_files_via_chats">{{ sending_messages_files_via_chats_ru }}</h2>
-        <h3>Рассылка сообщений по чатам</h3>
-        <blockquote>
-            <ol>
-                <li>
-                    Перейдите в раздел <b>«Рассылка сообщений»</b>.
-                    <p style="text-align: center;"><img src="/static/images/sending_messages.png" alt="Telegram Master"
-                                                        width="40%"></p>
-                </li>
-                <li>
-                    Выберите функцию <b>«💬 Рассылка сообщений по чатам»</b>.
-                    <p style="text-align: center;"><img src="/static/images/sending_messages_files_via_chats_ru.png"
-                                                        alt="Telegram Master" width="40%"></p>
-                </li>
-                <li>
-                    Введите время сна в поле ввода от и до. (Если данные введены не правильно, то программа выдаст
-                    предупреждение пользователю).
-                </li>
-                <li>Введите список групп (чатов) в поле ввода, если список ранее не был сформирован.</li>
-                <li>Если планируете использовать автоответчик, то поставьте галочку «Работа с автоответчиком».</li>
+
+
                 <li>Нажмите «Готово».
                     <p style="text-align: center;"><img src="/static/images/done_button.png" alt="Telegram Master"
                                                         width="40%"></p>
                 </li>
+
             </ol>
         </blockquote>
-        <p style="text-align: center;">
-            <img src="/static/images/sending_messages_files_via_chats_ru_2.png" alt="Telegram Master" width="40%">
-        </p>
+        <h2 id="sending_messages_files_via_chats">{{ sending_messages_files_via_chats_ru }}</h2>
+
+        <!--        <h3>Рассылка сообщений по чатам</h3>-->
+        <!--        <blockquote>-->
+        <!--            <ol>-->
+        <!--                <li>-->
+        <!--                    Перейдите в раздел <b>«Рассылка сообщений»</b>.-->
+        <!--                    <p style="text-align: center;"><img src="/static/images/sending_messages.png" alt="Telegram Master"-->
+        <!--                                                        width="40%"></p>-->
+        <!--                </li>-->
+        <!--                <li>-->
+        <!--                    Выберите функцию <b>«💬 Рассылка сообщений по чатам»</b>.-->
+        <!--                    <p style="text-align: center;"><img src="/static/images/sending_messages_files_via_chats_ru.png"-->
+        <!--                                                        alt="Telegram Master" width="40%"></p>-->
+        <!--                </li>-->
+        <!--                <li>-->
+        <!--                    Введите время сна в поле ввода от и до. (Если данные введены не правильно, то программа выдаст-->
+        <!--                    предупреждение пользователю).-->
+        <!--                </li>-->
+        <!--                <li>Введите список групп (чатов) в поле ввода, если список ранее не был сформирован.</li>-->
+        <!--                <li>Если планируете использовать автоответчик, то поставьте галочку «Работа с автоответчиком».</li>-->
+        <!--                <li>Нажмите «Готово».-->
+        <!--                    <p style="text-align: center;"><img src="/static/images/done_button.png" alt="Telegram Master"-->
+        <!--                                                        width="40%"></p>-->
+        <!--                </li>-->
+        <!--            </ol>-->
+        <!--        </blockquote>-->
+        <!--        <p style="text-align: center;">-->
+        <!--            <img src="/static/images/sending_messages_files_via_chats_ru_2.png" alt="Telegram Master" width="40%">-->
+        <!--        </p>-->
         <h3>Логирование и контроль работы</h3>
         <p style="color: #0c5460; font-size: 16px; line-height: 1.6;">
             Все действия записываются в лог-файл: <code>{{ program_name }}/user_data/log/log.log</code>.
