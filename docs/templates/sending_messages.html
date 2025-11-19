@@ -37,15 +37,12 @@
             <h3 style="color: #721c24; margin: 0 0 10px;">ПРИМЕЧАНИЕ:</h3>
             <p style="color: #721c24; margin: 0; font-size: 16px;">
                 💡 Важно!<br><br>
-                <strong>{{ program_name }}</strong> отправляет сообщения в личку
+                <strong>{{program_name}}</strong> отправляет сообщения в личку
                 <strong>только по username</strong> и делает это <strong>последовательно</strong>, а не параллельно
-                (без
-                использования потоков).<br><br>
+                (без использования потоков).<br><br>
                 При рассылке по чатам сообщения отправляются <strong>только в открытые чаты</strong>. Учитывайте,
-                что в
-                некоторых чатах
-                могут быть <strong>ограничения на публикацию</strong> (боты-защитники, антиспам-фильтры, запреты на
-                отправку сообщений и т. д.).
+                что в некоторых чатах могут быть <strong>ограничения на публикацию</strong> (боты-защитники,
+                антиспам-фильтры, запреты на отправку сообщений и т. д.).
             </p>
         </div>
         <hr/>
@@ -53,15 +50,13 @@
         <h2 id="sending_messages_via_chats" style="text-align: center; color: #0c5460; font-size: 24px;">
             {{ sending_messages_via_chats_ru }}</h2>
         <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Описание</h3>
-        <div
-                style="border: 2px solid #d1ecf1; background-color: #e3f4f9; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <div style="border: 2px solid #d1ecf1; background-color: #e3f4f9; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
             <h3 style="color: #0c5460; margin: 0 0 15px; font-size: 20px;">📝 Функция
                 «{{ sending_messages_via_chats_ru }}»</h3>
             <p style="color: #0c5460; margin: 0; font-size: 16px; line-height: 1.6;">
-                Функция <strong>«{{ sending_messages_via_chats_ru }}»</strong> в {{ program_name }} предоставляет
+                Функция <strong>«{{sending_messages_via_chats_ru}}»</strong> в {{program_name}} предоставляет
                 возможность отправлять сообщения и файлы в группы (чаты) Telegram. Более того, она позволяет не
-                только
-                отправлять сообщения, но и автоматически отвечать на них с подключенного аккаунта.
+                только отправлять сообщения, но и автоматически отвечать на них с подключенного аккаунта.
             </p>
         </div>
         <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Подготовка перед запуском</h3>
@@ -69,15 +64,13 @@
                 style="border: 2px solid #d4edda; background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
             <ol style="color: #155724; font-size: 16px; line-height: 1.6;">
                 <li><a href="{{ url_for('launch_telegrammaster') }}"
-                       style="color: #138496; text-decoration: none;">Запустите
-                    {{ program_name }}</a></li>
+                       style="color: #138496; text-decoration: none;">Запустите {{ program_name }}</a>
+                </li>
                 <li>
                     <a href="{{ url_for('connect_accounts') }}"
                        style="color: #138496; text-decoration: none;">Подключите
-                        аккаунты к {{ program_name }}</a> или скопируйте session файл в папку:
-                    <code
-                            style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
-                        }}/user_data/accounts/send_message</code>
+                        аккаунты к {{program_name}}</a> или скопируйте session файл в папку:
+                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name }}/user_data/accounts/send_message</code>
                 </li>
                 <li><a href="{{ url_for('forming_list_of_chats_channels') }}"
                        style="color: #138496; text-decoration: none;">Сформируйте список групп (чатов)</a></li>
@@ -87,9 +80,7 @@
                     Если потребуется использование автоответчика, запишите сообщения для автоответчика,
                     <ol>
                         <li>📂 Перейдите в папку
-                            <code
-                                    style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{
-                                program_name }}/user_data/answering_machine</code>.
+                            <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name }}/user_data/answering_machine</code>.
                         </li>
                         <li>📄 Откройте файл
                             <code
