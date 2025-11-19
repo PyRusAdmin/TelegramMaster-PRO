@@ -38,10 +38,12 @@
                 <!-- Пример правильного пути к изображению -->
                 <img src="/static/images/TelegramMaster_2.png" alt="Telegram Master" width="40%">
             </p>
-            2️⃣ Подключить аккаунты к {{ program_name }} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
-            аккаунтов Telegram к {{ program_name }})</a> или скопировать session файл аккаунта в папку
-            <code>{{ program_name }}/user_data/accounts/viewing</code><br>
-            <!-- Изображение с центровкой -->
+
+            <li id="step-2">
+                🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
+                аккаунтов Telegram к {{program_name}})</a>.
+            </li>
+
             <p style="text-align: center;">
                 <!-- Пример правильного пути к изображению -->
                 <img src="/static/images/connecting_accounts/connect_accounts.png" alt="Telegram Master"

@@ -34,7 +34,7 @@
         </div>
         <!-- Важное примечание -->
         <div style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
-            <h3 style="color: #721c24; margin: 0 0 10px;">ПРИМЕЧАНИЕ:</h3>
+            <h3>ПРИМЕЧАНИЕ:</h3>
             <p style="color: #721c24; margin: 0; font-size: 16px;">
                 💡 Важно!<br><br>
                 <strong>{{program_name}}</strong> отправляет сообщения в личку
@@ -47,31 +47,27 @@
         </div>
         <hr/>
         <!-- Рассылка сообщений по чатам -->
-        <h2 id="sending_messages_via_chats" style="text-align: center; color: #0c5460; font-size: 24px;">
-            {{ sending_messages_via_chats_ru }}</h2>
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Описание</h3>
+        <h2 id="sending_messages_via_chats">{{ sending_messages_via_chats_ru }}</h2>
+        <h3>Описание</h3>
         <div style="border: 2px solid #d1ecf1; background-color: #e3f4f9; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h3 style="color: #0c5460; margin: 0 0 15px; font-size: 20px;">📝 Функция
-                «{{ sending_messages_via_chats_ru }}»</h3>
+            <h3>📝 Функция «{{ sending_messages_via_chats_ru }}»</h3>
             <p style="color: #0c5460; margin: 0; font-size: 16px; line-height: 1.6;">
                 Функция <strong>«{{sending_messages_via_chats_ru}}»</strong> в {{program_name}} предоставляет
                 возможность отправлять сообщения и файлы в группы (чаты) Telegram. Более того, она позволяет не
                 только отправлять сообщения, но и автоматически отвечать на них с подключенного аккаунта.
             </p>
         </div>
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Подготовка перед запуском</h3>
+        <h3>Подготовка перед запуском</h3>
         <blockquote
                 style="border: 2px solid #d4edda; background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
             <ol style="color: #155724; font-size: 16px; line-height: 1.6;">
                 <li><a href="{{ url_for('launch_telegrammaster') }}"
                        style="color: #138496; text-decoration: none;">Запустите {{ program_name }}</a>
                 </li>
-                <li>
-                    <a href="{{ url_for('connect_accounts') }}"
-                       style="color: #138496; text-decoration: none;">Подключите
-                        аккаунты к {{program_name}}</a> или скопируйте session файл в папку:
-                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
-                        }}/user_data/accounts/send_message</code>
+                <li id="step-2">
+                    🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см.
+                    Подключение
+                    аккаунтов Telegram к {{program_name}})</a>.
                 </li>
                 <li><a href="{{ url_for('forming_list_of_chats_channels') }}"
                        style="color: #138496; text-decoration: none;">Сформируйте список групп (чатов)</a></li>
@@ -93,13 +89,13 @@
                         </li>
                     </ol>
                 </li>
-                <li>
-                    <a href="{{ url_for('connect_accounts') }}" style="color: #138496; text-decoration: none;">Подключите
-                        аккаунты к {{program_name}} для автоответчика</a>
-                    или скопируйте session файл в папку:
-                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
-                        }}/user_data/accounts/answering_machine</code>
+
+                <li id="step-2">
+                    🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см.
+                    Подключение
+                    аккаунтов Telegram к {{program_name}})</a>.
                 </li>
+
                 <li>
                     Подготовка перед отправкой файлов
                     <ol>
@@ -114,9 +110,8 @@
                 </li>
             </ol>
         </blockquote>
-        <h2 id="sending_messages_files_via_chats" style="text-align: center; color: #0c5460; font-size: 24px;">
-            {{ sending_messages_files_via_chats_ru }}</h2>
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Рассылка сообщений по чатам</h3>
+        <h2 id="sending_messages_files_via_chats">{{ sending_messages_files_via_chats_ru }}</h2>
+        <h3>Рассылка сообщений по чатам</h3>
         <blockquote>
             <ol>
                 <li>
@@ -144,7 +139,7 @@
         <p style="text-align: center;">
             <img src="/static/images/sending_messages_files_via_chats_ru_2.png" alt="Telegram Master" width="40%">
         </p>
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Логирование и контроль работы</h3>
+        <h3>Логирование и контроль работы</h3>
         <p style="color: #0c5460; font-size: 16px; line-height: 1.6;">
             Все действия записываются в лог-файл: <code>{{ program_name }}/user_data/log/log.log</code>.
         </p>
@@ -162,23 +157,25 @@
         </div>
         <hr/>
         <!-- Отправка сообщений в личку -->
-        <h2 id="sending_personal_messages_with_limits_ru" style="text-align: center; color: #0c5460; font-size: 24px;">
-            {{ sending_personal_messages_with_limits_ru }}</h2>
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Описание</h3>
+        <h2 id="sending_personal_messages_with_limits_ru">{{ sending_personal_messages_with_limits_ru }}</h2>
+        <h3>Описание</h3>
         <p style="color: #0c5460; font-size: 16px; line-height: 1.6;">
             Функция <b>«{{ sending_personal_messages_with_limits_ru }}»</b> в {{ program_name }} позволяет отправлять
             сообщения / файлы пользователям Telegram по ранее спарсенному или сформированному списку username.
         </p>
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Подготовка перед запуском</h3>
+        <h3>Подготовка перед запуском</h3>
         <div style="border: 2px solid #d4edda; background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <p style="color: #0c5460; font-size: 18px; margin: 0 0 15px;">📝 Перед началом работы убедитесь, что выполнены следующие шаги:</p>
+            <p style="color: #0c5460; font-size: 18px; margin: 0 0 15px;">📝 Перед началом работы убедитесь, что
+                выполнены следующие шаги:</p>
             <ol style="color: #0c5460; font-size: 16px; line-height: 1.6; padding-left: 20px;">
                 <li><a href="{{ url_for('launch_telegrammaster') }}"
                        style="color: #138496; text-decoration: none;">Запустите {{ program_name }}</a></li>
                 <li>
                     <a href="{{ url_for('connect_accounts') }}"
-                       style="color: #138496; text-decoration: none;">Подключите аккаунты к {{program_name}}</a> или скопируйте session файл аккаунта в папку:
-                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name }}/user_data/accounts/send_message</code>
+                       style="color: #138496; text-decoration: none;">Подключите аккаунты к {{program_name}}</a> или
+                    скопируйте session файл аккаунта в папку:
+                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
+                        }}/user_data/accounts/send_message</code>
                 </li>
                 <li><a href="#recording_messages_for_distribution" style="color: #138496; text-decoration: none;">Запишите
                     сообщения для рассылки.</a></li>
@@ -190,16 +187,19 @@
                 </li>
             </ol>
         </div>
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Отправка файлов / сообщений в личку</h3>
+        <h3>Отправка файлов / сообщений в личку</h3>
         <blockquote>
             <ol>
                 <li>
                     Перейдите в раздел <b>«Рассылка сообщений»</b>.
-                    <p style="text-align: center;"><img src="/static/images/sending_messages.png" alt="Telegram Master" width="40%"></p>
+                    <p style="text-align: center;"><img src="/static/images/sending_messages.png" alt="Telegram Master"
+                                                        width="40%"></p>
                 </li>
                 <li>
                     Выберите функцию <b>«📨 Отправка сообщений в личку»</b>.
-                    <p style="text-align: center;"><img src="/static/images/sending_personal_messages_with_limits_ru.png" alt="Telegram Master" width="40%"></p>
+                    <p style="text-align: center;"><img
+                            src="/static/images/sending_personal_messages_with_limits_ru.png" alt="Telegram Master"
+                            width="40%"></p>
                 </li>
                 <li>Запишите лимит на аккаунт в поле ввода в виде числа (например: 3).</li>
                 <li>Введите время сна в поле ввода от и до. (Если данные введены не правильно, то программа выдаст
@@ -211,16 +211,15 @@
                 </li>
             </ol>
         </blockquote>
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">Логирование и контроль работы</h3>
+        <h3>Логирование и контроль работы</h3>
         <p style="color: #0c5460; font-size: 16px; line-height: 1.6;">
             Во время отправки сообщений программа автоматически удаляет username из базы данных
             <code>{{ program_name }}/user_data/software_database.db</code>,
             если сообщение было отправлено или отправка не удалась. Все действия также фиксируются в лог-файле:
             <code>{{ program_name }}/user_data/log/log.log</code>.
         </p>
-        <div
-                style="border: 2px solid #f0c14b; background-color: #fff8dc; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h3 style="color: #9c6500; margin: 0 0 15px; font-size: 18px;">📝 Предупреждения:</h3>
+        <div style="border: 2px solid #f0c14b; background-color: #fff8dc; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h3>📝 Предупреждения:</h3>
             <ul style="color: #7a4f00; margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.6;">
                 <li>Функция <b>«Отправка файлов в личку»</b> позволяет рассылать неограниченное количество сообщений
                     и
@@ -233,9 +232,7 @@
         </div>
         <hr/>
         <!-- Порядок действий -->
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">🤖 Порядок действий при рассылке сообщений в
-            чаты
-            или в личку через {{ program_name }}</h3>
+        <h3>🤖 Порядок действий при рассылке сообщений в чаты или в личку через {{ program_name }}</h3>
         <blockquote>
             <ol>
                 <li>📂 {{ program_name }} проверяет папку
@@ -254,8 +251,7 @@
                 </li>
             </ol>
         </blockquote>
-        <h3 style="text-align: left; color: #0c5460; font-size: 20px;">🤖 Как работает автоответчик при рассылке
-            сообщений по чатам {{ program_name }}</h3>
+        <h3>🤖 Как работает автоответчик при рассылке сообщений по чатам {{ program_name }}</h3>
         <p style="color: #0c5460; font-size: 16px; line-height: 1.6;">
             Если во время рассылки включена функция автоответчика, программа автоматически отвечает на входящие
             сообщения. Тексты автоответов берутся из <code>user_data/answering_machine</code>.
@@ -279,9 +275,8 @@
                 </li>
             </ol>
         </blockquote>
-        <div
-                style="border: 2px solid #f0c14b; background-color: #fff8dc; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            <h3 style="color: #9c6500; margin: 0 0 15px; font-size: 18px;">📝 ПРИМЕЧАНИЕ:</h3>
+        <div style="border: 2px solid #f0c14b; background-color: #fff8dc; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h3>📝 ПРИМЕЧАНИЕ:</h3>
             <ul style="color: #7a4f00; margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.6;">
                 <li><strong>✅ Проверка путей и форматов:</strong> Убедитесь, что все пути к файлам указаны
                     корректно, а
