@@ -70,7 +70,8 @@
                     <a href="{{ url_for('connect_accounts') }}"
                        style="color: #138496; text-decoration: none;">Подключите
                         аккаунты к {{program_name}}</a> или скопируйте session файл в папку:
-                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name }}/user_data/accounts/send_message</code>
+                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
+                        }}/user_data/accounts/send_message</code>
                 </li>
                 <li><a href="{{ url_for('forming_list_of_chats_channels') }}"
                        style="color: #138496; text-decoration: none;">Сформируйте список групп (чатов)</a></li>
@@ -80,37 +81,35 @@
                     Если потребуется использование автоответчика, запишите сообщения для автоответчика,
                     <ol>
                         <li>📂 Перейдите в папку
-                            <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name }}/user_data/answering_machine</code>.
+                            <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{
+                                program_name }}/user_data/answering_machine</code>.
                         </li>
                         <li>📄 Откройте файл
-                            <code
-                                    style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">answering_machine_messages.json</code>.
+                            <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">answering_machine_messages.json</code>.
                         </li>
                         <li>🖋️ Введите сообщение, которое будет использоваться в автоответе вашего аккаунта,
                             рассылавшего сообщения. Сообщение должно быть в кавычках, например:
-                            <code
-                                    style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">"Сообщение"</code>.
+                            <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">"Сообщение"</code>.
                         </li>
                     </ol>
                 </li>
                 <li>
-                    <a href="{{ url_for('connect_accounts') }}"
-                       style="color: #138496; text-decoration: none;">Подключите
+                    <a href="{{ url_for('connect_accounts') }}" style="color: #138496; text-decoration: none;">Подключите
                         аккаунты к {{program_name}} для автоответчика</a>
                     или скопируйте session файл в папку:
-                    <code
-                            style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
+                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
                         }}/user_data/accounts/answering_machine</code>
                 </li>
                 <li>
                     Подготовка перед отправкой файлов
                     <ol>
                         <li>Перейдите в папку
-                            <code
-                                    style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{
+                            <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{
                                 program_name }}/user_data/files_to_send</code>
                         </li>
-                        <li>Поместите туда файлы для рассылки.</li>
+                        <li>
+                            Поместите туда файлы для рассылки.
+                        </li>
                     </ol>
                 </li>
             </ol>
@@ -122,15 +121,16 @@
             <ol>
                 <li>
                     Перейдите в раздел <b>«Рассылка сообщений»</b>.
-                    <p style="text-align: center;"><img src="/static/images/sending_messages.png"
-                                                        alt="Telegram Master" width="40%"></p>
+                    <p style="text-align: center;"><img src="/static/images/sending_messages.png" alt="Telegram Master"
+                                                        width="40%"></p>
                 </li>
                 <li>
                     Выберите функцию <b>«💬 Рассылка сообщений по чатам»</b>.
                     <p style="text-align: center;"><img src="/static/images/sending_messages_files_via_chats_ru.png"
                                                         alt="Telegram Master" width="40%"></p>
                 </li>
-                <li>Введите время сна в поле ввода от и до. (Если данные введены не правильно, то программа выдаст
+                <li>
+                    Введите время сна в поле ввода от и до. (Если данные введены не правильно, то программа выдаст
                     предупреждение пользователю).
                 </li>
                 <li>Введите список групп (чатов) в поле ввода, если список ранее не был сформирован.</li>
