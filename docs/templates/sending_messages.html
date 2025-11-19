@@ -156,38 +156,9 @@
         </blockquote>
         <h2 id="sending_messages_files_via_chats">{{ sending_messages_files_via_chats_ru }}</h2>
 
-        <!--        <h3>Рассылка сообщений по чатам</h3>-->
-        <!--        <blockquote>-->
-        <!--            <ol>-->
-        <!--                <li>-->
-        <!--                    Перейдите в раздел <b>«Рассылка сообщений»</b>.-->
-        <!--                    <p style="text-align: center;"><img src="/static/images/sending_messages.png" alt="Telegram Master"-->
-        <!--                                                        width="40%"></p>-->
-        <!--                </li>-->
-        <!--                <li>-->
-        <!--                    Выберите функцию <b>«💬 Рассылка сообщений по чатам»</b>.-->
-        <!--                    <p style="text-align: center;"><img src="/static/images/sending_messages_files_via_chats_ru.png"-->
-        <!--                                                        alt="Telegram Master" width="40%"></p>-->
-        <!--                </li>-->
-        <!--                <li>-->
-        <!--                    Введите время сна в поле ввода от и до. (Если данные введены не правильно, то программа выдаст-->
-        <!--                    предупреждение пользователю).-->
-        <!--                </li>-->
-        <!--                <li>Введите список групп (чатов) в поле ввода, если список ранее не был сформирован.</li>-->
-        <!--                <li>Если планируете использовать автоответчик, то поставьте галочку «Работа с автоответчиком».</li>-->
-        <!--                <li>Нажмите «Готово».-->
-        <!--                    <p style="text-align: center;"><img src="/static/images/done_button.png" alt="Telegram Master"-->
-        <!--                                                        width="40%"></p>-->
-        <!--                </li>-->
-        <!--            </ol>-->
-        <!--        </blockquote>-->
-        <!--        <p style="text-align: center;">-->
-        <!--            <img src="/static/images/sending_messages_files_via_chats_ru_2.png" alt="Telegram Master" width="40%">-->
-        <!--        </p>-->
         <h3>Логирование и контроль работы</h3>
-        <p style="color: #0c5460; font-size: 16px; line-height: 1.6;">
-            Все действия записываются в лог-файл: <code>{{ program_name }}/user_data/log/log.log</code>.
-        </p>
+        <p style="color: #0c5460; font-size: 16px; line-height: 1.6;">Все действия записываются в лог-файл: <code>{{
+            program_name }}/user_data/log/log.log</code>.</p>
         <div style="border: 2px solid #f0c14b; background-color: #fff8dc; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
             <h3 style="color: #9c6500; margin: 0 0 15px; font-size: 18px;">📝 Предупреждения:</h3>
             <ul style="color: #7a4f00; margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.6;">
@@ -213,19 +184,30 @@
             <p style="color: #0c5460; font-size: 18px; margin: 0 0 15px;">📝 Перед началом работы убедитесь, что
                 выполнены следующие шаги:</p>
             <ol style="color: #0c5460; font-size: 16px; line-height: 1.6; padding-left: 20px;">
-                <li><a href="{{ url_for('launch_telegrammaster') }}"
-                       style="color: #138496; text-decoration: none;">Запустите {{ program_name }}</a></li>
-                <li>
-                    <a href="{{ url_for('connect_accounts') }}"
-                       style="color: #138496; text-decoration: none;">Подключите аккаунты к {{program_name}}</a> или
-                    скопируйте session файл аккаунта в папку:
-                    <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{ program_name
-                        }}/user_data/accounts/send_message</code>
+
+                <!-- 1 -->
+                <li id="step-1">
+                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+                    {{program_name}}</a>).
+                    <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
+                                                        width="60%"></p>
                 </li>
-                <li><a href="#recording_messages_for_distribution" style="color: #138496; text-decoration: none;">Запишите
-                    сообщения для рассылки.</a></li>
-                <li><a href="{{ url_for('parsing') }}" style="color: #138496; text-decoration: none;">Выполните парсинг
-                    участников группы для последующей рассылки сообщений в личку.</a></li>
+                <!-- 2 -->
+                <li id="step-2">
+                    🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см.
+                    Подключение аккаунтов Telegram к {{program_name}})</a>.
+                </li>
+                <!-- 3 -->
+                <li>
+                    <a href="#recording_messages_for_distribution" style="color: #138496; text-decoration: none;">Запишите
+                        сообщения для рассылки.</a>
+                </li>
+                <!-- 4 -->
+                <li>
+                    <a href="{{ url_for('parsing') }}" style="color: #138496; text-decoration: none;">Выполните парсинг
+                        участников группы для последующей рассылки сообщений в личку.</a>
+                </li>
+                <!-- 5 -->
                 <li>
                     Поместите файл для отправки в папку:
                     <code style="background-color: #e9ecef; padding: 2px 5px; border-radius: 4px;">{{program_name}}/user_data/files_to_send</code>
