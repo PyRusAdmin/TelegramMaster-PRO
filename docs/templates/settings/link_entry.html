@@ -27,13 +27,18 @@
         <p>Для записи ссылки на вашу группу и возможности инвайтинга в неё через программу TelegramMaster, выполните
             следующие действия:</p>
         <blockquote>
-            1️⃣ Запустить {{ program_name }} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск
-            {{ program_name }}</a>).<br>
-            <!-- Изображение с центровкой -->
-            <p style="text-align: center;">
-                <!-- Пример правильного пути к изображению -->
-                <img src="/static/images/TelegramMaster_2.png" alt="Telegram Master" width="40%">
-            </p>
+
+
+            <!-- 1 -->
+            <li id="step-1">
+                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+                {{program_name}}</a>).
+                <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
+                                                    width="60%"></p>
+            </li>
+
+
+
             2️⃣ Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>".<br>
             <!-- Изображение с центровкой -->
             <p style="text-align: center;">

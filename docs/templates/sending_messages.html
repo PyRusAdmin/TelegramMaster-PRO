@@ -61,14 +61,23 @@
         <blockquote
                 style="border: 2px solid #d4edda; background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
             <ol style="color: #155724; font-size: 16px; line-height: 1.6;">
-                <li><a href="{{ url_for('launch_telegrammaster') }}"
-                       style="color: #138496; text-decoration: none;">Запустите {{ program_name }}</a>
+
+
+                <!-- 1 -->
+                <li id="step-1">
+                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+                    {{program_name}}</a>).
+                    <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
+                                                        width="60%"></p>
                 </li>
+                <!-- 2 -->
                 <li id="step-2">
                     🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см.
                     Подключение
                     аккаунтов Telegram к {{program_name}})</a>.
                 </li>
+
+
                 <li><a href="{{ url_for('forming_list_of_chats_channels') }}"
                        style="color: #138496; text-decoration: none;">Сформируйте список групп (чатов)</a></li>
                 <li><a href="{{ url_for('message_recording') }}" style="color: #138496; text-decoration: none;">🔄
@@ -90,6 +99,14 @@
                     </ol>
                 </li>
 
+                <!-- 1 -->
+                <li id="step-1">
+                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+                    {{program_name}}</a>).
+                    <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
+                                                        width="60%"></p>
+                </li>
+                <!-- 2 -->
                 <li id="step-2">
                     🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см.
                     Подключение
