@@ -11,6 +11,9 @@ time_subscription_2 = config.get('time_subscription', 'time_subscription_2', fal
 api_id = config.get('telegram_settings', 'id', fallback=None)
 api_hash = config.get('telegram_settings', 'hash', fallback=None)
 
+TIME_SENDING_MESSAGES_1 = config.get('time_inviting', 'time_inviting_1', fallback=None)
+TIME_SENDING_MESSAGES_2 = config.get('time_inviting', 'time_inviting_2', fallback=None)
+
 """Настройки внешнего вида программы"""
 config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
 config_gui.read(filenames='user_data/config/config_gui.ini', encoding='utf-8')
