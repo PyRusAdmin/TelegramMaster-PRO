@@ -127,7 +127,7 @@ class InvitingToAGroup:
 
             limit = get_limit(limits)  # Получаем лимит введенный пользователем
 
-            usernames = select_records_with_limit(limit=limit, app_logger=self.app_logger)
+            usernames = await select_records_with_limit(limit=limit, app_logger=self.app_logger)
             await self.app_logger.log_and_display(message=f"Список usernames: {usernames}\n\nЛимит на аккаунт {limit}")
 
             if not usernames:
