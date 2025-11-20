@@ -13,15 +13,30 @@ class AppLogger:
         self.page = page
         self.list_view = list_view  # Используем переданный list_view
 
-    async def start_time(self):
-        start = datetime.datetime.now()  # фиксируем и выводим время старта работы кода
-        await self.log_and_display(message='▶️ Время старта: ' + str(start))
+    async def start_time(self) -> datetime.datetime:
+        """
+        Фиксирует и отображает время старта операции.
+        
+        Записывает текущее время и выводит его в лог как метку начала выполнения.
+        
+        :returns: Время старта операции для последующего расчета продолжительности
+        """
+        start = datetime.datetime.now()
+        await self.log_and_display(message=f'▶️ Время старта: {start}')
         return start
 
-    async def end_time(self, start):
-        finish = datetime.datetime.now()  # фиксируем и выводим время окончания работы кода
-        await self.log_and_display(message='⏹️ Время окончания: ' + str(finish))
-        await self.log_and_display(message='⏱️ Время работы: ' + str(finish - start))
+    async def end_time(self, start: datetime.datetime):
+        """
+        Фиксирует и отображает время завершения операции и ее продолжительность.
+        
+        Рассчитывает и выводит в лог время окончания операции и общую продолжительность
+        выполнения от момента старта до завершения.
+        
+        :param start: Время старта операции, полученное от start_time()
+        """
+        finish = datetime.datetime.now()
+        await self.log_and_display(message=f'⏹️ Время окончания: {finish}')
+        await self.log_and_display(message=f'⏱️ Время работы: {finish - start}')
 
     async def log_and_display(self, message: str, level: str = "INFO"):
         """
