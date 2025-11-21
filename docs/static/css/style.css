@@ -55,8 +55,13 @@ body {
     border-radius: 8px;
 }
 
-h1, h2, h3 {
+h1 {
     text-align: center;
+    color: #00A6ED; /* Измените на желаемый цвет */
+}
+
+h2, h3 {
+    text-align: left;
     color: #00A6ED; /* Измените на желаемый цвет */
 }
 
