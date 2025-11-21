@@ -53,7 +53,8 @@ class Subscribe:
         except ChannelPrivateError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
         except (UsernameInvalidError, ValueError, TypeError):
-            await self.app_logger.log_and_display(f"❌ Попытка подписки на группу / канал {groups}. Не верное имя или cсылка {groups} не является группой / каналом: {groups}")
+            await self.app_logger.log_and_display(
+                f"❌ Попытка подписки на группу / канал {groups}. Не верное имя или cсылка {groups} не является группой / каналом: {groups}")
             # write_data_to_db(writing_group_links=groups)
         except PeerFloodError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["peer_flood"], level="error")

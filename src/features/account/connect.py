@@ -224,7 +224,7 @@ class TGConnect:
                     await client.disconnect()
                 except ValueError:
                     logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
-                return None # Не возвращаем клиента
+                return None  # Не возвращаем клиента
 
             me = await client.get_me()
             phone = me.phone or ""
@@ -233,9 +233,10 @@ class TGConnect:
             return client
 
         except AuthKeyDuplicatedError:
-            logger.error("❌ AuthKeyDuplicatedError: Повторный ввод ключа авторизации (на данный момент сеесия используется в другом месте)")
+            logger.error(
+                "❌ AuthKeyDuplicatedError: Повторный ввод ключа авторизации (на данный момент сеесия используется в другом месте)")
             await client.disconnect()
-            return None # Не возвращаем клиента
+            return None  # Не возвращаем клиента
 
     async def verify_account(self, session_name) -> None:
         """
