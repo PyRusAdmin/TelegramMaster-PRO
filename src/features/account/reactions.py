@@ -69,9 +69,7 @@ class WorkingWithReactions:
 
             try:
                 for session_name in self.session_string:
-                    client: TelegramClient = await self.connect.client_connect_string_session(
-                        session_name=session_name)
-                    await self.connect.getting_account_data(client)
+                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
 
                     await self.app_logger.log_and_display(f"➕ Работаем с группой: {chat.value}")
                     await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat.value)
@@ -134,7 +132,7 @@ class WorkingWithReactions:
 
                                     client: TelegramClient = await self.connect.client_connect_string_session(
                                         session_name=session_name_reactions)
-                                    await self.connect.getting_account_data(client)
+                                    # await self.connect.getting_account_data(client)
                                     await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_link)
 
                                     try:

@@ -140,7 +140,7 @@ class InvitingToAGroup:
 
             for session_name in self.session_string:
                 client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
-                await self.connect.getting_account_data(client)
+                # await self.connect.getting_account_data(client)
 
                 # Подписываемся на группы
                 await self.subscribe.subscribe_to_group_or_channel(client=client, groups=links)
@@ -428,6 +428,9 @@ class InvitingToAGroup:
                                                   level="error")
             await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
             await client.disconnect()  # Прерываем работу и меняем аккаунт
+
+            return  # Прерываем выполнение, чтобы не перегружать API
+
         except AuthKeyUnregisteredError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
             await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)

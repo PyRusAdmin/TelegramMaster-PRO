@@ -122,7 +122,6 @@ class AccountBIO:
             try:
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
-                await self.connect.getting_account_data(client)
                 try:
                     result = await client(
                         functions.account.UpdateProfileRequest(first_name=profile_name_input_field.value))

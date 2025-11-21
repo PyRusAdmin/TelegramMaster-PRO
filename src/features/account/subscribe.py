@@ -12,6 +12,7 @@ from src.core.database.database import write_data_to_db
 from src.core.utils import Utils
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations
+from loguru import logger
 
 
 class Subscribe:
@@ -58,14 +59,17 @@ class Subscribe:
         except PeerFloodError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["peer_flood"], level="error")
             await asyncio.sleep(random.randrange(50, 60))
+
         except FloodWaitError as e:
             await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
             await self.utils.record_and_interrupt(time_subscription_1, time_subscription_2)
-            # Прерываем работу и меняем аккаунт
-            raise
+
         except InviteRequestSentError:
             await self.app_logger.log_and_display(
                 f"❌ Попытка подписки на группу / канал {groups}. Действия будут доступны после одобрения администратором на вступление в группу")
         except sqlite3.DatabaseError:
             await self.app_logger.log_and_display(
                 f"❌ Попытка подписки на группу / канал {groups}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")
+
+        except Exception as e:  # Ловим все остальные ошибки
+            logger.exeption(e)

@@ -207,13 +207,13 @@ class TGConnect:
                          ),
                      ])]))
 
-    async def getting_account_data(self, client):
-        """Получаем данные аккаунта"""
-        await client.connect()
-        me = await client.get_me()
-        phone = me.phone or ""
-        logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-        await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
+    # async def getting_account_data(self, client):
+    #     """Получаем данные аккаунта"""
+    #     await client.connect()
+    #     me = await client.get_me()
+    #     phone = me.phone or ""
+    #     logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
+    #     await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
 
     async def client_connect_string_session(self, session_name: str) -> TelegramClient:
         """

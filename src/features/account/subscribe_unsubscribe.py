@@ -52,7 +52,7 @@ class SubscribeUnsubscribeTelegram:
             try:
                 for session_name in self.session_string:
                     client = await self.connect.connect_string_session(session_name=session_name)
-                    await self.connect.getting_account_data(client)
+                    # await self.connect.getting_account_data(client)
 
                     dialogs = client.iter_dialogs()
                     await self.app_logger.log_and_display(message=f"Диалоги: {dialogs}")
@@ -342,6 +342,11 @@ class SubscribeUnsubscribeTelegram:
         except SessionRevokedError:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"])
+
+        except FloodWaitError as e:
+            await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
+            await self.utils.record_and_interrupt(time_subscription_1, time_subscription_2)
+
         except sqlite3.DatabaseError:
             await self.app_logger.log_and_display(
                 message=f"❌ Попытка подписки на группу / канал {group_link}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")

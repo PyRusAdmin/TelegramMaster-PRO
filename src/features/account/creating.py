@@ -59,7 +59,7 @@ class CreatingGroupsAndChats:
 
             try:
                 client: TelegramClient = await self.connect.client_connect_string_session(session_name=selected_account)
-                await self.connect.getting_account_data(client=client)
+                # await self.connect.getting_account_data(client=client)
                 await client(functions.channels.CreateChannelRequest(title='My awesome title',
                                                                      about='Description for your group',
                                                                      megagroup=True))
