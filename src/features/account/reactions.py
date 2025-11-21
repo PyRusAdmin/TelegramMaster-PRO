@@ -16,8 +16,7 @@ from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
 from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
 from src.gui.buttons import FunctionButton
-from src.gui.gui import AppLogger
-from src.gui.gui import list_view
+from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
