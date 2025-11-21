@@ -227,8 +227,10 @@ class TGConnect:
 
         if not await client.is_user_authorized():
             logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
-            await client.disconnect()
-            raise ValueError("Unauthorized session")
+            try:
+                await client.disconnect()
+            except ValueError:
+                raise logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
 
         me = await client.get_me()
         phone = me.phone or ""
