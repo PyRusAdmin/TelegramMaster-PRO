@@ -207,15 +207,7 @@ class TGConnect:
                          ),
                      ])]))
 
-    # async def getting_account_data(self, client):
-    #     """Получаем данные аккаунта"""
-    #     await client.connect()
-    #     me = await client.get_me()
-    #     phone = me.phone or ""
-    #     logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-    #     await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-
-    async def client_connect_string_session(self, session_name: str) -> TelegramClient:
+    async def client_connect_string_session(self, session_name: str) -> TelegramClient | None:
         """
         Подключение к Telegram аккаунту через StringSession
         :param session_name: Имя аккаунта для подключения (файл .session)
@@ -223,20 +215,27 @@ class TGConnect:
         # Создаем клиент, используя StringSession и вашу строку
         client = TelegramClient(StringSession(session_name), api_id=api_id, api_hash=api_hash,
                                 system_version="4.16.30-vxCUSTOM")
-        await client.connect()
+        try:
+            await client.connect()
 
-        if not await client.is_user_authorized():
-            logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
-            try:
-                await client.disconnect()
-            except ValueError:
-                raise logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
+            if not await client.is_user_authorized():
+                logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
+                try:
+                    await client.disconnect()
+                except ValueError:
+                    logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
+                return None # Не возвращаем клиента
 
-        me = await client.get_me()
-        phone = me.phone or ""
-        logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-        await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-        return client
+            me = await client.get_me()
+            phone = me.phone or ""
+            logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
+            await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
+            return client
+
+        except AuthKeyDuplicatedError:
+            logger.error("❌ AuthKeyDuplicatedError: Повторный ввод ключа авторизации (на данный момент сеесия используется в другом месте)")
+            await client.disconnect()
+            return None # Не возвращаем клиента
 
     async def verify_account(self, session_name) -> None:
         """

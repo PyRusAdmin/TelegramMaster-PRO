@@ -139,7 +139,12 @@ class InvitingToAGroup:
                 return
 
             for session_name in self.session_string:
-                client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
+                client: TelegramClient | None = await self.connect.client_connect_string_session(session_name=session_name)
+
+                if client is None:
+                    await self.app_logger.log_and_display(message=f"⚠️ Пропускаем сессию {session_name} - не удалось подключиться.")
+                    continue # Переходим к следующему аккаунту
+
                 # await self.connect.getting_account_data(client)
 
                 # Подписываемся на группы
@@ -365,7 +370,7 @@ class InvitingToAGroup:
         """
         try:
             await self.app_logger.log_and_display(message=f"Попытка приглашения {username} в группу {username_group}.")
-            await client.connect()
+            # await client.connect()
 
             # Выполняем приглашение
             await client(InviteToChannelRequest(username_group, [username]))

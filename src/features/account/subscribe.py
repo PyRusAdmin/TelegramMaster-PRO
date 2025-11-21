@@ -8,7 +8,7 @@ from telethon.errors import (ChannelPrivateError, SessionRevokedError, UserDeact
 from telethon.tl.functions.channels import JoinChannelRequest
 
 from src.core.configs import time_subscription_1, time_subscription_2
-from src.core.database.database import write_data_to_db
+# from src.core.database.database import write_data_to_db
 from src.core.utils import Utils
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations
@@ -53,9 +53,8 @@ class Subscribe:
         except ChannelPrivateError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
         except (UsernameInvalidError, ValueError, TypeError):
-            await self.app_logger.log_and_display(
-                f"❌ Попытка подписки на группу / канал {groups}. Не верное имя или cсылка {groups} не является группой / каналом: {groups}")
-            write_data_to_db(writing_group_links=groups)
+            await self.app_logger.log_and_display(f"❌ Попытка подписки на группу / канал {groups}. Не верное имя или cсылка {groups} не является группой / каналом: {groups}")
+            # write_data_to_db(writing_group_links=groups)
         except PeerFloodError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["peer_flood"], level="error")
             await asyncio.sleep(random.randrange(50, 60))
