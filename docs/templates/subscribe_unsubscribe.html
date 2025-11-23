@@ -95,11 +95,13 @@
         </p>
         <ol>
             <li>Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).</li>
+                {{program_name}}</a>).
+            </li>
             <li style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                    width="60%"></li>
+                                                 width="60%"></li>
             <li>🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
-                аккаунтов Telegram к {{program_name}})</a>.</li>
+                аккаунтов Telegram к {{program_name}})</a>.
+            </li>
             <li style="text-align: center;">
                 <img src="/static/images/connecting_accounts/connect_accounts.png" alt="Telegram Master"
                      width="60%">
@@ -111,7 +113,7 @@
             <li>Выбрать функцию «Отписка».</li>
         </ol>
         <p>
-            {{ program_name }} автоматически очистит группы / каналы, на которые подписан аккаунт Telegram.<br>
+            {{program_name}} автоматически очистит группы / каналы, на которые подписан аккаунт Telegram.<br>
         </p>
         <hr/> <!-- Горизонтальная линия-->
         <!-- Кнопка "Вверх" -->
