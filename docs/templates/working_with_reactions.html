@@ -41,19 +41,20 @@
             В настройках {{program_name}} перейдите в пункт Выбор реакции<br>
             Выберите реакции, которые нужно поставить на пост. <br>
         </p>
-        <div
-                style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
+        <div style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
             <h3>Важное примечание</h3>
             <p style="color: #721c24; margin: 0; font-size: 16px;">
-                ⚠️ {{ program_name }} выбирает рандомно реакцию из выбранных пользователем.<br>
+                ⚠️ {{program_name}} выбирает рандомно реакцию из выбранных пользователем.<br>
             </p>
         </div>
         <ol>
-            <li>Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+            <li>
+                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
                 {{program_name}}</a>).
+                <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
+                                                    width="60%"></p>
             </li>
-            <li style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                 width="60%"></li>
+
             <li>🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
                 аккаунтов Telegram к {{program_name}})</a>.
             </li>
