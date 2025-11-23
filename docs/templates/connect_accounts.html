@@ -64,9 +64,13 @@
             {{ connecting_accounts_by_phone_number }}</h2>
         <p>Чтобы подключить аккаунт в формате tdata, выполните следующие действия:</p>
         <ol>
-            <li>Загрузите купленный аккаунт и распакуйте его в удобное место. В архиве вы найдёте папку с названием tdata и файл password2FA, который может содержать пароль</li>
-            <li>Скачайте портативную версию Telegram с официального сайта по адресу <a href="https://desktop.telegram.org">https://desktop.telegram.org</a></li>
-            <li>Распакуйте архив и скопируйте файлы Telegram.exe и modules в папку с вашим аккаунтом в формате tdata</li>
+            <li>Загрузите купленный аккаунт и распакуйте его в удобное место. В архиве вы найдёте папку с названием
+                tdata и файл password2FA, который может содержать пароль
+            </li>
+            <li>Скачайте портативную версию Telegram с официального сайта по адресу <a
+                    href="https://desktop.telegram.org">https://desktop.telegram.org</a></li>
+            <li>Распакуйте архив и скопируйте файлы Telegram.exe и modules в папку с вашим аккаунтом в формате tdata
+            </li>
         </ol>
         <p>После того как вы выполните все эти действия, запустите Telegram.exe. Если ваш аккаунт активен, то после
             запуска Telegram откроется его окно.</p>
@@ -81,9 +85,10 @@
 
         <ol>
             <li>Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).</li>
+                {{program_name}}</a>).
+            </li>
             <li style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                    width="60%"></li>
+                                                 width="60%"></li>
             <li>Запустить функцию «Подключение аккаунтов».</li>
             <li style="text-align: center;">
                 <img src="/static/images/connect_accounts.png" alt="Telegram Master" width="40%">
@@ -95,10 +100,11 @@
             <li>Выбрать функцию, для которой хотите подключить аккаунт.</li>
             <li>Ввести номер телефона без пробелов, начиная с символа + (например, +79490000000)</li>
             <li>Ввести код подтверждения от Telegram. Если код не пришел в течение минуты, повторите процедуру</li>
-            <li>Если на аккаунте есть пароль, ввести пароль. Если к аккаунту привязана двухфакторная аутентификация, программа запросит ввод пароля</li>
+            <li>Если на аккаунте есть пароль, ввести пароль. Если к аккаунту привязана двухфакторная аутентификация,
+                программа запросит ввод пароля
+            </li>
         </ol>
-        <div
-                style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
+        <div style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
             <p style="color: #721c24; margin: 0; font-size: 16px;">
                 ⚠️ Если не пришел код подтверждения, удалите session файл из
                 <code>{{ program_name }}/user_data/accounts</code>. Для этого откройте
@@ -111,19 +117,20 @@
         <hr/> <!-- Горизонтальная линия-->
         <h2 id="connecting_session_accounts">{{ connecting_session_accounts }}</h2>
         <blockquote>
-            <p>⚠️ <b>{{ program_name }}</b> позволяет добавить неограниченное количество аккаунтов.</p>
+            <p>⚠️ <b>{{program_name}}</b> позволяет добавить неограниченное количество аккаунтов.</p>
         </blockquote>
         <p>Чтобы добавить аккаунт в формате session, распакуйте (расположите) файл в зависимости от того, какие
-            функции {{ program_name }} вы будете использовать.</p>
+            функции {{program_name}} вы будете использовать.</p>
         <p>Например, если вы планируете использовать функцию парсинга, расположите аккаунт в папке
             <code>{{ program_name }}/user_data/accounts/parsing</code>. Если вам нужно будет рассылать сообщения по
             чатам, то поместите аккаунт в папку <code>{{ program_name }}/user_data/accounts/send_message</code>.
         </p>
         <ol>
             <li>Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).</li>
+                {{program_name}}</a>).
+            </li>
             <li style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                    width="60%"></li>
+                                                 width="60%"></li>
             <li>Запустить функцию «Подключение аккаунтов».</li>
             <li style="text-align: center;">
                 <img src="/static/images/connect_accounts.png" alt="Telegram Master" width="40%">
@@ -137,90 +144,25 @@
         </ol>
         <h2>Структура папок с аккаунтами:</h2>
 
-        <table border="1">
-            <thead>
-            <tr>
-                <th>Номер</th>
-                <th>Путь</th>
-                <th>Описание</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/answering_machine</td>
-                <td>Аккаунты для автоответчика</td>
-            </tr>
-            <tr>
-                <td>2️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/banned</td>
-                <td>Забаненные аккаунты, аккаунты, которые перемещены в данную папку, это аккаунты, перемещенные
-                    после
-                    проверки аккаунтов
-                </td>
-            </tr>
-            <tr>
-                <td>3️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/bio</td>
-                <td>Аккаунты для редактирования BIO</td>
-            </tr>
-            <tr>
-                <td>4️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/contact</td>
-                <td>Аккаунты для работы с телефонными номерами</td>
-            </tr>
-            <tr>
-                <td>5️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/creating</td>
-                <td>Аккаунты для создания групп</td>
-            </tr>
-            <tr>
-                <td>6️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/invalid_account</td>
-                <td>Невалидные аккаунты</td>
-            </tr>
-            <tr>
-                <td>7️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/inviting</td>
-                <td>Аккаунты для инвайтинга</td>
-            </tr>
-            <tr>
-                <td>8️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/parsing</td>
-                <td>аккаунты для парсинга</td>
-            </tr>
-            <tr>
-                <td>9️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/reactions</td>
-                <td>Аккаунты для работы с реакциями</td>
-            </tr>
-            <tr>
-                <td>1️⃣0️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/reactions_list</td>
-                <td>Аккаунты для проставления реакций</td>
-            </tr>
-            <tr>
-                <td>1️⃣1️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/send_message</td>
-                <td>Аккаунты для рассылки сообщений</td>
-            </tr>
-            <tr>
-                <td>1️⃣2️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/subscription</td>
-                <td>Аккаунты для подписки на группы и каналы</td>
-            </tr>
-            <tr>
-                <td>1️⃣3️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/unsubscribe</td>
-                <td>Аккаунты для отписки от групп и каналов</td>
-            </tr>
-            <tr>
-                <td>1️⃣4️⃣</td>
-                <td>{{ program_name }}/user_data/accounts/viewing</td>
-                <td>Аккаунты для накрутки просмотров постов.</td>
-            </tr>
-            </tbody>
-        </table>
+        <ol>
+            <li><b>{{ program_name }}/user_data/accounts/answering_machine</b> - Аккаунты для автоответчика</li>
+            <li><b>{{ program_name }}/user_data/accounts/banned</b> - Забаненные аккаунты, которые перемещаются в эту
+                папку после проверки
+            </li>
+            <li><b>{{ program_name }}/user_data/accounts/bio</b> - Аккаунты для редактирования BIO</li>
+            <li><b>{{ program_name }}/user_data/accounts/contact</b> - Аккаунты для работы с телефонными номерами</li>
+            <li><b>{{ program_name }}/user_data/accounts/creating</b> - Аккаунты для создания групп</li>
+            <li><b>{{ program_name }}/user_data/accounts/invalid_account</b> - Невалидные аккаунты</li>
+            <li><b>{{ program_name }}/user_data/accounts/inviting</b> - Аккаунты для инвайтинга</li>
+            <li><b>{{ program_name }}/user_data/accounts/parsing</b> - Аккаунты для парсинга</li>
+            <li><b>{{ program_name }}/user_data/accounts/reactions</b> - Аккаунты для работы с реакциями</li>
+            <li><b>{{ program_name }}/user_data/accounts/reactions_list</b> - Аккаунты для проставления реакций</li>
+            <li><b>{{ program_name }}/user_data/accounts/send_message</b> - Аккаунты для рассылки сообщений</li>
+            <li><b>{{ program_name }}/user_data/accounts/subscription</b> - Аккаунты для подписки на группы и каналы
+            </li>
+            <li><b>{{ program_name }}/user_data/accounts/unsubscribe</b> - Аккаунты для отписки от групп и каналов</li>
+            <li><b>{{ program_name }}/user_data/accounts/viewing</b> - Аккаунты для накрутки просмотров постов</li>
+        </ol>
         <div
                 style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
             <p style="color: #721c24; margin: 0; font-size: 16px;">
