@@ -24,38 +24,26 @@
         <h1>{{ forming_list_of_chats_channels_ru }}</h1>
         <hr/> <!-- Горизонтальная линия-->
         <p>Для формирования списка чатов - каналов, выполните следующие действия:</p>
-        <blockquote>
-
-            <!-- 1 -->
-            <li id="step-1">
-                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).
-                <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                    width="60%"></p>
-            </li>
-
-
-            2️⃣ Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>".<br>
-            <!-- Изображение с центровкой -->
-            <p style="text-align: center;">
-                <!-- Пример правильного пути к изображению -->
+        <ol>
+            <li>Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+                {{program_name}}</a>).</li>
+            <li style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
+                                                    width="60%"></li>
+            <li>Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>"</li>
+            <li style="text-align: center;">
                 <img src="/static/images/settings/settings.png" alt="Telegram Master" width="40%">
-            </p>
-            3️⃣ Запустить функцию "Формирование списка чатов каналов".<br>
-            <!-- Изображение с центровкой -->
-            <p style="text-align: center;">
-                <!-- Пример правильного пути к изображению -->
+            </li>
+            <li>Запустить функцию "Формирование списка чатов каналов"</li>
+            <li style="text-align: center;">
                 <img src="/static/images/settings/forming_list_of_chats_channels.png" alt="Telegram Master"
                      width="40%">
-            </p>
-            4️⃣ Ввести список чатов - каналов.<br>
-            5️⃣ Нажать "Готово".<br>
-            <!-- Изображение с центровкой -->
-            <p style="text-align: center;">
-                <!-- Пример правильного пути к изображению -->
+            </li>
+            <li>Ввести список чатов - каналов</li>
+            <li>Нажать "Готово"</li>
+            <li style="text-align: center;">
                 <img src="/static/images/done_button.png" alt="Telegram Master" width="40%">
-            </p>
-        </blockquote>
+            </li>
+        </ol>
         <p>
             После выполнения указанных действий программа автоматически запишет введенные данные в базу данных (в
             файл <code>{{ program_name }}/user_data/software_database.db</code> в таблицу
