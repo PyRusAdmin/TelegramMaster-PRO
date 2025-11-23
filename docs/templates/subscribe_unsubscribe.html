@@ -93,34 +93,23 @@
         <p>
             Для отписки группы / каналы на которые подписан аккаунт выполните следующие действия:<br>
         </p>
-        <blockquote>
-
-            <!-- 1 -->
-            <li id="step-1">
-                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).
-                <p style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
-                                                    width="60%"></p>
-            </li>
-            <!-- 2 -->
-            <li id="step-2">
-                🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
-                аккаунтов Telegram к {{program_name}})</a>.
-            </li>
-
-            <p style="text-align: center;">
-                <!-- Пример правильного пути к изображению -->
+        <ol>
+            <li>Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+                {{program_name}}</a>).</li>
+            <li style="text-align: center;"><img src="/static/images/TelegramMaster_2.png" alt="Telegram Master"
+                                                    width="60%"></li>
+            <li>🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
+                аккаунтов Telegram к {{program_name}})</a>.</li>
+            <li style="text-align: center;">
                 <img src="/static/images/connecting_accounts/connect_accounts.png" alt="Telegram Master"
                      width="60%">
-            </p>
-            3️⃣ Перейти в раздел «Подписка, отписка».<br>
-            <!-- Изображение с центровкой -->
-            <p style="text-align: center;">
-                <!-- Пример правильного пути к изображению -->
+            </li>
+            <li>Перейти в раздел «Подписка, отписка».</li>
+            <li style="text-align: center;">
                 <img src="/static/images/subscribe_unsubscribe.png" alt="Telegram Master" width="60%">
-            </p>
-            4️⃣ Выбрать функцию «Отписка».<br>
-        </blockquote>
+            </li>
+            <li>Выбрать функцию «Отписка».</li>
+        </ol>
         <p>
             {{ program_name }} автоматически очистит группы / каналы, на которые подписан аккаунт Telegram.<br>
         </p>

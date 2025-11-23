@@ -151,3 +151,4 @@ ENV/
 
 # Rope project settings
 .ropeproject
+/.gigaide/
