@@ -7,7 +7,7 @@ from telethon.errors import (ChannelPrivateError, SessionRevokedError, UserDeact
                              InviteRequestSentError, FloodWaitError, PeerFloodError, ChannelsTooMuchError)
 from telethon.tl.functions.channels import JoinChannelRequest
 
-from src.core.configs import time_subscription_1, time_subscription_2
+from src.core.config.configs import time_subscription_1, time_subscription_2
 # from src.core.database.database import write_data_to_db
 from src.core.utils import Utils
 from src.gui.gui import AppLogger

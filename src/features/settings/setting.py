@@ -7,7 +7,7 @@ import sys
 
 import flet as ft  # Импортируем библиотеку flet
 
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
+from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.database.database import save_proxy_data_to_db
 from src.gui.gui_elements import GUIProgram
 from src.gui.gui import AppLogger, list_view

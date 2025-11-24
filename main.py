@@ -2,8 +2,8 @@
 import flet as ft
 from loguru import logger
 
-from src.core.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
-                              WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
+from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
+                                     WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
 from src.core.database.create_database import create_database
 from src.features.account.account_bio import AccountBIO
 from src.features.account.connect import TGConnect

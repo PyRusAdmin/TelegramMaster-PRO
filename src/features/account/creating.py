@@ -4,7 +4,7 @@ from loguru import logger
 from telethon import TelegramClient
 from telethon import functions
 
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
+from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.database.account import getting_account, get_account_list
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect

@@ -12,8 +12,8 @@ from telethon.errors import (AuthKeyUnregisteredError, ChannelPrivateError, Chan
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
-from src.core.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1, time_subscription_2,
-                              width_one_input)
+from src.core.config.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1, time_subscription_2,
+                                     width_one_input)
 from src.core.database.account import getting_account
 from src.core.database.database import get_writing_group_links, write_writing_group_links_to_db
 from src.core.utils import Utils
