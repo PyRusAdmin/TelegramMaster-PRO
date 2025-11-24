@@ -131,7 +131,7 @@ class WorkingWithReactions:
 
                                     client: TelegramClient = await self.connect.client_connect_string_session(
                                         session_name=session_name_reactions)
-                                    # # await self.connect.getting_account_data(client)
+
                                     await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_link)
 
                                     try:

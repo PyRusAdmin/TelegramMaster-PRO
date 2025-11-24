@@ -75,7 +75,7 @@ class ParsingGroupMembers:
         async def on_account_change(e):
             if account_drop_down_list.value:
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
-                # # await self.connect.getting_account_data(client)
+
                 await self.load_groups(client, dropdown, result_text)
                 await client.disconnect()
             else:
@@ -364,7 +364,6 @@ class ParsingGroupMembers:
         :param client: Клиент Telethon
         """
         # Обрабатываем все файлы сессий по очереди 📂
-        # # await self.connect.getting_account_data(client)
 
         await self.forming_a_list_of_groups(client)
 

@@ -52,7 +52,6 @@ class SubscribeUnsubscribeTelegram:
             try:
                 for session_name in self.session_string:
                     client = await self.connect.connect_string_session(session_name=session_name)
-                    # # await self.connect.getting_account_data(client)
 
                     dialogs = client.iter_dialogs()
                     await self.app_logger.log_and_display(message=f"Диалоги: {dialogs}")

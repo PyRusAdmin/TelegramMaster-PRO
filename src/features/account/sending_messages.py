@@ -64,7 +64,7 @@ class SendTelegramMessages:
                         # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                         client: TelegramClient = await self.connect.client_connect_string_session(
                             session_name=session_name)
-                        # # await self.connect.getting_account_data(client)
+
                         try:
                             for username in await select_records_with_limit(limit=int(limits.value),
                                                                             app_logger=self.app_logger):
@@ -167,8 +167,6 @@ class SendTelegramMessages:
                     # Пользователь должен сам выбрать аккаунт
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                     client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
-
-                    # # await self.connect.getting_account_data(client)
 
                     @client.on(events.NewMessage(incoming=True))  # Обработчик личных сообщений
                     async def handle_private_messages(event):
