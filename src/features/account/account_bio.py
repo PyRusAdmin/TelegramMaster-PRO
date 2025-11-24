@@ -130,7 +130,7 @@ class AccountBIO:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["auth_key_unregistered"])
                 finally:
-                    await self.connect.getting_account_data(client)
+                    # # # await self.connect.getting_account_data(client)
                     await client.disconnect()
                 await show_notification(page=self.page,
                                         message="Работа окончена")  # Выводим уведомление пользователю
@@ -144,7 +144,7 @@ class AccountBIO:
             try:
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
-                await self.connect.getting_account_data(client)
+                # # await self.connect.getting_account_data(client)
                 try:
                     result = await client(
                         functions.account.UpdateProfileRequest(last_name=profile_last_name_input_field.value))
@@ -153,7 +153,7 @@ class AccountBIO:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["auth_key_unregistered"])
                 finally:
-                    await self.connect.getting_account_data(client)
+                    # # await self.connect.getting_account_data(client)
                     await client.disconnect()
                 await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
             except Exception as error:

@@ -147,7 +147,7 @@ class InvitingToAGroup:
                         message=f"⚠️ Пропускаем сессию {session_name} - не удалось подключиться.")
                     continue  # Переходим к следующему аккаунту
 
-                # await self.connect.getting_account_data(client)
+                # # await self.connect.getting_account_data(client)
 
                 # Подписываемся на группы
                 await self.subscribe.subscribe_to_group_or_channel(client=client, groups=links)
