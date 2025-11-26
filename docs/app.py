@@ -11,7 +11,7 @@ from fastapi.templating import Jinja2Templates
 from loguru import logger
 
 # Импорт необходимых переменных и функций
-from src.core.config.configs import PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE
+from src.core.config.configs import PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, path_folder_database
 from src.locales.translations_loader import translations
 
 app = FastAPI()
@@ -158,14 +158,18 @@ async def editing_bio(request: Request):
 async def working_with_contacts(request: Request):
     """Работа с контактами"""
     logger.info("Запущена страница работы с контактами")
-    return templates.TemplateResponse('working_with_contacts.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "creating_a_contact_list": translations["ru"]["contacts_menu"]["creating_a_contact_list"],
-        "show_a_list_of_contacts": translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
-        "deleting_contacts": translations["ru"]["contacts_menu"]["deleting_contacts"],
-        "adding_contacts": translations["ru"]["contacts_menu"]["adding_contacts"],
-        "working_with_contacts_menu_ru": translations["ru"]["menu"]["contacts"],
-    })
+    return templates.TemplateResponse(
+        'working_with_contacts.html', {
+            "request": request,
+            "program_name": PROGRAM_NAME,
+            "creating_a_contact_list": translations["ru"]["contacts_menu"]["creating_a_contact_list"],
+            "show_a_list_of_contacts": translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
+            "deleting_contacts": translations["ru"]["contacts_menu"]["deleting_contacts"],
+            "adding_contacts": translations["ru"]["contacts_menu"]["adding_contacts"],
+            "working_with_contacts_menu_ru": translations["ru"]["menu"]["contacts"],
+            "path_folder_database": path_folder_database
+        }
+    )
 
 
 # Настройки

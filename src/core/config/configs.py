@@ -35,5 +35,6 @@ config_path = configparser.ConfigParser(empty_lines_in_values=False, allow_no_va
 config_path.read(filenames='user_data/config/config_path.ini', encoding='utf-8')
 # Путь к сообщениям
 path_folder_with_messages = config_path.get('path_folder_with_messages', 'path_folder_with_messages', fallback=None)
+
 # Путь к папке с базой данных
 path_folder_database = config_path.get('path_folder_database', 'path_folder_database', fallback=None)
