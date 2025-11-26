@@ -454,7 +454,7 @@ async def launch_telegrammaster(request: Request):
 
 @app.get(path='/working_with_errors_telegrammaster', response_class=HTMLResponse)
 async def working_with_errors_telegrammaster(request: Request):
-    """Работа с ошибками TelegramMaster 2.0"""
+    """Работа с ошибками TelegramMaster-PRO"""
     logger.info("Запущена страница документации, о работе с ошибками TelegramMaster-PRO")
     return templates.TemplateResponse('working_with_errors_telegrammaster.html',
                                       {"request": request, "program_name": PROGRAM_NAME})
