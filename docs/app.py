@@ -447,7 +447,7 @@ async def creating_groups(request: Request):
 @app.get(path='/launch_telegrammaster', response_class=HTMLResponse)
 async def launch_telegrammaster(request: Request):
     """Запуск TelegramMaster"""
-    logger.info("Запущена страница документации, о запуске TelegramMaster 2.0")
+    logger.info("Запущена страница документации, о запуске TelegramMaster-PRO")
     return templates.TemplateResponse('launch_telegrammaster.html',
                                       {"request": request, "program_name": PROGRAM_NAME})
 
@@ -455,7 +455,7 @@ async def launch_telegrammaster(request: Request):
 @app.get(path='/working_with_errors_telegrammaster', response_class=HTMLResponse)
 async def working_with_errors_telegrammaster(request: Request):
     """Работа с ошибками TelegramMaster 2.0"""
-    logger.info("Запущена страница документации, о работе с ошибками TelegramMaster 2.0")
+    logger.info("Запущена страница документации, о работе с ошибками TelegramMaster-PRO")
     return templates.TemplateResponse('working_with_errors_telegrammaster.html',
                                       {"request": request, "program_name": PROGRAM_NAME})
 
