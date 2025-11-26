@@ -354,15 +354,17 @@ async def forming_list_of_chats_channels(request: Request):
 async def working_with_reactions(request: Request):
     """👍 Работа с реакциями"""
     logger.info("Запущена страница работы с реакциями")
-    return templates.TemplateResponse('working_with_reactions.html',
-                                      {
-                                          "request": request, "program_name": PROGRAM_NAME,
-                                          "setting_reactions": translations["ru"]["reactions_menu"][
-                                              "setting_reactions"],
-                                          "we_are_winding_up_post_views_ru": translations["ru"]["reactions_menu"][
-                                              "we_are_winding_up_post_views"],
-                                          "automatic_setting_of_reactions": translations["ru"]["reactions_menu"][
-                                              "automatic_setting_of_reactions"]})
+    return templates.TemplateResponse(
+        'working_with_reactions.html',
+        {
+            "request": request,
+            "program_name": PROGRAM_NAME,
+            "setting_reactions": translations["ru"]["reactions_menu"]["setting_reactions"],
+            "we_are_winding_up_post_views_ru": translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+            "automatic_setting_of_reactions": translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
+            "recording_reaction_link_ru": translations["ru"]["menu_settings"]["recording_reaction_link"],
+        }
+    )
 
 
 @app.get(path='/we_are_winding_up_post_views', response_class=HTMLResponse)
