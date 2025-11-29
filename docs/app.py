@@ -194,8 +194,10 @@ async def settings(request: Request):
             "message_limits_ru": translations["ru"]["menu_settings"]["message_limits"],
             "time_between_subscriptionss_ru": translations["ru"]["menu_settings"]["time_between_subscriptionss"],
             "creating_username_list_ru": translations["ru"]["menu_settings"]["creating_username_list"],
-            "recording_the_time_between_messages_ru": translations["ru"]["menu_settings"]["recording_the_time_between_messages"],
-            "time_between_invites_sending_messages_ru": translations["ru"]["menu_settings"]["time_between_invites_sending_messages"],
+            "recording_the_time_between_messages_ru": translations["ru"]["menu_settings"][
+                "recording_the_time_between_messages"],
+            "time_between_invites_sending_messages_ru": translations["ru"]["menu_settings"][
+                "time_between_invites_sending_messages"],
             "recording_reaction_link_ru": translations["ru"]["menu_settings"]["recording_reaction_link"],
             "forming_list_of_chats_channels_ru": translations["ru"]["menu_settings"]["forming_list_of_chats_channels"],
         }
@@ -260,16 +262,6 @@ async def message_recording(request: Request):
     return templates.TemplateResponse('settings/message_recording.html', {
         "request": request, "program_name": PROGRAM_NAME,
         "message_recording_ru": translations["ru"]["menu_settings"]["message_recording"],
-    })
-
-
-@app.get(path='/settings/link_entry', response_class=HTMLResponse)
-async def link_entry(request: Request):
-    """🔗 Запись ссылки для инвайтинга"""
-    logger.info("Запущена страница 🔗 Запись ссылки для инвайтинга")
-    return templates.TemplateResponse('settings/link_entry.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "link_entry_ru": translations["ru"]["menu_settings"]["link_entry"],
     })
 
 
