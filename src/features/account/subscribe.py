@@ -8,7 +8,6 @@ from telethon.errors import (ChannelPrivateError, SessionRevokedError, UserDeact
 from telethon.tl.functions.channels import JoinChannelRequest
 
 from src.core.config.configs import time_subscription_1, time_subscription_2
-# from src.core.database.database import write_data_to_db
 from src.core.utils import Utils
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations

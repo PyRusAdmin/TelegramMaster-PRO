@@ -130,7 +130,7 @@ class AccountBIO:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["auth_key_unregistered"])
                 finally:
-    
+
                     await client.disconnect()
                 await show_notification(page=self.page,
                                         message="Работа окончена")  # Выводим уведомление пользователю
