@@ -18,6 +18,7 @@ from src.locales.translations_loader import translations
 
 app = FastAPI()
 
+
 # Указываем путь к статическим файлам
 app.mount(path="/static", app=StaticFiles(directory="docs/static"), name="static")
 templates = Jinja2Templates(directory="docs/templates")  # Указываем директорию с шаблонами.

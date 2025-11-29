@@ -1,0 +1,8 @@
+{# macros/common_steps.html #}
+{% macro start_program(program_name) %}
+<li>
+    🚀 Запустить {{ program_name }} (см.
+    <a href="{{ url_for('launch_telegrammaster') }}">Запуск {{ program_name }}</a>
+    ).
+</li>
+{% endmacro %}

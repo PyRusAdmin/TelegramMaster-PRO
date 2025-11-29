@@ -13,6 +13,8 @@
 </head>
 
 <body>
+{% from 'macros/common_steps.html' import start_program with context %}
+
 <div class="container">
     <!-- Подключение бокового меню -->
     <div id="menu-placeholder"></div>
@@ -65,10 +67,7 @@
             <hr/>
             <p>Для выбора реакции, выполните следующие действия:</p>
             <ol>
-                <li>
-                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                    {{program_name}}</a>).
-                </li>
+                {{ start_program(program_name) }}
                 <li>
                     Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>"
                     <p style="text-align: center;">
@@ -103,10 +102,7 @@
             <hr/>
             <p>Для записи proxy, выполните следующие действия:</p>
             <ol>
-                <li>
-                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                    {{program_name}}</a>).
-                </li>
+                {{ start_program(program_name) }}
                 <li>
                     Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>"
                     <p style="text-align: center;">
@@ -153,10 +149,7 @@
                 следующие действия:
             </p>
             <ol>
-                <li>
-                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                    {{program_name}}</a>).
-                </li>
+                {{ start_program(program_name) }}
                 <li>
                     Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>"
                     <p style="text-align: center;">
@@ -193,10 +186,7 @@
             <hr/>
             <p>Для записи сообщений, выполните следующие действия:</p>
             <ol>
-                <li>
-                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                    {{program_name}}</a>).
-                </li>
+                {{ start_program(program_name) }}
                 <li>
                     Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>"
                     <p style="text-align: center;">
@@ -233,13 +223,10 @@
         <!-- РАЗДЕЛ: Запись ссылки для реакций -->
         <div id="recording_reaction_link_section">
             <h1>{{ recording_reaction_link_ru }}</h1>
-            <hr/>
+
             <p>Для записи ссылки для реакций, выполните следующие действия:</p>
             <ol>
-                <li>
-                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                    {{program_name}}</a>).
-                </li>
+                {{ start_program(program_name) }}
                 <li>
                     Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>"
                     <p style="text-align: center;">
