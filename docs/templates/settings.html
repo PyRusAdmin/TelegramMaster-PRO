@@ -44,47 +44,31 @@
                 <button class="card-button"><a
                         href="{{ url_for('recording_api_id_api_hash') }}">Перейти</a></button>
             </div>
-        </div>
-        <br><br>
-        <div class="card-container">
+
+
             <div class="card">
                 <!-- ✉️ Запись сообщений -->
                 <p class="heading">{{ message_recording_ru }}</p>
                 <p>{{ message_recording_ru }}</p>
                 <button class="card-button"><a href="{{ url_for('message_recording') }}">Перейти</a></button>
             </div>
-            <div class="card">
-                <!-- ⏳ Время между подпиской -->
-                <p class="heading">{{ time_between_subscriptionss_ru }}</p>
-                <p>{{ time_between_subscriptionss_ru }}</p>
-                <button class="card-button"><a
-                        href="{{ url_for('time_between_subscriptionss') }}">Перейти</a></button>
-            </div>
-        </div>
-        <br><br>
-        <div class="card-container">
-            <div class="card">
-                <!-- 🕒 Время между инвайтингом, рассылка сообщений -->
-                <p class="heading">{{ time_between_invites_sending_messages_ru }}</p>
-                <p>{{ time_between_invites_sending_messages_ru }}</p>
-                <button class="card-button"><a
-                        href="{{ url_for('time_between_invites_sending_messages') }}">Перейти</a>
-                </button>
-            </div>
+
             <div class="card">
                 <!-- 🔗 Запись ссылки для реакций -->
                 <p class="heading">{{ recording_reaction_link_ru }}</p>
                 <p>{{ recording_reaction_link_ru }}</p>
                 <button class="card-button"><a href="{{ url_for('recording_reaction_link') }}">Перейти</a></button>
             </div>
-            <div class="card">
-                <!-- 📑 Формирование списка чатов/каналов -->
-                <p class="heading">{{ forming_list_of_chats_channels_ru }}</p>
-                <p>{{ forming_list_of_chats_channels_ru }}</p>
-                <button class="card-button"><a href="{{ url_for('forming_list_of_chats_channels') }}">Перейти</a>
-                </button>
-            </div>
+
         </div>
+        <!--        <br><br>-->
+        <!--        <div class="card-container">-->
+
+        <!--    </div>-->
+        <!--        <br><br>-->
+        <!--        <div class="card-container">-->
+
+        <!--</div>-->
         <hr/> <!-- Горизонтальная линия-->
         <!-- Кнопка "Вверх" -->
         <a href="#" id="to-top" title="Вверх"><i class="fas fa-chevron-up" aria-hidden="true"></i></a>

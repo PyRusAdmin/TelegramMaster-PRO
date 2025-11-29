@@ -244,38 +244,6 @@ async def message_recording(request: Request):
     })
 
 
-@app.get(path='/settings/time_between_subscriptionss', response_class=HTMLResponse)
-async def time_between_subscriptionss(request: Request):
-    """⏳ Время между подпиской"""
-    logger.info("Запущена страница ⏳ Время между подпиской")
-    return templates.TemplateResponse('settings/time_between_subscriptionss.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "time_between_subscriptionss_ru": translations["ru"]["menu_settings"]["time_between_subscriptionss"],
-    })
-
-
-# @app.get(path='/settings/recording_the_time_between_messages', response_class=HTMLResponse)
-# async def recording_the_time_between_messages(request: Request):
-#     """⏱️ Запись времени между сообщениями"""
-#     logger.info("Запущена страница ⏱️ Запись времени между сообщениями")
-#     return templates.TemplateResponse('settings/recording_the_time_between_messages.html', {
-#         "request": request, "program_name": PROGRAM_NAME,
-#         "recording_the_time_between_messages_ru": translations["ru"]["menu_settings"][
-#             "recording_the_time_between_messages"],
-#     })
-
-
-@app.get(path='/settings/time_between_invites_sending_messages', response_class=HTMLResponse)
-async def time_between_invites_sending_messages(request: Request):
-    """🕒 Время между инвайтингом, рассылка сообщений"""
-    logger.info("Запущена страница 🕒 Время между инвайтингом, рассылка сообщений")
-    return templates.TemplateResponse('settings/time_between_invites_sending_messages.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "time_between_invites_sending_messages_ru": translations["ru"]["menu_settings"][
-            "time_between_invites_sending_messages"],
-    })
-
-
 @app.get(path='/settings/recording_reaction_link', response_class=HTMLResponse)
 async def recording_reaction_link(request: Request):
     """🔗 Запись ссылки для реакций"""
@@ -283,16 +251,6 @@ async def recording_reaction_link(request: Request):
     return templates.TemplateResponse('settings/recording_reaction_link.html', {
         "request": request, "program_name": PROGRAM_NAME,
         "recording_reaction_link_ru": translations["ru"]["menu_settings"]["recording_reaction_link"],
-    })
-
-
-@app.get(path='/settings/forming_list_of_chats_channels', response_class=HTMLResponse)
-async def forming_list_of_chats_channels(request: Request):
-    """📑 Формирование списка чатов / каналов"""
-    logger.info("Запущена страница 📑 Формирование списка чатов / каналов")
-    return templates.TemplateResponse('settings/forming_list_of_chats_channels.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "forming_list_of_chats_channels_ru": translations["ru"]["menu_settings"]["forming_list_of_chats_channels"],
     })
 
 
