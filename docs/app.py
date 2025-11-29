@@ -204,16 +204,6 @@ async def settings(request: Request):
     )
 
 
-@app.get(path='/settings/choice_of_reactions', response_class=HTMLResponse)
-async def choice_of_reactions(request: Request):
-    """👍 Выбор реакций"""
-    logger.info("Запущена страница выбора реакции")
-    return templates.TemplateResponse('settings/choice_of_reactions.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "choice_of_reactions_ru": translations["ru"]["menu_settings"]["choice_of_reactions"],
-    })
-
-
 @app.get(path='/settings/proxy_entry', response_class=HTMLResponse)
 async def proxy_entry(request: Request):
     """🔐 Запись proxy"""
