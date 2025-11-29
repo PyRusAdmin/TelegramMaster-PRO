@@ -18,7 +18,6 @@ from src.locales.translations_loader import translations
 
 app = FastAPI()
 
-
 # Указываем путь к статическим файлам
 app.mount(path="/static", app=StaticFiles(directory="docs/static"), name="static")
 templates = Jinja2Templates(directory="docs/templates")  # Указываем директорию с шаблонами.
@@ -33,6 +32,17 @@ async def index(request: Request):
     except Exception as error:
         logger.exception(error)
         return {"error": "Failed to render template"}
+
+
+@app.get(path='/message_recording', response_class=HTMLResponse)
+async def message_recording(request: Request):
+    """Запись сообщений"""
+    logger.info("Запущена страница — Запись сообщений")
+    return templates.TemplateResponse('message_recording.html', {
+        "request": request,
+        "program_name": PROGRAM_NAME,
+        "message_recording_ru": translations["ru"]["menu_settings"]["message_recording"],
+    })
 
 
 @app.get(path="/menu", response_class=HTMLResponse)
