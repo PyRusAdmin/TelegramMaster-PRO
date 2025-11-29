@@ -204,16 +204,6 @@ async def settings(request: Request):
     )
 
 
-@app.get(path='/settings/recording_reaction_link', response_class=HTMLResponse)
-async def recording_reaction_link(request: Request):
-    """🔗 Запись ссылки для реакций"""
-    logger.info("Запущена страница 🔗 Запись ссылки для реакций")
-    return templates.TemplateResponse('settings/recording_reaction_link.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "recording_reaction_link_ru": translations["ru"]["menu_settings"]["recording_reaction_link"],
-    })
-
-
 # Работа с реакциями
 
 @app.get(path='/working_with_reactions', response_class=HTMLResponse)
