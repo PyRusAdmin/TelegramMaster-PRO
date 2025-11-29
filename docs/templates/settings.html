@@ -44,13 +44,6 @@
                 <button class="card-button"><a
                         href="{{ url_for('recording_api_id_api_hash') }}">Перейти</a></button>
             </div>
-            <div class="card">
-                <!-- ⏰ Запись времени -->
-                <p class="heading">{{ time_between_subscriptions_ru }}</p>
-                <p>{{ time_between_subscriptions_ru }}</p>
-                <button class="card-button"><a
-                        href="{{ url_for('time_between_subscriptions') }}">Перейти</a></button>
-            </div>
         </div>
         <br><br>
         <div class="card-container">
@@ -59,19 +52,6 @@
                 <p class="heading">{{ message_recording_ru }}</p>
                 <p>{{ message_recording_ru }}</p>
                 <button class="card-button"><a href="{{ url_for('message_recording') }}">Перейти</a></button>
-            </div>
-
-            <div class="card">
-                <!-- 📊 Лимиты на аккаунт -->
-                <p class="heading">{{ account_limits_ru }}</p>
-                <p>{{ account_limits_ru }}</p>
-                <button class="card-button"><a href="{{ url_for('account_limits') }}">Перейти</a></button>
-            </div>
-            <div class="card">
-                <!-- 📨 Лимиты на сообщения -->
-                <p class="heading">{{ message_limits_ru }}</p>
-                <p>{{ message_limits_ru }}</p>
-                <button class="card-button"><a href="{{ url_for('message_limits') }}">Перейти</a></button>
             </div>
             <div class="card">
                 <!-- ⏳ Время между подпиской -->
@@ -83,12 +63,12 @@
         </div>
         <br><br>
         <div class="card-container">
-            <div class="card">
-                <!-- 📋 Формирование списка username -->
-                <p class="heading">{{ creating_username_list_ru }}</p>
-                <p>{{ creating_username_list_ru }}</p>
-                <button class="card-button"><a href="{{ url_for('creating_username_list') }}">Перейти</a></button>
-            </div>
+<!--            <div class="card">-->
+<!--                &lt;!&ndash; 📋 Формирование списка username &ndash;&gt;-->
+<!--                <p class="heading">{{ creating_username_list_ru }}</p>-->
+<!--                <p>{{ creating_username_list_ru }}</p>-->
+<!--                <button class="card-button"><a href="{{ url_for('creating_username_list') }}">Перейти</a></button>-->
+<!--            </div>-->
             <div class="card">
                 <!-- ⏱️ Запись времени между сообщениями -->
                 <p class="heading">{{ recording_the_time_between_messages_ru }}</p>

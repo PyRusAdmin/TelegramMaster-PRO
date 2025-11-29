@@ -234,15 +234,15 @@ async def recording_api_id_api_hash(request: Request):
     })
 
 
-@app.get(path='/settings/time_between_subscriptions', response_class=HTMLResponse)
-async def time_between_subscriptions(request: Request):
-    """⏰ Запись времени"""
-    logger.info("Запущена страница ⏰ Запись времени")
-    return templates.TemplateResponse('settings/time_between_subscriptions.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "time_between_subscriptions_ru": translations["ru"]["menu_settings"]["time_between_subscriptions"],
-
-    })
+# @app.get(path='/settings/time_between_subscriptions', response_class=HTMLResponse)
+# async def time_between_subscriptions(request: Request):
+#     """⏰ Запись времени"""
+#     logger.info("Запущена страница ⏰ Запись времени")
+#     return templates.TemplateResponse('settings/time_between_subscriptions.html', {
+#         "request": request, "program_name": PROGRAM_NAME,
+#         "time_between_subscriptions_ru": translations["ru"]["menu_settings"]["time_between_subscriptions"],
+#
+#     })
 
 
 @app.get(path='/settings/message_recording', response_class=HTMLResponse)
@@ -255,24 +255,24 @@ async def message_recording(request: Request):
     })
 
 
-@app.get(path='/settings/account_limits', response_class=HTMLResponse)
-async def account_limits(request: Request):
-    """📊 Лимиты на аккаунт"""
-    logger.info("Запущена страница 📊 Лимиты на аккаунт")
-    return templates.TemplateResponse('settings/account_limits.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "account_limits_ru": translations["ru"]["menu_settings"]["account_limits"],
-    })
+# @app.get(path='/settings/account_limits', response_class=HTMLResponse)
+# async def account_limits(request: Request):
+#     """📊 Лимиты на аккаунт"""
+#     logger.info("Запущена страница 📊 Лимиты на аккаунт")
+#     return templates.TemplateResponse('settings/account_limits.html', {
+#         "request": request, "program_name": PROGRAM_NAME,
+#         "account_limits_ru": translations["ru"]["menu_settings"]["account_limits"],
+#     })
 
 
-@app.get(path='/settings/message_limits', response_class=HTMLResponse)
-async def message_limits(request: Request):
-    """📨 Лимиты на сообщения"""
-    logger.info("Запущена страница 📨 Лимиты на сообщения")
-    return templates.TemplateResponse('settings/message_limits.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "message_limits_ru": translations["ru"]["menu_settings"]["message_limits"],
-    })
+# @app.get(path='/settings/message_limits', response_class=HTMLResponse)
+# async def message_limits(request: Request):
+#     """📨 Лимиты на сообщения"""
+#     logger.info("Запущена страница 📨 Лимиты на сообщения")
+#     return templates.TemplateResponse('settings/message_limits.html', {
+#         "request": request, "program_name": PROGRAM_NAME,
+#         "message_limits_ru": translations["ru"]["menu_settings"]["message_limits"],
+#     })
 
 
 @app.get(path='/settings/time_between_subscriptionss', response_class=HTMLResponse)
@@ -285,14 +285,14 @@ async def time_between_subscriptionss(request: Request):
     })
 
 
-@app.get(path='/settings/creating_username_list', response_class=HTMLResponse)
-async def creating_username_list(request: Request):
-    """📋 Формирование списка username"""
-    logger.info("Запущена страница 📋 Формирование списка username")
-    return templates.TemplateResponse('settings/creating_username_list.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "creating_username_list_ru": translations["ru"]["menu_settings"]["creating_username_list"],
-    })
+# @app.get(path='/settings/creating_username_list', response_class=HTMLResponse)
+# async def creating_username_list(request: Request):
+#     """📋 Формирование списка username"""
+#     logger.info("Запущена страница 📋 Формирование списка username")
+#     return templates.TemplateResponse('settings/creating_username_list.html', {
+#         "request": request, "program_name": PROGRAM_NAME,
+#         "creating_username_list_ru": translations["ru"]["menu_settings"]["creating_username_list"],
+#     })
 
 
 @app.get(path='/settings/recording_the_time_between_messages', response_class=HTMLResponse)
