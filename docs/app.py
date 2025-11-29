@@ -224,16 +224,6 @@ async def proxy_entry(request: Request):
     })
 
 
-@app.get(path='/settings/changing_accounts', response_class=HTMLResponse)
-async def changing_accounts(request: Request):
-    """🔄 Смена аккаунтов"""
-    logger.info("Запущена страница 🔄 Смена аккаунтов")
-    return templates.TemplateResponse('settings/changing_accounts.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "changing_accounts_ru": translations["ru"]["menu_settings"]["changing_accounts"],
-    })
-
-
 @app.get(path='/settings/recording_api_id_api_hash', response_class=HTMLResponse)
 async def recording_api_id_api_hash(request: Request):
     """📝 Запись api_id, api_hash"""
