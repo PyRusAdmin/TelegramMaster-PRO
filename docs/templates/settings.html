@@ -21,7 +21,6 @@
     <div class="content">
         <h1>⚙️ Настройки</h1>
         <hr/>
-
         <div class="card-container">
             <div class="card">
                 <!-- 👍 Выбор реакций -->
@@ -29,30 +28,26 @@
                 <p>{{ choice_of_reactions_ru }}</p>
                 <button class="card-button"><a href="#choice_of_reactions_section">Перейти</a></button>
             </div>
-
             <div class="card">
                 <!-- 🔐 Запись proxy -->
                 <p class="heading">{{ proxy_entry_ru }}</p>
                 <p>{{ proxy_entry_ru }}</p>
-                <button class="card-button"><a href="{{ url_for('proxy_entry') }}">Перейти</a></button>
+                <button class="card-button"><a href="#proxy_entry_section">Перейти</a></button>
             </div>
-
             <div class="card">
                 <!-- 📝 Запись api_id, api_hash -->
                 <p class="heading">{{ recording_api_id_api_hash_ru }}</p>
                 <p>{{ recording_api_id_api_hash_ru }}</p>
                 <button class="card-button">
-                    <a href="{{ url_for('recording_api_id_api_hash') }}">Перейти</a>
+                    <a href="#recording_api_id_api_hash_section">Перейти</a>
                 </button>
             </div>
-
             <div class="card">
                 <!-- ✉️ Запись сообщений -->
                 <p class="heading">{{ message_recording_ru }}</p>
                 <p>{{ message_recording_ru }}</p>
                 <button class="card-button"><a href="{{ url_for('message_recording') }}">Перейти</a></button>
             </div>
-
             <div class="card">
                 <!-- 🔗 Запись ссылки для реакций -->
                 <p class="heading">{{ recording_reaction_link_ru }}</p>
@@ -62,7 +57,6 @@
                 </button>
             </div>
         </div>
-
         <br><br>
 
         <!-- РАЗДЕЛ: Выбор реакций -->
@@ -81,14 +75,18 @@
                         <img src="/static/images/settings.png" alt="Telegram Master" width="60%">
                     </p>
                 </li>
-                <li>Запустить функцию "Выбор реакций"</li>
-                <li style="text-align: center;">
-                    <img src="/static/images/settings/settings_reactions.png" alt="Telegram Master" width="40%">
+                <li>
+                    Запустить функцию "Выбор реакций"
+                    <p style="text-align: center;">
+                        <img src="/static/images/settings/settings_reactions.png" alt="Telegram Master" width="60%">
+                    </p>
                 </li>
                 <li>С помощью чек-бокса выбрать необходимые реакции</li>
-                <li>Нажать "Готово"</li>
-                <li style="text-align: center;">
-                    <img src="/static/images/done_button.png" alt="Telegram Master" width="40%">
+                <li>
+                    Нажать "Готово"
+                    <p style="text-align: center;">
+                        <img src="/static/images/done_button.png" alt="Telegram Master" width="60%">
+                    </p>
                 </li>
             </ol>
             <p>
@@ -96,8 +94,99 @@
                 <code>{{ program_name }}/user_data/reactions/reactions.json</code>.
             </p>
         </div>
-
+        <br><br>
         <hr/>
+
+        <!-- РАЗДЕЛ: Запись proxy -->
+        <div id="proxy_entry_section">
+            <h1>{{ proxy_entry_ru }}</h1>
+            <hr/>
+            <p>Для записи proxy, выполните следующие действия:</p>
+            <ol>
+                <li>
+                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+                    {{program_name}}</a>).
+                </li>
+                <li>
+                    Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>"
+                    <p style="text-align: center;">
+                        <img src="/static/images/settings.png" alt="Telegram Master" width="60%">
+                    </p>
+                </li>
+                <li>
+                    Выбрать функцию «Запись proxy»
+                    <p style="text-align: center;">
+                        <img src="/static/images/settings/proxy_entry.png" alt="Telegram Master" width="50%">
+                    </p>
+                </li>
+                <li>
+                    В графическое окно введите:
+                    <ul>
+                        <li>Введите тип прокси, например: <code>SOCKS5</code></li>
+                        <li>Введите IP адрес, например: <code>194.67.248.9</code></li>
+                        <li>Введите порт прокси, например: <code>9795</code></li>
+                        <li>Введите username, например: <code>NnbjvX</code></li>
+                        <li>Введите пароль, например: <code>ySfCfk</code></li>
+                    </ul>
+                </li>
+                <li>
+                    Нажать «Готово»
+                    <p style="text-align: center;">
+                        <img src="/static/images/done_button.png" alt="Telegram Master" width="50%">
+                    </p>
+                </li>
+            </ol>
+            <p>
+                Данные proxy записываются в базу данных (в файл
+                <code>{{ program_name }}/user_data/database/db.sqlite</code> в таблицу <strong>proxy</strong>).
+            </p>
+        </div>
+        <br><br>
+        <hr/>
+
+        <!-- РАЗДЕЛ: Запись api_id, api_hash -->
+        <div id="recording_api_id_api_hash_section">
+            <h1>{{ recording_api_id_api_hash_ru }}</h1>
+            <hr/>
+            <p>
+                Для записи api_id, api_hash и возможности дальнейшего взаимодействия с аккаунтами Telegram выполните
+                следующие действия:
+            </p>
+            <ol>
+                <li>
+                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+                    {{program_name}}</a>).
+                </li>
+                <li>
+                    Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>"
+                    <p style="text-align: center;">
+                        <img src="/static/images/settings.png" alt="Telegram Master" width="60%">
+                    </p>
+                </li>
+                <li>
+                    Запустить функцию "Запись api_id, api_hash"
+                    <p style="text-align: center;">
+                        <img src="/static/images/settings/recording_api_id_api_hash.png" alt="Telegram Master"
+                             width="60%">
+                    </p>
+                </li>
+                <li>Ввести api_id</li>
+                <li>Ввести api_hash</li>
+                <li>После завершения этого процесса {{program_name}} перезапустится</li>
+            </ol>
+            <p>
+                После выполнения указанных действий программа автоматически запишет введенные данные в файл
+                <code>{{ program_name }}/user_data/config/config.ini</code>.
+            </p>
+            <blockquote>
+                <strong>⚠️ Важно:</strong> Убедитесь в правильности ввода api_id и api_hash. Если поля ввода будут
+                пустыми, то в файл <code>{{ program_name }}/user_data/config/config.ini</code> запишутся пустые данные,
+                что повлечет за собой ошибки в работе {{program_name}}.
+            </blockquote>
+        </div>
+        <br><br>
+        <hr/>
+
         <!-- Кнопка "Вверх" -->
         <a href="#" id="to-top" title="Вверх"><i class="fas fa-chevron-up" aria-hidden="true"></i></a>
     </div>

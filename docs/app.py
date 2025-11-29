@@ -204,24 +204,24 @@ async def settings(request: Request):
     )
 
 
-@app.get(path='/settings/proxy_entry', response_class=HTMLResponse)
-async def proxy_entry(request: Request):
-    """🔐 Запись proxy"""
-    logger.info("Запущена страница выбора реакции")
-    return templates.TemplateResponse('settings/proxy_entry.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "proxy_entry_ru": translations["ru"]["menu_settings"]["changing_accounts_ru"],
-    })
+# @app.get(path='/settings/proxy_entry', response_class=HTMLResponse)
+# async def proxy_entry(request: Request):
+#     """🔐 Запись proxy"""
+#     logger.info("Запущена страница выбора реакции")
+#     return templates.TemplateResponse('settings/proxy_entry.html', {
+#         "request": request, "program_name": PROGRAM_NAME,
+#         "proxy_entry_ru": translations["ru"]["menu_settings"]["changing_accounts_ru"],
+#     })
 
 
-@app.get(path='/settings/recording_api_id_api_hash', response_class=HTMLResponse)
-async def recording_api_id_api_hash(request: Request):
-    """📝 Запись api_id, api_hash"""
-    logger.info("Запущена страница записи api_id api_hash")
-    return templates.TemplateResponse('settings/recording_api_id_api_hash.html', {
-        "request": request, "program_name": PROGRAM_NAME,
-        "recording_api_id_api_hash_ru": translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
-    })
+# @app.get(path='/settings/recording_api_id_api_hash', response_class=HTMLResponse)
+# async def recording_api_id_api_hash(request: Request):
+#     """📝 Запись api_id, api_hash"""
+#     logger.info("Запущена страница записи api_id api_hash")
+#     return templates.TemplateResponse('settings/recording_api_id_api_hash.html', {
+#         "request": request, "program_name": PROGRAM_NAME,
+#         "recording_api_id_api_hash_ru": translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
+#     })
 
 
 @app.get(path='/settings/message_recording', response_class=HTMLResponse)
