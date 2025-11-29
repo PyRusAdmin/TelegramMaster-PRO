@@ -46,7 +46,7 @@
                 <!-- ✉️ Запись сообщений -->
                 <p class="heading">{{ message_recording_ru }}</p>
                 <p>{{ message_recording_ru }}</p>
-                <button class="card-button"><a href="{{ url_for('message_recording') }}">Перейти</a></button>
+                <button class="card-button"><a href="#message_recording_section">Перейти</a></button>
             </div>
             <div class="card">
                 <!-- 🔗 Запись ссылки для реакций -->
@@ -183,6 +183,49 @@
                 пустыми, то в файл <code>{{ program_name }}/user_data/config/config.ini</code> запишутся пустые данные,
                 что повлечет за собой ошибки в работе {{program_name}}.
             </blockquote>
+        </div>
+        <br><br>
+        <hr/>
+
+        <!-- РАЗДЕЛ: Запись сообщений -->
+        <div id="message_recording_section">
+            <h1>{{ message_recording_ru }}</h1>
+            <hr/>
+            <p>Для записи сообщений, выполните следующие действия:</p>
+            <ol>
+                <li>
+                    Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
+                    {{program_name}}</a>).
+                </li>
+                <li>
+                    Перейти в раздел "<a href="{{ url_for('settings') }}">⚙️ Настройки</a>"
+                    <p style="text-align: center;">
+                        <img src="/static/images/settings.png" alt="Telegram Master" width="60%">
+                    </p>
+                </li>
+                <li>
+                    Запустить функцию "Запись сообщений"
+                    <p style="text-align: center;">
+                        <img src="/static/images/settings/message_recording.png" alt="Telegram Master" width="60%">
+                    </p>
+                </li>
+                <li>Ввести сообщение</li>
+                <li>
+                    Нажать "Готово"
+                    <p style="text-align: center;">
+                        <img src="/static/images/done_button.png" alt="Telegram Master" width="60%">
+                    </p>
+                </li>
+            </ol>
+            <p>
+                После выполнения указанных действий программа автоматически запишет введенные данные в файл
+                <code>{{ program_name }}/user_data/message/message/message.json</code>.
+            </p>
+            <p>
+                При записи повторного сообщения будет создан файл с именем
+                <code>{{ program_name }}/user_data/message/message/message_1.json</code>, далее
+                <code>message_2.json</code> и так далее.
+            </p>
         </div>
         <br><br>
         <hr/>
