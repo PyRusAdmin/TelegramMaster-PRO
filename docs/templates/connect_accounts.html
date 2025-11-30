@@ -62,6 +62,14 @@
             <li><a href="https://retriv.biz">https://retriv.biz</a></li>
             <li><a href="https://tgseller.ru">https://tgseller.ru</a></li>
         </ol>
+
+        <blockquote>
+            <p>
+                ⚠️ <b>{{program_name}}</b> Не имеет ограничения на количество подключаемых аккаунтов.
+            </p>
+        </blockquote>
+
+
         <h2 id="connecting_accounts_by_phone_number">
             {{ connecting_accounts_by_phone_number }}</h2>
         <p>Чтобы подключить аккаунт в формате tdata, выполните следующие действия:</p>
@@ -107,9 +115,17 @@
             <!--            </li>-->
             <!--            <li>Выбрать функцию, для которой хотите подключить аккаунт.</li>-->
             <li>Ввести номер телефона без пробелов, начиная с символа + (например, +79490000000)</li>
-            <li>Ввести код подтверждения от Telegram. Если код не пришел в течение минуты, повторите процедуру</li>
+            <li>
+                Ввести код подтверждения от Telegram. Если код не пришел в течение минуты, повторите процедуру
+                <p style="text-align: center;">
+                    <img src="/static/images/connect_accounts_3.png" alt="connect_accounts_3" width="60%">
+                </p>
+            </li>
             <li>Если на аккаунте есть пароль, ввести пароль. Если к аккаунту привязана двухфакторная аутентификация,
                 программа запросит ввод пароля
+                <p style="text-align: center;">
+                    <img src="/static/images/connect_accounts_4.png" alt="connect_accounts_4" width="60%">
+                </p>
             </li>
         </ol>
         <!--        <div style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">-->
@@ -120,24 +136,22 @@
         <!--                введенным ранее.-->
         <!--            </p>.-->
         <!--        </div>-->
-        <p>После успешного подключения в базу данных будет записана строковая сессия, в таблицу account</p>
+        <p>После успешного подключения в базу данных будет записана строковая сессия в таблицу account.</p>
 
         <hr/> <!-- Горизонтальная линия-->
+
+        <!--        Подключение session аккаунтов-->
+
         <h2 id="connecting_session_accounts">{{ connecting_session_accounts }}</h2>
-        <blockquote>
-            <p>
-                ⚠️ <b>{{program_name}}</b> позволяет добавить неограниченное количество аккаунтов.
-            </p>
-        </blockquote>
+
         <p>
-            Чтобы добавить аккаунт в формате session, распакуйте (расположите) файл в зависимости от того, какие
-            функции {{program_name}} вы будете использовать.
+            Чтобы добавить аккаунт в формате session, распакуйте (расположите) файл в любом удобном для вас месте.
         </p>
-        <p>
-            Например, если вы планируете использовать функцию парсинга, расположите аккаунт в папке
-            <code>{{ program_name }}/user_data/accounts/parsing</code>. Если вам нужно будет рассылать сообщения по
-            чатам, то поместите аккаунт в папку <code>{{ program_name }}/user_data/accounts/send_message</code>.
-        </p>
+        <!--        <p>-->
+        <!--            Например, если вы планируете использовать функцию парсинга, расположите аккаунт в папке-->
+        <!--            <code>{{ program_name }}/user_data/accounts/parsing</code>. Если вам нужно будет рассылать сообщения по-->
+        <!--            чатам, то поместите аккаунт в папку <code>{{ program_name }}/user_data/accounts/send_message</code>.-->
+        <!--        </p>-->
         <ol>
             {{ start_program(program_name) }}
             <li>
@@ -183,7 +197,7 @@
         <!--            <li><b>{{ program_name }}/user_data/accounts/viewing</b> - Аккаунты для накрутки просмотров постов</li>-->
         <!--        </ol>-->
 
-        <p>После успешного подключения в базу данных будет записана строковая сессия, в таблицу account</p>
+        <p>После успешного подключения в базу данных будет записана строковая сессия в таблицу account.</p>
 
         <div
                 style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
