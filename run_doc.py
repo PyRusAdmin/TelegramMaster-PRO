@@ -2,5 +2,9 @@
 
 """Запуск документации"""
 from docs.app import start_app
+from loguru import logger
 
-start_app()
+logger.info("Запуск документации")
+
+if __name__ == "__main__":
+    start_app()
