@@ -42,12 +42,12 @@
         <b>{{program_name}}</b> не регистрирует аккаунты, а позволяет подключить уже существующие. Для этого можно
         использовать аккаунты в форматах <b>tdata</b>, <b>session</b> или перенести смартфонные аккаунты в
         <b>{{program_name}}</b>.
-        <div
-                style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
+        <div style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
             <h3>ПРИМЕЧАНИЕ:</h3>
             <p style="color: #721c24; margin: 0; font-size: 16px;">
                 ⚠️ Если вы планируете приобрести аккаунт Telegram, то я рекомендую ознакомиться с <b>частью 1 статьи
-                272 Уголовного кодекса Российской Федерации</b>, особенно если вы находитесь в России.</p>.
+                272 Уголовного кодекса Российской Федерации</b>, особенно если вы находитесь в России.
+            </p>.
         </div>
         <p>
             Вы можете приобрести аккаунты на различных сайтах, введя в поисковике запрос «Купить аккаунт Telegram».
@@ -68,7 +68,6 @@
                 ⚠️ <b>{{program_name}}</b> Не имеет ограничения на количество подключаемых аккаунтов.
             </p>
         </blockquote>
-
 
         <h2 id="connecting_accounts_by_phone_number">
             {{ connecting_accounts_by_phone_number }}</h2>
@@ -101,19 +100,12 @@
                     <img src="/static/images/connect_accounts.png" alt="connect_accounts" width="60%">
                 </p>
             </li>
-            <!--            <li>-->
-            <!--                -->
-            <!--            </li>-->
             <li>
                 Запустить функцию «Подключение аккаунтов по номеру телефона».
                 <p style="text-align: center;">
                     <img src="/static/images/connect_accounts_1.png" alt="connect_accounts_1" width="60%">
                 </p>
             </li>
-            <!--            <li>-->
-            <!--                -->
-            <!--            </li>-->
-            <!--            <li>Выбрать функцию, для которой хотите подключить аккаунт.</li>-->
             <li>Ввести номер телефона без пробелов, начиная с символа + (например, +79490000000)</li>
             <li>
                 Ввести код подтверждения от Telegram. Если код не пришел в течение минуты, повторите процедуру
@@ -128,30 +120,15 @@
                 </p>
             </li>
         </ol>
-        <!--        <div style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">-->
-        <!--            <p style="color: #721c24; margin: 0; font-size: 16px;">-->
-        <!--                ⚠️ Если не пришел код подтверждения, удалите session файл из-->
-        <!--                <code>{{ program_name }}/user_data/accounts</code>. Для этого откройте-->
-        <!--                <code>{{ program_name }}/user_data/accounts</code>, найдите session файл с номером телефона,-->
-        <!--                введенным ранее.-->
-        <!--            </p>.-->
-        <!--        </div>-->
         <p>После успешного подключения в базу данных будет записана строковая сессия в таблицу account.</p>
 
         <hr/> <!-- Горизонтальная линия-->
 
         <!--        Подключение session аккаунтов-->
-
         <h2 id="connecting_session_accounts">{{ connecting_session_accounts }}</h2>
-
         <p>
             Чтобы добавить аккаунт в формате session, распакуйте (расположите) файл в любом удобном для вас месте.
         </p>
-        <!--        <p>-->
-        <!--            Например, если вы планируете использовать функцию парсинга, расположите аккаунт в папке-->
-        <!--            <code>{{ program_name }}/user_data/accounts/parsing</code>. Если вам нужно будет рассылать сообщения по-->
-        <!--            чатам, то поместите аккаунт в папку <code>{{ program_name }}/user_data/accounts/send_message</code>.-->
-        <!--        </p>-->
         <ol>
             {{ start_program(program_name) }}
             <li>
@@ -160,45 +137,14 @@
                     <img src="/static/images/connect_accounts.png" alt="connect_accounts" width="60%">
                 </p>
             </li>
-            <!--            <li>-->
-            <!--                -->
-            <!--            </li>-->
             <li>
                 Выбрать session файл аккаунта, который хотите подключить к {{program_name}}.
                 <p style="text-align: center;">
                     <img src="/static/images/connect_accounts_2.png" alt="Telegram Master" width="60%">
                 </p>
             </li>
-            <!--            <li>-->
-            <!---->
-            <!--            </li>-->
-            <!--            <li>Выбрать функцию, для которой хотите подключить аккаунт.</li>-->
-            <!--            <li>Выбрать session аккаунт для подключения</li>-->
         </ol>
-        <!--        <h2>Структура папок с аккаунтами:</h2>-->
-        <!---->
-        <!--        <ol>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/answering_machine</b> - Аккаунты для автоответчика</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/banned</b> - Забаненные аккаунты, которые перемещаются в эту-->
-        <!--                папку после проверки-->
-        <!--            </li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/bio</b> - Аккаунты для редактирования BIO</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/contact</b> - Аккаунты для работы с телефонными номерами</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/creating</b> - Аккаунты для создания групп</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/invalid_account</b> - Невалидные аккаунты</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/inviting</b> - Аккаунты для инвайтинга</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/parsing</b> - Аккаунты для парсинга</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/reactions</b> - Аккаунты для работы с реакциями</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/reactions_list</b> - Аккаунты для проставления реакций</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/send_message</b> - Аккаунты для рассылки сообщений</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/subscription</b> - Аккаунты для подписки на группы и каналы-->
-        <!--            </li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/unsubscribe</b> - Аккаунты для отписки от групп и каналов</li>-->
-        <!--            <li><b>{{ program_name }}/user_data/accounts/viewing</b> - Аккаунты для накрутки просмотров постов</li>-->
-        <!--        </ol>-->
-
         <p>После успешного подключения в базу данных будет записана строковая сессия в таблицу account.</p>
-
         <div
                 style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
             <p style="color: #721c24; margin: 0; font-size: 16px;">
