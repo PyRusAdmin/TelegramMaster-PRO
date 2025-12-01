@@ -15,6 +15,7 @@
 </head>
 
 <body>
+{% from 'macros/common_steps.html' import start_program with context %}
 <div class="container">
     <!-- Подключение бокового меню -->
     <div id="menu-placeholder"></div>
@@ -99,10 +100,7 @@
         </p>
         <ol>
             <!-- 1 -->
-            <li id="step-1">
-                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).
-            </li>
+            {{ start_program(program_name) }}
             <!-- 2 -->
             <li id="step-2">
                 🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
