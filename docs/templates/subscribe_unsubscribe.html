@@ -14,6 +14,7 @@
 </head>
 
 <body>
+{% from 'macros/common_steps.html' import start_program with context %}
 <div class="container">
     <!-- Подключение бокового меню -->
     <div id="menu-placeholder"></div>
@@ -42,10 +43,7 @@
             <!-- Изображение с центровкой <p style="text-align: center;"> -->
             <!-- Пример правильного пути к изображению <img src="/static/images/TelegramMaster_2.png" alt="Telegram Master" width="40%"> -->
             <ol>
-                <li>
-                    Запустить {{program_name}} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск
-                    {{program_name}}</a>).
-                </li>
+                {{ start_program(program_name) }}
 
                 <li id="step-2">
                     🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см.
@@ -90,10 +88,7 @@
             Для отписки группы / каналы на которые подписан аккаунт выполните следующие действия:<br>
         </p>
         <ol>
-            <li>
-                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).
-            </li>
+            {{ start_program(program_name) }}
             <li>🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
                 аккаунтов Telegram к {{program_name}})</a>.
             </li>
