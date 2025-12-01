@@ -15,6 +15,7 @@
 </head>
 
 <body>
+{% from 'macros/common_steps.html' import start_program with context %}
 <div class="container">
     <!-- Подключение бокового меню -->
     <div id="menu-placeholder"></div>
@@ -62,13 +63,7 @@
         </blockquote>
         <!-- Изображение с центровкой -->
         <ol>
-            <li>
-                Запустить {{program_name}} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск
-                {{program_name}}</a>).
-                <p style="text-align: center;">
-                    <img src="/static/images/TelegramMaster_2.png" alt="Telegram Master" width="40%">
-                </p>
-            </li>
+            {{ start_program(program_name) }}
         </ol>
         <hr/> <!-- Горизонтальная линия-->
         <!-- Раздел документации -->
