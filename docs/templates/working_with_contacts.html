@@ -14,6 +14,7 @@
 </head>
 
 <body>
+{% from 'macros/common_steps.html' import start_program with context %}
 <div class="container">
     <!-- Подключение бокового меню -->
     <div id="menu-placeholder"></div>
@@ -52,10 +53,7 @@
             действия: <br>
         </p>
         <ol>
-            <li>
-                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).
-            </li>
+            {{ start_program(program_name) }}
             <li>
                 🔄 Подключить аккаунты к {{program_name}}
                 <a href="{{ url_for('connect_accounts') }}">
@@ -100,10 +98,7 @@
             Для того что бы посмотреть телефонную книгу аккаунта Telegram, выполните следующие действия:<br>
         </p>
         <ol>
-            <li>
-                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).
-            </li>
+            {{ start_program(program_name) }}
             <li>
                 🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
                 аккаунтов Telegram к {{program_name}})</a>.
@@ -128,10 +123,7 @@
             Для удаления номеров (контактов) с телефонной книги Telegram, выполните следующие действия: <br>
         </p>
         <ol>
-            <li>
-                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).
-            </li>
+            {{ start_program(program_name) }}
             <li>
                 🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
                 аккаунтов Telegram к {{program_name}})</a>.
@@ -162,10 +154,7 @@
             следующие действия:<br>
         </p>
         <ol>
-            <li>
-                Запустить {{program_name}} (см. <a href="{{url_for('launch_telegrammaster')}}">Запуск
-                {{program_name}}</a>).
-            </li>
+            {{ start_program(program_name) }}
             <li>
                 🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
                 аккаунтов Telegram к {{program_name}})</a>.
