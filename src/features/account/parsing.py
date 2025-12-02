@@ -110,9 +110,13 @@ class ParsingGroupMembers:
                     if active_switch.value:  # ⚠️ Парсинг активных пользователей
                         await self.app_logger.log_and_display(
                             f"🔍 Сканируем чат: {chat_input.value} на {limit_active_user.value} сообщений")
+                        limit_val = limit_active_user.value.strip()
+                        if not limit_val.isdigit():
+                            await self.app_logger.log_and_display("⚠️ Укажите корректное число для количества сообщений.")
+                            return
                         await self.parse_active_users(
                             chat_input=chat_input.value,
-                            limit_active_user=int(limit_active_user.value),
+                            limit_active_user=int(limit_val),
                             client=client
                         )
                     if account_group_selection_switch.value:  # Парсинг выбранной группы
@@ -126,7 +130,7 @@ class ParsingGroupMembers:
         async def start_group_parsing(client, dropdown):
             """
             Парсит выбранную группу.
-            :param client: клиент сессии телеграм
+            :param client: Клиент сессии телеграм
             :param dropdown: выпадающий список
             """
             if not dropdown.value:
