@@ -75,6 +75,23 @@ class WorkingWithReactions:
                     msg_id = int(re.search(r'/(\d+)$', message.value).group(1))  # Получаем id сообщения из ссылки
                     await asyncio.sleep(5)
                     try:
+                        """
+                        Функция client_connect_string_session возвращает None, если сессия недействительна или аккаунт 
+                        не авторизован, но в reactions.py нет проверки на этот случай. В результате client = None, и 
+                        при попытке вызвать client(...) возникает ошибка.
+                        
+                        ⚠️ Клиент не подключен. Проверьте сессию аккаунта.
+                        Рекомендации
+
+                        1. Проверяйте все аккаунты через меню "Проверка аккаунтов" — возможно, файлы сессий повреждены.
+                        2. Обновите Telethon до последней версии, чтобы избежать TypeNotFoundError.
+                        3. Если ошибка повторяется — пересоздайте сессии через "Подключение по номеру".
+                        """
+                        if client is None:
+                            await self.app_logger.log_and_display("⚠️ Клиент не подключен. Проверьте сессию аккаунта.")
+                            await self.app_logger.log_and_display("Рекомендации:\n1. Проверьте аккаунты через меню 'Проверка аккаунтов'.\n2. Обновите Telethon до последней версии.\n3. Пересоздайте сессии через 'Подключение по номеру'.")
+                            continue
+
                         await client(SendReactionRequest(
                             peer=chat.value, msg_id=msg_id,
                             reaction=[types.ReactionEmoji(emoticon=f'{await self.choosing_random_reaction()}')]))
