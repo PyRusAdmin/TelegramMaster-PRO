@@ -8,7 +8,7 @@ from loguru import logger
 from telethon.errors import (ApiIdInvalidError, AuthKeyDuplicatedError, AuthKeyNotFound, AuthKeyUnregisteredError,
                              PasswordHashInvalidError, PhoneNumberBannedError, SessionPasswordNeededError,
                              TimedOutError, TypeNotFoundError, UserDeactivatedBanError, YouBlockedUserError,
-                             SessionRevokedError)
+                             SessionRevokedError, PhoneCodeInvalidError)
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz
@@ -338,6 +338,9 @@ class TGConnect:
                                                             on_click=btn_click_password)  # Кнопка "Готово"
                         self.page.views.append(ft.View(controls=[pass_2fa, button_password]))
                         self.page.update()  # Обновляем страницу, чтобы интерфейс отобразился
+                    except PhoneCodeInvalidError:
+                        await self.app_logger.log_and_display(message=f"❌ Неверный код.")
+                        await client.disconnect()  # Отключаемся от Telegram
                     except ApiIdInvalidError:
                         await self.app_logger.log_and_display(message=f"[!] Неверные API ID или API Hash.")
                         await client.disconnect()  # Отключаемся от Telegram
