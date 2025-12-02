@@ -307,8 +307,14 @@ async def account_verification(request: Request):
 async def creating_groups(request: Request):
     """Создание групп (чатов)"""
     logger.info("Запущена страница создания групп (чатов)")
-    return templates.TemplateResponse('creating_groups.html',
-                                      {"request": request, "program_name": PROGRAM_NAME})
+    return templates.TemplateResponse(
+        'creating_groups.html',
+        {
+            "request": request,
+            "program_name": PROGRAM_NAME,
+            "create_groups": translations["ru"]["menu"]["create_groups"],
+        }
+    )
 
 
 @app.get(path='/launch_telegrammaster', response_class=HTMLResponse)
