@@ -1,6 +1,13 @@
-{# macros/common_steps.html #}
 {% macro start_program(program_name) %}
 <li>
-    🚀 Запустить {{program_name}} (см.<a href="{{ url_for('launch_telegrammaster') }}">Запуск {{program_name}}</a>).
+    🚀 Запустить {{program_name}} (см. <a href="{{ url_for('launch_telegrammaster') }}">Запуск {{program_name}}</a>).
 </li>
 {% endmacro %}
+
+{% macro step_connect_accounts(program_name) %}
+<li>🔄 Подключить аккаунты к {{ program_name }} <a href="{{ url_for('connect_accounts') }}">(см. Подключение аккаунтов
+    Telegram к {{ program_name }})</a>.
+</li>
+{% endmacro %}
+
+

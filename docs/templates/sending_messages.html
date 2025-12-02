@@ -67,10 +67,7 @@
                 <!-- 1 -->
                 {{ start_program(program_name) }}
                 <!-- 2 -->
-                <li id="step-2">
-                    🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см.
-                    Подключение аккаунтов Telegram к {{program_name}})</a>.
-                </li>
+                {{ step_connect_accounts(program_name) }}
                 <!-- 3 -->
                 <li id="step-3">
                     <a href="{{ url_for('message_recording') }}" style="color: #138496; text-decoration: none;">🔄
@@ -192,10 +189,7 @@
                 <!-- 1 -->
                 {{ start_program(program_name) }}
                 <!-- 2 -->
-                <li id="step-2">
-                    🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см.
-                    Подключение аккаунтов Telegram к {{program_name}})</a>.
-                </li>
+                {{ step_connect_accounts(program_name) }}
                 <!-- 3 -->
                 <li>
                     <a href="#recording_messages_for_distribution" style="color: #138496; text-decoration: none;">Запишите

@@ -102,10 +102,7 @@
             <!-- 1 -->
             {{ start_program(program_name) }}
             <!-- 2 -->
-            <li id="step-2">
-                🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
-                аккаунтов Telegram к {{program_name}})</a>.
-            </li>
+            {{ step_connect_accounts(program_name) }}
             <!-- 3 -->
             <li id="step-3">
                 👥 Выполните парсинг участников группы (см. <a href="{{ url_for('parsing') }}">Парсинг участников

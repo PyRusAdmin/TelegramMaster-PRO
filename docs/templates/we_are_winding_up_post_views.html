@@ -32,10 +32,7 @@
         </p>
         <ol>
             {{ start_program(program_name) }}
-            <li>
-                🔄 Подключить аккаунты к {{program_name}} <a href="{{ url_for('connect_accounts') }}">(см. Подключение
-                аккаунтов Telegram к {{program_name}})</a>.
-            </li>
+            {{ step_connect_accounts(program_name) }}
             <li>
                 Запустить функцию «{{ we_are_winding_up_post_views_ru }}».
                 <p style="text-align: center;">
