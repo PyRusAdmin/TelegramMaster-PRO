@@ -23,36 +23,40 @@
         <h1>«{{create_groups}}»</h1>
         <hr/> <!-- Горизонтальная линия-->
         <p>
-            Для создания группы (чата) в аккаунте Telegram, для этого выполните следующие действия:<br>
+            Для создания группы (чата) в аккаунте Telegram выполните следующие действия:<br>
         </p>
         <ol>
             {{ start_program(program_name) }}
             {{ step_connect_accounts(program_name) }}
             <li>
                 Перейдите в меню «{{create_groups}}»
-            </li>
-            <li>
                 <p style="text-align: center;">
                     <img src="/static/images/creating_groups_and_chats_menu.png" alt="Telegram Master" width="60%">
                 </p>
             </li>
+            <!--            <li>-->
+            <!--                -->
+            <!--            </li>-->
             <li>
                 Запустите функцию «{{create_groups}}»
-            </li>
-            <li>
                 <p style="text-align: center;">
                     <img src="/static/images/start_creating.png" alt="Telegram Master" width="60%">
                 </p>
+
             </li>
+            <!--            <li>-->
+            <!---->
+            <!--            </li>-->
             <li>
-                Если возникнет ошибка в работе с аккаунтом, программа выдаст предупреждение и подсказку по устранению
-                данной ошибки
-            </li>
-            <li>
+                Если возникнет ошибка при работе с аккаунтом, программа выдаст предупреждение и подсказку по устранению
+                этой ошибки
                 <p style="text-align: center;">
                     <img src="/static/images/error_creating_groups.png" alt="Telegram Master" width="60%">
                 </p>
             </li>
+            <!--            <li>-->
+            <!--                -->
+            <!--            </li>-->
         </ol>
         <hr/> <!-- Горизонтальная линия-->
         <!-- Кнопка "Вверх" -->
