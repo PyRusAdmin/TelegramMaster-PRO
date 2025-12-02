@@ -6,7 +6,7 @@ import re
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger  # Импортируем библиотеку loguru для логирования
 from telethon import events, types, TelegramClient
-from telethon.errors import ReactionInvalidError
+from telethon.errors import ReactionInvalidError, TypeNotFoundError
 from telethon.tl.functions.messages import SendReactionRequest
 
 from src.core.config.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
@@ -142,7 +142,24 @@ class WorkingWithReactions:
                                         await self.app_logger.log_and_display(
                                             translations["ru"]["errors"]["invalid_reaction"])
 
-                    await client.run_until_disconnected()  # Запуск клиента в режиме ожидания событий
+                    try:
+                        await client.run_until_disconnected()  # Запуск клиента в режиме ожидания событий
+                    except TypeNotFoundError:
+                        """
+                        Ошибка TypeNotFoundError: Could not find a matching Constructor ID for the TLObject that was 
+                        supposed to be read with ID b92f76cf возникает из-за несоответствия между версией библиотеки 
+                        Telethon и текущей схемой Telegram API. Код конструктора b92f76cf не распознаётся, что указывает
+                         на то, что Telethon не знает, как десериализовать полученный объект.
+                        
+                        Причина
+                        Эта ошибка обычно появляется, когда:
+                        
+                        Используется устаревшая версия Telethon, которая не поддерживает новые типы объектов Telegram.
+                        Telegram обновил свою схему TL (Telegram Layer), добавив новые типы, которые не отражены в 
+                        текущей версии Telethon.
+                        """
+                        await self.app_logger.log_and_display(message=f"Ошибка: Не найден тип сообщения, попробуйте обновить Telethon")
+
 
             except Exception as error:
                 logger.exception(error)
