@@ -44,7 +44,10 @@ class SubscribeUnsubscribeTelegram:
 
     async def subscribe_and_unsubscribe_menu(self):
         """
-        Меню подписка и отписка
+        Отображает меню для подписки и отписки от групп и каналов в Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        :return: None
         """
         self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
@@ -175,7 +178,12 @@ class SubscribeUnsubscribeTelegram:
 
     @staticmethod
     async def extract_channel_id(link):
-        """Сокращает ссылку с https://t.me/+yjqd0uZQETc4NGEy до yjqd0uZQETc4NGEy"""
+        """
+        Извлекает идентификатор канала из ссылки.
+
+        :param link: Ссылка на канал
+        :return: Идентификатор канала или None
+        """
         # Проверяем, начинается ли ссылка с 'https://t.me/'
         if link.startswith('https://t.me/'):
             return link[len('https://t.me/'):]
@@ -188,10 +196,11 @@ class SubscribeUnsubscribeTelegram:
 
     async def checking_links(self, client, link) -> None:
         """
-        Проверка ссылок на подписку
+        Проверяет и обрабатывает ссылку для подписки.
 
-        :param client: Клиент Telegram
-        :param link: Ссылка на подписку
+        :param client: Экземпляр клиента Telegram
+        :param link: Ссылка для подписки
+        :return: None
         """
         try:
             if link.startswith("https://t.me/+"):
@@ -328,10 +337,11 @@ class SubscribeUnsubscribeTelegram:
 
     async def unsubscribe_from_the_group(self, client, group_link) -> None:
         """
-        Отписываемся от группы.
+        Отписывается от указанной группы или канала.
 
-        :param group_link: Группа или канал
-        :param client: Телеграм клиент
+        :param client: Экземпляр клиента Telegram
+        :param group_link: Ссылка на группу или канал
+        :return: None
         """
         logger.info(f"Отписываемся от группы: {group_link}")
         try:

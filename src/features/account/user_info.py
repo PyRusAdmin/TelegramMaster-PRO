@@ -8,6 +8,12 @@ class UserInfo:
 
     @staticmethod
     async def get_bio_user(full_user):
+        """
+        Получает биографию пользователя.
+
+        :param full_user: Полная информация о пользователе
+        :return: Биография пользователя или пустая строка
+        """
         return full_user.full_user.about or ""
 
     async def get_full_user_info(self, user: User, client):
