@@ -14,7 +14,8 @@
 </head>
 
 <body>
-{% from 'macros/common_steps.html' import start_program, step_connect_accounts, navigate_to_editing_bio with context %}
+{% from 'macros/common_steps.html' import start_program, step_connect_accounts, navigate_to_editing_bio, select_accounts
+with context %}
 
 <div class="container">
     <!-- Подключение бокового меню -->
@@ -175,15 +176,17 @@
         </p>
 
         <hr/> <!-- Горизонтальная линия-->
-        <h2 id="name_change_f">{{ name_change_f }}</h2>
+        <h2 id="name_change_f">{{name_change_f}}</h2>
         <p>
             Во время выполнения функции «Изменение фамилии» {{program_name}} заменяет описание профиля пользователя
             аккаунта Telegram.
         </p>
-        <p>Перед тем как изменить фамилию пользователя, выполните следующие действия:</p>
+        <p>
+            Перед тем как изменить фамилию пользователя, выполните следующие действия:
+        </p>
         <ol>
-            {{ start_program(program_name) }}
-            {{ step_connect_accounts(program_name) }}
+            {{start_program(program_name)}}
+            {{step_connect_accounts(program_name)}}
             {{navigate_to_editing_bio(program_name)}}
             {{select_accounts(program_name)}}
             <li>
