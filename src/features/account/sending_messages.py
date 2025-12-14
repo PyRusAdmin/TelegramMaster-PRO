@@ -31,6 +31,11 @@ class SendTelegramMessages:
     """
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация класса для отправки сообщений в Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        """
         self.page = page
         self.connect = TGConnect(page=page)
         self.file_extension = "json"
@@ -47,7 +52,10 @@ class SendTelegramMessages:
 
     async def send_files_to_personal_chats(self) -> None:
         """
-        Отправка файлов в личку
+        Отображает интерфейс для отправки файлов в личные сообщения пользователей Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        :return: None
         """
         limits = ft.TextField(label="Введите лимит на сообщения")
 
@@ -141,11 +149,13 @@ class SendTelegramMessages:
     async def performing_the_operation(self, checs: bool, chat_list_fields: list, selected_account: str = None,
                                        auto_reply_text: str = None) -> None:
         """
-        Рассылка сообщений по чатам
-        :param auto_reply_text: текст для автоответчика
-        :param selected_account: выбранный аккаунт
-        :param chat_list_fields: список ссылок на группы
-        :param checs: значение чекбокса
+        Выполняет рассылку сообщений по чатам или работу с автоответчиком.
+
+        :param checs: Флаг режима автоответчика
+        :param chat_list_fields: Список ссылок на группы для рассылки
+        :param selected_account: Выбранный аккаунт (для автоответчика)
+        :param auto_reply_text: Текст сообщения для автоответчика
+        :return: None
         """
 
         # Определяем, какие сессии использовать
@@ -268,7 +278,10 @@ class SendTelegramMessages:
 
     async def sending_messages_files_via_chats(self) -> None:
         """
-        Рассылает сообщений + файлов по чатам Telegram
+        Отображает интерфейс для рассылки сообщений и файлов по чатам Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        :return: None
         """
         # Чекбокс для работы с автоответчиком
         c = ft.Checkbox(label="Работа с автоответчиком")
@@ -364,11 +377,13 @@ class SendTelegramMessages:
 
     async def send_content(self, client, target, messages, files):
         """
-        Отправляет сообщения и файлы в личку.
-        :param client: Телеграм клиент
-        :param target: Ссылка на группу (или личку)
-        :param messages: Список сообщений
-        :param files: Список файлов
+        Отправляет сообщения и файлы в указанную цель (личку или группу).
+
+        :param client: Экземпляр клиента Telegram
+        :param target: Ссылка на группу или личку
+        :param messages: Список сообщений для отправки
+        :param files: Список файлов для отправки
+        :return: None
         """
         await self.app_logger.log_and_display(f"Отправляем сообщение: {target}")
         if not messages:
@@ -394,14 +409,18 @@ class SendTelegramMessages:
 
     async def all_find_and_all_files(self):
         """
-        Находит все файлы в папке с сообщениями и папке с файлами для отправки.
+        Находит все файлы в папках с сообщениями и файлами для отправки.
+
+        :return: Кортеж с двумя списками - сообщениями и файлами
         """
         return (await self.utils.find_files(directory_path=path_folder_with_messages, extension=self.file_extension),
                 await self.utils.all_find_files(directory_path="user_data/files_to_send"))
 
     async def random_dream(self):
         """
-        Рандомный сон
+        Выполняет случайную задержку между операциями.
+
+        :return: None
         """
         try:
             time_in_seconds = random.randrange(TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
@@ -412,11 +431,11 @@ class SendTelegramMessages:
 
     async def select_and_read_random_file(self, entities, folder):
         """
-        Выбираем случайный файл и читаем из него данные.
+        Выбирает случайный файл и читает из него данные.
 
-        :param entities: список имён файлов (без расширения) для чтения
-        :param folder: подпапка внутри user_data (например, "message" или "answering_machine")
-        :return: содержимое JSON-файла или None, если файлы отсутствуют или произошла ошибка
+        :param entities: Список имён файлов (без расширения) для чтения
+        :param folder: Подпапка внутри user_data (например, "message" или "answering_machine")
+        :return: Содержимое JSON-файла или None при ошибке
         """
         try:
             if not entities:

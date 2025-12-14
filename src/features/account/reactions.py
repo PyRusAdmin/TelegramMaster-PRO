@@ -219,7 +219,11 @@ class WorkingWithReactions:
                      ])]))
 
     async def choosing_random_reaction(self):
-        """Выбираем случайное значение из списка (реакция)"""
+        """
+        Выбирает случайную реакцию из JSON-файла.
+
+        :return: Случайная реакция (эмодзи) или None при ошибке
+        """
         try:
             random_value = random.choice(await self.utils.read_json_file(filename='user_data/reactions/reactions.json'))
             await self.app_logger.log_and_display(f"{random_value}")
