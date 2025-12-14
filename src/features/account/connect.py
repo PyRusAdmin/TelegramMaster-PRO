@@ -246,7 +246,8 @@ class TGConnect:
         """
         Проверяет и сортирует аккаунты.
 
-        :param session_name: Имя аккаунта для проверки аккаунта
+        :param session_name: Имя аккаунта для проверки
+        :return: None
         """
         try:
             await self.app_logger.log_and_display(message=f"Проверка аккаунта {session_name}")
@@ -279,9 +280,10 @@ class TGConnect:
         working_with_accounts() - Перемещение файла. Исходный путь к файлу - account_folder. Путь к новой папке,
         куда нужно переместить файл - new_account_folder
 
-        :param telegram_client: TelegramClient
-        :param session_name: Имя аккаунта
-        :param exception: Расширение файла
+        :param telegram_client: Экземпляр клиента Telegram
+        :param session_name: Имя аккаунта (session string)
+        :param exception: Исключение, вызвавшее бан
+        :return: None
         """
         await self.app_logger.log_and_display(message=f"⛔ Аккаунт banned: {session_name}. {str(exception)}")
         await telegram_client.disconnect()

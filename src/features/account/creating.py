@@ -20,6 +20,11 @@ class CreatingGroupsAndChats:
     """
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация класса для создания групп и чатов Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        """
         self.page = page
         self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
@@ -31,6 +36,9 @@ class CreatingGroupsAndChats:
     async def creating_groups_and_chats(self) -> None:
         """
         Создание групп (чатов) в автоматическом режиме
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        :return: None
         """
         self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
