@@ -388,9 +388,11 @@ class ParsingGroupMembers:
     async def parse_active_users(self, chat_input, limit_active_user, client) -> None:
         """
         Парсинг активных пользователей в чате.
-        :param client: Клиент Telethon
+
+        :param client: Экземпляр клиента Telegram
         :param chat_input: ссылка на чат
-        :param limit_active_user: лимит сообщений
+        :param limit_active_user: лимит количества сообщений для анализа
+        :return: None
         """
         try:
             await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_input)
@@ -405,11 +407,12 @@ class ParsingGroupMembers:
 
     async def get_active_users(self, client, chat, limit_active_user) -> None:
         """
-        Получаем данные участников группы которые писали сообщения.
+        Получаем данные участников группы, которые писали сообщения.
 
-        :param client: Клиент Telegram
+        :param client: Экземпляр клиента Telegram
         :param chat: ссылка на чат
-        :param limit_active_user: лимит активных участников
+        :param limit_active_user: лимит количества сообщений для анализа
+        :return: None
         """
         try:
             entity = await client.get_entity(chat)
@@ -443,7 +446,8 @@ class ParsingGroupMembers:
         Метод собирает информацию о группах и каналах, включая их ID, название, описание, ссылку, количество участников
         и время последнего парсинга. Данные сохраняются в базу данных.
 
-        :param client: Экземпляр клиента Telegram.
+        :param client: Экземпляр клиента Telegram
+        :return: None
         """
         try:
             async for dialog in client.iter_dialogs():
