@@ -111,6 +111,7 @@ class UserInfo:
         """
         Определяет статус онлайна пользователя на основе его статуса.
         https://core.telegram.org/type/UserStatus
+
         :param user: Объект пользователя из Telethon
         :return: Строка или datetime, описывающая статус онлайна
         """

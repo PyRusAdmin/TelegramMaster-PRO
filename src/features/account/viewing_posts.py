@@ -24,8 +24,9 @@ class ViewingPosts:
 
     def __init__(self, page: ft.Page):
         """
-        Инициализация экземпляра класса ViewingPosts
-        :param page: Объект страницы ft.Page
+        Инициализация класса для просмотра постов в Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
         """
         self.page = page
         self.connect = TGConnect(page=page)
