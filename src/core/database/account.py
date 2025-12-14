@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from peewee import (Model, CharField)
+from peewee import Model, CharField
 from loguru import logger
 from src.core.database.database import db
 
@@ -35,7 +35,6 @@ def getting_account():
     for record in Account.select(Account.session_string):
         records.append(record.session_string)
 
-    logger.warning(records)
     return records
 
 
@@ -68,11 +67,14 @@ async def delete_account_from_db(session_string: str, app_logger) -> None:
 
 
 def get_account_list():
-    """Получаем подключенные аккаунты: возвращаем список кортежей (phone, session_string)"""
+    """
+    Получаем подключенные аккаунты: возвращаем список кортежей (phone, session_string)
+    :return: Список кортежей (phone, session_string)
+    """
     accounts = []
     for account in Account.select(Account.phone_number, Account.session_string):
         accounts.append((account.phone_number, account.session_string))
-    logger.info(f"Загружено аккаунтов: {len(accounts)}")
+
     return accounts  # Список аккаунтов
 
 
