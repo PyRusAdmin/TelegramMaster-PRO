@@ -10,17 +10,23 @@ from src.locales.translations_loader import translations
 class FunctionButton:
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация класса для управления кнопками в интерфейсе.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        """
         self.page = page
         self.gui_program = GUIProgram()
 
     async def function_button_ready_viewing(self, number_views, btn_click, link_channel, link_post):
         """
-        Функция для кнопки "Готово" и кнопки "Назад" в меню просмотра постов (Накрутка просмотров)
+        Создает интерфейс для накрутки просмотров постов.
 
-        :param btn_click: Кнопка "Готово"
-        :param link_channel: Введенные данные пользователем
-        :param link_post: Введенные данные пользователем
-        :param number_views: Поле ввода количества просмотров основываясь на количестве аккаунтов
+        :param number_views: Поле ввода количества просмотров
+        :param btn_click: Функция-обработчик для кнопки "Готово"
+        :param link_channel: Поле ввода ссылки на канал
+        :param link_post: Поле ввода ссылки на пост
+        :return: None
         """
         # Добавление представления на страницу
         self.page.views.append(

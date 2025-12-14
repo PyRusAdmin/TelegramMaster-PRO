@@ -10,16 +10,21 @@ list_view = ft.ListView(expand=10, spacing=1, padding=2, auto_scroll=True)
 class AppLogger:
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация класса для логирования и отображения сообщений в GUI.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        """
         self.page = page
         self.list_view = list_view  # Используем переданный list_view
 
     async def start_time(self) -> datetime.datetime:
         """
         Фиксирует и отображает время старта операции.
-        
+
         Записывает текущее время и выводит его в лог как метку начала выполнения.
-        
-        :returns: Время старта операции для последующего расчета продолжительности
+
+        :return: Время старта операции для последующего расчета продолжительности
         """
         start = datetime.datetime.now()
         await self.log_and_display(message=f'▶️ Время старта: {start}')
