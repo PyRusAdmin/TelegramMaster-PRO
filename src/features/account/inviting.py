@@ -66,7 +66,6 @@ class InvitingToAGroup:
         """
         Отображает меню инвайтинга с настройками и опциями.
 
-        :param page: Страница интерфейса Flet для отображения элементов управления
         :return: None
         """
         list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
@@ -234,7 +233,8 @@ class InvitingToAGroup:
                 await general_invitation_to_the_group(_)
 
             await self.app_logger.log_and_display(
-                message=f"Скрипт будет запускаться каждый день в {hour.value}:{self.minutes}")
+                message=f"Скрипт будет запускаться каждый день в {hour.value}:{minutes.value}"
+            )
             self.scheduler.daily(dt.time(hour=int(hour.value), minute=int(minutes.value)),
                                  general_invitation_group_scheduler)
             while True:
@@ -293,20 +293,29 @@ class InvitingToAGroup:
         )
 
         # Кнопки-переключатели
-        inviting_switch = ft.CupertinoSwitch(label=translations["ru"]["inviting_menu"]["inviting"], value=False,
-                                             disabled=True)
+        inviting_switch = ft.CupertinoSwitch(
+            label=translations["ru"]["inviting_menu"]["inviting"],
+            value=False,
+            disabled=True
+        )
         inviting_1_time_per_hour_switch = ft.CupertinoSwitch(
-            label=translations["ru"]["inviting_menu"]["invitation_1_time_per_hour"], value=False,
-            disabled=True)
+            label=translations["ru"]["inviting_menu"]["invitation_1_time_per_hour"],
+            value=False,
+            disabled=True
+        )
         inviting_at_a_certain_time_switch = ft.CupertinoSwitch(
-            label=translations["ru"]["inviting_menu"]["invitation_at_a_certain_time"], value=False,
-            disabled=True)
+            label=translations["ru"]["inviting_menu"]["invitation_at_a_certain_time"],
+            value=False,
+            disabled=True
+        )
         inviting_every_day_switch = ft.CupertinoSwitch(label=translations["ru"]["inviting_menu"]["inviting_every_day"],
                                                        value=False, disabled=True)
-        ToggleController(inviting_switch=inviting_switch,
-                         inviting_1_time_per_hour_switch=inviting_1_time_per_hour_switch,
-                         inviting_at_a_certain_time_switch=inviting_at_a_certain_time_switch,
-                         inviting_every_day_switch=inviting_every_day_switch).element_handler_inviting(self.page)
+        ToggleController(
+            inviting_switch=inviting_switch,
+            inviting_1_time_per_hour_switch=inviting_1_time_per_hour_switch,
+            inviting_at_a_certain_time_switch=inviting_at_a_certain_time_switch,
+            inviting_every_day_switch=inviting_every_day_switch
+        ).element_handler_inviting(self.page)
 
         start_inviting = ft.ElevatedButton(
             width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,

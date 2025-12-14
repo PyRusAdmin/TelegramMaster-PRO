@@ -45,7 +45,6 @@ class ParsingGroupMembers:
         """
         Отображает меню выбора аккаунта для парсинга групп.
 
-        :param page: Страница интерфейса Flet для отображения элементов управления
         :return: None
         """
 
@@ -79,8 +78,9 @@ class ParsingGroupMembers:
         active_switch = ft.CupertinoSwitch(label="Активные", value=False, disabled=True)
         account_group_selection_switch = ft.CupertinoSwitch(label="Выбрать группу", value=False, disabled=True)
 
-        ToggleController(admin_switch, account_groups_switch, members_switch, account_group_selection_switch,
-                         active_switch).element_handler(self.page)
+        ToggleController(
+            admin_switch, account_groups_switch, members_switch, account_group_selection_switch, active_switch
+        ).element_handler(self.page)
 
         async def on_account_change(e):
             if account_drop_down_list.value:
@@ -122,7 +122,8 @@ class ParsingGroupMembers:
                             f"🔍 Сканируем чат: {chat_input.value} на {limit_active_user.value} сообщений")
                         limit_val = limit_active_user.value.strip()
                         if not limit_val.isdigit():
-                            await self.app_logger.log_and_display("⚠️ Укажите корректное число для количества сообщений.")
+                            await self.app_logger.log_and_display(
+                                "⚠️ Укажите корректное число для количества сообщений.")
                             return
                         await self.parse_active_users(
                             chat_input=chat_input.value,
@@ -485,5 +486,3 @@ class ParsingGroupMembers:
                     continue
         except Exception as error:
             logger.exception(f"🔥 Критическая ошибка в forming_a_list_of_groups: {error}")
-
-# 690

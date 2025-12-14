@@ -20,6 +20,7 @@ class ToggleController:
         self.inviting_1_time_per_hour_switch = inviting_1_time_per_hour_switch
         self.inviting_at_a_certain_time_switch = inviting_at_a_certain_time_switch
         self.inviting_every_day_switch = inviting_every_day_switch
+        # TODO: Добавить self.page = page  # Страница интерфейса Flet для отображения элементов управления.
 
     def toggle_inviting_switch(self, page):
         """Обработчик переключателя инвайтинга"""
@@ -54,6 +55,7 @@ class ToggleController:
         page.update()
 
     def element_handler_inviting(self, page):
+        """Присоединяем обработчики к элементам интерфейса инвайтинга"""
         self.inviting_switch.on_change = lambda e: self.toggle_inviting_switch(page)
         self.inviting_1_time_per_hour_switch.on_change = lambda e: self.toggle_inviting_1_time_per_hour_switch(page)
         self.inviting_at_a_certain_time_switch.on_change = lambda e: self.toggle_inviting_at_a_certain_time_switch(page)

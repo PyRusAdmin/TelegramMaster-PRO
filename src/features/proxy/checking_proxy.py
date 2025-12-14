@@ -10,6 +10,9 @@ from src.gui.gui import AppLogger
 
 
 class Proxy:
+    """
+    Класс для проверки работоспособности прокси-серверов и работы с прокси из базы данных.
+    """
 
     def __init__(self, page: ft.Page):
         """
