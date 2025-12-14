@@ -4,11 +4,11 @@ import flet as ft
 
 async def show_notification(page: ft.Page, message: str):
     """
-    Показывает пользователю всплывающее уведомление на странице Flet. Например, об отсутствии аккаунтов, username или
-    определенных настроек.
+    Показывает пользователю всплывающее уведомление на странице Flet.
 
-    :param page: Страница интерфейса Flet для отображения элементов управления.
-    :param message: Текст уведомления.
+    :param page: Страница интерфейса Flet для отображения элементов управления
+    :param message: Текст уведомления
+    :return: None
     """
     # Переход обратно после закрытия диалога
     dlg = ft.AlertDialog(title=ft.Text(message))

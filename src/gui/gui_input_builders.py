@@ -46,12 +46,11 @@ class LinkInputRowBuilder:
 
     async def build_link_input_with_save_button(self, label_text, width):
         """
-        Создаёт текстовое поле для ввода ссылок и кнопку сохранения.
+        Создаёт текстовое поле для ввода ссылок.
 
+        :param label_text: Текст, отображаемый над полем ввода
         :param width: Ширина поля ввода
-        :param label_text:  Текст, отображаемый над полем ввода.
-        :return: Кортеж из двух элементов: ft.TextField
-        https://flet.dev/docs/controls/textfield/
+        :return: Объект TextField
         """
         # Поле ввода, для ссылок для подписки
         link_input = ft.TextField(
@@ -63,11 +62,10 @@ class LinkInputRowBuilder:
 
     async def compose_link_input_row(self, link_input: ft.TextField):
         """
-        Создаёт горизонтальный контейнер (строку) с полем ввода и кнопкой.
+        Создаёт горизонтальный контейнер с полем ввода ссылки.
 
-        :param link_input: Текстовое поле для ввода ссылок.
-        :return: Компонент ft.Row с размещёнными элементами.
-        https://flet.dev/docs/cookbook/large-lists/#gridview
+        :param link_input: Поле ввода ссылки
+        :return: Контейнер Row с полем ввода
         """
         return ft.Row(
             controls=[
