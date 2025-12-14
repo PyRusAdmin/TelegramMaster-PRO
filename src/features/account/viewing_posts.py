@@ -38,7 +38,12 @@ class ViewingPosts:
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def viewing_posts_request(self) -> None:
-        """Окно с полями ввода и кнопками для накрутки просмотров."""
+        """
+        Отображает интерфейс для накрутки просмотров постов в Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        :return: None
+        """
         try:
             list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
 
@@ -89,13 +94,14 @@ class ViewingPosts:
 
     async def viewing_posts(self, client, link_post, number, link_channel, session_name) -> None:
         """
-        Накрутка просмотров постов
+        Выполняет накрутку просмотров для указанного поста.
 
-        :param client: Клиент для работы с Telegram
+        :param client: Экземпляр клиента Telegram
         :param link_post: Ссылка на пост
-        :param number: Количество просмотров
+        :param number: Идентификатор сообщения
         :param link_channel: Ссылка на канал
         :param session_name: Имя сессии (аккаунта Telegram)
+        :return: None
         """
         try:
             try:
