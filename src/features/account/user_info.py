@@ -98,6 +98,12 @@ class UserInfo:
 
     @staticmethod
     async def get_photo_status(user: User) -> str:
+        """
+        Получает статус наличия фотографии профиля у пользователя.
+
+        :param user: Объект пользователя
+        :return: Статус наличия фотографии
+        """
         return "С фото" if isinstance(user.photo, UserProfilePhoto) else "Без фото"
 
     @staticmethod
