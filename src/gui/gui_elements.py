@@ -9,7 +9,11 @@ class GUIProgram:
 
     @staticmethod
     async def key_app_bar():
-        """Кнопка в верхней панели приложения (возврат в главное меню)."""
+        """
+        Создает верхнюю панель приложения с кнопкой возврата в главное меню.
+
+        :return: Объект AppBar
+        """
         return ft.AppBar(
             toolbar_height=40,
             title=ft.Text(translations["ru"]["menu"]["main"]),

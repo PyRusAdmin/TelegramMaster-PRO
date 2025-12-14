@@ -33,11 +33,12 @@ class AppLogger:
     async def end_time(self, start: datetime.datetime):
         """
         Фиксирует и отображает время завершения операции и ее продолжительность.
-        
+
         Рассчитывает и выводит в лог время окончания операции и общую продолжительность
         выполнения от момента старта до завершения.
-        
+
         :param start: Время старта операции, полученное от start_time()
+        :return: None
         """
         finish = datetime.datetime.now()
         await self.log_and_display(message=f'⏹️ Время окончания: {finish}')
@@ -45,10 +46,11 @@ class AppLogger:
 
     async def log_and_display(self, message: str, level: str = "INFO"):
         """
-        Выводит сообщение в GUI и записывает лог с указанным уровнем с помощью loguru.
+        Выводит сообщение в GUI и записывает лог с указанным уровнем.
 
         :param message: Текст сообщения для отображения и записи в лог
         :param level: Уровень логирования ("info" или "error"), по умолчанию "info"
+        :return: None
         """
         if level.lower() == "error":
             logger.error(message)
