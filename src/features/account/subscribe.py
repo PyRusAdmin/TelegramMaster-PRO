@@ -17,16 +17,22 @@ from loguru import logger
 class Subscribe:
 
     def __init__(self, page):
+        """
+        Инициализация класса для подписки на группы и каналы в Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        """
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
 
     async def subscribe_to_group_or_channel(self, client, groups) -> None:
         """
-        Подписываемся на группу или канал
+        Подписывается на указанную группу или канал.
 
-        :param groups: Str - группа или канал
-        :param client: TelegramClient - объект клиента
+        :param client: Экземпляр клиента Telegram
+        :param groups: Ссылка на группу или канал
+        :return: None
         """
         # цикл for нужен для того, что бы сработала команда brake команда break в Python используется только для выхода из
         # цикла, а не выхода из программы в целом.

@@ -29,6 +29,11 @@ from src.locales.translations_loader import translations
 class SubscribeUnsubscribeTelegram:
 
     def __init__(self, page):
+        """
+        Инициализация класса для подписки и отписки от групп и каналов в Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        """
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
         self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
