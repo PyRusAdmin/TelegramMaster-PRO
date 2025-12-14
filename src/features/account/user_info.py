@@ -17,6 +17,13 @@ class UserInfo:
         return full_user.full_user.about or ""
 
     async def get_full_user_info(self, user: User, client):
+        """
+        Получает полную информацию о пользователе.
+
+        :param user: Объект пользователя
+        :param client: Экземпляр клиента Telegram
+        :return: Полная информация о пользователе
+        """
         full_user = await client(GetFullUserRequest(id=await self.get_user_id(user)))
         return full_user
 
