@@ -28,30 +28,72 @@ class UserInfo:
         return full_user
 
     async def get_user_id(self, user: User) -> int:
+        """
+        Получает идентификатор пользователя.
+
+        :param user: Объект пользователя
+        :return: Идентификатор пользователя
+        """
         return user.id
 
     @staticmethod
     async def get_access_hash(user: User) -> int:
+        """
+        Получает хэш доступа пользователя.
+
+        :param user: Объект пользователя
+        :return: Хэш доступа
+        """
         return user.access_hash
 
     @staticmethod
     async def get_last_name(user: User) -> str:
+        """
+        Получает фамилию пользователя.
+
+        :param user: Объект пользователя
+        :return: Фамилия пользователя или пустая строка
+        """
         return user.last_name or ""
 
     @staticmethod
     async def get_first_name(user: User) -> str:
+        """
+        Получает имя пользователя.
+
+        :param user: Объект пользователя
+        :return: Имя пользователя или пустая строка
+        """
         return user.first_name or ""
 
     @staticmethod
     async def get_username(user: User) -> str:
+        """
+        Получает имя пользователя (username).
+
+        :param user: Объект пользователя
+        :return: Имя пользователя или пустая строка
+        """
         return user.username or ""
 
     @staticmethod
     async def get_user_phone(user: User) -> str:
+        """
+        Получает номер телефона пользователя.
+
+        :param user: Объект пользователя
+        :return: Номер телефона или сообщение о скрытости
+        """
         return user.phone if getattr(user, "phone", None) else "Номер телефона скрыт"
 
     @staticmethod
     async def get_user_premium_status(user: User) -> str:
+        """
+        Получает статус премиум-подписки пользователя.
+
+        :param user: Объект пользователя
+        :return: Статус премиум-подписки
+        """
         return "Пользователь с premium" if getattr(user, "premium", False) else "Обычный пользователь"
 
     @staticmethod
