@@ -245,7 +245,12 @@ class SettingPage:
             json.dump(reactions, file, ensure_ascii=False, indent=4)
 
     def get_unique_filename(self, base_filename) -> str:
-        """Функция для получения уникального имени файла"""
+        """
+        Генерирует уникальное имя файла, добавляя индекс к базовому имени.
+
+        :param base_filename: Базовое имя файла
+        :return: Уникальное имя файла
+        """
         index = 1
         while True:
             new_filename = f"{base_filename}_{index}.json"
@@ -255,7 +260,10 @@ class SettingPage:
 
     async def reaction_gui(self):
         """
-        Выбираем реакцию с помощью чекбокса
+        Создает графический интерфейс для выбора реакций.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        :return: None
         """
 
         t = ft.Text(value='Выберите реакцию')  # Создает текстовое поле (t).
