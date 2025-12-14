@@ -23,12 +23,11 @@ class TimeInputRowBuilder:
 
     async def compose_time_input_row(self, min_time_input: ft.TextField, max_time_input: ft.TextField):
         """
-        Создаёт горизонтальный контейнер (строку) с полем ввода и кнопкой.
+        Создаёт горизонтальный контейнер с полями ввода времени.
 
-        :param min_time_input: Текстовое поле для ввода минимального времени.
-        :param max_time_input: Текстовое поле для ввода максимального времени.
-        :return: Компонент ft.Row с размещёнными элементами.
-        https://flet.dev/docs/cookbook/large-lists/#gridview
+        :param min_time_input: Поле ввода для минимального времени
+        :param max_time_input: Поле ввода для максимального времени
+        :return: Контейнер Row с полями ввода
         """
         return ft.Row(
             controls=[
