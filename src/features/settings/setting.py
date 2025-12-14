@@ -135,9 +135,11 @@ class SettingPage:
 
     async def create_main_window(self, variable, smaller_timex, larger_timex) -> None:
         """
+        Создает главное окно для настройки временных интервалов.
+
         :param variable: Название переменной в файле config.ini
-        :param smaller_timex: Первое время
-        :param larger_timex: Второе время
+        :param smaller_timex: Первое время (начальное)
+        :param larger_timex: Второе время (конечное)
         :return: None
         """
         try:
@@ -158,7 +160,10 @@ class SettingPage:
 
     async def writing_api_id_api_hash(self):
         """
-        Записываем api, hash полученный с помощью регистрации приложения на сайте https://my.telegram.org/auth
+        Создает интерфейс для записи API ID и API Hash.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        :return: None
         """
         self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
         list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
@@ -181,7 +186,7 @@ class SettingPage:
         Добавляет представление с заданными текстовыми полями и кнопкой.
 
         :param fields: Список текстовых полей для добавления
-        :param btn_click: Кнопка для добавления
+        :param btn_click: Функция-обработчик для кнопки
         :return: None
         """
 
@@ -200,17 +205,23 @@ class SettingPage:
                           )]))
 
     def writing_settings_to_a_file(self, config) -> None:
-        """Запись данных в файл user_data/config.ini"""
+        """
+        Записывает конфигурационные данные в файл.
+
+        :param config: Объект конфигурации для записи
+        :return: None
+        """
         with open("user_data/config/config.ini", "w") as setup:  # Открываем файл в режиме записи
             config.write(setup)  # Записываем данные в файл
 
     async def recording_limits_file(self, time_1, time_2, variable: str) -> configparser.ConfigParser:
         """
-        Запись данных в файл TelegramMaster/user_data/config.ini
+        Записывает временные лимиты в конфигурационный файл.
 
-        :param time_1: Время в секундах
-        :param time_2: Время в секундах
+        :param time_1: Начальное время в секундах
+        :param time_2: Конечное время в секундах
         :param variable: Название переменной в файле config.ini
+        :return: Объект конфигурации
         """
         try:
             config.get(f"{variable}", f"{variable}_1")
@@ -223,7 +234,13 @@ class SettingPage:
         return config
 
     def write_data_to_json_file(self, reactions, path_to_the_file):
-        """Открываем файл для записи данных в формате JSON"""
+        """
+        Записывает данные в JSON-файл.
+
+        :param reactions: Данные для записи
+        :param path_to_the_file: Путь к файлу для записи
+        :return: None
+        """
         with open(path_to_the_file, 'w', encoding='utf-8') as file:
             json.dump(reactions, file, ensure_ascii=False, indent=4)
 
