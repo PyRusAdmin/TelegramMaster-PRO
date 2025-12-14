@@ -70,7 +70,7 @@
                     <img src="/static/images/editing_bio_menu.png" alt="editing_bio_menu" width="60%">
                 </p>
             </li>
-            {{select_accounts(program_name) }}
+            {{select_accounts(program_name)}}
             <li>
                 Введите новый username в поле ввода.
                 <p style="text-align: center;">
@@ -98,15 +98,15 @@
         </p>
         <p>Перед тем как изменить фото пользователя, выполните следующие действия:</p>
         <ol>
-            {{ start_program(program_name) }}
-            {{ step_connect_accounts(program_name) }}
+            {{start_program(program_name)}}
+            {{step_connect_accounts(program_name)}}
             <li>
                 Перейдите в «Редактирование BIO».
                 <p style="text-align: center;">
                     <img src="/static/images/editing_bio_menu.png" alt="Telegram Master" width="60%">
                 </p>
             </li>
-            {{select_accounts(program_name) }}
+            {{select_accounts(program_name)}}
 
             <li>Расположите фото для профиля в папке <code>{{ program_name }}/user_data/bio</code></li>
             <li>Выберите функцию «Изменение фото».</li>
@@ -114,19 +114,19 @@
         <p>
             После выполнения этих действий фото пользователя вашего аккаунта Telegram изменится и программа выведет
             уведомление.
-        <p style="text-align: center;">
-            <img src="/static/images/editing_bio.png" alt="Telegram Master" width="60%">
-        </p>
+            <!--        <p style="text-align: center;">-->
+            <!--            <img src="/static/images/editing_bio.png" alt="Telegram Master" width="60%">-->
+            <!--        </p>-->
         <hr/> <!-- Горизонтальная линия-->
-        <h2 id="changing_the_description">{{ changing_the_description }}</h2>
+        <h2 id="changing_the_description">{{changing_the_description}}</h2>
         <p>
             Во время выполнения функции «Изменение описания» {{program_name}} заменяет описание профиля пользователя
             аккаунта Telegram.
         </p>
         <p>Перед тем как изменить описание пользователя, выполните следующие действия:</p>
         <ol>
-            {{ start_program(program_name) }}
-            {{ step_connect_accounts(program_name) }}
+            {{start_program(program_name)}}
+            {{step_connect_accounts(program_name)}}
 
             <li>
                 Перейдите в «Редактирование BIO».
@@ -153,9 +153,9 @@
             После выполнения этих действий описание пользователя вашего аккаунта Telegram изменится и программа
             выведет
             уведомление.
-        <p style="text-align: center;">
-            <img src="/static/images/editing_bio.png" alt="Telegram Master" width="60%">
-        </p>
+            <!--        <p style="text-align: center;">-->
+            <!--            <img src="/static/images/editing_bio.png" alt="Telegram Master" width="60%">-->
+            <!--        </p>-->
         <hr/> <!-- Горизонтальная линия-->
         <h2 id="name_change_n">{{ name_change_n }}</h2>
         <p>
@@ -164,8 +164,8 @@
         </p>
         <p>Перед тем как изменить имя пользователя, выполните следующие действия:</p>
         <ol>
-            {{ start_program(program_name) }}
-            {{ step_connect_accounts(program_name) }}
+            {{start_program(program_name)}}
+            {{step_connect_accounts(program_name)}}
             <li>
                 Перейдите в «Редактирование BIO».
                 <p style="text-align: center;">
@@ -173,11 +173,12 @@
                 </p>
             </li>
             <li>
-                Выберите функцию «Изменение имени».
+                Введите в поле ввода новое имя пользователя.
                 <p style="text-align: center;">
-                    <img src="/static/images/name_change_n.png" alt="Telegram Master" width="60%">
+                    <img src="/static/images/editing_bio_menu_6.png" alt="Telegram Master" width="60%">
                 </p>
             </li>
+            {{select_accounts(program_name)}}
             <li>Введите новое имя пользователя в поле ввода.</li>
             <li>
                 Нажмите «Готово».
@@ -189,9 +190,10 @@
         <p>
             После выполнения этих действий имя пользователя вашего аккаунта Telegram изменится и программа выведет
             уведомление.
-        <p style="text-align: center;">
-            <img src="/static/images/editing_bio.png" alt="Telegram Master" width="60%">
-        </p>
+            <!--        <p style="text-align: center;">-->
+            <!--            <img src="/static/images/editing_bio.png" alt="Telegram Master" width="60%">-->
+            <!--        </p>-->
+
         <hr/> <!-- Горизонтальная линия-->
         <h2 id="name_change_f">{{ name_change_f }}</h2>
         <p>
@@ -208,7 +210,7 @@
                     <img src="/static/images/editing_bio_menu.png" alt="Telegram Master" width="60%">
                 </p>
             </li>
-            {{select_accounts(program_name) }}
+            {{select_accounts(program_name)}}
             <li>
                 Введите в поле ввода новую фамилию пользователя.
                 <p style="text-align: center;">
@@ -225,9 +227,9 @@
         <p>
             После выполнения этих действий фамилия пользователя вашего аккаунта Telegram изменится и программа
             выведет уведомление.
-        <p style="text-align: center;">
-            <img src="/static/images/editing_bio.png" alt="Telegram Master" width="60%">
-        </p>
+            <!--        <p style="text-align: center;">-->
+            <!--            <img src="/static/images/editing_bio.png" alt="Telegram Master" width="60%">-->
+            <!--        </p>-->
         <hr/> <!-- Горизонтальная линия-->
         <!-- Кнопка "Вверх" -->
         <a href="#" id="to-top" title="Вверх"><i class="fas fa-chevron-up" aria-hidden="true"></i></a>
