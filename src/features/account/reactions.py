@@ -28,6 +28,11 @@ class WorkingWithReactions:
     """
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация класса для работы с реакциями в Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        """
         self.page = page
         self.connect = TGConnect(page=page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
@@ -41,7 +46,10 @@ class WorkingWithReactions:
 
     async def reactions_menu(self):
         """
-        Меню ❤️ Работа с реакциями
+        Отображает меню работы с реакциями в Telegram.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        :return: None
         """
 
         list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
