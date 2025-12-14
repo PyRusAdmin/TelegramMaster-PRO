@@ -22,7 +22,11 @@ class GUIProgram:
 
     @staticmethod
     async def outputs_text_gradient():
-        """Выводит текст с градиентом на странице."""
+        """
+        Создает текст с градиентным оформлением.
+
+        :return: Объект Text с градиентом
+        """
         # Создаем текст с градиентным оформлением через TextStyle
         return ft.Text(
             spans=[
@@ -42,5 +46,9 @@ class GUIProgram:
     # TODO: Применить во всем проекте, для одинакового оформления GUI программы
     @staticmethod
     async def diver_castom():
-        """Разделительная линия"""
+        """
+        Создает разделительную линию в интерфейсе.
+
+        :return: Объект Divider
+        """
         return ft.Divider(height=1, color="red")

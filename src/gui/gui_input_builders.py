@@ -8,13 +8,12 @@ class TimeInputRowBuilder:
 
     async def build_time_inputs_with_save_button(self, label_min, label_max, width):
         """
-        Создаёт текстовое поле для ввода данных (ссылок, времени и.т.д.) и кнопку сохранения.
+        Создаёт текстовые поля для ввода времени и возвращает их.
 
-        :param label_max: Выводимый текст на поле ввода
-        :param label_min: Выводимый текст на поле ввода
-        :param width: Ширина поля ввода.
-        :return: Кортеж из двух элементов: ft.TextField и ft.IconButton.
-        https://flet.dev/docs/controls/textfield/
+        :param label_min: Текст для поля ввода минимального значения
+        :param label_max: Текст для поля ввода максимального значения
+        :param width: Ширина полей ввода
+        :return: Кортеж из двух объектов TextField
         """
         min_time_input = ft.TextField(label=label_min, label_style=ft.TextStyle(size=15), autofocus=True, width=width,
                                       text_size=12)
