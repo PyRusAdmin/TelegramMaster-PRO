@@ -37,6 +37,8 @@ class TGConnect:
     async def check_menu(self):
         """
         Меню 🔍 Проверка аккаунтов
+
+        :param page: Страница интерфейса Flet для отображения элементов управления.
         """
 
         list_view.controls.clear()  # Очистка list_view для отображения новых элементов и недопущения дублирования
@@ -210,7 +212,9 @@ class TGConnect:
     async def client_connect_string_session(self, session_name: str) -> TelegramClient | None:
         """
         Подключение к Telegram аккаунту через StringSession
+
         :param session_name: Имя аккаунта для подключения (файл .session)
+        :return: Клиент Telegram или None, если подключение не удалось
         """
         # Создаем клиент, используя StringSession и вашу строку
         client = TelegramClient(StringSession(session_name), api_id=api_id, api_hash=api_hash,
