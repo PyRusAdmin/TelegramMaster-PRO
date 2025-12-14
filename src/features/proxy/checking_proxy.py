@@ -12,14 +12,19 @@ from src.gui.gui import AppLogger
 class Proxy:
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация класса для проверки работоспособности прокси-серверов.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        """
         self.page = page
         self.app_logger = AppLogger(page=page)
 
     def reading_proxy_data_from_the_database(self):
         """
-        Считываем данные для proxy c базы данных "software_database.db", таблица "proxy" где:
-        proxy_type - тип proxy (например: SOCKS5), addr - адрес (например: 194.67.248.9), port - порт (например: 9795)
-        username - логин (например: username), password - пароль (например: password)
+        Считывает данные прокси из базы данных.
+
+        :return: Словарь с данными прокси или None при ошибке
         """
         try:
             proxy_random_list = random.choice(get_proxy_database())
@@ -36,9 +41,9 @@ class Proxy:
 
     async def checking_the_proxy_for_work(self) -> None:
         """
-        Проверка proxy на работоспособность с помощью Example.org. Example.org является примером адреса домена верхнего
-        уровня, который используется для демонстрации работы сетевых протоколов. На этом сайте нет никакого контента, но он
-        используется для различных тестов.
+        Проверяет работоспособность всех прокси из базы данных.
+
+        :return: None
         """
         try:
             for proxy_dic in get_proxy_database():
@@ -55,16 +60,16 @@ class Proxy:
             logger.exception(error)
 
     async def connecting_to_proxy_with_verification(self, proxy_type, addr, port, username, password, rdns) -> None:
-        """Подключение к proxy с проверкой на работоспособность где: proxy_type - тип proxy (например: SOCKS5),
-        addr - адрес (например: 194.67.248.9), port - порт (например: 9795), username - логин (например: username),
-        password - пароль (например: password)
+        """
+        Подключается к прокси-серверу с проверкой его работоспособности.
 
-        :param proxy_type: тип proxy (например: SOCKS5)
-        :param addr: адрес (например: 194.67.248.9)
-        :param port: порт (например: 9795)
-        :param username: логин (например: username)
-        :param password: пароль (например: password)
-        :param rdns: rdns (например: rdns)
+        :param proxy_type: Тип прокси (например: SOCKS5)
+        :param addr: Адрес прокси (например: 194.67.248.9)
+        :param port: Порт прокси (например: 9795)
+        :param username: Логин для аутентификации
+        :param password: Пароль для аутентификации
+        :param rdns: Параметр rdns
+        :return: None
         """
         # Пробуем подключиться по прокси
         try:

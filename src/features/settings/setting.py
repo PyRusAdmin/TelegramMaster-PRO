@@ -23,6 +23,11 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 class SettingPage:
 
     def __init__(self, page: ft.Page):
+        """
+        Инициализация класса для управления настройками приложения.
+
+        :param page: Страница интерфейса Flet для отображения элементов управления
+        """
         self.page = page
         self.app_logger = AppLogger(page=page)
         self.gui_program = GUIProgram()
