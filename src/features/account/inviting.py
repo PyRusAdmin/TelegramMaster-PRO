@@ -369,12 +369,13 @@ class InvitingToAGroup:
     async def add_user_test(self, client, username_group, username, time_inviting_1, time_inviting_2):
         """
         Метод для приглашения участников в группу.
-        :param client: Телеграм-клиент
+
+        :param client: Экземпляр клиента Telegram
         :param username_group: Ссылка на группу
         :param username: Имя пользователя (username)
-        :param time_inviting_1: Время ожидания начальное
-        :param time_inviting_2: Время ожидания конечное
-        :return:
+        :param time_inviting_1: Начальное время ожидания в секундах
+        :param time_inviting_2: Конечное время ожидания в секундах
+        :return: None
         """
         try:
             await self.app_logger.log_and_display(message=f"Попытка приглашения {username} в группу {username_group}.")
