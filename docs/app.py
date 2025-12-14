@@ -376,12 +376,18 @@ async def importing_a_list_of_parsed_data(request: Request):
 
 
 def run_uvicorn():
-    """Запуск Uvicorn в отдельном процессе."""
+    """
+    Запускает сервер Uvicorn в отдельном процессе.
+
+    """
     logger.info("Запуск сервера FastAPI...")
     uvicorn.run("docs.app:app", host="127.0.0.1", port=8000, reload=True)
 
 
 def start_app():
+    """
+    Запускает приложение, включая сервер FastAPI и открывает браузер.
+    """
     try:
         server_process = Process(target=run_uvicorn)
         server_process.start()
