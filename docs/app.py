@@ -84,70 +84,6 @@ async def inviting_page(request: Request):
     )
 
 
-# @app.get(path="/inviting/inviting_with_limits_in_telegram_master", response_class=HTMLResponse)
-# async def inviting_with_limits_in_telegram_master(request: Request):
-#     """🚀 Инвайтинг"""
-#     logger.info("Запущена страница 🚀 Инвайтинг")
-#     return templates.TemplateResponse(
-#         "inviting/inviting_with_limits_in_telegram_master.html", {
-#             "request": request,
-#             "program_name": PROGRAM_NAME,
-#             "inviting": translations["ru"]["inviting_menu"]["inviting"],
-#             "invitation_1_time_per_hour": translations["ru"]["inviting_menu"]["invitation_1_time_per_hour"],
-#             "invitation_at_a_certain_time": translations["ru"]["inviting_menu"]["invitation_at_a_certain_time"],
-#             "inviting_every_day": translations["ru"]["inviting_menu"]["inviting_every_day"],
-#             "start_inviting_button": translations["ru"]["buttons"]["start"],
-#         }
-#     )
-
-
-# @app.get(path="/inviting/inviting_1_time_per_hour", response_class=HTMLResponse)
-# async def inviting_1_time_per_hour(request: Request):
-#     """⏰ Инвайтинг 1 раз в час"""
-#     logger.info("Запущена страница 🚀 Инвайтинг")
-#     return templates.TemplateResponse(
-#         "inviting/inviting_1_time_per_hour.html", {
-#             "request": request,
-#             "program_name": PROGRAM_NAME,
-#             "inviting": translations["ru"]["inviting_menu"]["inviting"],
-#             "invitation_1_time_per_hour": translations["ru"]["inviting_menu"]["invitation_1_time_per_hour"],
-#             "start_inviting_button": translations["ru"]["buttons"]["start"],
-#         }
-#     )
-
-
-# @app.get(path="/inviting/inviting_at_a_certain_time", response_class=HTMLResponse)
-# async def inviting_at_a_certain_time(request: Request):
-#     """🕒 Инвайтинг в определенное время"""
-#     logger.info("Запущена страница 🚀 Инвайтинг")
-#     return templates.TemplateResponse(
-#         "inviting/inviting_at_a_certain_time.html", {
-#             "request": request,
-#             "program_name": PROGRAM_NAME,
-#             "inviting": translations["ru"]["inviting_menu"]["inviting"],
-#             "invitation_at_a_certain_time": translations["ru"]["inviting_menu"]["invitation_at_a_certain_time"],
-#             "time_between_subscriptions_ru": translations["ru"]["menu_settings"]["time_between_subscriptions"],
-#             "start_inviting_button": translations["ru"]["buttons"]["start"],
-#         }
-#     )
-
-
-# @app.get(path="/inviting/inviting_every_day", response_class=HTMLResponse)
-# async def inviting_every_day(request: Request):
-#     """📅 Инвайтинг каждый день"""
-#     logger.info("Запущена страница 🚀 Инвайтинг")
-#     return templates.TemplateResponse(
-#         "inviting/inviting_every_day.html", {
-#             "request": request,
-#             "program_name": PROGRAM_NAME,
-#             "inviting": translations["ru"]["inviting_menu"]["inviting"],
-#             "inviting_every_day": translations["ru"]["inviting_menu"]["inviting_every_day"],
-#             "time_between_subscriptions_ru": translations["ru"]["menu_settings"]["time_between_subscriptions"],
-#             "start_inviting_button": translations["ru"]["buttons"]["start"],
-#         }
-#     )
-
-
 # Рассылка сообщений по чатам, в личку
 @app.get(path='/sending_messages', response_class=HTMLResponse)
 async def sending_messages(request: Request):
@@ -239,7 +175,7 @@ async def working_with_reactions(request: Request):
             "request": request,
             "program_name": PROGRAM_NAME,
             "setting_reactions": translations["ru"]["reactions_menu"]["setting_reactions"],
-            "we_are_winding_up_post_views_ru": translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+            "we_are_winding_up_post_views": translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
             "automatic_setting_of_reactions": translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
             "recording_reaction_link": translations["ru"]["menu_settings"]["recording_reaction_link"],
         }
@@ -255,9 +191,8 @@ async def we_are_winding_up_post_views(request: Request):
             "request": request,
             "program_name": PROGRAM_NAME,
             "setting_reactions": translations["ru"]["reactions_menu"]["setting_reactions"],
-            "we_are_winding_up_post_views_ru": translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+            "we_are_winding_up_post_views": translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
             "automatic_setting_of_reactions": translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
-            "forming_list_of_chats_channels_ru": translations["ru"]["menu_settings"]["forming_list_of_chats_channels"],
         }
     )
 
@@ -274,7 +209,6 @@ async def parsing(request: Request):
             "parse_selected_user_subscribed_group": translations["ru"]["parsing_menu"]["parse_selected_user_subscribed_group"],
             "parse_active_group_members": translations["ru"]["parsing_menu"]["parse_active_group_members"],
             "parse_account_subscribed_groups_channels": translations["ru"]["parsing_menu"]["parse_account_subscribed_groups_channels"],
-            "clear_previously_parsed_data_list": translations["ru"]["parsing_menu"]["clear_previously_parsed_data_list"],
             "importing_a_list_of_parsed_data": translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"]
         }
     )
