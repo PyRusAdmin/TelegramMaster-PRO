@@ -42,7 +42,8 @@ async def message_recording(request: Request):
         "request": request,
         "program_name": PROGRAM_NAME,
         "message_recording": translations["ru"]["menu_settings"]["message_recording"],
-    })
+    }
+                                      )
 
 
 @app.get(path="/menu", response_class=HTMLResponse)
@@ -169,7 +170,12 @@ async def editing_bio(request: Request):
 
 @app.get(path='/working_with_contacts', response_class=HTMLResponse)
 async def working_with_contacts(request: Request):
-    """Работа с контактами"""
+    """
+    Работа с контактами
+
+    :param request: Request
+    :return: HTMLResponse
+    """
     logger.info("Запущена страница работы с контактами")
     return templates.TemplateResponse(
         'working_with_contacts.html', {
@@ -179,13 +185,12 @@ async def working_with_contacts(request: Request):
             "show_a_list_of_contacts": translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
             "deleting_contacts": translations["ru"]["contacts_menu"]["deleting_contacts"],
             "adding_contacts": translations["ru"]["contacts_menu"]["adding_contacts"],
-            "working_with_contacts_menu_ru": translations["ru"]["menu"]["contacts"],
+            "working_with_contacts_menu": translations["ru"]["menu"]["contacts"],
             "path_folder_database": path_folder_database
         }
     )
 
 
-# Настройки
 @app.get(path='/settings', response_class=HTMLResponse)
 async def settings(request: Request):
     """
