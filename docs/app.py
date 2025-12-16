@@ -66,12 +66,15 @@ async def menu(request: Request):
 async def inviting_page(request: Request):
     """🚀 Инвайтинг"""
     logger.info("Запущена страница инвайтинга")
-    return templates.TemplateResponse("inviting.html", {
-        "request": request, "program_name": PROGRAM_NAME,
-        "inviting_ru": translations["ru"]["inviting_menu"]["inviting"],
-        "invitation_1_time_per_hour_ru": translations["ru"]["inviting_menu"]["invitation_1_time_per_hour"],
-        "invitation_at_a_certain_time_ru": translations["ru"]["inviting_menu"]["invitation_at_a_certain_time"],
-        "inviting_every_day_ru": translations["ru"]["inviting_menu"]["inviting_every_day"]})
+    return templates.TemplateResponse(
+        "inviting.html", {
+            "request": request, "program_name": PROGRAM_NAME,
+            "inviting": translations["ru"]["inviting_menu"]["inviting"],
+            "invitation_1_time_per_hour": translations["ru"]["inviting_menu"]["invitation_1_time_per_hour"],
+            "invitation_at_a_certain_time": translations["ru"]["inviting_menu"]["invitation_at_a_certain_time"],
+            "inviting_every_day": translations["ru"]["inviting_menu"]["inviting_every_day"]
+        }
+    )
 
 
 @app.get(path="/inviting/inviting_with_limits_in_telegram_master", response_class=HTMLResponse)
@@ -81,12 +84,12 @@ async def inviting_with_limits_in_telegram_master(request: Request):
     return templates.TemplateResponse("inviting/inviting_with_limits_in_telegram_master.html",
                                       {
                                           "request": request, "program_name": PROGRAM_NAME,
-                                          "inviting_ru": translations["ru"]["inviting_menu"]["inviting"],
-                                          "invitation_1_time_per_hour_ru": translations["ru"]["inviting_menu"][
+                                          "inviting": translations["ru"]["inviting_menu"]["inviting"],
+                                          "invitation_1_time_per_hour": translations["ru"]["inviting_menu"][
                                               "invitation_1_time_per_hour"],
                                           "invitation_at_a_certain_time": translations["ru"]["inviting_menu"][
                                               "invitation_at_a_certain_time"],
-                                          "inviting_every_day_ru": translations["ru"]["inviting_menu"][
+                                          "inviting_every_day": translations["ru"]["inviting_menu"][
                                               "inviting_every_day"],
                                           "start_inviting_button": translations["ru"]["buttons"]["start"],
                                       })
@@ -99,8 +102,8 @@ async def inviting_1_time_per_hour(request: Request):
     return templates.TemplateResponse("inviting/inviting_1_time_per_hour.html",
                                       {
                                           "request": request, "program_name": PROGRAM_NAME,
-                                          "inviting_ru": translations["ru"]["inviting_menu"]["inviting"],
-                                          "invitation_1_time_per_hour_ru": translations["ru"]["inviting_menu"][
+                                          "inviting": translations["ru"]["inviting_menu"]["inviting"],
+                                          "invitation_1_time_per_hour": translations["ru"]["inviting_menu"][
                                               "invitation_1_time_per_hour"],
                                           "start_inviting_button": translations["ru"]["buttons"]["start"],
                                       })
@@ -114,7 +117,7 @@ async def inviting_at_a_certain_time(request: Request):
                                       {
                                           "request": request, "program_name": PROGRAM_NAME,
                                           "inviting": translations["ru"]["inviting_menu"]["inviting"],
-                                          "invitation_at_a_certain_time_ru": translations["ru"]["inviting_menu"][
+                                          "invitation_at_a_certain_time": translations["ru"]["inviting_menu"][
                                               "invitation_at_a_certain_time"],
                                           "time_between_subscriptions_ru": translations["ru"]["menu_settings"][
                                               "time_between_subscriptions"],
@@ -129,8 +132,8 @@ async def inviting_every_day(request: Request):
     return templates.TemplateResponse("inviting/inviting_every_day.html",
                                       {
                                           "request": request, "program_name": PROGRAM_NAME,
-                                          "inviting_ru": translations["ru"]["inviting_menu"]["inviting"],
-                                          "inviting_every_day_ru": translations["ru"]["inviting_menu"][
+                                          "inviting": translations["ru"]["inviting_menu"]["inviting"],
+                                          "inviting_every_day": translations["ru"]["inviting_menu"][
                                               "inviting_every_day"],
                                           "time_between_subscriptions_ru": translations["ru"]["menu_settings"][
                                               "time_between_subscriptions"],
