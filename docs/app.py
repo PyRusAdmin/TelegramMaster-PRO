@@ -41,7 +41,7 @@ async def message_recording(request: Request):
     return templates.TemplateResponse('message_recording.html', {
         "request": request,
         "program_name": PROGRAM_NAME,
-        "message_recording_ru": translations["ru"]["menu_settings"]["message_recording"],
+        "message_recording": translations["ru"]["menu_settings"]["message_recording"],
     })
 
 
@@ -188,29 +188,22 @@ async def working_with_contacts(request: Request):
 # Настройки
 @app.get(path='/settings', response_class=HTMLResponse)
 async def settings(request: Request):
-    """⚙️ Настройки"""
+    """
+    ⚙️ Настройки
+
+    :param request: Request
+    :return: HTMLResponse
+    """
     logger.info("Запущена страница настроек")
     return templates.TemplateResponse(
         'settings.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
-            "choice_of_reactions_ru": translations["ru"]["menu_settings"]["choice_of_reactions"],
-            "proxy_entry_ru": translations["ru"]["menu_settings"]["proxy_entry"],  # ← ИСПРАВЛЕНО
-            "changing_accounts_ru": translations["ru"]["menu_settings"]["changing_accounts"],
-            "recording_api_id_api_hash_ru": translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
-            "time_between_subscriptions_ru": translations["ru"]["menu_settings"]["time_between_subscriptions"],
-            "message_recording_ru": translations["ru"]["menu_settings"]["message_recording"],
-            "link_entry_ru": translations["ru"]["menu_settings"]["link_entry"],
-            "account_limits_ru": translations["ru"]["menu_settings"]["account_limits"],
-            "message_limits_ru": translations["ru"]["menu_settings"]["message_limits"],
-            "time_between_subscriptionss_ru": translations["ru"]["menu_settings"]["time_between_subscriptionss"],
-            "creating_username_list_ru": translations["ru"]["menu_settings"]["creating_username_list"],
-            "recording_the_time_between_messages_ru": translations["ru"]["menu_settings"][
-                "recording_the_time_between_messages"],
-            "time_between_invites_sending_messages_ru": translations["ru"]["menu_settings"][
-                "time_between_invites_sending_messages"],
-            "recording_reaction_link_ru": translations["ru"]["menu_settings"]["recording_reaction_link"],
-            "forming_list_of_chats_channels_ru": translations["ru"]["menu_settings"]["forming_list_of_chats_channels"],
+            "choice_of_reactions": translations["ru"]["menu_settings"]["choice_of_reactions"],
+            "proxy_entry": translations["ru"]["menu_settings"]["proxy_entry"],
+            "recording_api_id_api_hash": translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
+            "message_recording": translations["ru"]["menu_settings"]["message_recording"],
+            "recording_reaction_link": translations["ru"]["menu_settings"]["recording_reaction_link"],
         }
     )
 
@@ -229,7 +222,7 @@ async def working_with_reactions(request: Request):
             "setting_reactions": translations["ru"]["reactions_menu"]["setting_reactions"],
             "we_are_winding_up_post_views_ru": translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
             "automatic_setting_of_reactions": translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
-            "recording_reaction_link_ru": translations["ru"]["menu_settings"]["recording_reaction_link"],
+            "recording_reaction_link": translations["ru"]["menu_settings"]["recording_reaction_link"],
         }
     )
 
