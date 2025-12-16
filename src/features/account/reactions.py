@@ -97,7 +97,8 @@ class WorkingWithReactions:
                         """
                         if client is None:
                             await self.app_logger.log_and_display("⚠️ Клиент не подключен. Проверьте сессию аккаунта.")
-                            await self.app_logger.log_and_display("Рекомендации:\n1. Проверьте аккаунты через меню 'Проверка аккаунтов'.\n2. Обновите Telethon до последней версии.\n3. Пересоздайте сессии через 'Подключение по номеру'.")
+                            await self.app_logger.log_and_display(
+                                "Рекомендации:\n1. Проверьте аккаунты через меню 'Проверка аккаунтов'.\n2. Обновите Telethon до последней версии.\n3. Пересоздайте сессии через 'Подключение по номеру'.")
                             continue
 
                         await client(SendReactionRequest(
@@ -183,7 +184,8 @@ class WorkingWithReactions:
                         Telegram обновил свою схему TL (Telegram Layer), добавив новые типы, которые не отражены в 
                         текущей версии Telethon.
                         """
-                        await self.app_logger.log_and_display(message=f"Ошибка: Не найден тип сообщения, попробуйте обновить Telethon")
+                        await self.app_logger.log_and_display(
+                            message=f"Ошибка: Не найден тип сообщения, попробуйте обновить Telethon")
 
 
             except Exception as error:
