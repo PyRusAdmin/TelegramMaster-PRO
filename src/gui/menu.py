@@ -66,51 +66,51 @@ class Menu:
                                   ),
                                   # 🔐 Подключение аккаунтов
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["menu"]["account_connect"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["menu"]["account_connect"],
                                       on_click=lambda _: self.page.go("/account_connection_menu")
                                   ),
                                   # 📨 Отправка сообщений в личку
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
                                       on_click=lambda _: self.page.go("/sending_files_to_personal_account_with_limits")
                                   ),
                                   # ❤️ Работа с реакциями
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["menu"]["reactions"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["menu"]["reactions"],
                                       on_click=lambda _: self.page.go("/working_with_reactions")
                                   ),
                                   # 🔍 Проверка аккаунтов
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["menu"]["account_check"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["menu"]["account_check"],
                                       on_click=lambda _: self.page.go("/account_verification_menu")
                                   ),
                                   # 👥 Создание групп (чатов)
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["menu"]["create_groups"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["menu"]["create_groups"],
                                       on_click=lambda _: self.page.go("/creating_groups")
                                   ),
                                   # ✏️ Редактирование_BIO
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["menu"]["edit_bio"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["menu"]["edit_bio"],
                                       on_click=lambda _: self.page.go("/bio_editing")
                                   ),
                                   # 👁️‍🗨️ Накручиваем просмотры постов
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
                                       on_click=lambda _: self.page.go("/viewing_posts_menu")
                                   ),
                                   # 💬 Рассылка сообщений по чатам
