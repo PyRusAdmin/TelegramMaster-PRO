@@ -23,7 +23,7 @@ async def main(page: ft.Page):
     page.title = f"{PROGRAM_NAME}: {PROGRAM_VERSION} (Дата изменения {DATE_OF_PROGRAM_CHANGE})"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     menu = Menu(page=page)
-
+    BUTTON_HEIGHT = 100
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
 
@@ -135,7 +135,7 @@ async def main(page: ft.Page):
                     style=elevated_style,
                 ),
             ], scroll=ft.ScrollMode.AUTO),
-
+            ft.VerticalDivider(width=20, thickness=2, color=ft.Colors.GREY_400),
             # ft.Row(
             #     alignment=ft.MainAxisAlignment.CENTER,
             #     controls=[
@@ -225,8 +225,6 @@ ft.run(main)
 #         page.views.append(
 #             ft.View("/", [
 #
-#
-#                     ft.VerticalDivider(width=20, thickness=2, color=ft.Colors.GREY_400),
 #                     ft.Column([
 #                         ft.Text(spans=[ft.TextSpan(
 #                             f"{PROGRAM_NAME}",
