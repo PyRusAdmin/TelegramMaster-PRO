@@ -7,6 +7,17 @@ from loguru import logger
 from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
                                      WINDOW_HEIGHT, WINDOW_RESIZABLE)
 from src.core.database.create_database import create_database
+from src.features.account.account_bio import AccountBIO
+from src.features.account.connect import TGConnect
+from src.features.account.contact import TGContact
+from src.features.account.creating import CreatingGroupsAndChats
+from src.features.account.parsing import ParsingGroupMembers
+from src.features.account.reactions import WorkingWithReactions
+from src.features.account.sending_messages import SendTelegramMessages
+from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
+from src.features.account.viewing_posts import ViewingPosts
+from src.features.recording.receiving_and_recording import ReceivingAndRecording
+from src.features.settings.setting import SettingPage
 from src.gui.menu import Menu
 from src.locales.translations_loader import translations
 
@@ -20,6 +31,20 @@ async def main(page: ft.Page):
     :param page: Страница интерфейса Flet для отображения элементов управления.
     """
     create_database()
+
+    setting_page = SettingPage(page=page)
+    account_bio = AccountBIO(page=page)
+
+    connect = TGConnect(page=page)
+    creating_groups_and_chats = CreatingGroupsAndChats(page=page)
+    subscribe_unsubscribe_telegram = SubscribeUnsubscribeTelegram(page=page)
+    working_with_reactions = WorkingWithReactions(page=page)
+    parsing_group_members = ParsingGroupMembers(page=page)
+    viewing_posts = ViewingPosts(page=page)
+    receiving_and_recording = ReceivingAndRecording()
+    tg_contact = TGContact(page=page)
+    send_telegram_messages = SendTelegramMessages(page=page)
+
     page.title = f"{PROGRAM_NAME}: {PROGRAM_VERSION} (Дата изменения {DATE_OF_PROGRAM_CHANGE})"
 
     menu = Menu(page=page)
@@ -50,20 +75,10 @@ async def main(page: ft.Page):
 
         ft.Row([
             ft.Column([
-                # ft.Container(
-                #     content=ft.Text(
-                #         "Главное меню",
-                #         size=18,
-                #         weight=ft.FontWeight.NORMAL,
-                #         color=ft.Colors.BLACK87,
-                #     ),
-                #     padding=ft.Padding(10, 10, 10, 20),
-                # ),
 
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.CELEBRATION, size=20, color=ft.Colors.PINK),
                             ft.Text(translations["ru"]["inviting_menu"]["inviting"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -77,7 +92,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.BAR_CHART, size=20, color=ft.Colors.BLUE),
                             ft.Text(translations["ru"]["menu"]["parsing"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -91,7 +105,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.CONTACTS, size=20, color=ft.Colors.BLUE),
                             ft.Text(translations["ru"]["menu"]["contacts"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -105,7 +118,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.SUBSCRIPTIONS, size=20, color=ft.Colors.LIGHT_BLUE),
                             ft.Text(translations["ru"]["menu"]["subscribe_unsubscribe"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -119,7 +131,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=20, color=ft.Colors.ORANGE),
                             ft.Text(translations["ru"]["menu"]["account_connect"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -133,7 +144,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.MESSAGE, size=20, color=ft.Colors.PURPLE),
                             ft.Text(
                                 translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"]),
                         ], tight=True, spacing=10),
@@ -148,7 +158,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.FAVORITE, size=20, color=ft.Colors.RED),
                             ft.Text(translations["ru"]["menu"]["reactions"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -162,7 +171,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.VERIFIED_USER, size=20, color=ft.Colors.BLUE),
                             ft.Text(translations["ru"]["menu"]["account_check"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -176,7 +184,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.GROUP, size=20, color=ft.Colors.PURPLE),
                             ft.Text(translations["ru"]["menu"]["create_groups"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -190,7 +197,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.EDIT, size=20, color=ft.Colors.ORANGE),
                             ft.Text(translations["ru"]["menu"]["edit_bio"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -204,7 +210,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.REMOVE_RED_EYE, size=20, color=ft.Colors.GREY),
                             ft.Text(translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -218,7 +223,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.CHAT, size=20, color=ft.Colors.LIGHT_BLUE),
                             ft.Text(translations["ru"]["message_sending_menu"]["sending_messages_via_chats"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -232,7 +236,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.FILE_UPLOAD, size=20, color=ft.Colors.BROWN),
                             ft.Text(translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -246,7 +249,6 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            # ft.Icon(ft.Icons.SETTINGS, size=20, color=ft.Colors.GREY),
                             ft.Text(translations["ru"]["menu"]["settings"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -334,21 +336,8 @@ ft.run(main)
 # from src.features.account.viewing_posts import ViewingPosts
 # from src.features.recording.receiving_and_recording import ReceivingAndRecording
 # from src.features.settings.setting import SettingPage
-#
-#
-# async def main(page: ft.Page):
-#     setting_page = SettingPage(page=page)
-#     account_bio = AccountBIO(page=page)
-#
-#     connect = TGConnect(page=page)
-#     creating_groups_and_chats = CreatingGroupsAndChats(page=page)
-#     subscribe_unsubscribe_telegram = SubscribeUnsubscribeTelegram(page=page)
-#     working_with_reactions = WorkingWithReactions(page=page)
-#     parsing_group_members = ParsingGroupMembers(page=page)
-#     viewing_posts = ViewingPosts(page=page)
-#     receiving_and_recording = ReceivingAndRecording()
-#     tg_contact = TGContact(page=page)
-#     send_telegram_messages = SendTelegramMessages(page=page)
+
+
 #
 #     def navigate_to(route):
 #         """Вспомогательная функция для навигации"""
