@@ -26,7 +26,7 @@ async def main(page: ft.Page):
     page.window.width = WINDOW_WIDTH
     page.window.height = WINDOW_HEIGHT
     page.window.resizable = WINDOW_RESIZABLE
-    BUTTON_HEIGHT = 50
+    BUTTON_HEIGHT = 30
     BUTTON_WIDTH = 350
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
@@ -50,20 +50,20 @@ async def main(page: ft.Page):
 
         ft.Row([
             ft.Column([
-                ft.Container(
-                    content=ft.Text(
-                        "Главное меню",
-                        size=18,
-                        weight=ft.FontWeight.NORMAL,
-                        color=ft.Colors.BLACK87,
-                    ),
-                    padding=ft.Padding(10, 10, 10, 20),
-                ),
+                # ft.Container(
+                #     content=ft.Text(
+                #         "Главное меню",
+                #         size=18,
+                #         weight=ft.FontWeight.NORMAL,
+                #         color=ft.Colors.BLACK87,
+                #     ),
+                #     padding=ft.Padding(10, 10, 10, 20),
+                # ),
 
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.CELEBRATION, size=20, color=ft.Colors.PINK),
+                            # ft.Icon(ft.Icons.CELEBRATION, size=20, color=ft.Colors.PINK),
                             ft.Text(translations["ru"]["inviting_menu"]["inviting"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -77,7 +77,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.BAR_CHART, size=20, color=ft.Colors.BLUE),
+                            # ft.Icon(ft.Icons.BAR_CHART, size=20, color=ft.Colors.BLUE),
                             ft.Text(translations["ru"]["menu"]["parsing"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -91,7 +91,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.CONTACTS, size=20, color=ft.Colors.BLUE),
+                            # ft.Icon(ft.Icons.CONTACTS, size=20, color=ft.Colors.BLUE),
                             ft.Text(translations["ru"]["menu"]["contacts"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -105,7 +105,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.SUBSCRIPTIONS, size=20, color=ft.Colors.LIGHT_BLUE),
+                            # ft.Icon(ft.Icons.SUBSCRIPTIONS, size=20, color=ft.Colors.LIGHT_BLUE),
                             ft.Text(translations["ru"]["menu"]["subscribe_unsubscribe"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -119,7 +119,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=20, color=ft.Colors.ORANGE),
+                            # ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=20, color=ft.Colors.ORANGE),
                             ft.Text(translations["ru"]["menu"]["account_connect"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -133,7 +133,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.MESSAGE, size=20, color=ft.Colors.PURPLE),
+                            # ft.Icon(ft.Icons.MESSAGE, size=20, color=ft.Colors.PURPLE),
                             ft.Text(
                                 translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"]),
                         ], tight=True, spacing=10),
@@ -148,7 +148,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.FAVORITE, size=20, color=ft.Colors.RED),
+                            # ft.Icon(ft.Icons.FAVORITE, size=20, color=ft.Colors.RED),
                             ft.Text(translations["ru"]["menu"]["reactions"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -162,7 +162,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.VERIFIED_USER, size=20, color=ft.Colors.BLUE),
+                            # ft.Icon(ft.Icons.VERIFIED_USER, size=20, color=ft.Colors.BLUE),
                             ft.Text(translations["ru"]["menu"]["account_check"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -176,7 +176,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.GROUP, size=20, color=ft.Colors.PURPLE),
+                            # ft.Icon(ft.Icons.GROUP, size=20, color=ft.Colors.PURPLE),
                             ft.Text(translations["ru"]["menu"]["create_groups"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -190,7 +190,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.EDIT, size=20, color=ft.Colors.ORANGE),
+                            # ft.Icon(ft.Icons.EDIT, size=20, color=ft.Colors.ORANGE),
                             ft.Text(translations["ru"]["menu"]["edit_bio"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -204,7 +204,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.REMOVE_RED_EYE, size=20, color=ft.Colors.GREY),
+                            # ft.Icon(ft.Icons.REMOVE_RED_EYE, size=20, color=ft.Colors.GREY),
                             ft.Text(translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -218,7 +218,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.CHAT, size=20, color=ft.Colors.LIGHT_BLUE),
+                            # ft.Icon(ft.Icons.CHAT, size=20, color=ft.Colors.LIGHT_BLUE),
                             ft.Text(translations["ru"]["message_sending_menu"]["sending_messages_via_chats"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -232,7 +232,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.FILE_UPLOAD, size=20, color=ft.Colors.BROWN),
+                            # ft.Icon(ft.Icons.FILE_UPLOAD, size=20, color=ft.Colors.BROWN),
                             ft.Text(translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
@@ -246,7 +246,7 @@ async def main(page: ft.Page):
                 ft.Container(
                     content=ft.Button(
                         content=ft.Row([
-                            ft.Icon(ft.Icons.SETTINGS, size=20, color=ft.Colors.GREY),
+                            # ft.Icon(ft.Icons.SETTINGS, size=20, color=ft.Colors.GREY),
                             ft.Text(translations["ru"]["menu"]["settings"]),
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
