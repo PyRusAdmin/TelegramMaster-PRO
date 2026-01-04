@@ -114,7 +114,7 @@ async def main(page: ft.Page):
                                                   smaller_timex=TIME_SENDING_MESSAGES_1,
                                                   larger_timex=TIME_SENDING_MESSAGES_2)
 
-        await page.update_async()
+        page.update()  # ИСПРАВЛЕНО: update_async() заменен на update()
 
     def view_pop(e):
         page.views.pop()
@@ -124,8 +124,13 @@ async def main(page: ft.Page):
     page.on_route_change = route_change
     page.on_view_pop = view_pop
 
-    await route_change(None)
+    # Устанавливаем начальный маршрут
+    # page.go("/")
+    # page.push_route("/")
 
+    # await route_change(_)
 
 if __name__ == '__main__':
-    ft.run(main)
+    # ft.run(main)  # Используем ft.run() вместо ft.app()
+
+    ft.app(main, view=ft.AppView.WEB_BROWSER)

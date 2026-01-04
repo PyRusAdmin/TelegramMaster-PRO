@@ -59,77 +59,77 @@ class Menu:
                                   ),
                                   # 🔄 Подписка, отписка
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["menu"]["subscribe_unsubscribe"],
+                                      translations["ru"]["menu"]["subscribe_unsubscribe"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/subscribe_unsubscribe")
                                   ),
                                   # 🔐 Подключение аккаунтов
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["menu"]["account_connect"],
+                                      translations["ru"]["menu"]["account_connect"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/account_connection_menu")
                                   ),
                                   # 📨 Отправка сообщений в личку
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
+                                      translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/sending_files_to_personal_account_with_limits")
                                   ),
                                   # ❤️ Работа с реакциями
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["menu"]["reactions"],
+                                      translations["ru"]["menu"]["reactions"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/working_with_reactions")
                                   ),
                                   # 🔍 Проверка аккаунтов
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["menu"]["account_check"],
+                                      translations["ru"]["menu"]["account_check"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/account_verification_menu")
                                   ),
                                   # 👥 Создание групп (чатов)
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["menu"]["create_groups"],
+                                      translations["ru"]["menu"]["create_groups"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/creating_groups")
                                   ),
                                   # ✏️ Редактирование_BIO
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["menu"]["edit_bio"],
+                                      translations["ru"]["menu"]["edit_bio"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/bio_editing")
                                   ),
                                   # 👁️‍🗨️ Накручиваем просмотры постов
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+                                      translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/viewing_posts_menu")
                                   ),
                                   # 💬 Рассылка сообщений по чатам
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
+                                      translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/sending_messages_files_via_chats")
                                   ),
                                   # 📋 Импорт списка от ранее спарсенных данных
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
+                                      translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/importing_a_list_of_parsed_data")
                                   ),
                                   # ⚙️ Настройки
                                   ft.ElevatedButton(
-                                      text=translations["ru"]["menu"]["settings"],
+                                      translations["ru"]["menu"]["settings"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
                                       on_click=lambda _: self.page.go("/settings")
