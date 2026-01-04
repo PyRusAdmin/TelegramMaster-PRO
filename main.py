@@ -26,8 +26,9 @@ async def main(page: ft.Page):
     page.window.width = WINDOW_WIDTH
     page.window.height = WINDOW_HEIGHT
     page.window.resizable = WINDOW_RESIZABLE
-    BUTTON_HEIGHT = 20
-    BUTTON_WIDTH = 300
+    BUTTON_HEIGHT = 50
+    BUTTON_WIDTH = 350
+
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
 
@@ -38,102 +39,229 @@ async def main(page: ft.Page):
         fit=ft.BoxFit.CONTAIN,
     )
 
-    # Создаём стиль, имитирующий старый ElevatedButton
-    elevated_style = ft.ButtonStyle(elevation=2)
+    # Стиль для кнопок меню
+    menu_button_style = ft.ButtonStyle(
+        shape=ft.RoundedRectangleBorder(radius=8),
+        padding=ft.Padding(15, 10, 15, 10),
+    )
 
     page.add(
         await menu.gui_program.key_app_bar(),
 
         ft.Row([
             ft.Column([
-                ft.Button(
-                    translations["ru"]["inviting_menu"]["inviting"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/inviting"),
-                    style=elevated_style,
+                ft.Container(
+                    content=ft.Text(
+                        "Главное меню",
+                        size=18,
+                        weight=ft.FontWeight.NORMAL,
+                        color=ft.Colors.BLACK87,
+                    ),
+                    padding=ft.Padding(10, 10, 10, 20),
                 ),
-                ft.Button(
-                    translations["ru"]["menu"]["parsing"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/parsing"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.CELEBRATION, size=20, color=ft.Colors.PINK),
+                            ft.Text(translations["ru"]["inviting_menu"]["inviting"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/inviting"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["menu"]["contacts"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/working_with_contacts"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.BAR_CHART, size=20, color=ft.Colors.BLUE),
+                            ft.Text(translations["ru"]["menu"]["parsing"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/parsing"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["menu"]["subscribe_unsubscribe"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/subscribe_unsubscribe"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.CONTACTS, size=20, color=ft.Colors.BLUE),
+                            ft.Text(translations["ru"]["menu"]["contacts"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/working_with_contacts"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["menu"]["account_connect"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/account_connection_menu"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.SUBSCRIPTIONS, size=20, color=ft.Colors.LIGHT_BLUE),
+                            ft.Text(translations["ru"]["menu"]["subscribe_unsubscribe"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/subscribe_unsubscribe"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/sending_files_to_personal_account_with_limits"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.ACCOUNT_CIRCLE, size=20, color=ft.Colors.ORANGE),
+                            ft.Text(translations["ru"]["menu"]["account_connect"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/account_connection_menu"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["menu"]["reactions"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/working_with_reactions"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.MESSAGE, size=20, color=ft.Colors.PURPLE),
+                            ft.Text(
+                                translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/sending_files_to_personal_account_with_limits"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["menu"]["account_check"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/account_verification_menu"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.FAVORITE, size=20, color=ft.Colors.RED),
+                            ft.Text(translations["ru"]["menu"]["reactions"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/working_with_reactions"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["menu"]["create_groups"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/creating_groups"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.VERIFIED_USER, size=20, color=ft.Colors.BLUE),
+                            ft.Text(translations["ru"]["menu"]["account_check"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/account_verification_menu"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["menu"]["edit_bio"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/bio_editing"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.GROUP, size=20, color=ft.Colors.PURPLE),
+                            ft.Text(translations["ru"]["menu"]["create_groups"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/creating_groups"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/viewing_posts_menu"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.EDIT, size=20, color=ft.Colors.ORANGE),
+                            ft.Text(translations["ru"]["menu"]["edit_bio"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/bio_editing"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/sending_messages_files_via_chats"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.REMOVE_RED_EYE, size=20, color=ft.Colors.GREY),
+                            ft.Text(translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/viewing_posts_menu"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/importing_a_list_of_parsed_data"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.CHAT, size=20, color=ft.Colors.LIGHT_BLUE),
+                            ft.Text(translations["ru"]["message_sending_menu"]["sending_messages_via_chats"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/sending_messages_files_via_chats"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-                ft.Button(
-                    translations["ru"]["menu"]["settings"],
-                    width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/settings"),
-                    style=elevated_style,
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.FILE_UPLOAD, size=20, color=ft.Colors.BROWN),
+                            ft.Text(translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/importing_a_list_of_parsed_data"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
                 ),
-            ], scroll=ft.ScrollMode.AUTO),
+
+                ft.Container(
+                    content=ft.Button(
+                        content=ft.Row([
+                            ft.Icon(ft.Icons.SETTINGS, size=20, color=ft.Colors.GREY),
+                            ft.Text(translations["ru"]["menu"]["settings"]),
+                        ], tight=True, spacing=10),
+                        width=BUTTON_WIDTH,
+                        height=BUTTON_HEIGHT,
+                        on_click=lambda _: page.go("/settings"),
+                        style=menu_button_style,
+                    ),
+                    padding=ft.Padding(0, 5, 0, 5),
+                ),
+            ], scroll=ft.ScrollMode.AUTO, spacing=0),
+
             ft.Column([
                 ft.VerticalDivider(width=20, thickness=2, color=ft.Colors.GREY_400),
             ]),
+
             ft.Column([
                 ft.Text(spans=[ft.TextSpan(
                     f"{PROGRAM_NAME}",
@@ -150,6 +278,8 @@ async def main(page: ft.Page):
                 )]),
                 ft.Text(spans=[ft.TextSpan(text=f"Версия программы: {PROGRAM_VERSION}")]),
                 ft.Text(spans=[ft.TextSpan(text=f"Дата выхода: {DATE_OF_PROGRAM_CHANGE}")]),
+
+                ft.Container(height=20),
 
                 ft.Row([
                     img,
@@ -187,7 +317,6 @@ async def main(page: ft.Page):
 
 
 ft.run(main)
-
 # import flet as ft
 
 # from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
