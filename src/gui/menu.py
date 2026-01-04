@@ -51,9 +51,12 @@ class Menu:
                                       on_click=lambda _: self.page.go("/parsing")
                                   ),
                                   # 📇 Работа с контактами
-                                  ft.ElevatedButton(width=350, height=BUTTON_HEIGHT,
-                                                    text=translations["ru"]["menu"]["contacts"],
-                                                    on_click=lambda _: self.page.go("/working_with_contacts")),
+                                  ft.ElevatedButton(
+                                      translations["ru"]["menu"]["contacts"],
+                                      width=350,
+                                      height=BUTTON_HEIGHT,
+                                      on_click=lambda _: self.page.go("/working_with_contacts")
+                                  ),
                                   # 🔄 Подписка, отписка
                                   ft.ElevatedButton(width=350, height=BUTTON_HEIGHT,
                                                     text=translations["ru"]["menu"]["subscribe_unsubscribe"],
