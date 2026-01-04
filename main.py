@@ -4,8 +4,8 @@ import base64
 import flet as ft
 from loguru import logger
 
-from src.core.config.configs import (BUTTON_HEIGHT)
-from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE)
+from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
+                                     WINDOW_HEIGHT, WINDOW_RESIZABLE)
 from src.core.database.create_database import create_database
 from src.gui.menu import Menu
 from src.locales.translations_loader import translations
@@ -21,8 +21,11 @@ async def main(page: ft.Page):
     """
     create_database()
     page.title = f"{PROGRAM_NAME}: {PROGRAM_VERSION} (Дата изменения {DATE_OF_PROGRAM_CHANGE})"
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+
     menu = Menu(page=page)
+    page.window.width = WINDOW_WIDTH
+    page.window.height = WINDOW_HEIGHT
+    page.window.resizable = WINDOW_RESIZABLE
     BUTTON_HEIGHT = 20
     BUTTON_WIDTH = 300
     with open("src/gui/image_display/telegram.png", "rb") as f:
@@ -34,14 +37,6 @@ async def main(page: ft.Page):
         height=30,
         fit=ft.BoxFit.CONTAIN,
     )
-
-    input = ft.TextField(value="0", text_align=ft.TextAlign.RIGHT, width=100)
-
-    # def minus_click(e):
-    #     input.value = str(int(input.value) - 1)
-    #
-    # def plus_click(e):
-    #     input.value = str(int(input.value) + 1)
 
     # Создаём стиль, имитирующий старый ElevatedButton
     elevated_style = ft.ButtonStyle(elevation=2)
@@ -136,43 +131,57 @@ async def main(page: ft.Page):
                     style=elevated_style,
                 ),
             ], scroll=ft.ScrollMode.AUTO),
-            ft.VerticalDivider(width=20, thickness=2, color=ft.Colors.GREY_400),
-            # ft.Row(
-            #     alignment=ft.MainAxisAlignment.CENTER,
-            #     controls=[
-            #         ft.IconButton(ft.Icons.REMOVE, on_click=minus_click),
-            #         input,
-            #         ft.IconButton(ft.Icons.ADD, on_click=plus_click),
-            #     ],
-            # ),
-            ft.Row([
-                img,
-                ft.Text(
-                    disabled=False,
-                    spans=[
-                        ft.TextSpan(translations["ru"]["main_menu_texts"]["text_1"]),
-                        ft.TextSpan(
-                            translations["ru"]["main_menu_texts"]["text_link_1"],
-                            ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-                            url=translations["ru"]["main_menu_texts"]["text_2"],
-                        ),
-                    ],
-                ),
+            ft.Column([
+                ft.VerticalDivider(width=20, thickness=2, color=ft.Colors.GREY_400),
             ]),
-            ft.Row([
-                img,
-                ft.Text(
-                    disabled=False,
-                    spans=[
-                        ft.TextSpan(translations["ru"]["main_menu_texts"]["text_2"]),
-                        ft.TextSpan(
-                            translations["ru"]["main_menu_texts"]["text_link_2"],
-                            ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-                            url=translations["ru"]["main_menu_texts"]["text_2"],
+            ft.Column([
+                ft.Text(spans=[ft.TextSpan(
+                    f"{PROGRAM_NAME}",
+                    ft.TextStyle(
+                        size=40,
+                        weight=ft.FontWeight.BOLD,
+                        foreground=ft.Paint(
+                            gradient=ft.PaintLinearGradient(
+                                (0, 20), (150, 20),
+                                [ft.Colors.PINK, ft.Colors.PURPLE]
+                            )
                         ),
-                    ],
-                ),
-            ]),
+                    ),
+                )]),
+                ft.Text(spans=[ft.TextSpan(text=f"Версия программы: {PROGRAM_VERSION}")]),
+                ft.Text(spans=[ft.TextSpan(text=f"Дата выхода: {DATE_OF_PROGRAM_CHANGE}")]),
+
+                ft.Row([
+                    img,
+                    ft.Text(
+                        disabled=False,
+                        spans=[
+                            ft.TextSpan(translations["ru"]["main_menu_texts"]["text_1"]),
+                            ft.TextSpan(
+                                translations["ru"]["main_menu_texts"]["text_link_1"],
+                                ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
+                                url=translations["ru"]["main_menu_texts"]["text_2"],
+                            ),
+                        ],
+                    ),
+                ]),
+
+                ft.Row([
+                    img,
+                    ft.Text(
+                        disabled=False,
+                        spans=[
+                            ft.TextSpan(translations["ru"]["main_menu_texts"]["text_2"]),
+                            ft.TextSpan(
+                                translations["ru"]["main_menu_texts"]["text_link_2"],
+                                ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
+                                url=translations["ru"]["main_menu_texts"]["text_2"],
+                            ),
+                        ],
+                    ),
+                ]),
+
+            ], horizontal_alignment=ft.CrossAxisAlignment.START, expand=True),
         ])
     )
 
@@ -199,11 +208,6 @@ ft.run(main)
 #
 #
 # async def main(page: ft.Page):
-#
-#     page.window.width = WINDOW_WIDTH
-#     page.window.height = WINDOW_HEIGHT
-#     page.window.resizable = WINDOW_RESIZABLE
-#
 #     setting_page = SettingPage(page=page)
 #     account_bio = AccountBIO(page=page)
 #
@@ -225,30 +229,6 @@ ft.run(main)
 #         """Главное меню программы"""
 #         page.views.append(
 #             ft.View("/", [
-#
-#                     ft.Column([
-#                         ft.Text(spans=[ft.TextSpan(
-#                             f"{PROGRAM_NAME}",
-#                             ft.TextStyle(
-#                                 size=40,
-#                                 weight=ft.FontWeight.BOLD,
-#                                 foreground=ft.Paint(
-#                                     gradient=ft.PaintLinearGradient(
-#                                         (0, 20), (150, 20),
-#                                         [ft.Colors.PINK, ft.Colors.PURPLE]
-#                                     )
-#                                 ),
-#                             ),
-#                         )]),
-#                         ft.Text(
-#                             disabled=False,
-#                             spans=[ft.TextSpan(text=f"Версия программы: {PROGRAM_VERSION}")],
-#                         ),
-#                         ft.Text(
-#                             disabled=False,
-#                             spans=[ft.TextSpan(text=f"Дата выхода: {DATE_OF_PROGRAM_CHANGE}")],
-#                         ),
-#                 ], vertical_alignment=ft.CrossAxisAlignment.START, expand=True)
 #             ])
 #         )
 #
@@ -319,6 +299,3 @@ ft.run(main)
 #
 #     # Устанавливаем начальный маршрут
 #     navigate_to("/")
-#
-#
-# ft.run(main)
