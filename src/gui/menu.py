@@ -115,23 +115,23 @@ class Menu:
                                   ),
                                   # 💬 Рассылка сообщений по чатам
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
                                       on_click=lambda _: self.page.go("/sending_messages_files_via_chats")
                                   ),
                                   # 📋 Импорт списка от ранее спарсенных данных
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
                                       on_click=lambda _: self.page.go("/importing_a_list_of_parsed_data")
                                   ),
                                   # ⚙️ Настройки
                                   ft.ElevatedButton(
+                                      text=translations["ru"]["menu"]["settings"],
                                       width=350,
                                       height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["menu"]["settings"],
                                       on_click=lambda _: self.page.go("/settings")
                                   ),
                               ], scroll=ft.ScrollMode.AUTO),
