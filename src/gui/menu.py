@@ -37,13 +37,19 @@ class Menu:
                               # Левая колонка — кнопки
                               ft.Column([
                                   # 🚀 Инвайтинг
-                                  ft.ElevatedButton(width=350, height=BUTTON_HEIGHT,
-                                                    text=translations["ru"]["inviting_menu"]["inviting"],
-                                                    on_click=lambda _: self.page.go("/inviting")),
+                                  ft.ElevatedButton(
+                                      translations["ru"]["inviting_menu"]["inviting"],
+                                      width=350,
+                                      height=BUTTON_HEIGHT,
+                                      on_click=lambda _: self.page.go("/inviting")
+                                  ),
                                   # 📊 Парсинг
-                                  ft.ElevatedButton(width=350, height=BUTTON_HEIGHT,
-                                                    text=translations["ru"]["menu"]["parsing"],
-                                                    on_click=lambda _: self.page.go("/parsing")),
+                                  ft.ElevatedButton(
+                                      translations["ru"]["menu"]["parsing"],
+                                      width=350,
+                                      height=BUTTON_HEIGHT,
+                                      on_click=lambda _: self.page.go("/parsing")
+                                  ),
                                   # 📇 Работа с контактами
                                   ft.ElevatedButton(width=350, height=BUTTON_HEIGHT,
                                                     text=translations["ru"]["menu"]["contacts"],
