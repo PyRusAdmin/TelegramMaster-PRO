@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 import base64
-
+import asyncio
 import flet as ft
 from loguru import logger
 
 from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
                                      WINDOW_HEIGHT, WINDOW_RESIZABLE)
+from src.core.config.configs import (TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
 from src.core.database.create_database import create_database
 from src.features.account.account_bio import AccountBIO
 from src.features.account.connect import TGConnect
 from src.features.account.contact import TGContact
 from src.features.account.creating import CreatingGroupsAndChats
+from src.features.account.inviting import InvitingToAGroup
 from src.features.account.parsing import ParsingGroupMembers
 from src.features.account.reactions import WorkingWithReactions
 from src.features.account.sending_messages import SendTelegramMessages
@@ -70,6 +72,80 @@ async def main(page: ft.Page):
         padding=ft.Padding(15, 10, 15, 10),
     )
 
+    # Вспомогательная функция для навигации
+    # async def navigate_to(route):
+    #     await page.push_route_async(route)
+
+    # Обработка смены маршрута
+    async def route_change(e):
+        page.views.clear()
+        route = page.route
+
+        if page.route == "/":
+            pass  # Главное меню уже отображено
+        elif page.route == "/inviting":
+            await InvitingToAGroup(page=page).inviting_menu()
+        elif page.route == "/parsing":
+            await parsing_group_members.account_selection_menu()
+        elif page.route == "/account_verification_menu":
+            await connect.check_menu()
+        elif page.route == "/subscribe_unsubscribe":
+            await subscribe_unsubscribe_telegram.subscribe_and_unsubscribe_menu()
+        elif page.route == "/working_with_reactions":
+            await working_with_reactions.reactions_menu()
+        elif page.route == "/viewing_posts_menu":
+            await viewing_posts.viewing_posts_request()
+        elif page.route == "/importing_a_list_of_parsed_data":
+            await receiving_and_recording.write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
+        elif page.route == "/working_with_contacts":
+            await tg_contact.working_with_contacts_menu()
+        elif page.route == "/account_connection_menu":
+            await connect.account_connection_menu()
+        elif page.route == "/creating_groups":
+            await creating_groups_and_chats.creating_groups_and_chats()
+        elif page.route == "/sending_messages_files_via_chats":
+            await send_telegram_messages.sending_messages_files_via_chats()
+        elif page.route == "/sending_files_to_personal_account_with_limits":
+            await send_telegram_messages.send_files_to_personal_chats()
+        elif page.route == "/bio_editing":
+            await account_bio.bio_editing_menu()
+        elif page.route == "/settings":
+            await menu.settings_menu()
+        elif page.route == "/choice_of_reactions":
+            await setting_page.reaction_gui()
+        elif page.route == "/proxy_entry":
+            await setting_page.creating_the_main_window_for_proxy_data_entry()
+        elif page.route == "/recording_api_id_api_hash":
+            await setting_page.writing_api_id_api_hash()
+        elif page.route == "/message_recording":
+            await setting_page.recording_text_for_sending_messages(
+                "Введите текст для сообщения",
+                setting_page.get_unique_filename(base_filename='user_data/message/message')
+            )
+        elif page.route == "/recording_reaction_link":
+            await setting_page.recording_text_for_sending_messages(
+                "Введите ссылку для реакций",
+                'user_data/reactions/link_channel.json'
+            )
+        elif page.route == "/recording_the_time_between_messages":
+            await setting_page.create_main_window(
+                variable="time_sending_messages",
+                smaller_timex=TIME_SENDING_MESSAGES_1,
+                larger_timex=TIME_SENDING_MESSAGES_2
+            )
+
+        page.update()
+
+    def view_pop(e):
+        if len(page.views) > 1:
+            page.views.pop()
+            top_view = page.views[-1]
+            page.route = top_view.route
+            page.update()
+
+    page.on_route_change = route_change
+    page.on_view_pop = view_pop
+
     page.add(
         await menu.gui_program.key_app_bar(),
 
@@ -83,7 +159,11 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/inviting"),
+                        # on_click=lambda _: page.push_route("/inviting"),
+                        on_click=lambda: asyncio.create_task(
+                            page.push_route("/inviting")
+                        ),
+
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -96,7 +176,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/parsing"),
+                        on_click=lambda _: page.push_route("/parsing"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -109,7 +189,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/working_with_contacts"),
+                        on_click=lambda _: page.push_route("/working_with_contacts"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -122,7 +202,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/subscribe_unsubscribe"),
+                        on_click=lambda _: page.push_route("/subscribe_unsubscribe"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -135,7 +215,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/account_connection_menu"),
+                        on_click=lambda _: page.push_route("/account_connection_menu"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -149,7 +229,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/sending_files_to_personal_account_with_limits"),
+                        on_click=lambda _: page.push_route("/sending_files_to_personal_account_with_limits"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -162,7 +242,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/working_with_reactions"),
+                        on_click=lambda _: page.push_route("/working_with_reactions"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -175,7 +255,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/account_verification_menu"),
+                        on_click=lambda _: page.push_route("/account_verification_menu"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -188,7 +268,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/creating_groups"),
+                        on_click=lambda _: page.push_route("/creating_groups"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -201,7 +281,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/bio_editing"),
+                        on_click=lambda _: page.push_route("/bio_editing"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -214,7 +294,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/viewing_posts_menu"),
+                        on_click=lambda _: page.push_route("/viewing_posts_menu"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -227,7 +307,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/sending_messages_files_via_chats"),
+                        on_click=lambda _: page.push_route("/sending_messages_files_via_chats"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -240,7 +320,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/importing_a_list_of_parsed_data"),
+                        on_click=lambda _: page.push_route("/importing_a_list_of_parsed_data"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -253,7 +333,7 @@ async def main(page: ft.Page):
                         ], tight=True, spacing=10),
                         width=BUTTON_WIDTH,
                         height=BUTTON_HEIGHT,
-                        on_click=lambda _: page.go("/settings"),
+                        on_click=lambda _: page.push_route("/settings"),
                         style=menu_button_style,
                     ),
                     padding=ft.Padding(0, 5, 0, 5),
@@ -319,101 +399,3 @@ async def main(page: ft.Page):
 
 
 ft.run(main)
-# import flet as ft
-
-# from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
-#                                      WINDOW_HEIGHT, WINDOW_RESIZABLE, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
-
-# from src.features.account.account_bio import AccountBIO
-# from src.features.account.connect import TGConnect
-# from src.features.account.contact import TGContact
-# from src.features.account.creating import CreatingGroupsAndChats
-# from src.features.account.inviting import InvitingToAGroup
-# from src.features.account.parsing import ParsingGroupMembers
-# from src.features.account.reactions import WorkingWithReactions
-# from src.features.account.sending_messages import SendTelegramMessages
-# from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTelegram
-# from src.features.account.viewing_posts import ViewingPosts
-# from src.features.recording.receiving_and_recording import ReceivingAndRecording
-# from src.features.settings.setting import SettingPage
-
-
-#
-#     def navigate_to(route):
-#         """Вспомогательная функция для навигации"""
-#         page.go(route)
-#
-#     async def main_menu_program():
-#         """Главное меню программы"""
-#         page.views.append(
-#             ft.View("/", [
-#             ])
-#         )
-#
-#     async def route_change(_):
-#         page.views.clear()
-#         if page.route == "/":
-#             await main_menu_program()
-#         elif page.route == "/inviting":
-#             await InvitingToAGroup(page=page).inviting_menu()
-#         elif page.route == "/parsing":
-#             await parsing_group_members.account_selection_menu()
-#         elif page.route == "/account_verification_menu":
-#             await connect.check_menu()
-#         elif page.route == "/subscribe_unsubscribe":
-#             await subscribe_unsubscribe_telegram.subscribe_and_unsubscribe_menu()
-#         elif page.route == "/working_with_reactions":
-#             await working_with_reactions.reactions_menu()
-#         elif page.route == "/viewing_posts_menu":
-#             await viewing_posts.viewing_posts_request()
-#         elif page.route == "/importing_a_list_of_parsed_data":
-#             await receiving_and_recording.write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
-#         elif page.route == "/working_with_contacts":
-#             await tg_contact.working_with_contacts_menu()
-#         elif page.route == "/account_connection_menu":
-#             await connect.account_connection_menu()
-#         elif page.route == "/creating_groups":
-#             await creating_groups_and_chats.creating_groups_and_chats()
-#         elif page.route == "/sending_messages_files_via_chats":
-#             await send_telegram_messages.sending_messages_files_via_chats()
-#         elif page.route == "/sending_files_to_personal_account_with_limits":
-#             await send_telegram_messages.send_files_to_personal_chats()
-#         elif page.route == "/bio_editing":
-#             await account_bio.bio_editing_menu()
-#         elif page.route == "/settings":
-#             await menu.settings_menu()
-#         elif page.route == "/choice_of_reactions":
-#             await setting_page.reaction_gui()
-#         elif page.route == "/proxy_entry":
-#             await setting_page.creating_the_main_window_for_proxy_data_entry()
-#         elif page.route == "/recording_api_id_api_hash":
-#             await setting_page.writing_api_id_api_hash()
-#         elif page.route == "/message_recording":
-#             await setting_page.recording_text_for_sending_messages(
-#                 "Введите текст для сообщения",
-#                 setting_page.get_unique_filename(base_filename='user_data/message/message')
-#             )
-#         elif page.route == "/recording_reaction_link":
-#             await setting_page.recording_text_for_sending_messages(
-#                 "Введите ссылку для реакций",
-#                 'user_data/reactions/link_channel.json'
-#             )
-#         elif page.route == "/recording_the_time_between_messages":
-#             await setting_page.create_main_window(
-#                 variable="time_sending_messages",
-#                 smaller_timex=TIME_SENDING_MESSAGES_1,
-#                 larger_timex=TIME_SENDING_MESSAGES_2
-#             )
-#
-#         page.update()
-#
-#     def view_pop(e):
-#         page.views.pop()
-#         top_view = page.views[-1]
-#         navigate_to(top_view.route)
-#
-#     page.on_route_change = route_change
-#     page.on_view_pop = view_pop
-#
-#     # Устанавливаем начальный маршрут
-#     navigate_to("/")

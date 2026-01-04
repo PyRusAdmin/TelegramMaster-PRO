@@ -69,7 +69,8 @@ class InvitingToAGroup:
         :return: None
         """
         list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
-        self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
+        # self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
+
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
         await self.app_logger.log_and_display(
@@ -318,8 +319,9 @@ class InvitingToAGroup:
         ).element_handler_inviting(self.page)
 
         start_inviting = ft.ElevatedButton(
-            width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-            text="Запуск",
+            "Запуск",
+            width=WIDTH_WIDE_BUTTON,
+            height=BUTTON_HEIGHT,
             on_click=start_inviting_grup  # Используем синхронную обёртку
         )
 
