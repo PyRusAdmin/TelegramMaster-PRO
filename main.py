@@ -50,65 +50,77 @@ async def main(page: ft.Page):
 
         ft.Row([
             ft.Column([
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["inviting_menu"]["inviting"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/inviting")
+                    on_click=lambda _: page.go("/inviting"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["menu"]["parsing"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/parsing")
+                    on_click=lambda _: page.go("/parsing"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["menu"]["contacts"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/working_with_contacts")
+                    on_click=lambda _: page.go("/working_with_contacts"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["menu"]["subscribe_unsubscribe"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/subscribe_unsubscribe")
+                    on_click=lambda _: page.go("/subscribe_unsubscribe"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["menu"]["account_connect"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/account_connection_menu")
+                    on_click=lambda _: page.go("/account_connection_menu"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/sending_files_to_personal_account_with_limits")
+                    on_click=lambda _: page.go("/sending_files_to_personal_account_with_limits"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["menu"]["reactions"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/working_with_reactions")
+                    on_click=lambda _: page.go("/working_with_reactions"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["menu"]["account_check"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/account_verification_menu")
+                    on_click=lambda _: page.go("/account_verification_menu"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["menu"]["create_groups"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/creating_groups")
+                    on_click=lambda _: page.go("/creating_groups"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["menu"]["edit_bio"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/bio_editing")
+                    on_click=lambda _: page.go("/bio_editing"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/viewing_posts_menu")
+                    on_click=lambda _: page.go("/viewing_posts_menu"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/sending_messages_files_via_chats")
+                    on_click=lambda _: page.go("/sending_messages_files_via_chats"),
+                    style=elevated_style,
                 ),
                 ft.Button(
                     translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
