@@ -42,6 +42,9 @@ async def main(page: ft.Page):
     # def plus_click(e):
     #     input.value = str(int(input.value) + 1)
 
+    # Создаём стиль, имитирующий старый ElevatedButton
+    elevated_style = ft.ButtonStyle(elevation=2)
+
     page.add(
         await menu.gui_program.key_app_bar(),
 
@@ -107,15 +110,17 @@ async def main(page: ft.Page):
                     width=350, height=BUTTON_HEIGHT,
                     on_click=lambda _: page.go("/sending_messages_files_via_chats")
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/importing_a_list_of_parsed_data")
+                    on_click=lambda _: page.go("/importing_a_list_of_parsed_data"),
+                    style=elevated_style,
                 ),
-                ft.ElevatedButton(
+                ft.Button(
                     translations["ru"]["menu"]["settings"],
                     width=350, height=BUTTON_HEIGHT,
-                    on_click=lambda _: page.go("/settings")
+                    on_click=lambda _: page.go("/settings"),
+                    style=elevated_style,
                 ),
             ], scroll=ft.ScrollMode.AUTO),
 
