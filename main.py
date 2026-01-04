@@ -36,6 +36,7 @@ async def main(page: ft.Page):
     page.window.width = WINDOW_WIDTH  # Ширина окна
     page.window.height = WINDOW_HEIGHT  # Высота окна
     page.window.resizable = WINDOW_RESIZABLE  # Разрешение изменения размера окна
+
     setting_page = SettingPage(page=page)
     account_bio = AccountBIO(page=page)
     menu = Menu(page=page)
@@ -112,18 +113,19 @@ async def main(page: ft.Page):
             await setting_page.create_main_window(variable="time_sending_messages",
                                                   smaller_timex=TIME_SENDING_MESSAGES_1,
                                                   larger_timex=TIME_SENDING_MESSAGES_2)
-        page.update()
 
-    def view_pop(_):
+        await page.update_async()
+
+    def view_pop(e):
         page.views.pop()
         top_view = page.views[-1]
         page.go(top_view.route)
 
     page.on_route_change = route_change
     page.on_view_pop = view_pop
-    page.go(page.route)
+
+    await route_change(None)
 
 
 if __name__ == '__main__':
-    ft.app(target=main)
-    # 192
+    ft.run(main)

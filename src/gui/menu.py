@@ -2,7 +2,7 @@
 import base64
 
 import flet as ft
-
+# from flet.core.image import ImageFit
 from src.core.config.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, PROGRAM_NAME, DATE_OF_PROGRAM_CHANGE,
                                      PROGRAM_VERSION)
 from src.gui.gui_elements import GUIProgram
@@ -23,12 +23,12 @@ class Menu:
         with open("src/gui/image_display/telegram.png", "rb") as f:
             img_base64 = base64.b64encode(f.read()).decode("utf-8")
 
-        # Создание изображения и установка
+        # Создание изображения
         img = ft.Image(
-            src_base64=img_base64,
+            src=f"data:image/png;base64,{img_base64}",
             width=30,
             height=30,
-            fit=ft.ImageFit.CONTAIN,
+            fit=ft.BoxFit.CONTAIN,
         )
 
         self.page.views.append(
