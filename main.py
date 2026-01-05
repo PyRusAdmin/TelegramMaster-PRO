@@ -4,11 +4,8 @@ import base64
 import flet as ft
 from loguru import logger
 
-from src.gui.buttons import menu_button
-from src.gui.gui_elements import GUIProgram
 from src.core.config.configs import (
-    PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height, TIME_SENDING_MESSAGES_1,
-    TIME_SENDING_MESSAGES_2
+    PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height
 )
 from src.core.database.create_database import create_database
 from src.features.account.account_bio import AccountBIO
@@ -23,6 +20,8 @@ from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTeleg
 from src.features.account.viewing_posts import ViewingPosts
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage
+from src.gui.buttons import menu_button
+from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")
@@ -98,36 +97,8 @@ async def main(page: ft.Page):
             await send_telegram_messages.send_files_to_personal_chats()
         elif page.route == "/bio_editing":
             await account_bio.bio_editing_menu()
-
         elif page.route == "/settings":
             await setting_page.settings_page_menu()
-
-        # elif page.route == "/choice_of_reactions":
-        #     await setting_page.reaction_gui()
-        # elif page.route == "/proxy_entry":
-        #     await setting_page.creating_the_main_window_for_proxy_data_entry()
-        # elif page.route == "/recording_api_id_api_hash":
-        #     await setting_page.writing_api_id_api_hash()
-        # elif page.route == "/message_recording":
-        #     await setting_page.recording_text_for_sending_messages(
-        #         label="Введите текст для сообщения",
-        #         unique_filename=setting_page.get_unique_filename(base_filename='user_data/message/message')
-        #     )
-
-        elif page.route == "/recording_reaction_link":
-
-            await setting_page.recording_text_for_sending_messages(
-                label="Введите ссылку для реакций",
-                unique_filename='user_data/reactions/link_channel.json'
-            )
-
-        elif page.route == "/recording_the_time_between_messages":
-
-            await setting_page.create_main_window(
-                variable="time_sending_messages",
-                smaller_timex=TIME_SENDING_MESSAGES_1,
-                larger_timex=TIME_SENDING_MESSAGES_2
-            )
 
         page.update()
 

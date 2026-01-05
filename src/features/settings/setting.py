@@ -7,7 +7,7 @@ import sys
 
 import flet as ft  # Импортируем библиотеку flet
 
-from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, BUTTON_WIDTH
+from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.database.database import save_proxy_data_to_db
 from src.gui.buttons import menu_button_fun
 from src.gui.gui import AppLogger, list_view
@@ -191,6 +191,12 @@ class SettingPage:
                 unique_filename=self.get_unique_filename(base_filename='user_data/message/message')
             )
 
+        async def recording_reaction_link():
+            await recording_text_for_sending_messages(
+                label="Введите ссылку для реакций",
+                unique_filename='user_data/reactions/link_channel.json'
+            )
+
         self.page.views.append(
             ft.View("/settings",
                     [await self.gui_program.key_app_bar(),
@@ -208,85 +214,81 @@ class SettingPage:
                                                writing_api_id_api_hash),  # 📝 Запись api_id, api_hash
                          await menu_button_fun(translations["ru"]["menu_settings"]["message_recording"],
                                                message_recording),  # ✉️ Запись сообщений
+                         await menu_button_fun(translations["ru"]["menu_settings"]["recording_reaction_link"],
+                                               recording_reaction_link),  # 🔗 Запись ссылки для реакций
 
-                         # 🔗 Запись ссылки для реакций
-                         ft.Button(
-                             translations["ru"]["menu_settings"]["recording_reaction_link"],
-                             width=BUTTON_WIDTH,
-                             height=BUTTON_HEIGHT,
-                             on_click=lambda _: self.page.go("/recording_reaction_link")),
                      ])]))
 
-    async def record_setting(self, limit_type: str, limits):
-        """
-        Записывает лимиты на аккаунт или сообщение в конфигурационный файл.
+    # async def record_setting(self, limit_type: str, limits):
+    #     """
+    #     Записывает лимиты на аккаунт или сообщение в конфигурационный файл.
+    #
+    #     :param limit_type: Тип лимита
+    #     :param limits: Значение лимита
+    #     :return: None
+    #     """
+    #     try:
+    #         config.get(limit_type, limit_type)
+    #         config.set(limit_type, limit_type, limits.value)
+    #         self.writing_settings_to_a_file(config)
+    #         await show_notification(self.page, "Данные успешно записаны!")
+    #     except configparser.NoSectionError as error:
+    #         await show_notification(self.page, "⚠️ Поврежден файл user_data/config/config.ini")
+    #         await self.app_logger.log_and_display(f"Ошибка: {error}")
 
-        :param limit_type: Тип лимита
-        :param limits: Значение лимита
-        :return: None
-        """
-        try:
-            config.get(limit_type, limit_type)
-            config.set(limit_type, limit_type, limits.value)
-            self.writing_settings_to_a_file(config)
-            await show_notification(self.page, "Данные успешно записаны!")
-        except configparser.NoSectionError as error:
-            await show_notification(self.page, "⚠️ Поврежден файл user_data/config/config.ini")
-            await self.app_logger.log_and_display(f"Ошибка: {error}")
+    # async def recording_the_time_to_launch_an_invite_every_day(self, hour_textfield, minutes_textfield) -> None:
+    #     """
+    #     Записывает время для ежедневного запуска инвайтинга в конфигурационный файл.
+    #
+    #     :param hour_textfield: Поле ввода для часов
+    #     :param minutes_textfield: Поле ввода для минут
+    #     :return: None
+    #     """
+    #     try:
+    #         hour = int(hour_textfield.value)
+    #         minutes = int(minutes_textfield.value)
+    #         if not 0 <= hour < 24:
+    #             await self.app_logger.log_and_display(f"Введите часы в пределах от 0 до 23!")
+    #             return
+    #         if not 0 <= minutes < 60:
+    #             await self.app_logger.log_and_display(f"Введите минуты в пределах от 0 до 59!")
+    #             return
+    #         # Предполагая, что config является объектом, похожим на словарь
+    #         config.get("hour_minutes_every_day", "hour")
+    #         config.set("hour_minutes_every_day", "hour", str(hour))
+    #         config.get("hour_minutes_every_day", "minutes")
+    #         config.set("hour_minutes_every_day", "minutes", str(minutes))
+    #         self.writing_settings_to_a_file(config)
+    #         await show_notification(self.page, "Данные успешно записаны!")
+    #
+    #     except ValueError:
+    #         await self.app_logger.log_and_display(f"Введите числовые значения для часов и минут!")
+    #     self.page.update()  # Обновляем страницу
 
-    async def recording_the_time_to_launch_an_invite_every_day(self, hour_textfield, minutes_textfield) -> None:
-        """
-        Записывает время для ежедневного запуска инвайтинга в конфигурационный файл.
-
-        :param hour_textfield: Поле ввода для часов
-        :param minutes_textfield: Поле ввода для минут
-        :return: None
-        """
-        try:
-            hour = int(hour_textfield.value)
-            minutes = int(minutes_textfield.value)
-            if not 0 <= hour < 24:
-                await self.app_logger.log_and_display(f"Введите часы в пределах от 0 до 23!")
-                return
-            if not 0 <= minutes < 60:
-                await self.app_logger.log_and_display(f"Введите минуты в пределах от 0 до 59!")
-                return
-            # Предполагая, что config является объектом, похожим на словарь
-            config.get("hour_minutes_every_day", "hour")
-            config.set("hour_minutes_every_day", "hour", str(hour))
-            config.get("hour_minutes_every_day", "minutes")
-            config.set("hour_minutes_every_day", "minutes", str(minutes))
-            self.writing_settings_to_a_file(config)
-            await show_notification(self.page, "Данные успешно записаны!")
-
-        except ValueError:
-            await self.app_logger.log_and_display(f"Введите числовые значения для часов и минут!")
-        self.page.update()  # Обновляем страницу
-
-    async def create_main_window(self, variable, smaller_timex, larger_timex) -> None:
-        """
-        Создает главное окно для настройки временных интервалов.
-
-        :param variable: Название переменной в файле config.ini
-        :param smaller_timex: Первое время (начальное)
-        :param larger_timex: Второе время (конечное)
-        :return: None
-        """
-        try:
-            smaller_times = smaller_timex.value
-            larger_times = larger_timex.value
-            if int(smaller_times) < int(larger_times):  # Проверяем, что первое время меньше второго
-                # Если условие прошло проверку, то возвращаем первое и второе время
-                self.writing_settings_to_a_file(
-                    await self.recording_limits_file(str(smaller_times), str(larger_times), variable=variable))
-                list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
-                await show_notification(self.page, "Данные успешно записаны!")
-                self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-            else:
-                list_view.controls.append(ft.Text("Ошибка: первое время должно быть меньше второго!"))
-        except ValueError:
-            list_view.controls.append(ft.Text("Ошибка: введите числовые значения!"))
-        self.page.update()  # обновляем страницу
+    # async def create_main_window(self, variable, smaller_timex, larger_timex) -> None:
+    #     """
+    #     Создает главное окно для настройки временных интервалов.
+    #
+    #     :param variable: Название переменной в файле config.ini
+    #     :param smaller_timex: Первое время (начальное)
+    #     :param larger_timex: Второе время (конечное)
+    #     :return: None
+    #     """
+    #     try:
+    #         smaller_times = smaller_timex.value
+    #         larger_times = larger_timex.value
+    #         if int(smaller_times) < int(larger_times):  # Проверяем, что первое время меньше второго
+    #             # Если условие прошло проверку, то возвращаем первое и второе время
+    #             self.writing_settings_to_a_file(
+    #                 await self.recording_limits_file(str(smaller_times), str(larger_times), variable=variable))
+    #             list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
+    #             await show_notification(self.page, "Данные успешно записаны!")
+    #             self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+    #         else:
+    #             list_view.controls.append(ft.Text("Ошибка: первое время должно быть меньше второго!"))
+    #     except ValueError:
+    #         list_view.controls.append(ft.Text("Ошибка: введите числовые значения!"))
+    #     self.page.update()  # обновляем страницу
 
     async def add_view_with_fields_and_button(self, fields: list, btn_click) -> None:
         """

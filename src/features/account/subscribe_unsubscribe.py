@@ -168,12 +168,12 @@ class SubscribeUnsubscribeTelegram:
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🔔 Подписка
                          ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
-                                           on_click=add_items),
+                                   text=translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
+                                   on_click=add_items),
                          # 🚫 Отписываемся
                          ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"],
-                                           on_click=unsubscribe_all),
+                                   text=translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"],
+                                   on_click=unsubscribe_all),
                      ])]))
 
     @staticmethod
