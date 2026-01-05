@@ -6,6 +6,7 @@ import os
 import sys
 
 import flet as ft  # Импортируем библиотеку flet
+from loguru import logger
 
 from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.database.database import save_proxy_data_to_db
@@ -55,173 +56,183 @@ class SettingPage:
 
         Меню настройки
         """
+        try:
 
-        async def reaction_gui():
-            """
-            Создает графический интерфейс для выбора реакций.
-            :return: None
-            """
+            async def reaction_gui():
+                """
+                Создает графический интерфейс для выбора реакций.
+                :return: None
+                """
 
-            t = ft.Text(value='Выберите реакцию')  # Создает текстовое поле (t).
+                t = ft.Text(value='Выберите реакцию')  # Создает текстовое поле (t).
 
-            # Создаем все чекбоксы единожды и сохраняем их в списке
-            checkboxes = [
-                ft.Checkbox(label="😀"), ft.Checkbox(label="😎"), ft.Checkbox(label="😍"),
-                ft.Checkbox(label="😂"), ft.Checkbox(label="😡"), ft.Checkbox(label="😱"),
-                ft.Checkbox(label="😭"), ft.Checkbox(label="👍"), ft.Checkbox(label="👎"),
-                ft.Checkbox(label="❤"), ft.Checkbox(label="🔥"), ft.Checkbox(label="🎉"),
-                ft.Checkbox(label="😁"), ft.Checkbox(label="😢"), ft.Checkbox(label="💩"),
-                ft.Checkbox(label="👏"), ft.Checkbox(label="🤷‍♀️"), ft.Checkbox(label="🤷"),
-                ft.Checkbox(label="🤷‍♂️"), ft.Checkbox(label="👾"), ft.Checkbox(label="🙊"),
-                ft.Checkbox(label="💊"), ft.Checkbox(label="😘"), ft.Checkbox(label="🦄"),
-                ft.Checkbox(label="💘"), ft.Checkbox(label="🆒"), ft.Checkbox(label="🗿"),
-                ft.Checkbox(label="🤪"), ft.Checkbox(label="💅"), ft.Checkbox(label="☃️"),
-                ft.Checkbox(label="🎄"), ft.Checkbox(label="🎅"), ft.Checkbox(label="🤗"),
-                ft.Checkbox(label="🤬"), ft.Checkbox(label="🤮"), ft.Checkbox(label="🤡"),
-                ft.Checkbox(label="🥴"), ft.Checkbox(label="💯"), ft.Checkbox(label="🌭"),
-                ft.Checkbox(label="⚡️"), ft.Checkbox(label="🍌"), ft.Checkbox(label="🖕"),
-                ft.Checkbox(label="💋"), ft.Checkbox(label="👀"), ft.Checkbox(label="🤝"),
-                ft.Checkbox(label="🍾"), ft.Checkbox(label="🏆"), ft.Checkbox(label="🥱"),
-                ft.Checkbox(label="🕊"), ft.Checkbox(label="😭")
-            ]
+                # Создаем все чекбоксы единожды и сохраняем их в списке
+                checkboxes = [
+                    ft.Checkbox(label="😀"), ft.Checkbox(label="😎"), ft.Checkbox(label="😍"),
+                    ft.Checkbox(label="😂"), ft.Checkbox(label="😡"), ft.Checkbox(label="😱"),
+                    ft.Checkbox(label="😭"), ft.Checkbox(label="👍"), ft.Checkbox(label="👎"),
+                    ft.Checkbox(label="❤"), ft.Checkbox(label="🔥"), ft.Checkbox(label="🎉"),
+                    ft.Checkbox(label="😁"), ft.Checkbox(label="😢"), ft.Checkbox(label="💩"),
+                    ft.Checkbox(label="👏"), ft.Checkbox(label="🤷‍♀️"), ft.Checkbox(label="🤷"),
+                    ft.Checkbox(label="🤷‍♂️"), ft.Checkbox(label="👾"), ft.Checkbox(label="🙊"),
+                    ft.Checkbox(label="💊"), ft.Checkbox(label="😘"), ft.Checkbox(label="🦄"),
+                    ft.Checkbox(label="💘"), ft.Checkbox(label="🆒"), ft.Checkbox(label="🗿"),
+                    ft.Checkbox(label="🤪"), ft.Checkbox(label="💅"), ft.Checkbox(label="☃️"),
+                    ft.Checkbox(label="🎄"), ft.Checkbox(label="🎅"), ft.Checkbox(label="🤗"),
+                    ft.Checkbox(label="🤬"), ft.Checkbox(label="🤮"), ft.Checkbox(label="🤡"),
+                    ft.Checkbox(label="🥴"), ft.Checkbox(label="💯"), ft.Checkbox(label="🌭"),
+                    ft.Checkbox(label="⚡️"), ft.Checkbox(label="🍌"), ft.Checkbox(label="🖕"),
+                    ft.Checkbox(label="💋"), ft.Checkbox(label="👀"), ft.Checkbox(label="🤝"),
+                    ft.Checkbox(label="🍾"), ft.Checkbox(label="🏆"), ft.Checkbox(label="🥱"),
+                    ft.Checkbox(label="🕊"), ft.Checkbox(label="😭")
+                ]
 
-            async def button_clicked(_) -> None:
-                """Выбранная реакция"""
-                selected_reactions = [checkbox.label for checkbox in checkboxes if
-                                      checkbox.value]  # Получаем только выбранные реакции
-                self.write_data_to_json_file(reactions=selected_reactions,
-                                             path_to_the_file='user_data/reactions/reactions.json')
+                async def button_clicked(_) -> None:
+                    """Выбранная реакция"""
+                    selected_reactions = [checkbox.label for checkbox in checkboxes if
+                                          checkbox.value]  # Получаем только выбранные реакции
+                    self.write_data_to_json_file(reactions=selected_reactions,
+                                                 path_to_the_file='user_data/reactions/reactions.json')
 
-                await show_notification(page=self.page, message="Данные успешно записаны!")
-                self.page.go("/settings")  # Переход к странице настроек
+                    await show_notification(page=self.page, message="Данные успешно записаны!")
+                    self.page.go("/settings")  # Переход к странице настроек
 
-            # Добавляем элементы на страницу
-            self.page.views.append(
-                ft.View(
-                    "/settings",
-                    controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
-                              t,
-                              ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
-                              # Чекбоксы в колонках
-                              ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                        text=translations["ru"]["buttons"]["done"],
-                                        on_click=button_clicked),  # Кнопка "Готово",
-                              ]
+                # Добавляем элементы на страницу
+                self.page.views.append(
+                    ft.View(
+                        "/settings",
+                        controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
+                                  t,
+                                  ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
+                                  # Чекбоксы в колонках
+                                  ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                            text=translations["ru"]["buttons"]["done"],
+                                            on_click=button_clicked),  # Кнопка "Готово",
+                                  ]
+                    )
                 )
-            )
 
-        async def creating_the_main_window_for_proxy_data_entry() -> None:
-            """
-            Создает интерфейс для ввода данных прокси-сервера.
+            async def creating_the_main_window_for_proxy_data_entry() -> None:
+                """
+                Создает интерфейс для ввода данных прокси-сервера.
 
-            :return: None
-            """
-            self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+                :return: None
+                """
+                self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
 
-            list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+                list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
 
-            proxy_type = ft.TextField(label="Введите тип прокси, например SOCKS5: ", multiline=True, max_lines=19)
-            addr_type = ft.TextField(label="Введите ip адрес, например 194.67.248.9: ", multiline=True, max_lines=19)
-            port_type = ft.TextField(label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19)
-            username_type = ft.TextField(label="Введите username, например NnbjvX: ", multiline=True, max_lines=19)
-            password_type = ft.TextField(label="Введите пароль, например ySfCfk: ", multiline=True, max_lines=19)
+                proxy_type = ft.TextField(label="Введите тип прокси, например SOCKS5: ", multiline=True, max_lines=19)
+                addr_type = ft.TextField(label="Введите ip адрес, например 194.67.248.9: ", multiline=True,
+                                         max_lines=19)
+                port_type = ft.TextField(label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19)
+                username_type = ft.TextField(label="Введите username, например NnbjvX: ", multiline=True, max_lines=19)
+                password_type = ft.TextField(label="Введите пароль, например ySfCfk: ", multiline=True, max_lines=19)
 
-            async def btn_click(_) -> None:
-                proxy = {
-                    "proxy_type": proxy_type.value,
-                    "addr": addr_type.value,
-                    "port": port_type.value,
-                    "username": username_type.value,
-                    "password": password_type.value,
-                    "rdns": "True"
-                }
-                save_proxy_data_to_db(proxy=proxy)
-                await show_notification(self.page, "Данные успешно записаны!")
-                self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-                self.page.update()
+                async def btn_click(_) -> None:
+                    proxy = {
+                        "proxy_type": proxy_type.value,
+                        "addr": addr_type.value,
+                        "port": port_type.value,
+                        "username": username_type.value,
+                        "password": password_type.value,
+                        "rdns": "True"
+                    }
+                    save_proxy_data_to_db(proxy=proxy)
+                    await show_notification(self.page, "Данные успешно записаны!")
+                    self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                    self.page.update()
 
-            await self.add_view_with_fields_and_button([proxy_type, addr_type, port_type, username_type, password_type],
-                                                       btn_click)
+                await self.add_view_with_fields_and_button(
+                    [proxy_type, addr_type, port_type, username_type, password_type],
+                    btn_click)
 
-        async def writing_api_id_api_hash():
-            """
-            Создает интерфейс для записи API ID и API Hash.
-            :return: None
-            """
-            self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
-            list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-            api_id_data = ft.TextField(label="Введите api_id", multiline=True, max_lines=19)
-            api_hash_data = ft.TextField(label="Введите api_hash", multiline=True, max_lines=19)
+            async def writing_api_id_api_hash():
+                """
+                Создает интерфейс для записи API ID и API Hash.
+                :return: None
+                """
+                self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+                list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+                api_id_data = ft.TextField(label="Введите api_id", multiline=True, max_lines=19)
+                api_hash_data = ft.TextField(label="Введите api_hash", multiline=True, max_lines=19)
 
-            def btn_click(_) -> None:
-                config.get("telegram_settings", "id")
-                config.set("telegram_settings", "id", api_id_data.value)
-                config.get("telegram_settings", "hash")
-                config.set("telegram_settings", "hash", api_hash_data.value)
-                self.writing_settings_to_a_file(config)
-                self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-                self.page.update()
+                def btn_click(_) -> None:
+                    config.get("telegram_settings", "id")
+                    config.set("telegram_settings", "id", api_id_data.value)
+                    config.get("telegram_settings", "hash")
+                    config.set("telegram_settings", "hash", api_hash_data.value)
+                    self.writing_settings_to_a_file(config)
+                    self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                    self.page.update()
 
-            await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
+                await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
 
-        async def recording_text_for_sending_messages(label, unique_filename) -> None:
-            """
-            Создает интерфейс для записи текста в JSON-файл для отправки сообщений в Telegram.
+            async def recording_text_for_sending_messages(label, unique_filename) -> None:
+                """
+                Создает интерфейс для записи текста в JSON-файл для отправки сообщений в Telegram.
 
-            :param label: Текст для отображения в поле ввода
-            :param unique_filename: Имя файла для записи данных
-            :return: None
-            """
-            self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
-            list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-            text_to_send = ft.TextField(label=label, multiline=True, max_lines=19)
+                :param label: Текст для отображения в поле ввода
+                :param unique_filename: Имя файла для записи данных
+                :return: None
+                """
+                self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+                list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+                text_to_send = ft.TextField(label=label, multiline=True, max_lines=19)
 
-            async def btn_click(_) -> None:
-                self.write_data_to_json_file(reactions=text_to_send.value,
-                                             path_to_the_file=unique_filename)  # Сохраняем данные в файл
-                await show_notification(self.page, "Данные успешно записаны!")
-                self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-                self.page.update()
+                async def btn_click(_) -> None:
+                    self.write_data_to_json_file(reactions=text_to_send.value,
+                                                 path_to_the_file=unique_filename)  # Сохраняем данные в файл
+                    await show_notification(self.page, "Данные успешно записаны!")
+                    self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                    self.page.update()
 
-            await self.add_view_with_fields_and_button([text_to_send], btn_click)
+                await self.add_view_with_fields_and_button([text_to_send], btn_click)
 
-        async def message_recording():
-            await recording_text_for_sending_messages(
-                label="Введите текст для сообщения",
-                unique_filename=self.get_unique_filename(base_filename='user_data/message/message')
-            )
+            async def message_recording():
+                await recording_text_for_sending_messages(
+                    label="Введите текст для сообщения",
+                    unique_filename=self.get_unique_filename(base_filename='user_data/message/message')
+                )
 
-        async def recording_reaction_link():
-            await recording_text_for_sending_messages(
-                label="Введите ссылку для реакций",
-                unique_filename='user_data/reactions/link_channel.json'
-            )
+            async def recording_reaction_link():
+                await recording_text_for_sending_messages(
+                    label="Введите ссылку для реакций",
+                    unique_filename='user_data/reactions/link_channel.json'
+                )
 
-        self.page.views.append(
-            ft.View(route="/settings",
-                    controls=[await self.gui_program.key_app_bar(),  # Кнопка назад
-                             ft.Text(spans=[ft.TextSpan(translations["ru"]["menu"]["settings"],
-                                                        ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
-                                                                     foreground=ft.Paint(
-                                                                         gradient=ft.PaintLinearGradient((0, 20),
-                                                                                                         (150, 20),
-                                                                                                         [ft.Colors.PINK,
-                                                                                                          ft.Colors.PURPLE]))))]),
+            self.page.views.append(
+                ft.View(route="/settings",
+                        controls=[await self.gui_program.key_app_bar(),  # Кнопка назад
+                                  ft.Text(spans=[ft.TextSpan(translations["ru"]["menu"]["settings"],
+                                                             ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
+                                                                          foreground=ft.Paint(
+                                                                              gradient=ft.PaintLinearGradient((0, 20),
+                                                                                                              (150, 20),
+                                                                                                              [ft.Colors.PINK,
+                                                                                                               ft.Colors.PURPLE]))))]),
 
-                             ft.Column(controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                                 await menu_button_fun(translations["ru"]["menu_settings"]["choice_of_reactions"],
-                                                       reaction_gui),  # 👍 Выбор реакций
-                                 await menu_button_fun(translations["ru"]["menu_settings"]["proxy_entry"],
-                                                       creating_the_main_window_for_proxy_data_entry),
-                                 # 🔐 Запись proxy
-                                 await menu_button_fun(translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
-                                                       writing_api_id_api_hash),  # 📝 Запись api_id, api_hash
-                                 await menu_button_fun(translations["ru"]["menu_settings"]["message_recording"],
-                                                       message_recording),  # ✉️ Запись сообщений
-                                 await menu_button_fun(translations["ru"]["menu_settings"]["recording_reaction_link"],
-                                                       recording_reaction_link),  # 🔗 Запись ссылки для реакций
+                                  ft.Column(
+                                      controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                                          await menu_button_fun(
+                                              translations["ru"]["menu_settings"]["choice_of_reactions"],
+                                              reaction_gui),  # 👍 Выбор реакций
+                                          await menu_button_fun(translations["ru"]["menu_settings"]["proxy_entry"],
+                                                                creating_the_main_window_for_proxy_data_entry),
+                                          # 🔐 Запись proxy
+                                          await menu_button_fun(
+                                              translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
+                                              writing_api_id_api_hash),  # 📝 Запись api_id, api_hash
+                                          await menu_button_fun(
+                                              translations["ru"]["menu_settings"]["message_recording"],
+                                              message_recording),  # ✉️ Запись сообщений
+                                          await menu_button_fun(
+                                              translations["ru"]["menu_settings"]["recording_reaction_link"],
+                                              recording_reaction_link),  # 🔗 Запись ссылки для реакций
 
-                             ])]))
+                                      ])]))
+        except Exception as e:
+            logger.exception(e)
 
     async def add_view_with_fields_and_button(self, fields: list, btn_click) -> None:
         """
