@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import base64
-
+import asyncio
 import flet as ft
 from loguru import logger
 
@@ -29,7 +29,7 @@ BUTTON_HEIGHT = 30  # Высота
 BUTTON_WIDTH = 400  # Ширина
 
 
-def menu_button(text: str, route: str, page: ft.Page):
+async def menu_button(text: str, route: str, page: ft.Page):
     """
     :param text: Текст, отображаемый на кнопке меню.
     :type text: str
@@ -45,7 +45,7 @@ def menu_button(text: str, route: str, page: ft.Page):
             text,
             width=BUTTON_WIDTH,
             height=BUTTON_HEIGHT,
-            on_click=lambda _: page.push_route(route),
+            on_click=lambda _: asyncio.create_task(page.push_route(route)),
         )
     )
 
@@ -165,9 +165,9 @@ async def main(page: ft.Page):
 
                 ft.Row([
                     ft.Column([
-                        menu_button(translations["ru"]["inviting_menu"]["inviting"], "/inviting", page),
-                        menu_button(translations["ru"]["menu"]["parsing"], "/parsing", page),
-                        menu_button(translations["ru"]["menu"]["contacts"], "/working_with_contacts", page),
+                        await menu_button(translations["ru"]["inviting_menu"]["inviting"], "/inviting", page),
+                        await menu_button(translations["ru"]["menu"]["parsing"], "/parsing", page),
+                        await menu_button(translations["ru"]["menu"]["contacts"], "/working_with_contacts", page),
 
                         ft.Container(
                             content=ft.Button(
