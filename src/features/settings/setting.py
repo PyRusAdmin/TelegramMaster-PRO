@@ -101,17 +101,20 @@ class SettingPage:
 
                     # Добавляем элементы на страницу
                     self.page.views.append(
-                        ft.View(
-                            "/settings",
-                            controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
-                                      t,
-                                      ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
-                                      # Чекбоксы в колонках
-                                      ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                                text=translations["ru"]["buttons"]["done"],
-                                                on_click=button_clicked),  # Кнопка "Готово",
-                                      ]
-                        )
+                        ft.View(route="/settings",
+                                controls=[await self.gui_program.key_app_bar(),
+                                          # Кнопка для перехода на главную страницу
+                                          t,
+                                          ft.Column(
+                                              [ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
+                                          # Чекбоксы в колонках
+                                          ft.Button(
+                                              translations["ru"]["buttons"]["done"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
+                                              on_click=button_clicked),  # Кнопка "Готово",
+                                          ]
+                                )
                     )
                 except Exception as e:
                     logger.exception(e)
