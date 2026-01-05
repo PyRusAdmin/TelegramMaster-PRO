@@ -176,8 +176,8 @@ class TGConnect:
                 logger.exception(error)
 
         self.page.views.append(
-            ft.View("/account_verification_menu",
-                    [await self.gui_program.key_app_bar(),  # Добавляет кнопку назад на страницу (page)
+            ft.View(route="/account_verification_menu",  # Маршрут для этого представления
+                controls=[await self.gui_program.key_app_bar(),  # Добавляет кнопку назад на страницу (page)
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["menu"]["account_check"],
                          ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
@@ -422,8 +422,8 @@ class TGConnect:
         self.page.overlay.append(pick_files_dialog)  # Добавляем FilePicker на страницу
 
         self.page.views.append(
-            ft.View("/account_connection_menu",
-                    [await self.gui_program.key_app_bar(),
+            ft.View(route="/account_connection_menu",  # Маршрут для этого представления
+                controls=[await self.gui_program.key_app_bar(),
                      ft.Text(spans=[ft.TextSpan("Подключение аккаунта Telegram по номеру телефона.",
                                                 ft.TextStyle(
                                                     size=20,
