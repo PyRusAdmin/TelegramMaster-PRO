@@ -258,9 +258,11 @@ class SettingPage:
                           list_view,  # отображение логов 📝
                           ft.Column(
                               controls=fields + [
-                                  ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                            text=translations["ru"]["buttons"]["done"],
-                                            on_click=btn_click),
+                                  ft.Button(
+                                              translations["ru"]["buttons"]["done"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
+                                              on_click=btn_click),
                               ]
                           )]))
 
