@@ -139,10 +139,10 @@ class SendTelegramMessages:
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
                             ft.Button(
-                                text=translations["ru"]["buttons"]["done"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=button_clicked, ),
+                                              translations["ru"]["buttons"]["done"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
+                                              on_click=button_clicked),
                         ],
                     ), ], ))
 
