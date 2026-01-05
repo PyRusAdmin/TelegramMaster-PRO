@@ -138,28 +138,29 @@ class TGContact:
 
                             ft.Row([input_numbers,  # Ввод номеров
                                     # 📋 Формирование списка контактов
-                                    ft.Button(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
-                                              text=translations["ru"]["contacts_menu"][
-                                                  "creating_a_contact_list"],
-                                              on_click=write_contact_to_db)]),
+                                    ft.Button(
+                                        translations["ru"]["contacts_menu"]["creating_a_contact_list"],
+                                        width=WIDTH_INPUT_FIELD_AND_BUTTON,
+                                        height=BUTTON_HEIGHT,
+                                        on_click=write_contact_to_db)]),
                             # 👥 Парсинг списка контактов
                             ft.Button(
-                                              translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=show_account_contact_list),
+                                translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=show_account_contact_list),
                             # 🗑️ Удаление контактов
                             ft.Button(
-                                              translations["ru"]["contacts_menu"]["deleting_contacts"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=delete_contact),
+                                translations["ru"]["contacts_menu"]["deleting_contacts"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=delete_contact),
                             # ➕ Добавление контактов
                             ft.Button(
-                                              translations["ru"]["contacts_menu"]["adding_contacts"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=inviting_contact),
+                                translations["ru"]["contacts_menu"]["adding_contacts"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=inviting_contact),
                         ])]))
 
     async def parsing_contacts(self, client):
