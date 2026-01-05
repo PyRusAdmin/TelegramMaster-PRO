@@ -22,8 +22,11 @@ PROGRAM_NAME = config_gui.get('program_name', 'program_name', fallback=None)  # 
 PROGRAM_VERSION = config_gui.get('program_version', 'program_version', fallback=None)  # Версия программы
 DATE_OF_PROGRAM_CHANGE = config_gui.get('date_of_program_change', 'date_of_program_change',
                                         fallback=None)  # Дата изменения (обновления)
-WINDOW_WIDTH = config_gui.get('window_width', 'window_width', fallback=None)  # Ширина программы
-WINDOW_HEIGHT = config_gui.get('window_height', 'window_height', fallback=None)  # Высота программы
+
+# Ширина программы / высота программы
+WINDOW_WIDTH = 1050  # Ширина программы
+WINDOW_HEIGHT = 725  # Высота программы
+
 WINDOW_RESIZABLE = config_gui.get('window_resizable', 'window_resizable', fallback=None)  # Ширина программы
 WIDTH_WIDE_BUTTON = config_gui.get('line_width_button', 'line_width_button', fallback=None)  # Ширина кнопки
 WIDTH_INPUT_FIELD_AND_BUTTON = int(WIDTH_WIDE_BUTTON) / 2 - 5  # Ширина кнопки (окно и поле ввода)
@@ -38,3 +41,6 @@ path_folder_with_messages = config_path.get('path_folder_with_messages', 'path_f
 
 # Путь к папке с базой данных
 path_folder_database = config_path.get('path_folder_database', 'path_folder_database', fallback=None)
+
+# Широкая одиночная кнопка
+wide_single_button = 300  # Применяется: Инвайтинг
