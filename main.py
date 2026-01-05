@@ -187,14 +187,19 @@ async def main(page: ft.Page):
                         #     ),
                         # ),
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["menu"]["reactions"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/working_with_reactions"),
-                            ),
-                        ),
+                        await menu_button(
+                            translations["ru"]["menu"]["reactions"],
+                            "/working_with_reactions",
+                            page),
+
+                        # ft.Container(
+                        #     content=ft.Button(
+                        #         content=translations["ru"]["menu"]["reactions"],
+                        #         width=BUTTON_WIDTH,
+                        #         height=BUTTON_HEIGHT,
+                        #         on_click=lambda _: page.push_route("/working_with_reactions"),
+                        #     ),
+                        # ),
 
                         ft.Container(
                             content=ft.Button(
