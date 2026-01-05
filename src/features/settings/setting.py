@@ -64,53 +64,57 @@ class SettingPage:
                 :return: None
                 """
 
-                t = ft.Text(value='Выберите реакцию')  # Создает текстовое поле (t).
+                try:
 
-                # Создаем все чекбоксы единожды и сохраняем их в списке
-                checkboxes = [
-                    ft.Checkbox(label="😀"), ft.Checkbox(label="😎"), ft.Checkbox(label="😍"),
-                    ft.Checkbox(label="😂"), ft.Checkbox(label="😡"), ft.Checkbox(label="😱"),
-                    ft.Checkbox(label="😭"), ft.Checkbox(label="👍"), ft.Checkbox(label="👎"),
-                    ft.Checkbox(label="❤"), ft.Checkbox(label="🔥"), ft.Checkbox(label="🎉"),
-                    ft.Checkbox(label="😁"), ft.Checkbox(label="😢"), ft.Checkbox(label="💩"),
-                    ft.Checkbox(label="👏"), ft.Checkbox(label="🤷‍♀️"), ft.Checkbox(label="🤷"),
-                    ft.Checkbox(label="🤷‍♂️"), ft.Checkbox(label="👾"), ft.Checkbox(label="🙊"),
-                    ft.Checkbox(label="💊"), ft.Checkbox(label="😘"), ft.Checkbox(label="🦄"),
-                    ft.Checkbox(label="💘"), ft.Checkbox(label="🆒"), ft.Checkbox(label="🗿"),
-                    ft.Checkbox(label="🤪"), ft.Checkbox(label="💅"), ft.Checkbox(label="☃️"),
-                    ft.Checkbox(label="🎄"), ft.Checkbox(label="🎅"), ft.Checkbox(label="🤗"),
-                    ft.Checkbox(label="🤬"), ft.Checkbox(label="🤮"), ft.Checkbox(label="🤡"),
-                    ft.Checkbox(label="🥴"), ft.Checkbox(label="💯"), ft.Checkbox(label="🌭"),
-                    ft.Checkbox(label="⚡️"), ft.Checkbox(label="🍌"), ft.Checkbox(label="🖕"),
-                    ft.Checkbox(label="💋"), ft.Checkbox(label="👀"), ft.Checkbox(label="🤝"),
-                    ft.Checkbox(label="🍾"), ft.Checkbox(label="🏆"), ft.Checkbox(label="🥱"),
-                    ft.Checkbox(label="🕊"), ft.Checkbox(label="😭")
-                ]
+                    t = ft.Text(value='Выберите реакцию')  # Создает текстовое поле (t).
 
-                async def button_clicked(_) -> None:
-                    """Выбранная реакция"""
-                    selected_reactions = [checkbox.label for checkbox in checkboxes if
-                                          checkbox.value]  # Получаем только выбранные реакции
-                    self.write_data_to_json_file(reactions=selected_reactions,
-                                                 path_to_the_file='user_data/reactions/reactions.json')
+                    # Создаем все чекбоксы единожды и сохраняем их в списке
+                    checkboxes = [
+                        ft.Checkbox(label="😀"), ft.Checkbox(label="😎"), ft.Checkbox(label="😍"),
+                        ft.Checkbox(label="😂"), ft.Checkbox(label="😡"), ft.Checkbox(label="😱"),
+                        ft.Checkbox(label="😭"), ft.Checkbox(label="👍"), ft.Checkbox(label="👎"),
+                        ft.Checkbox(label="❤"), ft.Checkbox(label="🔥"), ft.Checkbox(label="🎉"),
+                        ft.Checkbox(label="😁"), ft.Checkbox(label="😢"), ft.Checkbox(label="💩"),
+                        ft.Checkbox(label="👏"), ft.Checkbox(label="🤷‍♀️"), ft.Checkbox(label="🤷"),
+                        ft.Checkbox(label="🤷‍♂️"), ft.Checkbox(label="👾"), ft.Checkbox(label="🙊"),
+                        ft.Checkbox(label="💊"), ft.Checkbox(label="😘"), ft.Checkbox(label="🦄"),
+                        ft.Checkbox(label="💘"), ft.Checkbox(label="🆒"), ft.Checkbox(label="🗿"),
+                        ft.Checkbox(label="🤪"), ft.Checkbox(label="💅"), ft.Checkbox(label="☃️"),
+                        ft.Checkbox(label="🎄"), ft.Checkbox(label="🎅"), ft.Checkbox(label="🤗"),
+                        ft.Checkbox(label="🤬"), ft.Checkbox(label="🤮"), ft.Checkbox(label="🤡"),
+                        ft.Checkbox(label="🥴"), ft.Checkbox(label="💯"), ft.Checkbox(label="🌭"),
+                        ft.Checkbox(label="⚡️"), ft.Checkbox(label="🍌"), ft.Checkbox(label="🖕"),
+                        ft.Checkbox(label="💋"), ft.Checkbox(label="👀"), ft.Checkbox(label="🤝"),
+                        ft.Checkbox(label="🍾"), ft.Checkbox(label="🏆"), ft.Checkbox(label="🥱"),
+                        ft.Checkbox(label="🕊"), ft.Checkbox(label="😭")
+                    ]
 
-                    await show_notification(page=self.page, message="Данные успешно записаны!")
-                    self.page.go("/settings")  # Переход к странице настроек
+                    async def button_clicked(_) -> None:
+                        """Выбранная реакция"""
+                        selected_reactions = [checkbox.label for checkbox in checkboxes if
+                                              checkbox.value]  # Получаем только выбранные реакции
+                        self.write_data_to_json_file(reactions=selected_reactions,
+                                                     path_to_the_file='user_data/reactions/reactions.json')
 
-                # Добавляем элементы на страницу
-                self.page.views.append(
-                    ft.View(
-                        "/settings",
-                        controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
-                                  t,
-                                  ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
-                                  # Чекбоксы в колонках
-                                  ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                            text=translations["ru"]["buttons"]["done"],
-                                            on_click=button_clicked),  # Кнопка "Готово",
-                                  ]
+                        await show_notification(page=self.page, message="Данные успешно записаны!")
+                        self.page.go("/settings")  # Переход к странице настроек
+
+                    # Добавляем элементы на страницу
+                    self.page.views.append(
+                        ft.View(
+                            "/settings",
+                            controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
+                                      t,
+                                      ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
+                                      # Чекбоксы в колонках
+                                      ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                                text=translations["ru"]["buttons"]["done"],
+                                                on_click=button_clicked),  # Кнопка "Готово",
+                                      ]
+                        )
                     )
-                )
+                except Exception as e:
+                    logger.exception(e)
 
             async def creating_the_main_window_for_proxy_data_entry() -> None:
                 """
