@@ -318,11 +318,15 @@ class InvitingToAGroup:
             inviting_every_day_switch=inviting_every_day_switch
         ).element_handler_inviting(self.page)
 
-        start_inviting = ft.ElevatedButton(
+        start_inviting = ft.Button(
             "Запуск",
             width=WIDTH_WIDE_BUTTON,
             height=BUTTON_HEIGHT,
-            on_click=start_inviting_grup  # Используем синхронную обёртку
+            on_click=start_inviting_grup,  # Используем синхронную обёртку
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=8),
+                padding=ft.Padding(15, 10, 15, 10),
+            ),
         )
 
         inviting_switch.disabled = False
