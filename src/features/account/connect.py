@@ -188,8 +188,9 @@ class TGConnect:
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🤖 Проверка через спам бот
                          ft.Button(
+                             translations["ru"]["account_verification"]["spam_check"],
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                             text=translations["ru"]["account_verification"]["spam_check"],
+
                              on_click=check_for_spam
                          ),
                          # ✅ Проверка на валидность
