@@ -3,8 +3,8 @@ import asyncio
 import random
 import re
 
-import flet as ft  # Импортируем библиотеку flet
-from loguru import logger  # Импортируем библиотеку loguru для логирования
+import flet as ft
+from loguru import logger
 from telethon import events, types, TelegramClient
 from telethon.errors import ReactionInvalidError, TypeNotFoundError
 from telethon.tl.functions.messages import SendReactionRequest
@@ -28,21 +28,15 @@ class WorkingWithReactions:
     """
 
     def __init__(self, page: ft.Page):
-        """
-        Инициализация класса для работы с реакциями в Telegram.
-
-        :param page: Страница интерфейса Flet для отображения элементов управления
-        """
         self.page = page
         self.connect = TGConnect(page=page)
         self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.function_button = FunctionButton(page=page)
-        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
-        self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
-        self.gui_program = GUIProgram()  # Инициализация экземпляра класса GUIProgram
-        self.app_logger = AppLogger(page=page)
+        self.session_string = getting_account()
+        self.subscribe = Subscribe(page=page)
+        self.gui_program = GUIProgram()
 
     async def reactions_menu(self):
         """
@@ -50,178 +44,162 @@ class WorkingWithReactions:
 
         :return: None
         """
+        try:
+            list_view.controls.clear()
 
-        list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
-        self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
-        self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
+            # Перемещаем объявление chat и message СЮДА (внешне от try)
+            chat = ft.TextField(label="Введите ссылку на группу / чат:", multiline=False, max_lines=1)
+            message = ft.TextField(label="Введите ссылку на сообщение или пост:", multiline=False, max_lines=1)
 
-        # Отображение информации о настройках инвайтинга
-        await self.app_logger.log_and_display(
-            message=(
-                f"Всего подключенных аккаунтов: {len(self.session_string)}\n"
-            )
-        )
+            async def send_reaction_request(_) -> None:
+                start = await self.app_logger.start_time()
+                logger.info("▶️ Начало Проставления реакций")
 
-        # Поле для ввода ссылки на чат
-        chat = ft.TextField(label="Введите ссылку на группу / чат:", multiline=False, max_lines=1)
-        message = ft.TextField(label="Введите ссылку на сообщение или пост:", multiline=False, max_lines=1)
+                try:
+                    for session_name in self.session_string:
+                        client: TelegramClient = await self.connect.client_connect_string_session(
+                            session_name=session_name)
 
-        async def send_reaction_request(_) -> None:
-            """
-            Ставим реакции на сообщения
-            """
-            start = await self.app_logger.start_time()
-            logger.info("▶️ Начало Проставления реакций")
-
-            try:
-                for session_name in self.session_string:
-                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
-
-                    await self.app_logger.log_and_display(f"➕ Работаем с группой: {chat.value}")
-                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat.value)
-                    msg_id = int(re.search(r'/(\d+)$', message.value).group(1))  # Получаем id сообщения из ссылки
-                    await asyncio.sleep(5)
-                    try:
-                        """
-                        Функция client_connect_string_session возвращает None, если сессия недействительна или аккаунт 
-                        не авторизован, но в reactions.py нет проверки на этот случай. В результате client = None, и 
-                        при попытке вызвать client(...) возникает ошибка.
-                        
-                        ⚠️ Клиент не подключен. Проверьте сессию аккаунта.
-                        Рекомендации
-
-                        1. Проверяйте все аккаунты через меню "Проверка аккаунтов" — возможно, файлы сессий повреждены.
-                        2. Обновите Telethon до последней версии, чтобы избежать TypeNotFoundError.
-                        3. Если ошибка повторяется — пересоздайте сессии через "Подключение по номеру".
-                        """
                         if client is None:
                             await self.app_logger.log_and_display("⚠️ Клиент не подключен. Проверьте сессию аккаунта.")
                             await self.app_logger.log_and_display(
-                                "Рекомендации:\n1. Проверьте аккаунты через меню 'Проверка аккаунтов'.\n2. Обновите Telethon до последней версии.\n3. Пересоздайте сессии через 'Подключение по номеру'.")
+                                "Рекомендации:\n"
+                                "1. Проверьте аккаунты через меню 'Проверка аккаунтов'.\n"
+                                "2. Обновите Telethon до последней версии.\n"
+                                "3. Пересоздайте сессии через 'Подключение по номеру'."
+                            )
                             continue
 
-                        await client(SendReactionRequest(
-                            peer=chat.value, msg_id=msg_id,
-                            reaction=[types.ReactionEmoji(emoticon=f'{await self.choosing_random_reaction()}')]))
-                        await asyncio.sleep(1)
-                        await client.disconnect()
-                    except ReactionInvalidError:
-                        await self.app_logger.log_and_display(f"Ошибка : Предоставлена неверная реакция")
-                        await asyncio.sleep(1)
-                        await client.disconnect()
+                        await self.app_logger.log_and_display(f"➕ Работаем с группой: {chat.value}")
+                        await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat.value)
 
-                    # Изменение маршрута на новый (если необходимо)
-                    self.page.go("/working_with_reactions")
-                    self.page.update()  # Обновление страницы для отображения изменений
+                        try:
+                            msg_id = int(re.search(r'/(\d+)$', message.value).group(1))
+                            await asyncio.sleep(5)
 
-            except Exception as error:
-                logger.exception(error)
+                            await client(SendReactionRequest(
+                                peer=chat.value,
+                                msg_id=msg_id,
+                                reaction=[types.ReactionEmoji(emoticon=f'{await self.choosing_random_reaction()}')]
+                            ))
+                            await asyncio.sleep(1)
+                        except AttributeError:
+                            await self.app_logger.log_and_display("⚠️ Неверный формат ссылки на сообщение.")
+                        except ReactionInvalidError:
+                            await self.app_logger.log_and_display("❌ Ошибка: предоставлена неверная реакция")
+                        finally:
+                            await client.disconnect()
 
-            logger.info("🔚 Конец Проставления реакций")
-            await self.app_logger.end_time(start)
+                except Exception as error:
+                    logger.exception(error)
+                finally:
+                    logger.info("🔚 Конец Проставления реакций")
+                    await self.app_logger.end_time(start)
 
-        async def setting_reactions(_) -> None:
-            """
-            Выставление реакций на новые посты и сообщения в автоматическом режиме
-            """
-            start = await self.app_logger.start_time()
-            try:
-                for session_name in self.session_string:
+            async def setting_reactions(_) -> None:
+                start = await self.app_logger.start_time()
+                try:
+                    for session_name in self.session_string:
+                        client: TelegramClient = await self.connect.client_connect_string_session(
+                            session_name=session_name)
 
-                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
-                    # await self.connect.getting_account_data(client)
+                        if client is None:
+                            await self.app_logger.log_and_display("⚠️ Клиент не подключен.")
+                            continue
 
-                    # Сохраняем ссылку на чат заранее
-                    chat_link = chat.value
-                    if not chat_link:
-                        await self.app_logger.log_and_display("Ошибка: не указана ссылка на чат")
-                        continue
+                        chat_link = chat.value
+                        if not chat_link:
+                            await self.app_logger.log_and_display("❌ Ошибка: не указана ссылка на чат")
+                            continue
 
-                    await self.app_logger.log_and_display(f"Подписка и прослушивание чата: {chat_link}")
-                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_link)
+                        await self.app_logger.log_and_display(f"🎧 Подписка и прослушивание чата: {chat_link}")
+                        await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_link)
 
-                    @client.on(events.NewMessage(chats=chat_link))
-                    async def handler(event):
-                        message = event.message  # Получаем сообщение из события
-                        message_id = message.id  # Получаем id сообщение
-                        await self.app_logger.log_and_display(f"Идентификатор сообщения: {message_id}, {message}")
-                        # Проверяем, является ли сообщение постом и не является ли оно нашим
-                        if message.post and not message.out:
+                        @client.on(events.NewMessage(chats=chat_link))
+                        async def handler(event):
+                            msg = event.message
+                            msg_id = msg.id
+                            await self.app_logger.log_and_display(f"📩 Новое сообщение: {msg_id}")
 
-                            for session_name_reactions in self.session_string:
+                            if msg.post and not msg.out:
+                                for session_name_reactions in self.session_string:
+                                    if session_name == session_name_reactions:
+                                        continue
 
-                                if session_name == session_name_reactions:
-                                    pass
-                                else:
-
-                                    client: TelegramClient = await self.connect.client_connect_string_session(
+                                    sub_client = await self.connect.client_connect_string_session(
                                         session_name=session_name_reactions)
-
-                                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=chat_link)
+                                    if sub_client is None:
+                                        continue
 
                                     try:
-                                        await client(SendReactionRequest(peer=chat_link, msg_id=int(message_id),
-                                                                         reaction=[types.ReactionEmoji(
-                                                                             emoticon=f'{await self.choosing_random_reaction()}')]))
+                                        await sub_client(SendReactionRequest(
+                                            peer=chat_link,
+                                            msg_id=msg_id,
+                                            reaction=[types.ReactionEmoji(
+                                                emoticon=f'{await self.choosing_random_reaction()}')]
+                                        ))
                                     except ReactionInvalidError:
                                         await self.app_logger.log_and_display(
                                             translations["ru"]["errors"]["invalid_reaction"])
+                                    finally:
+                                        await sub_client.disconnect()
 
-                    try:
-                        await client.run_until_disconnected()  # Запуск клиента в режиме ожидания событий
-                    except TypeNotFoundError:
-                        """
-                        Ошибка TypeNotFoundError: Could not find a matching Constructor ID for the TLObject that was 
-                        supposed to be read with ID b92f76cf возникает из-за несоответствия между версией библиотеки 
-                        Telethon и текущей схемой Telegram API. Код конструктора b92f76cf не распознаётся, что указывает
-                         на то, что Telethon не знает, как десериализовать полученный объект.
-                        
-                        Причина
-                        Эта ошибка обычно появляется, когда:
-                        
-                        Используется устаревшая версия Telethon, которая не поддерживает новые типы объектов Telegram.
-                        Telegram обновил свою схему TL (Telegram Layer), добавив новые типы, которые не отражены в 
-                        текущей версии Telethon.
-                        """
-                        await self.app_logger.log_and_display(
-                            message=f"Ошибка: Не найден тип сообщения, попробуйте обновить Telethon")
+                        try:
+                            await client.run_until_disconnected()
+                        except TypeNotFoundError:
+                            await self.app_logger.log_and_display(
+                                "⚠️ Ошибка: Неизвестный тип сообщения. Попробуйте обновить Telethon.")
+                except Exception as error:
+                    logger.exception(error)
+                finally:
+                    await self.app_logger.end_time(start)
+                    await show_notification(self.page, "🔚 Конец Автоматического выставления реакций")
 
+            # Теперь создаём View ПОСЛЕ объявления chat и message
+            view = ft.View(
+                "/working_with_reactions",
+                controls=[
+                    await self.gui_program.key_app_bar(),
+                    ft.Text(
+                        spans=[
+                            ft.TextSpan(
+                                translations["ru"]["menu"]["reactions"],
+                                ft.TextStyle(
+                                    size=20,
+                                    weight=ft.FontWeight.BOLD,
+                                    foreground=ft.Paint(
+                                        gradient=ft.PaintLinearGradient(
+                                            (0, 20), (150, 20), [ft.Colors.PINK, ft.Colors.PURPLE]
+                                        )
+                                    ),
+                                ),
+                            ),
+                        ],
+                    ),
+                    list_view,
+                    chat,
+                    message,
+                    ft.Column([
+                        ft.ElevatedButton(
+                            content=ft.Text(translations["ru"]["reactions_menu"]["setting_reactions"]),
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
+                            on_click=send_reaction_request,
+                        ),
+                        ft.ElevatedButton(
+                            content=ft.Text(translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"]),
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
+                            on_click=setting_reactions,
+                        ),
+                    ]),
+                ],
+            )
+            self.page.views.append(view)
+            self.page.update()
 
-            except Exception as error:
-                logger.exception(error)
-            await self.app_logger.end_time(start=start)
-            await show_notification(page=self.page,
-                                    message="🔚 Конец Автоматического выставления реакций")  # Выводим уведомление пользователю
-
-        self.page.views.append(
-            ft.View("/working_with_reactions",
-                    [await self.gui_program.key_app_bar(),  # Кнопка "Назад"
-                     ft.Text(spans=[ft.TextSpan(
-                         translations["ru"]["menu"]["reactions"],
-                         ft.TextStyle(
-                             size=20, weight=ft.FontWeight.BOLD,
-                             foreground=ft.Paint(
-                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                      ft.Colors.PURPLE])), ), ), ], ),
-                     list_view,  # Отображение логов 📝
-
-                     chat,  # Поле ввода ссылки на чат
-                     message,  # Поле ввода ссылки пост
-
-                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                         # 👍 Ставим реакции
-                         ft.Button(
-                             translations["ru"]["reactions_menu"]["setting_reactions"],
-                             width=WIDTH_WIDE_BUTTON,
-                             height=BUTTON_HEIGHT,
-                             on_click=send_reaction_request),
-                         # 🤖 Автоматическое выставление реакций
-                         ft.Button(
-                             translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
-                             width=WIDTH_WIDE_BUTTON,
-                             height=BUTTON_HEIGHT,
-                             on_click=setting_reactions),
-                     ])]))
+        except Exception as e:
+            logger.exception(e)
 
     async def choosing_random_reaction(self):
         """
@@ -230,11 +208,13 @@ class WorkingWithReactions:
         :return: Случайная реакция (эмодзи) или None при ошибке
         """
         try:
-            random_value = random.choice(await self.utils.read_json_file(filename='user_data/reactions/reactions.json'))
-            await self.app_logger.log_and_display(f"{random_value}")
+            reactions = await self.utils.read_json_file('user_data/reactions/reactions.json')
+            if not reactions:
+                await self.app_logger.log_and_display("⚠️ Список реакций пуст.")
+                return None
+            random_value = random.choice(reactions)
+            await self.app_logger.log_and_display(f"✅ Выбрана реакция: {random_value}")
             return random_value
         except Exception as error:
             logger.exception(error)
             return None
-
-# 204
