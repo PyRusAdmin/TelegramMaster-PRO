@@ -5,6 +5,7 @@ import sqlite3
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon import functions
+from telethon.tl.types import Chat, Channel
 from telethon.errors import (AuthKeyUnregisteredError, ChannelPrivateError, ChatAdminRequiredError, FloodWaitError,
                              UsernameInvalidError)
 from telethon.tl.functions.channels import GetParticipantsRequest
@@ -47,225 +48,236 @@ class ParsingGroupMembers:
 
         :return: None
         """
+        try:
 
-        list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
-        self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
-        self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
+            list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
+            # self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
+            self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
-        """
-        TextField - поле для ввода ссылки на чат
-        Dropdown - выпадающий список с названиями групп , аккаунтами
-        """
-        chat_input = ft.TextField(label="🔗 Введите ссылку на чат...", disabled=True)
+            """
+            TextField - поле для ввода ссылки на чат
+            Dropdown - выпадающий список с названиями групп , аккаунтами
+            """
+            chat_input = ft.TextField(label="🔗 Введите ссылку на чат...", disabled=True)
 
-        # Создаём опции: текст — номер, ключ — session_string
-        account_options = [
-            ft.DropdownOption(text=phone, key=session_str)
-            for phone, session_str in self.account_data
-        ]
-        # Создаем выпадающий список с названиями групп
-        account_drop_down_list = ft.Dropdown(
-            label="📂 Выберите аккаунт",  # ✅ Название выпадающего списка
-            width=WIDTH_WIDE_BUTTON,  # ✅ Ширина выпадающего списка
-            options=account_options,  # ✅ Опции выпадающего списка
-            autofocus=True  # ✅ Автозаполнение
-        )
+            # Создаём опции: текст — номер, ключ — session_string
+            account_options = [
+                ft.DropdownOption(text=phone, key=session_str)
+                for phone, session_str in self.account_data
+            ]
+            # Создаем выпадающий список с названиями групп
+            account_drop_down_list = ft.Dropdown(
+                label="📂 Выберите аккаунт",  # ✅ Название выпадающего списка
+                width=WIDTH_WIDE_BUTTON,  # ✅ Ширина выпадающего списка
+                options=account_options,  # ✅ Опции выпадающего списка
+                autofocus=True  # ✅ Автозаполнение
+            )
 
-        # Кнопки-переключатели
-        account_groups_switch = ft.CupertinoSwitch(label="Группы аккаунта", value=False, disabled=True)
-        admin_switch = ft.CupertinoSwitch(label="Администраторов", value=False, disabled=True)
-        members_switch = ft.CupertinoSwitch(label="Участников", value=False, disabled=True)
-        active_switch = ft.CupertinoSwitch(label="Активные", value=False, disabled=True)
-        account_group_selection_switch = ft.CupertinoSwitch(label="Выбрать группу", value=False, disabled=True)
+            # Кнопки-переключатели
+            account_groups_switch = ft.CupertinoSwitch(label="Группы аккаунта", value=False, disabled=True)
+            admin_switch = ft.CupertinoSwitch(label="Администраторов", value=False, disabled=True)
+            members_switch = ft.CupertinoSwitch(label="Участников", value=False, disabled=True)
+            active_switch = ft.CupertinoSwitch(label="Активные", value=False, disabled=True)
+            account_group_selection_switch = ft.CupertinoSwitch(label="Выбрать группу", value=False, disabled=True)
 
-        ToggleController(
-            admin_switch, account_groups_switch, members_switch, account_group_selection_switch, active_switch
-        ).element_handler(self.page)
+            ToggleController(
+                admin_switch, account_groups_switch, members_switch, account_group_selection_switch, active_switch
+            ).element_handler(self.page)
 
-        async def on_account_change(e):
-            if account_drop_down_list.value:
-                client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
+            async def on_account_change(e):
+                if account_drop_down_list.value:
+                    client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
 
-                await self.load_groups(client, dropdown, result_text)
-                await client.disconnect()
-            else:
-                dropdown.options = []
-                result_text.value = "📂 Выберите аккаунт"
-                self.page.update()
+                    await self.load_groups(client, dropdown, result_text)
+                    await client.disconnect()
+                else:
+                    dropdown.options = []
+                    result_text.value = "📂 Выберите аккаунт"
+                    self.page.update()
 
-        account_drop_down_list.on_change = on_account_change
+            account_drop_down_list.on_change = on_account_change
 
-        async def add_items(_):
-            """🚀 Запускает процесс парсинга групп и отображает статус в интерфейсе."""
-            try:
-
-                logger.debug(f"Аккаунт: {account_drop_down_list.value}")
-
-                client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
-
-                data = chat_input.value.split()
-                logger.info(f"Полученные данные: {data}")  # Отладка
-                # Удаляем дубликаты ссылок введенных пользователем
-                start = await self.app_logger.start_time()
-                self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
+            async def add_items(_):
+                """🚀 Запускает процесс парсинга групп и отображает статус в интерфейсе."""
                 try:
-                    if account_groups_switch.value:  # Парсинг групп, на которые подписан аккаунт
-                        await self.parsing_account_groups(client=client)
-                    if admin_switch.value:  # Если выбрано парсить администраторов, выполняем парсинг администраторов 👤
-                        for groups in data:
-                            await self.obtaining_administrators(client=client, groups=groups)
-                    if members_switch.value:  # Парсинг участников
-                        for groups in data:
-                            await parse_group(client=client, groups_wr=groups)
-                    if active_switch.value:  # ⚠️ Парсинг активных пользователей
-                        await self.app_logger.log_and_display(
-                            f"🔍 Сканируем чат: {chat_input.value} на {limit_active_user.value} сообщений")
-                        limit_val = limit_active_user.value.strip()
-                        if not limit_val.isdigit():
+
+                    logger.debug(f"Аккаунт: {account_drop_down_list.value}")
+
+                    client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
+
+                    data = chat_input.value.split()
+                    logger.info(f"Полученные данные: {data}")  # Отладка
+                    # Удаляем дубликаты ссылок введенных пользователем
+                    start = await self.app_logger.start_time()
+                    self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
+                    try:
+                        if account_groups_switch.value:  # Парсинг групп, на которые подписан аккаунт
+                            await self.parsing_account_groups(client=client)
+                        if admin_switch.value:  # Если выбрано парсить администраторов, выполняем парсинг администраторов 👤
+                            for groups in data:
+                                await self.obtaining_administrators(client=client, groups=groups)
+                        if members_switch.value:  # Парсинг участников
+                            for groups in data:
+                                await parse_group(client=client, groups_wr=groups)
+                        if active_switch.value:  # ⚠️ Парсинг активных пользователей
                             await self.app_logger.log_and_display(
-                                "⚠️ Укажите корректное число для количества сообщений.")
-                            return
-                        await self.parse_active_users(
-                            chat_input=chat_input.value,
-                            limit_active_user=int(limit_val),
-                            client=client
-                        )
-                    if account_group_selection_switch.value:  # Парсинг выбранной группы
-                        await start_group_parsing(client=client, dropdown=dropdown)
-                    await self.app_logger.end_time(start)
+                                f"🔍 Сканируем чат: {chat_input.value} на {limit_active_user.value} сообщений")
+                            limit_val = limit_active_user.value.strip()
+                            if not limit_val.isdigit():
+                                await self.app_logger.log_and_display(
+                                    "⚠️ Укажите корректное число для количества сообщений.")
+                                return
+                            await self.parse_active_users(
+                                chat_input=chat_input.value,
+                                limit_active_user=int(limit_val),
+                                client=client
+                            )
+                        if account_group_selection_switch.value:  # Парсинг выбранной группы
+                            await start_group_parsing(client=client, dropdown=dropdown)
+                        await self.app_logger.end_time(start)
+                    except Exception as error:
+                        logger.exception(error)
                 except Exception as error:
                     logger.exception(error)
-            except Exception as error:
-                logger.exception(error)
 
-        async def start_group_parsing(client, dropdown):
-            """
-            Парсит выбранную группу.
-            :param client: Клиент сессии телеграм
-            :param dropdown: выпадающий список
-            """
-            if not dropdown.value:
-                await self.app_logger.log_and_display("⚠️ Группа не выбрана")
-                return
+            async def start_group_parsing(client, dropdown):
+                """
+                Парсит выбранную группу.
+                :param client: Клиент сессии телеграм
+                :param dropdown: выпадающий список
+                """
+                if not dropdown.value:
+                    await self.app_logger.log_and_display("⚠️ Группа не выбрана")
+                    return
 
-            group_entity = self.group_map.get(dropdown.value)
-            if not group_entity:
-                await self.app_logger.log_and_display("❌ Не удалось найти группу")
-                return
+                group_entity = self.group_map.get(dropdown.value)
+                if not group_entity:
+                    await self.app_logger.log_and_display("❌ Не удалось найти группу")
+                    return
 
-            await self.app_logger.log_and_display(f"▶️ Парсинг группы: {dropdown.value}")
-            await parse_group(client=client, groups_wr=group_entity)  # ← передаём entity
-            await self.app_logger.log_and_display("🔚 Парсинг завершён")
+                await self.app_logger.log_and_display(f"▶️ Парсинг группы: {dropdown.value}")
+                await parse_group(client=client, groups_wr=group_entity)  # ← передаём entity
+                await self.app_logger.log_and_display("🔚 Парсинг завершён")
 
-        async def parse_group(client, groups_wr) -> None:
-            """
-            Выполняет парсинг участников указанной группы.
+            async def parse_group(client, groups_wr) -> None:
+                """
+                Выполняет парсинг участников указанной группы.
 
-            :param client: Экземпляр клиента Telegram
-            :param groups_wr: Ссылка на группу или её entity
-            :return: None
-            """
+                :param client: Экземпляр клиента Telegram
+                :param groups_wr: Ссылка на группу или её entity
+                :return: None
+                """
 
-            await self.app_logger.log_and_display("🔍 Ищем участников... 💾 Сохраняем в файл software_database.db...")
-            try:
-                all_participants: list = []
-                while_condition = True
-                my_filter = ChannelParticipantsSearch("")
-                offset = 0
-                while while_condition:
-                    try:
-                        logger.warning(f"🔍 Получаем участников группы: {groups_wr}")
-                        participants = await client(
-                            GetParticipantsRequest(channel=groups_wr, offset=offset, filter=my_filter, limit=200,
-                                                   hash=0, ))
-                        all_participants.extend(participants.users)
-                        offset += len(participants.users)
-                        if len(participants.users) < 1:
-                            while_condition = False
-                    except TypeError:
-                        await self.app_logger.log_and_display(f"❌ Ошибка: {groups_wr} не является группой / каналом.",
-                                                              level="error")
-                        await asyncio.sleep(2)
-                        break
-                    except ChatAdminRequiredError:
-                        await self.app_logger.log_and_display(translations["ru"]["errors"]["admin_rights_required"])
-                        await asyncio.sleep(2)
-                        break
-                    except ChannelPrivateError:
-                        await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
-                        await asyncio.sleep(2)
-                        break
-                    except AuthKeyUnregisteredError:
-                        await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
-                        await asyncio.sleep(2)
-                        break
-                    except sqlite3.DatabaseError:  # TODO Обработка ошибок базы данных (придумать универсальнео наименование)
-                        await self.app_logger.log_and_display("Ошибка базы данных аккаунта")
-                        await asyncio.sleep(2)
-                        break
+                await self.app_logger.log_and_display(
+                    "🔍 Ищем участников... 💾 Сохраняем в файл software_database.db...")
+                try:
+                    all_participants: list = []
+                    while_condition = True
+                    my_filter = ChannelParticipantsSearch("")
+                    offset = 0
+                    while while_condition:
+                        try:
+                            logger.warning(f"🔍 Получаем участников группы: {groups_wr}")
+                            participants = await client(
+                                GetParticipantsRequest(channel=groups_wr, offset=offset, filter=my_filter, limit=200,
+                                                       hash=0, ))
+                            all_participants.extend(participants.users)
+                            offset += len(participants.users)
+                            if len(participants.users) < 1:
+                                while_condition = False
+                        except TypeError:
+                            await self.app_logger.log_and_display(
+                                f"❌ Ошибка: {groups_wr} не является группой / каналом.",
+                                level="error")
+                            await asyncio.sleep(2)
+                            break
+                        except ChatAdminRequiredError:
+                            await self.app_logger.log_and_display(translations["ru"]["errors"]["admin_rights_required"])
+                            await asyncio.sleep(2)
+                            break
+                        except ChannelPrivateError:
+                            await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
+                            await asyncio.sleep(2)
+                            break
+                        except AuthKeyUnregisteredError:
+                            await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
+                            await asyncio.sleep(2)
+                            break
+                        except sqlite3.DatabaseError:  # TODO Обработка ошибок базы данных (придумать универсальнео наименование)
+                            await self.app_logger.log_and_display("Ошибка базы данных аккаунта")
+                            await asyncio.sleep(2)
+                            break
 
-                for user in all_participants:
-                    await self.app_logger.log_and_display(f"Полученные данные: {user}")
-                    logger.info(f"Полученные данные: {user}")
-                    log_data = await self.collect_user_log_data(user)
-                    add_member_to_db(log_data=log_data)
+                    for user in all_participants:
+                        await self.app_logger.log_and_display(f"Полученные данные: {user}")
+                        logger.info(f"Полученные данные: {user}")
+                        log_data = await self.collect_user_log_data(user)
+                        add_member_to_db(log_data=log_data)
 
-            except TypeError as error:
-                logger.exception(f"❌ Ошибка: {error}")
-                return []  # Возвращаем пустой список в случае ошибки
-            except Exception as error:
-                logger.exception(error)
+                except TypeError as error:
+                    logger.exception(f"❌ Ошибка: {error}")
+                    return []  # Возвращаем пустой список в случае ошибки
+                except Exception as error:
+                    logger.exception(error)
 
-        limit_active_user = ft.TextField(label="💬 Кол-во сообщений", expand=True, disabled=True)
-        # Выпадающий список для выбора группы
-        dropdown = ft.Dropdown(width=WIDTH_WIDE_BUTTON, options=[], autofocus=True, disabled=True)
-        result_text = ft.Text(value="📂 Группы не загружены")
-        parse_button = ft.ElevatedButton(text="🔍 Парсить", width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                         on_click=add_items, disabled=True)
+            limit_active_user = ft.TextField(label="💬 Кол-во сообщений", expand=True, disabled=True)
+            # Выпадающий список для выбора группы
+            dropdown = ft.Dropdown(width=WIDTH_WIDE_BUTTON, options=[], autofocus=True, disabled=True)
+            result_text = ft.Text(value="📂 Группы не загружены")
+            parse_button = ft.Button(
+                "🔍 Парсить",
+                width=WIDTH_WIDE_BUTTON,
+                height=BUTTON_HEIGHT,
+                on_click=add_items,
+                disabled=True
+            )
 
-        # После успешного выбора файла:
-        admin_switch.disabled = False
-        members_switch.disabled = False
-        account_groups_switch.disabled = False
-        account_group_selection_switch.disabled = False
-        active_switch.disabled = False
-        chat_input.disabled = False
-        limit_active_user.disabled = False
-        dropdown.disabled = False
-        parse_button.disabled = False
+            # После успешного выбора файла:
+            admin_switch.disabled = False
+            members_switch.disabled = False
+            account_groups_switch.disabled = False
+            account_group_selection_switch.disabled = False
+            active_switch.disabled = False
+            chat_input.disabled = False
+            limit_active_user.disabled = False
+            dropdown.disabled = False
+            parse_button.disabled = False
 
-        # Выравнивание элементов управления
-        admin_switch.expand = True
-        members_switch.expand = True
-        account_groups_switch.expand = True
+            # Выравнивание элементов управления
+            admin_switch.expand = True
+            members_switch.expand = True
+            account_groups_switch.expand = True
 
-        account_group_selection_switch.expand = True
-        active_switch.expand = True
-        self.page.update()
+            account_group_selection_switch.expand = True
+            active_switch.expand = True
+            self.page.update()
 
-        # Представление (View)
-        view = ft.View(
-            route="/parsing",
-            controls=[
-                await self.gui_program.key_app_bar(),
-                await self.gui_program.outputs_text_gradient(),
-                list_view,
-                ft.Column([
-                    account_drop_down_list,  # ⬅️ Выбор аккаунта из выпадающего списка
-                    ft.Row([admin_switch, members_switch, account_groups_switch, account_group_selection_switch,
-                            active_switch]),
-                    chat_input,
-                    await self.gui_program.diver_castom(),  # Горизонтальная линия
-                    ft.Row([limit_active_user]),
-                    await self.gui_program.diver_castom(),  # Горизонтальная линия
-                    result_text,
-                    dropdown,
-                    parse_button,  # ⬅️ Кнопка для парсинга
-                ])
-            ]
-        )
-        self.page.views.append(view)
-        self.page.update()
+            # Представление (View)
+            view = ft.View(
+                route="/parsing",
+                controls=[
+                    await self.gui_program.key_app_bar(),
+                    await self.gui_program.outputs_text_gradient(),
+                    list_view,
+                    ft.Column([
+                        account_drop_down_list,  # ⬅️ Выбор аккаунта из выпадающего списка
+                        ft.Row([admin_switch, members_switch, account_groups_switch, account_group_selection_switch,
+                                active_switch]),
+                        chat_input,
+                        await self.gui_program.diver_castom(),  # Горизонтальная линия
+                        ft.Row([limit_active_user]),
+                        await self.gui_program.diver_castom(),  # Горизонтальная линия
+                        result_text,
+                        dropdown,
+                        parse_button,  # ⬅️ Кнопка для парсинга
+                    ])
+                ]
+            )
+            self.page.views.append(view)
+            self.page.update()
+
+        except Exception as e:
+            logger.exception(e)
 
     async def collect_user_log_data(self, user):
         return {
@@ -455,7 +467,7 @@ class ParsingGroupMembers:
                 try:
                     entity = await client.get_entity(dialog.id)
                     # Пропускаем личные чаты
-                    from telethon.tl.types import Chat, Channel
+
                     if isinstance(entity, Chat):
                         logger.debug(f"💬 Пропущен личный чат: {dialog.id}")
                         continue
