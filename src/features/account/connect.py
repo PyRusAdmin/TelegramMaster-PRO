@@ -365,10 +365,11 @@ class TGConnect:
                         await client.disconnect()  # Отключаемся от Telegram
 
                 self.page.views.append(ft.View(controls=[passww,
-                                                         ft.Button(width=WIDTH_WIDE_BUTTON,
-                                                                   height=BUTTON_HEIGHT,
-                                                                   text=translations["ru"]["buttons"]["done"],
-                                                                   on_click=btn_click_code)]))  # Кнопка "Готово"
+                                                         ft.Button(
+                                              translations["ru"]["buttons"]["done"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
+                                              on_click=btn_click_code)]))  # Кнопка "Готово"
                 self.page.update()  # Обновляем страницу, чтобы отобразился интерфейс для ввода кода
             self.page.update()
 
