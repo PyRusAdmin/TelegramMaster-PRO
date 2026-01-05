@@ -167,15 +167,7 @@ async def main(page: ft.Page):
                     ft.Column([
                         menu_button(translations["ru"]["inviting_menu"]["inviting"], "/inviting", page),
                         menu_button(translations["ru"]["menu"]["parsing"], "/parsing", page),
-
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["menu"]["contacts"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/working_with_contacts"),
-                            ),
-                        ),
+                        menu_button(translations["ru"]["menu"]["contacts"], "/working_with_contacts", page),
 
                         ft.Container(
                             content=ft.Button(
