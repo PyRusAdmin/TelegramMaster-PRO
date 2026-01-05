@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import flet as ft
 
-from src.core.config.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON)
+from src.core.config.configs import (BUTTON_HEIGHT, BUTTON_WIDTH)
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
@@ -25,23 +25,33 @@ class Menu:
                                                                                                          ft.Colors.PURPLE]))))]),
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 👍 Выбор реакций
-                         ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["menu_settings"]["choice_of_reactions"],
-                                           on_click=lambda _: self.page.go("/choice_of_reactions")),
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["choice_of_reactions"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/choice_of_reactions")),
                          # 🔐 Запись proxy
-                         ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["menu_settings"]["proxy_entry"],
-                                           on_click=lambda _: self.page.go("/proxy_entry")),
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["proxy_entry"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/proxy_entry")),
                          # 📝 Запись api_id, api_hash
-                         ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
-                                           on_click=lambda _: self.page.go("/recording_api_id_api_hash")),
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/recording_api_id_api_hash")),
                          # ✉️ Запись сообщений
-                         ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["menu_settings"]["message_recording"],
-                                           on_click=lambda _: self.page.go("/message_recording")),
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["message_recording"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/message_recording")),
                          # 🔗 Запись ссылки для реакций
-                         ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["menu_settings"]["recording_reaction_link"],
-                                           on_click=lambda _: self.page.go("/recording_reaction_link")),
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["recording_reaction_link"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/recording_reaction_link")),
                      ])]))
