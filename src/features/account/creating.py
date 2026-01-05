@@ -92,9 +92,11 @@ class CreatingGroupsAndChats:
                                                                                                      ft.Colors.PURPLE]))))]),
                                         list_view,
                                         account_drop_down_list,
-                                        ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                                          text=translations["ru"]["buttons"]["start"],
-                                                          on_click=add_items),
+                                        ft.Button(
+                                              translations["ru"]["buttons"]["start"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
+                                              on_click=add_items),
                                         ]))
         self.page.update()
 # 144
