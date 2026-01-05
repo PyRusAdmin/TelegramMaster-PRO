@@ -190,25 +190,24 @@ class TGConnect:
                          ft.Button(
                              translations["ru"]["account_verification"]["spam_check"],
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-
                              on_click=check_for_spam
                          ),
                          # ✅ Проверка на валидность
                          ft.Button(
+                             translations["ru"]["account_verification"]["validation"],
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                             text=translations["ru"]["account_verification"]["validation"],
                              on_click=validation_check
                          ),
                          # ✏️ Переименование аккаунтов
                          ft.Button(
+                             translations["ru"]["account_verification"]["renaming"],
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                             text=translations["ru"]["account_verification"]["renaming"],
                              on_click=renaming_accounts
                          ),
                          # 🔍 Полная проверка
                          ft.Button(
+                             translations["ru"]["account_verification"]["full_verification"],
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                             text=translations["ru"]["account_verification"]["full_verification"],
                              on_click=full_verification
                          ),
                      ])]))
@@ -349,8 +348,8 @@ class TGConnect:
                                 self.page.go("/")  # Изменение маршрута в представлении существующих настроек
 
                         button_password = ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                                            text=translations["ru"]["buttons"]["done"],
-                                                            on_click=btn_click_password)  # Кнопка "Готово"
+                                                    text=translations["ru"]["buttons"]["done"],
+                                                    on_click=btn_click_password)  # Кнопка "Готово"
                         self.page.views.append(ft.View(controls=[pass_2fa, button_password]))
                         self.page.update()  # Обновляем страницу, чтобы интерфейс отобразился
                     except PhoneCodeInvalidError:
@@ -365,9 +364,9 @@ class TGConnect:
 
                 self.page.views.append(ft.View(controls=[passww,
                                                          ft.Button(width=WIDTH_WIDE_BUTTON,
-                                                                           height=BUTTON_HEIGHT,
-                                                                           text=translations["ru"]["buttons"]["done"],
-                                                                           on_click=btn_click_code)]))  # Кнопка "Готово"
+                                                                   height=BUTTON_HEIGHT,
+                                                                   text=translations["ru"]["buttons"]["done"],
+                                                                   on_click=btn_click_code)]))  # Кнопка "Готово"
                 self.page.update()  # Обновляем страницу, чтобы отобразился интерфейс для ввода кода
             self.page.update()
 
@@ -434,7 +433,7 @@ class TGConnect:
                      phone_number,
                      # 📞 Подключение аккаунтов по номеру телефона
                      ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                       text="Получить код", on_click=connecting_number_accounts),
+                               text="Получить код", on_click=connecting_number_accounts),
 
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
 
@@ -452,7 +451,7 @@ class TGConnect:
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🔑 Подключение session аккаунтов
                          ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                           text=translations["ru"]["create_groups_menu"]["choose_session_files"],
-                                           on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
+                                   text=translations["ru"]["create_groups_menu"]["choose_session_files"],
+                                   on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
                      ])]))
 # 486
