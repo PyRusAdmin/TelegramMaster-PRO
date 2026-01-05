@@ -347,9 +347,11 @@ class TGConnect:
                                 await show_notification(self.page, f"⚠️ Неверный пароль. Попробуйте еще раз.")
                                 self.page.go("/")  # Изменение маршрута в представлении существующих настроек
 
-                        button_password = ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                                    text=translations["ru"]["buttons"]["done"],
-                                                    on_click=btn_click_password)  # Кнопка "Готово"
+                        button_password = ft.Button(
+                                              translations["ru"]["buttons"]["done"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
+                                              on_click=btn_click_password)  # Кнопка "Готово"
                         self.page.views.append(ft.View(controls=[pass_2fa, button_password]))
                         self.page.update()  # Обновляем страницу, чтобы интерфейс отобразился
                     except PhoneCodeInvalidError:
