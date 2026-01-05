@@ -48,7 +48,6 @@ class WorkingWithReactions:
         """
         Отображает меню работы с реакциями в Telegram.
 
-        :param page: Страница интерфейса Flet для отображения элементов управления
         :return: None
         """
 
