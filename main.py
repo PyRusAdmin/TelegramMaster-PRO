@@ -42,7 +42,6 @@ async def main(page: ft.Page):
 
     setting_page = SettingPage(page=page)
     account_bio = AccountBIO(page=page)
-
     connect = TGConnect(page=page)
     creating_groups_and_chats = CreatingGroupsAndChats(page=page)
     subscribe_unsubscribe_telegram = SubscribeUnsubscribeTelegram(page=page)
@@ -52,7 +51,6 @@ async def main(page: ft.Page):
     receiving_and_recording = ReceivingAndRecording()
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
-
     gui_program = GUIProgram()
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
