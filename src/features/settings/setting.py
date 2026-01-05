@@ -123,55 +123,61 @@ class SettingPage:
 
                 :return: None
                 """
-                self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+                try:
+                    self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
 
-                list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+                    list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
 
-                proxy_type = ft.TextField(label="Введите тип прокси, например SOCKS5: ", multiline=True, max_lines=19)
-                addr_type = ft.TextField(label="Введите ip адрес, например 194.67.248.9: ", multiline=True,
-                                         max_lines=19)
-                port_type = ft.TextField(label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19)
-                username_type = ft.TextField(label="Введите username, например NnbjvX: ", multiline=True, max_lines=19)
-                password_type = ft.TextField(label="Введите пароль, например ySfCfk: ", multiline=True, max_lines=19)
+                    proxy_type = ft.TextField(label="Введите тип прокси, например SOCKS5: ", multiline=True, max_lines=19)
+                    addr_type = ft.TextField(label="Введите ip адрес, например 194.67.248.9: ", multiline=True,
+                                             max_lines=19)
+                    port_type = ft.TextField(label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19)
+                    username_type = ft.TextField(label="Введите username, например NnbjvX: ", multiline=True, max_lines=19)
+                    password_type = ft.TextField(label="Введите пароль, например ySfCfk: ", multiline=True, max_lines=19)
 
-                async def btn_click(_) -> None:
-                    proxy = {
-                        "proxy_type": proxy_type.value,
-                        "addr": addr_type.value,
-                        "port": port_type.value,
-                        "username": username_type.value,
-                        "password": password_type.value,
-                        "rdns": "True"
-                    }
-                    save_proxy_data_to_db(proxy=proxy)
-                    await show_notification(self.page, "Данные успешно записаны!")
-                    self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-                    self.page.update()
+                    async def btn_click(_) -> None:
+                        proxy = {
+                            "proxy_type": proxy_type.value,
+                            "addr": addr_type.value,
+                            "port": port_type.value,
+                            "username": username_type.value,
+                            "password": password_type.value,
+                            "rdns": "True"
+                        }
+                        save_proxy_data_to_db(proxy=proxy)
+                        await show_notification(self.page, "Данные успешно записаны!")
+                        self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                        self.page.update()
 
-                await self.add_view_with_fields_and_button(
-                    [proxy_type, addr_type, port_type, username_type, password_type],
-                    btn_click)
+                    await self.add_view_with_fields_and_button(
+                        [proxy_type, addr_type, port_type, username_type, password_type],
+                        btn_click)
+                except Exception as e:
+                    logger.exception(e)
 
             async def writing_api_id_api_hash():
                 """
                 Создает интерфейс для записи API ID и API Hash.
                 :return: None
                 """
-                self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
-                list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-                api_id_data = ft.TextField(label="Введите api_id", multiline=True, max_lines=19)
-                api_hash_data = ft.TextField(label="Введите api_hash", multiline=True, max_lines=19)
+                try:
+                    self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+                    list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+                    api_id_data = ft.TextField(label="Введите api_id", multiline=True, max_lines=19)
+                    api_hash_data = ft.TextField(label="Введите api_hash", multiline=True, max_lines=19)
 
-                def btn_click(_) -> None:
-                    config.get("telegram_settings", "id")
-                    config.set("telegram_settings", "id", api_id_data.value)
-                    config.get("telegram_settings", "hash")
-                    config.set("telegram_settings", "hash", api_hash_data.value)
-                    self.writing_settings_to_a_file(config)
-                    self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-                    self.page.update()
+                    def btn_click(_) -> None:
+                        config.get("telegram_settings", "id")
+                        config.set("telegram_settings", "id", api_id_data.value)
+                        config.get("telegram_settings", "hash")
+                        config.set("telegram_settings", "hash", api_hash_data.value)
+                        self.writing_settings_to_a_file(config)
+                        self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                        self.page.update()
 
-                await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
+                    await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
+                except Exception as e:
+                    logger.exception(e)
 
             async def recording_text_for_sending_messages(label, unique_filename) -> None:
                 """
@@ -181,18 +187,21 @@ class SettingPage:
                 :param unique_filename: Имя файла для записи данных
                 :return: None
                 """
-                self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
-                list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-                text_to_send = ft.TextField(label=label, multiline=True, max_lines=19)
+                try:
+                    self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+                    list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+                    text_to_send = ft.TextField(label=label, multiline=True, max_lines=19)
 
-                async def btn_click(_) -> None:
-                    self.write_data_to_json_file(reactions=text_to_send.value,
-                                                 path_to_the_file=unique_filename)  # Сохраняем данные в файл
-                    await show_notification(self.page, "Данные успешно записаны!")
-                    self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-                    self.page.update()
+                    async def btn_click(_) -> None:
+                        self.write_data_to_json_file(reactions=text_to_send.value,
+                                                     path_to_the_file=unique_filename)  # Сохраняем данные в файл
+                        await show_notification(self.page, "Данные успешно записаны!")
+                        self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                        self.page.update()
 
-                await self.add_view_with_fields_and_button([text_to_send], btn_click)
+                    await self.add_view_with_fields_and_button([text_to_send], btn_click)
+                except Exception as e:
+                    logger.exception(e)
 
             async def message_recording():
                 await recording_text_for_sending_messages(

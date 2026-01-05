@@ -22,7 +22,10 @@ def write_account_to_db(session_string, phone_number):
     :param phone_number: Номер телефона аккаунта
     :param session_string: Строка сессии
     """
-    Account.insert(session_string=session_string, phone_number=phone_number).on_conflict(action='IGNORE').execute()
+    try:
+        Account.insert(session_string=session_string, phone_number=phone_number).on_conflict(action='IGNORE').execute()
+    except Exception as e:
+        logger.exception(e)
 
 
 def getting_account():
