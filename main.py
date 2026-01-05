@@ -4,8 +4,10 @@ import asyncio
 import flet as ft
 from loguru import logger
 
-from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE)
-from src.core.config.configs import (TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
+from src.core.config.configs import (
+    PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, BUTTON_WIDTH, BUTTON_HEIGHT,
+    window_width, window_height, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2
+)
 from src.core.database.create_database import create_database
 from src.features.account.account_bio import AccountBIO
 from src.features.account.connect import TGConnect
@@ -24,11 +26,6 @@ from src.locales.translations_loader import translations
 
 logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")
-
-BUTTON_HEIGHT = 30  # Высота
-BUTTON_WIDTH = 400  # Ширина
-window_width = 1050  # Ширина
-window_height = 680  # Высота
 
 
 async def menu_button(text: str, route: str, page: ft.Page):
@@ -92,7 +89,6 @@ async def main(page: ft.Page):
     # Обработка смены маршрута
     async def route_change(e):
         page.views.clear()
-        # route = page.route
 
         if page.route == "/":
             pass  # Главное меню уже отображено

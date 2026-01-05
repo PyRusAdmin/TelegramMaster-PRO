@@ -17,7 +17,7 @@ TIME_SENDING_MESSAGES_2 = config.get('time_inviting', 'time_inviting_2', fallbac
 """Настройки внешнего вида программы"""
 config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
 config_gui.read(filenames='user_data/config/config_gui.ini', encoding='utf-8')
-BUTTON_HEIGHT = config_gui.get('height_button', 'height_button', fallback=None)  # Получение ширины кнопки
+# BUTTON_HEIGHT = config_gui.get('height_button', 'height_button', fallback=None)  # Получение ширины кнопки
 PROGRAM_NAME = config_gui.get('program_name', 'program_name', fallback=None)  # Имя программы
 PROGRAM_VERSION = config_gui.get('program_version', 'program_version', fallback=None)  # Версия программы
 DATE_OF_PROGRAM_CHANGE = config_gui.get('date_of_program_change', 'date_of_program_change',
@@ -44,3 +44,8 @@ path_folder_database = config_path.get('path_folder_database', 'path_folder_data
 
 # Широкая одиночная кнопка
 wide_single_button = 300  # Применяется: Инвайтинг
+
+BUTTON_HEIGHT = 30  # Высота (кнопок главного меню)
+BUTTON_WIDTH = 400  # Ширина (кнопок главного меню)
+window_width = 1050  # Ширина (программы)
+window_height = 680  # Высота (программы)
