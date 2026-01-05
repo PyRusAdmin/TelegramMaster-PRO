@@ -256,23 +256,35 @@ async def main(page: ft.Page):
                         #     ),
                         # ),
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/sending_messages_files_via_chats"),
-                            ),
-                        ),
+                        await menu_button(
+                            translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
+                            "/sending_messages_files_via_chats",
+                            page),
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/importing_a_list_of_parsed_data"),
-                            ),
-                        ),
+                        # ft.Container(
+                        #     content=ft.Button(
+                        #         content=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
+                        #         width=BUTTON_WIDTH,
+                        #         height=BUTTON_HEIGHT,
+                        #         on_click=lambda _: page.push_route("/sending_messages_files_via_chats"),
+                        #     ),
+                        # ),
+
+                        await menu_button(
+                            translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
+                            "/importing_a_list_of_parsed_data",
+                            page),
+
+                        # ft.Container(
+                        #     content=ft.Button(
+                        #         content=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
+                        #         width=BUTTON_WIDTH,
+                        #         height=BUTTON_HEIGHT,
+                        #         on_click=lambda _: page.push_route("/importing_a_list_of_parsed_data"),
+                        #     ),
+                        # ),
+
+                        await menu_button(translations["ru"]["menu"]["settings"],"/settings", page),
 
                         ft.Container(
                             content=ft.Button(
