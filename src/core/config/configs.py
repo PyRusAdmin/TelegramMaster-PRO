@@ -18,16 +18,16 @@ TIME_SENDING_MESSAGES_2 = config.get('time_inviting', 'time_inviting_2', fallbac
 config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
 config_gui.read(filenames='user_data/config/config_gui.ini', encoding='utf-8')
 # BUTTON_HEIGHT = config_gui.get('height_button', 'height_button', fallback=None)  # Получение ширины кнопки
-PROGRAM_NAME = config_gui.get('program_name', 'program_name', fallback=None)  # Имя программы
-PROGRAM_VERSION = config_gui.get('program_version', 'program_version', fallback=None)  # Версия программы
-DATE_OF_PROGRAM_CHANGE = config_gui.get('date_of_program_change', 'date_of_program_change',
-                                        fallback=None)  # Дата изменения (обновления)
+
+PROGRAM_NAME = "TelegramMaster-PRO"  # Имя программы
+PROGRAM_VERSION = "2.8.3"  # Версия программы
+DATE_OF_PROGRAM_CHANGE = "05.01.2026"  # Дата изменения (обновления)
 
 # Ширина программы / высота программы
 WINDOW_WIDTH = 1050  # Ширина программы
 WINDOW_HEIGHT = 725  # Высота программы
 
-WINDOW_RESIZABLE = config_gui.get('window_resizable', 'window_resizable', fallback=None)  # Ширина программы
+# WINDOW_RESIZABLE = config_gui.get('window_resizable', 'window_resizable', fallback=None)  # Ширина программы
 WIDTH_WIDE_BUTTON = config_gui.get('line_width_button', 'line_width_button', fallback=None)  # Ширина кнопки
 WIDTH_INPUT_FIELD_AND_BUTTON = int(WIDTH_WIDE_BUTTON) / 2 - 5  # Ширина кнопки (окно и поле ввода)
 width_one_input = 500  # 2 поля ввода (без кнопки сохранить)
