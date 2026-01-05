@@ -203,8 +203,9 @@ class InvitingToAGroup:
                                       general_invitation_group_scheduler)  # Асинхронная функция для выполнения
                 while True:
                     await asyncio.sleep(1)
-            except Exception as error:
-                logger.exception(error)
+
+            except Exception as e:
+                logger.exception(e)
 
         async def schedule_invite(_):
             """
@@ -221,25 +222,29 @@ class InvitingToAGroup:
                                     general_invitation_group_scheduler)
                 while True:
                     await asyncio.sleep(1)
-            except Exception as error:
-                logger.exception(error)
+
+            except Exception as e:
+                logger.exception(e)
 
         async def launching_invite_every_day_certain_time(_):
             """
             🚀 Запускает процесс инвайтинга групп и отображает статус в интерфейсе.
             📅 Инвайтинг каждый день. Запуск приглашения участников каждый день в определенное время, выбранное пользователем.
             """
+            try:
+                async def general_invitation_group_scheduler():
+                    await general_invitation_to_the_group(_)
 
-            async def general_invitation_group_scheduler():
-                await general_invitation_to_the_group(_)
+                await self.app_logger.log_and_display(
+                    message=f"Скрипт будет запускаться каждый день в {hour.value}:{minutes.value}"
+                )
+                self.scheduler.daily(dt.time(hour=int(hour.value), minute=int(minutes.value)),
+                                     general_invitation_group_scheduler)
+                while True:
+                    await asyncio.sleep(1)
 
-            await self.app_logger.log_and_display(
-                message=f"Скрипт будет запускаться каждый день в {hour.value}:{minutes.value}"
-            )
-            self.scheduler.daily(dt.time(hour=int(hour.value), minute=int(minutes.value)),
-                                 general_invitation_group_scheduler)
-            while True:
-                await asyncio.sleep(1)
+            except Exception as e:
+                logger.exception(e)
 
         async def start_inviting_grup(_):
             """
