@@ -348,10 +348,10 @@ class TGConnect:
                                 self.page.go("/")  # Изменение маршрута в представлении существующих настроек
 
                         button_password = ft.Button(
-                                              translations["ru"]["buttons"]["done"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=btn_click_password)  # Кнопка "Готово"
+                            translations["ru"]["buttons"]["done"],
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
+                            on_click=btn_click_password)  # Кнопка "Готово"
                         self.page.views.append(ft.View(controls=[pass_2fa, button_password]))
                         self.page.update()  # Обновляем страницу, чтобы интерфейс отобразился
                     except PhoneCodeInvalidError:
@@ -366,10 +366,10 @@ class TGConnect:
 
                 self.page.views.append(ft.View(controls=[passww,
                                                          ft.Button(
-                                              translations["ru"]["buttons"]["done"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=btn_click_code)]))  # Кнопка "Готово"
+                                                             translations["ru"]["buttons"]["done"],
+                                                             width=WIDTH_WIDE_BUTTON,
+                                                             height=BUTTON_HEIGHT,
+                                                             on_click=btn_click_code)]))  # Кнопка "Готово"
                 self.page.update()  # Обновляем страницу, чтобы отобразился интерфейс для ввода кода
             self.page.update()
 
@@ -436,10 +436,10 @@ class TGConnect:
                      phone_number,
                      # 📞 Подключение аккаунтов по номеру телефона
                      ft.Button(
-                                              "Получить код",
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=connecting_number_accounts),
+                         "Получить код",
+                         width=WIDTH_WIDE_BUTTON,
+                         height=BUTTON_HEIGHT,
+                         on_click=connecting_number_accounts),
 
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
 
@@ -457,9 +457,9 @@ class TGConnect:
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🔑 Подключение session аккаунтов
                          ft.Button(
-                                              translations["ru"]["create_groups_menu"]["choose_session_files"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
+                             translations["ru"]["create_groups_menu"]["choose_session_files"],
+                             width=WIDTH_WIDE_BUTTON,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
                      ])]))
 # 486

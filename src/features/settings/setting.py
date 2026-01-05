@@ -259,10 +259,10 @@ class SettingPage:
                           ft.Column(
                               controls=fields + [
                                   ft.Button(
-                                              translations["ru"]["buttons"]["done"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=btn_click),
+                                      translations["ru"]["buttons"]["done"],
+                                      width=WIDTH_WIDE_BUTTON,
+                                      height=BUTTON_HEIGHT,
+                                      on_click=btn_click),
                               ]
                           )]))
 

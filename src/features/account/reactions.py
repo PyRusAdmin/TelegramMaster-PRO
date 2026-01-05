@@ -212,16 +212,16 @@ class WorkingWithReactions:
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 👍 Ставим реакции
                          ft.Button(
-                                              translations["ru"]["reactions_menu"]["setting_reactions"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=send_reaction_request),
+                             translations["ru"]["reactions_menu"]["setting_reactions"],
+                             width=WIDTH_WIDE_BUTTON,
+                             height=BUTTON_HEIGHT,
+                             on_click=send_reaction_request),
                          # 🤖 Автоматическое выставление реакций
                          ft.Button(
-                                              translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=setting_reactions),
+                             translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
+                             width=WIDTH_WIDE_BUTTON,
+                             height=BUTTON_HEIGHT,
+                             on_click=setting_reactions),
                      ])]))
 
     async def choosing_random_reaction(self):

@@ -93,10 +93,10 @@ class CreatingGroupsAndChats:
                                         list_view,
                                         account_drop_down_list,
                                         ft.Button(
-                                              translations["ru"]["buttons"]["start"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=add_items),
+                                            translations["ru"]["buttons"]["start"],
+                                            width=WIDTH_WIDE_BUTTON,
+                                            height=BUTTON_HEIGHT,
+                                            on_click=add_items),
                                         ]))
         self.page.update()
 # 144

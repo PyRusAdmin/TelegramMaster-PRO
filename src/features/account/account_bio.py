@@ -224,18 +224,18 @@ class AccountBIO:
                              profile_last_name_input_field,
                              # 📝 Изменение фамилии
                              ft.Button(
-                                              translations["ru"]["edit_bio_menu"]["name_change_f"],
-                                              width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=change_last_name_profile_gui),
+                                 translations["ru"]["edit_bio_menu"]["name_change_f"],
+                                 width=WIDTH_INPUT_FIELD_AND_BUTTON,
+                                 height=BUTTON_HEIGHT,
+                                 on_click=change_last_name_profile_gui),
                          ]),
                          await self.gui_program.diver_castom(),  # Горизонтальная линия
                          # 🖼️ Изменение фото
                          ft.Button(
-                                              translations["ru"]["edit_bio_menu"]["changing_the_photo"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=change_photo_profile_gui),
+                             translations["ru"]["edit_bio_menu"]["changing_the_photo"],
+                             width=WIDTH_WIDE_BUTTON,
+                             height=BUTTON_HEIGHT,
+                             on_click=change_photo_profile_gui),
                      ])]))
 
 # 244
