@@ -71,9 +71,8 @@ class FunctionButton:
         """
         # Добавление представления на страницу
         self.page.views.append(
-            ft.View(
-                "/viewing_posts_menu",  # Маршрут для этого представления
-                [
+            ft.View(route="/viewing_posts_menu",  # Маршрут для этого представления
+                controls=[
                     await self.gui_program.key_app_bar(),  # Кнопка "Назад"
 
                     ft.Text(spans=[ft.TextSpan(
