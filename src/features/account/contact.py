@@ -143,8 +143,10 @@ class TGContact:
                                                           "creating_a_contact_list"],
                                                       on_click=write_contact_to_db)]),
                             # 👥 Парсинг списка контактов
-                            ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                              text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
+                            ft.Button(
+                                              translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
                                               on_click=show_account_contact_list),
                             # 🗑️ Удаление контактов
                             ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
