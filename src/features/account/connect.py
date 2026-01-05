@@ -13,6 +13,7 @@ from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
+from src.gui.buttons import menu_button_fun
 from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, api_id, api_hash
 from src.core.database.account import (getting_account, write_account_to_db, delete_account_from_db,
                                        update_phone_by_session)
@@ -302,6 +303,8 @@ class TGConnect:
         Меню подключения аккаунтов (по телефону и по session)
         """
 
+        list_view.controls.clear()
+
         # Создаем текстовый элемент и добавляем его на страницу
         phone_number = ft.TextField(label="Введите номер телефона:", multiline=False, max_lines=1)
 
@@ -376,50 +379,77 @@ class TGConnect:
         # Поле для отображения выбранного файла
         selected_files = ft.Text(value="Session файл не выбран", size=12)
 
-        async def btn_click(e: ft.FilePickerResultEvent) -> None:
+        async def open_file_picker(e):
+            await pick_files_dialog.pick_files(
+                allow_multiple=False
+            )
+
+        async def btn_click(e) -> None:
             """Подключение аккаунта Telegram по session файлу"""
 
-            if e.files:
-                file_name = e.files[0].name  # Имя файла
-                file_path = e.files[0].path  # Путь к файлу
-
-                logger.info(f"Выбранный файл: {file_name}")
-                logger.info(f"Путь к файлу: {file_path}")
-
-                # Проверка расширения файла на ".session"
-                if file_name.endswith(".session"):
-                    selected_files.value = f"Выбран session файл: {file_name}"
-                    logger.info(f"Выбранный файл: {selected_files.value}")
-                    selected_files.update()
-                    session_path = os.path.splitext(file_path)[0]  # путь без .session
-                    logger.info(f"Путь без .session: {session_path}")
-                    client = TelegramClient(session=f"{session_path}", api_id=api_id, api_hash=api_hash,
-                                            system_version="4.16.30-vxCUSTOM")
-                    await client.connect()
-                    logger.info(f"✨ STRING SESSION: {StringSession.save(client.session)}")
-                    session_string = StringSession.save(client.session)
-                    await client.disconnect()
-                    client = TelegramClient(StringSession(session_string), api_id=api_id, api_hash=api_hash,
-                                            system_version="4.16.30-vxCUSTOM")
-                    await client.connect()
-                    me = await client.get_me()
-                    try:
-                        phone = me.phone or ""
-                        logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-                        await client.disconnect()
-                        write_account_to_db(session_string=session_string,
-                                            phone_number=phone)  # Запись строки сессии в базу данных
-                    except AttributeError:
-                        await show_notification(page=self.page, message="Не валидный аккаунт")
-                else:
-                    selected_files.value = "Выбранный файл не является session файлом"
-            else:
+            if not e.files:
                 selected_files.value = "Выбор файла отменен"
+                selected_files.update()
+                return
+
+            file = e.files[0]
+            file_name = file.name
+            file_path = file.path
+
+            logger.info(f"Выбранный файл: {file_name}")
+            logger.info(f"Путь к файлу: {file_path}")
+
+            if not file_name.endswith(".session"):
+                selected_files.value = "Выбранный файл не является session файлом"
+                selected_files.update()
+                return
+
+            selected_files.value = f"Выбран session файл: {file_name}"
             selected_files.update()
+
+            session_path = os.path.splitext(file_path)[0]
+
+            client = TelegramClient(
+                session=session_path,
+                api_id=api_id,
+                api_hash=api_hash,
+                system_version="4.16.30-vxCUSTOM"
+            )
+
+            await client.connect()
+            session_string = StringSession.save(client.session)
+            await client.disconnect()
+
+            client = TelegramClient(
+                StringSession(session_string),
+                api_id=api_id,
+                api_hash=api_hash,
+                system_version="4.16.30-vxCUSTOM"
+            )
+
+            await client.connect()
+            me = await client.get_me()
+
+            if not me:
+                await show_notification(page=self.page, message="❌ Не валидный аккаунт")
+                await client.disconnect()
+                return
+
+            phone = me.phone or ""
+            logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
+
+            write_account_to_db(
+                session_string=session_string,
+                phone_number=phone
+            )
+
+            await client.disconnect()
             self.page.update()
 
-        pick_files_dialog = ft.FilePicker(on_result=btn_click)  # Инициализация выбора файлов
+        pick_files_dialog = ft.FilePicker()
+        pick_files_dialog.on_result = btn_click
         self.page.overlay.append(pick_files_dialog)  # Добавляем FilePicker на страницу
+        self.page.update()  # 🔥 КРИТИЧНО
 
         self.page.views.append(
             ft.View(route="/account_connection_menu",  # Маршрут для этого представления
@@ -456,10 +486,15 @@ class TGConnect:
                               selected_files,  # Поле для отображения выбранного файла
                               ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                                   # 🔑 Подключение session аккаунтов
-                                  ft.Button(
+
+                                  await menu_button_fun(
                                       translations["ru"]["create_groups_menu"]["choose_session_files"],
-                                      width=WIDTH_WIDE_BUTTON,
-                                      height=BUTTON_HEIGHT,
-                                      on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
+                                      open_file_picker),  # Кнопка выбора файла
+
+                                  # ft.Button(
+                                  #     translations["ru"]["create_groups_menu"]["choose_session_files"],
+                                  #     width=WIDTH_WIDE_BUTTON,
+                                  #     height=BUTTON_HEIGHT,
+                                  #     on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
                               ])]))
 # 486
