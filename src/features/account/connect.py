@@ -435,8 +435,11 @@ class TGConnect:
                      list_view,  # Отображение логов 📝
                      phone_number,
                      # 📞 Подключение аккаунтов по номеру телефона
-                     ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                               text="Получить код", on_click=connecting_number_accounts),
+                     ft.Button(
+                                              "Получить код",
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
+                                              on_click=connecting_number_accounts),
 
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
 
@@ -453,8 +456,10 @@ class TGConnect:
                      selected_files,  # Поле для отображения выбранного файла
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🔑 Подключение session аккаунтов
-                         ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                   text=translations["ru"]["create_groups_menu"]["choose_session_files"],
-                                   on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
+                         ft.Button(
+                                              translations["ru"]["create_groups_menu"]["choose_session_files"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
+                                              on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
                      ])]))
 # 486
