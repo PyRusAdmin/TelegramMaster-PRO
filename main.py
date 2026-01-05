@@ -235,49 +235,37 @@ async def main(page: ft.Page):
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["menu"]["edit_bio"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["menu"]["edit_bio"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/bio_editing"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/viewing_posts_menu"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["message_sending_menu"]["sending_messages_via_chats"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/sending_messages_files_via_chats"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/importing_a_list_of_parsed_data"),
-                                style=menu_button_style,
                             ),
                         ),
 
