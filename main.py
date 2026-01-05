@@ -158,105 +158,78 @@ async def main(page: ft.Page):
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: asyncio.create_task(page.push_route("/inviting")),
-
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["menu"]["parsing"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["menu"]["parsing"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/parsing"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["menu"]["contacts"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["menu"]["contacts"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/working_with_contacts"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["menu"]["subscribe_unsubscribe"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["menu"]["subscribe_unsubscribe"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/subscribe_unsubscribe"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["menu"]["account_connect"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["menu"]["account_connect"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/account_connection_menu"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(
-                                        translations["ru"]["message_sending_menu"][
-                                            "sending_personal_messages_with_limits"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/sending_files_to_personal_account_with_limits"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["menu"]["reactions"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["menu"]["reactions"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/working_with_reactions"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["menu"]["account_check"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["menu"]["account_check"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/account_verification_menu"),
-                                style=menu_button_style,
                             ),
                         ),
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["menu"]["create_groups"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["menu"]["create_groups"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/creating_groups"),
-                                style=menu_button_style,
                             ),
                         ),
 
