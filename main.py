@@ -27,6 +27,8 @@ logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", 
 
 BUTTON_HEIGHT = 30  # Высота
 BUTTON_WIDTH = 400  # Ширина
+window_width = 1050  # Ширина
+window_height = 680  # Высота
 
 
 async def menu_button(text: str, route: str, page: ft.Page):
@@ -56,9 +58,9 @@ async def main(page: ft.Page):
     :param page: Страница интерфейса Flet для отображения элементов управления.
     """
     page.title = f"{PROGRAM_NAME}: {PROGRAM_VERSION}"
-
-    # ❗ НИКАКИХ sleep
-    page.update()
+    page.adaptive = True
+    page.window.width = window_width  # Ширина
+    page.window.height = window_height  # Высота
 
     create_database()
 
@@ -130,13 +132,13 @@ async def main(page: ft.Page):
             await setting_page.writing_api_id_api_hash()
         elif page.route == "/message_recording":
             await setting_page.recording_text_for_sending_messages(
-                "Введите текст для сообщения",
-                setting_page.get_unique_filename(base_filename='user_data/message/message')
+                label="Введите текст для сообщения",
+                unique_filename=setting_page.get_unique_filename(base_filename='user_data/message/message')
             )
         elif page.route == "/recording_reaction_link":
             await setting_page.recording_text_for_sending_messages(
-                "Введите ссылку для реакций",
-                'user_data/reactions/link_channel.json'
+                label="Введите ссылку для реакций",
+                unique_filename='user_data/reactions/link_channel.json'
             )
         elif page.route == "/recording_the_time_between_messages":
             await setting_page.create_main_window(
@@ -157,174 +159,108 @@ async def main(page: ft.Page):
     page.on_route_change = route_change
     page.on_view_pop = view_pop
 
-    page.views.append(
-        ft.View(
-            route="/",
+    page.add(
+        await menu.gui_program.key_app_bar(),
+
+        ft.Row(
             controls=[
-                await menu.gui_program.key_app_bar(),
-
-                ft.Row([
-                    ft.Column([
-                        await menu_button(translations["ru"]["inviting_menu"]["inviting"], "/inviting", page),
-                        await menu_button(translations["ru"]["menu"]["parsing"], "/parsing", page),
-                        await menu_button(translations["ru"]["menu"]["contacts"], "/working_with_contacts", page),
-                        await menu_button(translations["ru"]["menu"]["subscribe_unsubscribe"], "/subscribe_unsubscribe",
-                                          page),
-                        await menu_button(translations["ru"]["menu"]["account_connect"], "/account_connection_menu",
-                                          page),
-
-                        await menu_button(translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"], "/sending_files_to_personal_account_with_limits",
-                                          page),
-
-                        # ft.Container(
-                        #     content=ft.Button(
-                        #         content=translations["ru"]["message_sending_menu"][
-                        #             "sending_personal_messages_with_limits"],
-                        #         width=BUTTON_WIDTH,
-                        #         height=BUTTON_HEIGHT,
-                        #         on_click=lambda _: page.push_route(
-                        #             "/sending_files_to_personal_account_with_limits"),
-                        #     ),
-                        # ),
-
+                # ===== Левая колонка — кнопки =====
+                ft.Column(
+                    controls=[
+                        await menu_button(translations["ru"]["inviting_menu"]["inviting"],
+                                          "/inviting", page),
+                        await menu_button(translations["ru"]["menu"]["parsing"],
+                                          "/parsing", page),
+                        await menu_button(translations["ru"]["menu"]["contacts"],
+                                          "/working_with_contacts", page),
+                        await menu_button(translations["ru"]["menu"]["subscribe_unsubscribe"],
+                                          "/subscribe_unsubscribe", page),
+                        await menu_button(translations["ru"]["menu"]["account_connect"],
+                                          "/account_connection_menu", page),
                         await menu_button(
-                            translations["ru"]["menu"]["reactions"],
-                            "/working_with_reactions",
-                            page),
+                            translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
+                            "/sending_files_to_personal_account_with_limits", page),
+                        await menu_button(translations["ru"]["menu"]["reactions"],
+                                          "/working_with_reactions", page),
+                        await menu_button(translations["ru"]["menu"]["account_check"],
+                                          "/account_verification_menu", page),
+                        await menu_button(translations["ru"]["menu"]["create_groups"],
+                                          "/creating_groups", page),
+                        await menu_button(translations["ru"]["menu"]["edit_bio"],
+                                          "/bio_editing", page),
+                        await menu_button(translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+                                          "/viewing_posts_menu", page),
+                        await menu_button(translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
+                                          "/sending_messages_files_via_chats", page),
+                        await menu_button(translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
+                                          "/importing_a_list_of_parsed_data", page),
+                        await menu_button(translations["ru"]["menu"]["settings"],
+                                          "/settings", page),
+                    ],
+                ),
 
-                        # ft.Container(
-                        #     content=ft.Button(
-                        #         content=translations["ru"]["menu"]["reactions"],
-                        #         width=BUTTON_WIDTH,
-                        #         height=BUTTON_HEIGHT,
-                        #         on_click=lambda _: page.push_route("/working_with_reactions"),
-                        #     ),
-                        # ),
-                        await menu_button(
-                            translations["ru"]["menu"]["account_check"],
-                            "/account_verification_menu",
-                            page),
+                # ===== Правая колонка — надписи =====
+                ft.Column(
+                    controls=[
+                        ft.Text(
+                            spans=[
+                                ft.TextSpan(
+                                    f"{PROGRAM_NAME}",
+                                    ft.TextStyle(
+                                        size=40,
+                                        weight=ft.FontWeight.BOLD,
+                                        foreground=ft.Paint(
+                                            gradient=ft.PaintLinearGradient(
+                                                (0, 20),
+                                                (150, 20),
+                                                [ft.Colors.PINK, ft.Colors.PURPLE],
+                                            )
+                                        ),
+                                    ),
+                                )
+                            ]
+                        ),
 
-                        # ft.Container(
-                        #     content=ft.Button(
-                        #         content=translations["ru"]["menu"]["account_check"],
-                        #         width=BUTTON_WIDTH,
-                        #         height=BUTTON_HEIGHT,
-                        #         on_click=lambda _: page.push_route("/account_verification_menu"),
-                        #     ),
-                        # ),
+                        ft.Text(f"Версия программы: {PROGRAM_VERSION}"),
+                        ft.Text(f"Дата выхода: {DATE_OF_PROGRAM_CHANGE}"),
 
-                        await menu_button(
-                            translations["ru"]["menu"]["create_groups"],
-                            "/creating_groups",
-                            page),
+                        ft.Row(
+                            controls=[
+                                img,
+                                ft.Text(
+                                    spans=[
+                                        ft.TextSpan(translations["ru"]["main_menu_texts"]["text_1"]),
+                                        ft.TextSpan(
+                                            translations["ru"]["main_menu_texts"]["text_link_1"],
+                                            ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
+                                            url=translations["ru"]["main_menu_texts"]["text_2"],
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
 
-                        # ft.Container(
-                        #     content=ft.Button(
-                        #         content=translations["ru"]["menu"]["create_groups"],
-                        #         width=BUTTON_WIDTH,
-                        #         height=BUTTON_HEIGHT,
-                        #         on_click=lambda _: page.push_route("/creating_groups"),
-                        #     ),
-                        # ),
-
-                        await menu_button(
-                            translations["ru"]["menu"]["edit_bio"],
-                            "/bio_editing",
-                            page),
-
-                        # ft.Container(
-                        #     content=ft.Button(
-                        #         content=translations["ru"]["menu"]["edit_bio"],
-                        #         width=BUTTON_WIDTH,
-                        #         height=BUTTON_HEIGHT,
-                        #         on_click=lambda _: page.push_route("/bio_editing"),
-                        #     ),
-                        # ),
-
-                        await menu_button(
-                            translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                            "/viewing_posts_menu",
-                            page),
-
-                        # ft.Container(
-                        #     content=ft.Button(
-                        #         content=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                        #         width=BUTTON_WIDTH,
-                        #         height=BUTTON_HEIGHT,
-                        #         on_click=lambda _: page.push_route("/viewing_posts_menu"),
-                        #     ),
-                        # ),
-
-                        await menu_button(
-                            translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
-                            "/sending_messages_files_via_chats",
-                            page),
-
-                        # ft.Container(
-                        #     content=ft.Button(
-                        #         content=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
-                        #         width=BUTTON_WIDTH,
-                        #         height=BUTTON_HEIGHT,
-                        #         on_click=lambda _: page.push_route("/sending_messages_files_via_chats"),
-                        #     ),
-                        # ),
-
-                        await menu_button(
-                            translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
-                            "/importing_a_list_of_parsed_data",
-                            page),
-
-                        # ft.Container(
-                        #     content=ft.Button(
-                        #         content=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
-                        #         width=BUTTON_WIDTH,
-                        #         height=BUTTON_HEIGHT,
-                        #         on_click=lambda _: page.push_route("/importing_a_list_of_parsed_data"),
-                        #     ),
-                        # ),
-
-                        await menu_button(translations["ru"]["menu"]["settings"],"/settings", page),
-
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["menu"]["settings"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/settings"),
-                            ),
+                        ft.Row(
+                            controls=[
+                                img,
+                                ft.Text(
+                                    spans=[
+                                        ft.TextSpan(translations["ru"]["main_menu_texts"]["text_2"]),
+                                        ft.TextSpan(
+                                            translations["ru"]["main_menu_texts"]["text_link_2"],
+                                            ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
+                                            url=translations["ru"]["main_menu_texts"]["text_2"],
+                                        ),
+                                    ]
+                                ),
+                            ]
                         ),
                     ],
-                    ),
-
-                    ft.Column([ft.Text(spans=[ft.TextSpan(
-                        f"{PROGRAM_NAME}",
-                        ft.TextStyle(size=40, weight=ft.FontWeight.BOLD,
-                                     foreground=ft.Paint(gradient=ft.PaintLinearGradient(
-                                         (0, 20), (150, 20),
-                                         [ft.Colors.PINK, ft.Colors.PURPLE])), ), )]),
-
-                        ft.Text(spans=[ft.TextSpan(text=f"Версия программы: {PROGRAM_VERSION}")]),
-                        ft.Text(spans=[ft.TextSpan(text=f"Дата выхода: {DATE_OF_PROGRAM_CHANGE}")]),
-
-                        ft.Container(height=20),
-
-                        ft.Row([img, ft.Text(disabled=False, spans=[
-                            ft.TextSpan(translations["ru"]["main_menu_texts"]["text_1"]),
-                            ft.TextSpan(translations["ru"]["main_menu_texts"]["text_link_1"],
-                                        ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-                                        url=translations["ru"]["main_menu_texts"]["text_2"], ), ], ), ]),
-
-                        ft.Row([img, ft.Text(disabled=False, spans=[
-                            ft.TextSpan(translations["ru"]["main_menu_texts"]["text_2"]),
-                            ft.TextSpan(translations["ru"]["main_menu_texts"]["text_link_2"],
-                                        ft.TextStyle(decoration=ft.TextDecoration.UNDERLINE),
-                                        url=translations["ru"]["main_menu_texts"]["text_2"], ), ], ), ]),
-
-                    ], horizontal_alignment=ft.CrossAxisAlignment.START, expand=True),
-                ])
-            ]
-        )
+                    expand=True,
+                ),
+            ],
+            expand=True,
+        ),
     )
 
 
