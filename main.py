@@ -214,32 +214,47 @@ async def main(page: ft.Page):
                         #     ),
                         # ),
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["menu"]["create_groups"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/creating_groups"),
-                            ),
-                        ),
+                        await menu_button(
+                            translations["ru"]["menu"]["create_groups"],
+                            "/creating_groups",
+                            page),
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["menu"]["edit_bio"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/bio_editing"),
-                            ),
-                        ),
+                        # ft.Container(
+                        #     content=ft.Button(
+                        #         content=translations["ru"]["menu"]["create_groups"],
+                        #         width=BUTTON_WIDTH,
+                        #         height=BUTTON_HEIGHT,
+                        #         on_click=lambda _: page.push_route("/creating_groups"),
+                        #     ),
+                        # ),
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/viewing_posts_menu"),
-                            ),
-                        ),
+                        await menu_button(
+                            translations["ru"]["menu"]["edit_bio"],
+                            "/bio_editing",
+                            page),
+
+                        # ft.Container(
+                        #     content=ft.Button(
+                        #         content=translations["ru"]["menu"]["edit_bio"],
+                        #         width=BUTTON_WIDTH,
+                        #         height=BUTTON_HEIGHT,
+                        #         on_click=lambda _: page.push_route("/bio_editing"),
+                        #     ),
+                        # ),
+
+                        await menu_button(
+                            translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+                            "/viewing_posts_menu",
+                            page),
+
+                        # ft.Container(
+                        #     content=ft.Button(
+                        #         content=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+                        #         width=BUTTON_WIDTH,
+                        #         height=BUTTON_HEIGHT,
+                        #         on_click=lambda _: page.push_route("/viewing_posts_menu"),
+                        #     ),
+                        # ),
 
                         ft.Container(
                             content=ft.Button(
