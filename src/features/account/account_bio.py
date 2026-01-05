@@ -180,8 +180,8 @@ class AccountBIO:
             await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
 
         self.page.views.append(
-            ft.View("/bio_editing",
-                    [await self.gui_program.key_app_bar(),
+            ft.View(route="/bio_editing",  # Маршрут для этого представления
+                controls=[await self.gui_program.key_app_bar(),
                      ft.Text(spans=[ft.TextSpan(
                          translations["ru"]["menu"]["edit_bio"],
                          ft.TextStyle(
