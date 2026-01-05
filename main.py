@@ -26,6 +26,20 @@ from src.locales.translations_loader import translations
 logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")
 
+BUTTON_HEIGHT = 30
+BUTTON_WIDTH = 30
+
+
+def menu_button(text: str, route: str, page: ft.Page):
+    return ft.Container(
+        content=ft.Button(
+            text,
+            width=BUTTON_WIDTH,
+            height=BUTTON_HEIGHT,
+            on_click=lambda _: page.push_route(route),
+        )
+    )
+
 
 async def main(page: ft.Page):
     """
@@ -53,9 +67,6 @@ async def main(page: ft.Page):
     send_telegram_messages = SendTelegramMessages(page=page)
 
     menu = Menu(page=page)
-
-    BUTTON_HEIGHT = 30
-    BUTTON_WIDTH = 350
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
@@ -146,14 +157,16 @@ async def main(page: ft.Page):
                 ft.Row([
                     ft.Column([
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["inviting_menu"]["inviting"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: asyncio.create_task(page.push_route("/inviting")),
-                            ),
-                        ),
+                        menu_button(translations["ru"]["menu"]["parsing"], "/inviting", page),
+
+                        # ft.Container(
+                        #     content=ft.Button(
+                        #         content=translations["ru"]["inviting_menu"]["inviting"],
+                        #         width=BUTTON_WIDTH,
+                        #         height=BUTTON_HEIGHT,
+                        #         on_click=lambda _: asyncio.create_task(page.push_route("/inviting")),
+                        #     ),
+                        # ),
 
                         ft.Container(
                             content=ft.Button(
@@ -197,7 +210,8 @@ async def main(page: ft.Page):
                                     "sending_personal_messages_with_limits"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/sending_files_to_personal_account_with_limits"),
+                                on_click=lambda _: page.push_route(
+                                    "/sending_files_to_personal_account_with_limits"),
                             ),
                         ),
 
