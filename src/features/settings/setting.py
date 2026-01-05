@@ -128,12 +128,15 @@ class SettingPage:
 
                     list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
 
-                    proxy_type = ft.TextField(label="Введите тип прокси, например SOCKS5: ", multiline=True, max_lines=19)
+                    proxy_type = ft.TextField(label="Введите тип прокси, например SOCKS5: ", multiline=True,
+                                              max_lines=19)
                     addr_type = ft.TextField(label="Введите ip адрес, например 194.67.248.9: ", multiline=True,
                                              max_lines=19)
                     port_type = ft.TextField(label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19)
-                    username_type = ft.TextField(label="Введите username, например NnbjvX: ", multiline=True, max_lines=19)
-                    password_type = ft.TextField(label="Введите пароль, например ySfCfk: ", multiline=True, max_lines=19)
+                    username_type = ft.TextField(label="Введите username, например NnbjvX: ", multiline=True,
+                                                 max_lines=19)
+                    password_type = ft.TextField(label="Введите пароль, например ySfCfk: ", multiline=True,
+                                                 max_lines=19)
 
                     async def btn_click(_) -> None:
                         proxy = {

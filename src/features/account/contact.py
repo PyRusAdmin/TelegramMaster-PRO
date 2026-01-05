@@ -124,7 +124,7 @@ class TGContact:
 
         self.page.views.append(
             ft.View(route="/working_with_contacts",  # Маршрут для этого представления
-                controls=[
+                    controls=[
                         await self.gui_program.key_app_bar(),
                         ft.Text(spans=[ft.TextSpan(
                             translations["ru"]["menu"]["contacts"],
