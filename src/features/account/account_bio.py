@@ -208,16 +208,16 @@ class AccountBIO:
                              ft.Button(
                                  translations["ru"]["edit_bio_menu"]["changing_the_description"],
                                  width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
-
-                                       on_click=change_bio_profile),
+                                 on_click=change_bio_profile),
                          ]),
                          await self.gui_program.diver_castom(),  # Горизонтальная линия
                          ft.Row([
                              profile_name_input_field,  # Поле для ввода имени профиля Telegram
                              # 📝 Изменение имени
-                             ft.Button(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
-                                       text=translations["ru"]["edit_bio_menu"]["name_change_n"],
-                                       on_click=change_name_profile_gui),
+                             ft.Button(
+                                 translations["ru"]["edit_bio_menu"]["name_change_n"],
+                                 width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
+                                 on_click=change_name_profile_gui),
                          ]),
                          await self.gui_program.diver_castom(),  # Горизонтальная линия
                          ft.Row([
