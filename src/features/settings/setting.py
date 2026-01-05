@@ -96,6 +96,60 @@ class SettingPage:
                 )
             )
 
+        async def creating_the_main_window_for_proxy_data_entry() -> None:
+            """
+            Создает интерфейс для ввода данных прокси-сервера.
+
+            :return: None
+            """
+            self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+
+            list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+
+            proxy_type = ft.TextField(label="Введите тип прокси, например SOCKS5: ", multiline=True, max_lines=19)
+            addr_type = ft.TextField(label="Введите ip адрес, например 194.67.248.9: ", multiline=True, max_lines=19)
+            port_type = ft.TextField(label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19)
+            username_type = ft.TextField(label="Введите username, например NnbjvX: ", multiline=True, max_lines=19)
+            password_type = ft.TextField(label="Введите пароль, например ySfCfk: ", multiline=True, max_lines=19)
+
+            async def btn_click(_) -> None:
+                proxy = {
+                    "proxy_type": proxy_type.value,
+                    "addr": addr_type.value,
+                    "port": port_type.value,
+                    "username": username_type.value,
+                    "password": password_type.value,
+                    "rdns": "True"
+                }
+                save_proxy_data_to_db(proxy=proxy)
+                await show_notification(self.page, "Данные успешно записаны!")
+                self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                self.page.update()
+
+            await self.add_view_with_fields_and_button([proxy_type, addr_type, port_type, username_type, password_type],
+                                                       btn_click)
+
+        async def writing_api_id_api_hash():
+            """
+            Создает интерфейс для записи API ID и API Hash.
+            :return: None
+            """
+            self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+            list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+            api_id_data = ft.TextField(label="Введите api_id", multiline=True, max_lines=19)
+            api_hash_data = ft.TextField(label="Введите api_hash", multiline=True, max_lines=19)
+
+            def btn_click(_) -> None:
+                config.get("telegram_settings", "id")
+                config.set("telegram_settings", "id", api_id_data.value)
+                config.get("telegram_settings", "hash")
+                config.set("telegram_settings", "hash", api_hash_data.value)
+                self.writing_settings_to_a_file(config)
+                self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                self.page.update()
+
+            await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
+
         self.page.views.append(
             ft.View("/settings",
                     [await self.gui_program.key_app_bar(),
@@ -107,25 +161,11 @@ class SettingPage:
 
                          await menu_button_fun(translations["ru"]["menu_settings"]["choice_of_reactions"],
                                                reaction_gui),  # 👍 Выбор реакций
+                         await menu_button_fun(translations["ru"]["menu_settings"]["proxy_entry"],
+                                               creating_the_main_window_for_proxy_data_entry),  # 🔐 Запись proxy
+                         await menu_button_fun(translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
+                                               writing_api_id_api_hash),  # 📝 Запись api_id, api_hash
 
-                         # ft.Button(
-                         #     translations["ru"]["menu_settings"]["choice_of_reactions"],
-                         #     width=BUTTON_WIDTH,
-                         #     height=BUTTON_HEIGHT,
-                         #     on_click=lambda _: self.page.go("/choice_of_reactions")),
-
-                         # 🔐 Запись proxy
-                         ft.Button(
-                             translations["ru"]["menu_settings"]["proxy_entry"],
-                             width=BUTTON_WIDTH,
-                             height=BUTTON_HEIGHT,
-                             on_click=lambda _: self.page.go("/proxy_entry")),
-                         # 📝 Запись api_id, api_hash
-                         ft.Button(
-                             translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
-                             width=BUTTON_WIDTH,
-                             height=BUTTON_HEIGHT,
-                             on_click=lambda _: self.page.go("/recording_api_id_api_hash")),
                          # ✉️ Запись сообщений
                          ft.Button(
                              translations["ru"]["menu_settings"]["message_recording"],
@@ -139,39 +179,6 @@ class SettingPage:
                              height=BUTTON_HEIGHT,
                              on_click=lambda _: self.page.go("/recording_reaction_link")),
                      ])]))
-
-    async def creating_the_main_window_for_proxy_data_entry(self) -> None:
-        """
-        Создает интерфейс для ввода данных прокси-сервера.
-
-        :return: None
-        """
-        self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
-
-        list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-
-        proxy_type = ft.TextField(label="Введите тип прокси, например SOCKS5: ", multiline=True, max_lines=19)
-        addr_type = ft.TextField(label="Введите ip адрес, например 194.67.248.9: ", multiline=True, max_lines=19)
-        port_type = ft.TextField(label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19)
-        username_type = ft.TextField(label="Введите username, например NnbjvX: ", multiline=True, max_lines=19)
-        password_type = ft.TextField(label="Введите пароль, например ySfCfk: ", multiline=True, max_lines=19)
-
-        async def btn_click(_) -> None:
-            proxy = {
-                "proxy_type": proxy_type.value,
-                "addr": addr_type.value,
-                "port": port_type.value,
-                "username": username_type.value,
-                "password": password_type.value,
-                "rdns": "True"
-            }
-            save_proxy_data_to_db(proxy=proxy)
-            await show_notification(self.page, "Данные успешно записаны!")
-            self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-            self.page.update()
-
-        await self.add_view_with_fields_and_button([proxy_type, addr_type, port_type, username_type, password_type],
-                                                   btn_click)
 
     async def recording_text_for_sending_messages(self, label, unique_filename) -> None:
         """
@@ -264,29 +271,6 @@ class SettingPage:
         except ValueError:
             list_view.controls.append(ft.Text("Ошибка: введите числовые значения!"))
         self.page.update()  # обновляем страницу
-
-    async def writing_api_id_api_hash(self):
-        """
-        Создает интерфейс для записи API ID и API Hash.
-
-        :param page: Страница интерфейса Flet для отображения элементов управления
-        :return: None
-        """
-        self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
-        list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-        api_id_data = ft.TextField(label="Введите api_id", multiline=True, max_lines=19)
-        api_hash_data = ft.TextField(label="Введите api_hash", multiline=True, max_lines=19)
-
-        def btn_click(_) -> None:
-            config.get("telegram_settings", "id")
-            config.set("telegram_settings", "id", api_id_data.value)
-            config.get("telegram_settings", "hash")
-            config.set("telegram_settings", "hash", api_hash_data.value)
-            self.writing_settings_to_a_file(config)
-            self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-            self.page.update()
-
-        await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
 
     async def add_view_with_fields_and_button(self, fields: list, btn_click) -> None:
         """

@@ -100,20 +100,14 @@ async def main(page: ft.Page):
             await account_bio.bio_editing_menu()
 
         elif page.route == "/settings":
-
             await setting_page.settings_page_menu()
 
-        elif page.route == "/choice_of_reactions":
-
-            await setting_page.reaction_gui()
-
-        elif page.route == "/proxy_entry":
-
-            await setting_page.creating_the_main_window_for_proxy_data_entry()
-
-        elif page.route == "/recording_api_id_api_hash":
-
-            await setting_page.writing_api_id_api_hash()
+        # elif page.route == "/choice_of_reactions":
+        #     await setting_page.reaction_gui()
+        # elif page.route == "/proxy_entry":
+        #     await setting_page.creating_the_main_window_for_proxy_data_entry()
+        # elif page.route == "/recording_api_id_api_hash":
+        #     await setting_page.writing_api_id_api_hash()
 
         elif page.route == "/message_recording":
 

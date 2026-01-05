@@ -22,7 +22,8 @@ async def menu_button_fun(text: str, on_click):
             text,
             width=BUTTON_WIDTH,
             height=BUTTON_HEIGHT,
-            on_click=on_click),
+            on_click=on_click
+        ),
     )
 
 
