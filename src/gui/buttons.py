@@ -1,10 +1,33 @@
 # -*- coding: utf-8 -*-
+import asyncio
+
 import flet as ft  # Импортируем библиотеку flet
 
-from src.core.config.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
-from src.gui.gui_elements import GUIProgram
+from src.core.config.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, BUTTON_WIDTH
 from src.gui.gui import list_view
+from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
+
+
+async def menu_button(text: str, route: str, page: ft.Page):
+    """
+    :param text: Текст, отображаемый на кнопке меню.
+    :type text: str
+    :param route: Путь маршрута (например: "/parsing", "/settings"), на который будет выполнен переход при нажатии.
+    :type route: str
+    :param page: Экземпляр страницы Flet, используемый для навигации.
+    :type page: ft.Page
+    :return: Контейнер с кнопкой меню, готовый для добавления в layout (`Column`, `Row`, `View`).
+    :rtype: ft.Container https://docs.flet.dev/controls/container/
+    """
+    return ft.Container(
+        content=ft.Button(
+            text,
+            width=BUTTON_WIDTH,
+            height=BUTTON_HEIGHT,
+            on_click=lambda _: asyncio.create_task(page.push_route(route)),
+        )
+    )
 
 
 class FunctionButton:
@@ -49,5 +72,5 @@ class FunctionButton:
                     link_post,  # Поле ввода ссылки пост
                     ft.Column(),  # Колонка для размещения других элементов (при необходимости)
                     ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                      text=translations["ru"]["buttons"]["done"], on_click=btn_click),
+                              text=translations["ru"]["buttons"]["done"], on_click=btn_click),
                 ]))

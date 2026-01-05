@@ -15,11 +15,9 @@ TIME_SENDING_MESSAGES_1 = config.get('time_inviting', 'time_inviting_1', fallbac
 TIME_SENDING_MESSAGES_2 = config.get('time_inviting', 'time_inviting_2', fallback=None)
 
 """Настройки внешнего вида программы"""
-config_gui = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-config_gui.read(filenames='user_data/config/config_gui.ini', encoding='utf-8')
 
 PROGRAM_NAME = "TelegramMaster-PRO"  # Имя программы
-PROGRAM_VERSION = "2.8.3"  # Версия программы
+PROGRAM_VERSION = "2.8.4"  # Версия программы
 DATE_OF_PROGRAM_CHANGE = "05.01.2026"  # Дата изменения (обновления)
 
 WIDTH_WIDE_BUTTON = 1010  # Ширина кнопки

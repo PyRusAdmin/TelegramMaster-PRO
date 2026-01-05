@@ -7,7 +7,7 @@ import sys
 
 import flet as ft  # Импортируем библиотеку flet
 
-from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
+from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, BUTTON_WIDTH
 from src.core.database.database import save_proxy_data_to_db
 from src.gui.gui_elements import GUIProgram
 from src.gui.gui import AppLogger, list_view
@@ -31,12 +31,118 @@ class SettingPage:
         self.page = page
         self.app_logger = AppLogger(page=page)
         self.gui_program = GUIProgram()
+        self.page = page
+        self.gui_program = GUIProgram()
+
+    async def settings_page_menu(self):
+        """
+        Основное меню страницы настроек
+
+        Меню настройки
+        """
+
+        async def reaction_gui():
+            """
+            Создает графический интерфейс для выбора реакций.
+            :return: None
+            """
+
+            t = ft.Text(value='Выберите реакцию')  # Создает текстовое поле (t).
+
+            # Создаем все чекбоксы единожды и сохраняем их в списке
+            checkboxes = [
+                ft.Checkbox(label="😀"), ft.Checkbox(label="😎"), ft.Checkbox(label="😍"),
+                ft.Checkbox(label="😂"), ft.Checkbox(label="😡"), ft.Checkbox(label="😱"),
+                ft.Checkbox(label="😭"), ft.Checkbox(label="👍"), ft.Checkbox(label="👎"),
+                ft.Checkbox(label="❤"), ft.Checkbox(label="🔥"), ft.Checkbox(label="🎉"),
+                ft.Checkbox(label="😁"), ft.Checkbox(label="😢"), ft.Checkbox(label="💩"),
+                ft.Checkbox(label="👏"), ft.Checkbox(label="🤷‍♀️"), ft.Checkbox(label="🤷"),
+                ft.Checkbox(label="🤷‍♂️"), ft.Checkbox(label="👾"), ft.Checkbox(label="🙊"),
+                ft.Checkbox(label="💊"), ft.Checkbox(label="😘"), ft.Checkbox(label="🦄"),
+                ft.Checkbox(label="💘"), ft.Checkbox(label="🆒"), ft.Checkbox(label="🗿"),
+                ft.Checkbox(label="🤪"), ft.Checkbox(label="💅"), ft.Checkbox(label="☃️"),
+                ft.Checkbox(label="🎄"), ft.Checkbox(label="🎅"), ft.Checkbox(label="🤗"),
+                ft.Checkbox(label="🤬"), ft.Checkbox(label="🤮"), ft.Checkbox(label="🤡"),
+                ft.Checkbox(label="🥴"), ft.Checkbox(label="💯"), ft.Checkbox(label="🌭"),
+                ft.Checkbox(label="⚡️"), ft.Checkbox(label="🍌"), ft.Checkbox(label="🖕"),
+                ft.Checkbox(label="💋"), ft.Checkbox(label="👀"), ft.Checkbox(label="🤝"),
+                ft.Checkbox(label="🍾"), ft.Checkbox(label="🏆"), ft.Checkbox(label="🥱"),
+                ft.Checkbox(label="🕊"), ft.Checkbox(label="😭")
+            ]
+
+            async def button_clicked(_) -> None:
+                """Выбранная реакция"""
+                selected_reactions = [checkbox.label for checkbox in checkboxes if
+                                      checkbox.value]  # Получаем только выбранные реакции
+                self.write_data_to_json_file(reactions=selected_reactions,
+                                             path_to_the_file='user_data/reactions/reactions.json')
+
+                await show_notification(page=self.page, message="Данные успешно записаны!")
+                self.page.go("/settings")  # Переход к странице настроек
+
+            # Добавляем элементы на страницу
+            self.page.views.append(
+                ft.View(
+                    "/settings",
+                    controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
+                              t,
+                              ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
+                              # Чекбоксы в колонках
+                              ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                        text=translations["ru"]["buttons"]["done"],
+                                        on_click=button_clicked),  # Кнопка "Готово",
+                              ]
+                )
+            )
+
+        self.page.views.append(
+            ft.View("/settings",
+                    [await self.gui_program.key_app_bar(),
+                     ft.Text(spans=[ft.TextSpan(translations["ru"]["menu"]["settings"],
+                                                ft.TextStyle(size=20, weight=ft.FontWeight.BOLD, foreground=ft.Paint(
+                                                    gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
+                                                                                                         ft.Colors.PURPLE]))))]),
+                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+
+
+                         # 👍 Выбор реакций
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["choice_of_reactions"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/choice_of_reactions")),
+
+
+                         # 🔐 Запись proxy
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["proxy_entry"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/proxy_entry")),
+                         # 📝 Запись api_id, api_hash
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/recording_api_id_api_hash")),
+                         # ✉️ Запись сообщений
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["message_recording"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/message_recording")),
+                         # 🔗 Запись ссылки для реакций
+                         ft.Button(
+                             translations["ru"]["menu_settings"]["recording_reaction_link"],
+                             width=BUTTON_WIDTH,
+                             height=BUTTON_HEIGHT,
+                             on_click=lambda _: self.page.go("/recording_reaction_link")),
+                     ])]))
 
     async def creating_the_main_window_for_proxy_data_entry(self) -> None:
         """
         Создает интерфейс для ввода данных прокси-сервера.
 
-        :param page: Страница интерфейса Flet для отображения элементов управления
         :return: None
         """
         self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
@@ -199,8 +305,8 @@ class SettingPage:
                           ft.Column(
                               controls=fields + [
                                   ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                                    text=translations["ru"]["buttons"]["done"],
-                                                    on_click=btn_click),
+                                            text=translations["ru"]["buttons"]["done"],
+                                            on_click=btn_click),
                               ]
                           )]))
 
@@ -257,59 +363,3 @@ class SettingPage:
             if not os.path.isfile(new_filename):
                 return new_filename
             index += 1
-
-    async def reaction_gui(self):
-        """
-        Создает графический интерфейс для выбора реакций.
-
-        :param page: Страница интерфейса Flet для отображения элементов управления
-        :return: None
-        """
-
-        t = ft.Text(value='Выберите реакцию')  # Создает текстовое поле (t).
-
-        # Создаем все чекбоксы единожды и сохраняем их в списке
-        checkboxes = [
-            ft.Checkbox(label="😀"), ft.Checkbox(label="😎"), ft.Checkbox(label="😍"),
-            ft.Checkbox(label="😂"), ft.Checkbox(label="😡"), ft.Checkbox(label="😱"),
-            ft.Checkbox(label="😭"), ft.Checkbox(label="👍"), ft.Checkbox(label="👎"),
-            ft.Checkbox(label="❤"), ft.Checkbox(label="🔥"), ft.Checkbox(label="🎉"),
-            ft.Checkbox(label="😁"), ft.Checkbox(label="😢"), ft.Checkbox(label="💩"),
-            ft.Checkbox(label="👏"), ft.Checkbox(label="🤷‍♀️"), ft.Checkbox(label="🤷"),
-            ft.Checkbox(label="🤷‍♂️"), ft.Checkbox(label="👾"), ft.Checkbox(label="🙊"),
-            ft.Checkbox(label="💊"), ft.Checkbox(label="😘"), ft.Checkbox(label="🦄"),
-            ft.Checkbox(label="💘"), ft.Checkbox(label="🆒"), ft.Checkbox(label="🗿"),
-            ft.Checkbox(label="🤪"), ft.Checkbox(label="💅"), ft.Checkbox(label="☃️"),
-            ft.Checkbox(label="🎄"), ft.Checkbox(label="🎅"), ft.Checkbox(label="🤗"),
-            ft.Checkbox(label="🤬"), ft.Checkbox(label="🤮"), ft.Checkbox(label="🤡"),
-            ft.Checkbox(label="🥴"), ft.Checkbox(label="💯"), ft.Checkbox(label="🌭"),
-            ft.Checkbox(label="⚡️"), ft.Checkbox(label="🍌"), ft.Checkbox(label="🖕"),
-            ft.Checkbox(label="💋"), ft.Checkbox(label="👀"), ft.Checkbox(label="🤝"),
-            ft.Checkbox(label="🍾"), ft.Checkbox(label="🏆"), ft.Checkbox(label="🥱"),
-            ft.Checkbox(label="🕊"), ft.Checkbox(label="😭")
-        ]
-
-        async def button_clicked(_) -> None:
-            """Выбранная реакция"""
-            selected_reactions = [checkbox.label for checkbox in checkboxes if
-                                  checkbox.value]  # Получаем только выбранные реакции
-            self.write_data_to_json_file(reactions=selected_reactions,
-                                         path_to_the_file='user_data/reactions/reactions.json')
-
-            await show_notification(page=self.page, message="Данные успешно записаны!")
-            self.page.go("/settings")  # Переход к странице настроек
-
-        # Добавляем элементы на страницу
-        self.page.views.append(
-            ft.View(
-                "/settings",
-                controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
-                          t,
-                          ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
-                          # Чекбоксы в колонках
-                          ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                            text=translations["ru"]["buttons"]["done"],
-                                            on_click=button_clicked),  # Кнопка "Готово",
-                          ]
-            )
-        )

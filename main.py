@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import base64
-import asyncio
+
 import flet as ft
 from loguru import logger
 
+from src.gui.buttons import menu_button
+from src.gui.gui_elements import GUIProgram
 from src.core.config.configs import (
-    PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, BUTTON_WIDTH, BUTTON_HEIGHT,
-    window_width, window_height, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2
+    PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height, TIME_SENDING_MESSAGES_1,
+    TIME_SENDING_MESSAGES_2
 )
 from src.core.database.create_database import create_database
 from src.features.account.account_bio import AccountBIO
@@ -21,32 +23,10 @@ from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTeleg
 from src.features.account.viewing_posts import ViewingPosts
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage
-from src.gui.menu import Menu
 from src.locales.translations_loader import translations
 
 logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")
-
-
-async def menu_button(text: str, route: str, page: ft.Page):
-    """
-    :param text: Текст, отображаемый на кнопке меню.
-    :type text: str
-    :param route: Путь маршрута (например: "/parsing", "/settings"), на который будет выполнен переход при нажатии.
-    :type route: str
-    :param page: Экземпляр страницы Flet, используемый для навигации.
-    :type page: ft.Page
-    :return: Контейнер с кнопкой меню, готовый для добавления в layout (`Column`, `Row`, `View`).
-    :rtype: ft.Container https://docs.flet.dev/controls/container/
-    """
-    return ft.Container(
-        content=ft.Button(
-            text,
-            width=BUTTON_WIDTH,
-            height=BUTTON_HEIGHT,
-            on_click=lambda _: asyncio.create_task(page.push_route(route)),
-        )
-    )
 
 
 async def main(page: ft.Page):
@@ -74,7 +54,7 @@ async def main(page: ft.Page):
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
 
-    menu = Menu(page=page)
+    gui_program = GUIProgram()
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
@@ -118,25 +98,39 @@ async def main(page: ft.Page):
             await send_telegram_messages.send_files_to_personal_chats()
         elif page.route == "/bio_editing":
             await account_bio.bio_editing_menu()
+
         elif page.route == "/settings":
-            await menu.settings_menu()
+
+            await setting_page.settings_page_menu()
+
         elif page.route == "/choice_of_reactions":
+
             await setting_page.reaction_gui()
+
         elif page.route == "/proxy_entry":
+
             await setting_page.creating_the_main_window_for_proxy_data_entry()
+
         elif page.route == "/recording_api_id_api_hash":
+
             await setting_page.writing_api_id_api_hash()
+
         elif page.route == "/message_recording":
+
             await setting_page.recording_text_for_sending_messages(
                 label="Введите текст для сообщения",
                 unique_filename=setting_page.get_unique_filename(base_filename='user_data/message/message')
             )
+
         elif page.route == "/recording_reaction_link":
+
             await setting_page.recording_text_for_sending_messages(
                 label="Введите ссылку для реакций",
                 unique_filename='user_data/reactions/link_channel.json'
             )
+
         elif page.route == "/recording_the_time_between_messages":
+
             await setting_page.create_main_window(
                 variable="time_sending_messages",
                 smaller_timex=TIME_SENDING_MESSAGES_1,
@@ -156,7 +150,7 @@ async def main(page: ft.Page):
     page.on_view_pop = view_pop
 
     page.add(
-        await menu.gui_program.key_app_bar(),
+        await gui_program.key_app_bar(),
 
         ft.Row(
             controls=[
