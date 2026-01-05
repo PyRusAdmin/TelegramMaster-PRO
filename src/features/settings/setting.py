@@ -9,8 +9,9 @@ import flet as ft  # Импортируем библиотеку flet
 
 from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, BUTTON_WIDTH
 from src.core.database.database import save_proxy_data_to_db
-from src.gui.gui_elements import GUIProgram
+from src.gui.buttons import menu_button_fun
 from src.gui.gui import AppLogger, list_view
+from src.gui.gui_elements import GUIProgram
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
@@ -104,14 +105,14 @@ class SettingPage:
                                                                                                          ft.Colors.PURPLE]))))]),
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
 
+                         await menu_button_fun(translations["ru"]["menu_settings"]["choice_of_reactions"],
+                                               reaction_gui),  # 👍 Выбор реакций
 
-                         # 👍 Выбор реакций
-                         ft.Button(
-                             translations["ru"]["menu_settings"]["choice_of_reactions"],
-                             width=BUTTON_WIDTH,
-                             height=BUTTON_HEIGHT,
-                             on_click=lambda _: self.page.go("/choice_of_reactions")),
-
+                         # ft.Button(
+                         #     translations["ru"]["menu_settings"]["choice_of_reactions"],
+                         #     width=BUTTON_WIDTH,
+                         #     height=BUTTON_HEIGHT,
+                         #     on_click=lambda _: self.page.go("/choice_of_reactions")),
 
                          # 🔐 Запись proxy
                          ft.Button(
