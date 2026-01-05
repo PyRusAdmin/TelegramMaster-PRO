@@ -260,7 +260,7 @@ class SettingPage:
         # Создание View с элементами
         self.page.views.append(
             ft.View(
-                "/settings",
+                route="/settings",
                 controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
                           list_view,  # отображение логов 📝
                           ft.Column(

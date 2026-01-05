@@ -89,8 +89,8 @@ class AccountBIO:
                     await show_notification(self.page, "❌ Неверный никнейм")  # Выводим уведомление пользователю
                 finally:
                     await client.disconnect()
-            except Exception as error:
-                logger.exception(error)
+            except Exception as e:
+                logger.exception(e)
 
         async def change_bio_profile(_) -> None:
             """Изменение описания профиля Telegram аккаунта."""
@@ -111,8 +111,8 @@ class AccountBIO:
                         message=translations["ru"]["errors"]["auth_key_unregistered"])
                 finally:
                     await client.disconnect()
-            except Exception as error:
-                logger.exception(error)
+            except Exception as e:
+                logger.exception(e)
             await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
 
         async def change_name_profile_gui(_) -> None:
@@ -134,8 +134,8 @@ class AccountBIO:
                     await client.disconnect()
                 await show_notification(page=self.page,
                                         message="Работа окончена")  # Выводим уведомление пользователю
-            except Exception as error:
-                logger.exception(error)
+            except Exception as e:
+                logger.exception(e)
 
         async def change_last_name_profile_gui(_) -> None:
             """
@@ -156,8 +156,8 @@ class AccountBIO:
 
                     await client.disconnect()
                 await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
-            except Exception as error:
-                logger.exception(error)
+            except Exception as e:
+                logger.exception(e)
 
         async def change_photo_profile_gui(_) -> None:
             """
@@ -175,8 +175,8 @@ class AccountBIO:
                             message=translations["ru"]["errors"]["auth_key_unregistered"])
                     finally:
                         await client.disconnect()
-            except Exception as error:
-                logger.exception(error)
+            except Exception as e:
+                logger.exception(e)
             await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
 
         self.page.views.append(
