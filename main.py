@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-import base64
 import asyncio
+import base64
+
 import flet as ft
 from loguru import logger
 
-from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, WINDOW_WIDTH,
-                                     WINDOW_HEIGHT, WINDOW_RESIZABLE)
+from src.core.config.configs import (PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE)
 from src.core.config.configs import (TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
 from src.core.database.create_database import create_database
 from src.features.account.account_bio import AccountBIO
@@ -33,16 +33,6 @@ async def main(page: ft.Page):
     :param page: Страница интерфейса Flet для отображения элементов управления.
     """
     page.title = f"{PROGRAM_NAME}: {PROGRAM_VERSION}"
-
-    # ✅ Размер окна задаётся ОДИН РАЗ
-    page.window.width = WINDOW_WIDTH
-    page.window.height = WINDOW_HEIGHT
-
-    page.window.min_width = WINDOW_WIDTH
-    page.window.min_height = WINDOW_HEIGHT
-
-    page.window.resizable = WINDOW_RESIZABLE
-    page.window.center()
 
     # ❗ НИКАКИХ sleep
     page.update()
@@ -86,7 +76,7 @@ async def main(page: ft.Page):
     # Обработка смены маршрута
     async def route_change(e):
         page.views.clear()
-        route = page.route
+        # route = page.route
 
         if page.route == "/":
             pass  # Главное меню уже отображено
@@ -170,7 +160,7 @@ async def main(page: ft.Page):
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: asyncio.create_task(page.push_route("/inviting")),
-                                style=menu_button_style,
+
                             ),
                             padding=ft.Padding(0, 5, 0, 5),
                         ),
@@ -185,7 +175,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/parsing"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -198,7 +188,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/working_with_contacts"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -211,7 +201,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/subscribe_unsubscribe"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -224,7 +214,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/account_connection_menu"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -239,7 +229,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/sending_files_to_personal_account_with_limits"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -252,7 +242,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/working_with_reactions"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -265,7 +255,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/account_verification_menu"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -278,7 +268,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/creating_groups"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -291,7 +281,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/bio_editing"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -304,7 +294,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/viewing_posts_menu"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -317,7 +307,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/sending_messages_files_via_chats"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -330,7 +320,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/importing_a_list_of_parsed_data"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -343,7 +333,7 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/settings"),
                                 style=menu_button_style,
                             ),
-                            padding=ft.Padding(0, 5, 0, 5),
+                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
                     ], scroll=ft.ScrollMode.AUTO, spacing=0),
 
