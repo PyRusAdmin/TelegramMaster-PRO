@@ -200,15 +200,19 @@ async def main(page: ft.Page):
                         #         on_click=lambda _: page.push_route("/working_with_reactions"),
                         #     ),
                         # ),
+                        await menu_button(
+                            translations["ru"]["menu"]["account_check"],
+                            "/account_verification_menu",
+                            page),
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["menu"]["account_check"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/account_verification_menu"),
-                            ),
-                        ),
+                        # ft.Container(
+                        #     content=ft.Button(
+                        #         content=translations["ru"]["menu"]["account_check"],
+                        #         width=BUTTON_WIDTH,
+                        #         height=BUTTON_HEIGHT,
+                        #         on_click=lambda _: page.push_route("/account_verification_menu"),
+                        #     ),
+                        # ),
 
                         ft.Container(
                             content=ft.Button(
