@@ -14,7 +14,7 @@ from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, Sessio
                              FloodWaitError, AuthKeyUnregisteredError, PeerFloodError)
 from telethon.tl.functions.channels import InviteToChannelRequest
 
-from src.core.config.configs import width_tvo_input, width_one_input, wide_single_button, window_width, BUTTON_HEIGHT
+from src.core.config.configs import width_tvo_input, width_one_input, window_width, BUTTON_HEIGHT
 from src.core.database.account import getting_account
 from src.core.database.database import select_records_with_limit, get_links_inviting, save_links_inviting
 from src.core.utils import Utils
