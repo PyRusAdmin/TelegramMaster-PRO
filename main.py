@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import asyncio
 import base64
 
 import flet as ft
@@ -26,11 +25,21 @@ from src.locales.translations_loader import translations
 logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")
 
-BUTTON_HEIGHT = 30
-BUTTON_WIDTH = 30
+BUTTON_HEIGHT = 30  # Высота
+BUTTON_WIDTH = 400  # Ширина
 
 
 def menu_button(text: str, route: str, page: ft.Page):
+    """
+    :param text: Текст, отображаемый на кнопке меню.
+    :type text: str
+    :param route: Путь маршрута (например: "/parsing", "/settings"), на который будет выполнен переход при нажатии.
+    :type route: str
+    :param page: Экземпляр страницы Flet, используемый для навигации.
+    :type page: ft.Page
+    :return: Контейнер с кнопкой меню, готовый для добавления в layout (`Column`, `Row`, `View`).
+    :rtype: ft.Container https://docs.flet.dev/controls/container/
+    """
     return ft.Container(
         content=ft.Button(
             text,
@@ -156,26 +165,8 @@ async def main(page: ft.Page):
 
                 ft.Row([
                     ft.Column([
-
-                        menu_button(translations["ru"]["menu"]["parsing"], "/inviting", page),
-
-                        # ft.Container(
-                        #     content=ft.Button(
-                        #         content=translations["ru"]["inviting_menu"]["inviting"],
-                        #         width=BUTTON_WIDTH,
-                        #         height=BUTTON_HEIGHT,
-                        #         on_click=lambda _: asyncio.create_task(page.push_route("/inviting")),
-                        #     ),
-                        # ),
-
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["menu"]["parsing"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/parsing"),
-                            ),
-                        ),
+                        menu_button(translations["ru"]["inviting_menu"]["inviting"], "/inviting", page),
+                        menu_button(translations["ru"]["menu"]["parsing"], "/parsing", page),
 
                         ft.Container(
                             content=ft.Button(
