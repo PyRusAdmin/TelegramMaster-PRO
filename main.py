@@ -67,12 +67,6 @@ async def main(page: ft.Page):
         fit=ft.BoxFit.CONTAIN,
     )
 
-    # Стиль для кнопок меню
-    menu_button_style = ft.ButtonStyle(
-        shape=ft.RoundedRectangleBorder(radius=8),
-        padding=ft.Padding(15, 10, 15, 10),
-    )
-
     # Обработка смены маршрута
     async def route_change(e):
         page.views.clear()
@@ -199,7 +193,8 @@ async def main(page: ft.Page):
 
                         ft.Container(
                             content=ft.Button(
-                                content=translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
+                                content=translations["ru"]["message_sending_menu"][
+                                    "sending_personal_messages_with_limits"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: page.push_route("/sending_files_to_personal_account_with_limits"),
@@ -269,14 +264,15 @@ async def main(page: ft.Page):
                             ),
                         ),
 
-                        ft.Container(content=ft.Button(content=ft.Row([ft.Text(translations["ru"]["menu"]["settings"]),
-                                                                       ], tight=True, spacing=10),
-                                                       width=BUTTON_WIDTH,
-                                                       height=BUTTON_HEIGHT,
-                                                       on_click=lambda _: page.push_route("/settings"),
-                                                       style=menu_button_style,
-                                                       ),
-                                     ), ],
+                        ft.Container(
+                            content=ft.Button(
+                                content=translations["ru"]["menu"]["settings"],
+                                width=BUTTON_WIDTH,
+                                height=BUTTON_HEIGHT,
+                                on_click=lambda _: page.push_route("/settings"),
+                            ),
+                        ),
+                    ],
                     ),
 
                     ft.Column([ft.Text(spans=[ft.TextSpan(
