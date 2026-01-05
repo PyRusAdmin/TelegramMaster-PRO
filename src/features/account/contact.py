@@ -149,12 +149,16 @@ class TGContact:
                                               height=BUTTON_HEIGHT,
                                               on_click=show_account_contact_list),
                             # 🗑️ Удаление контактов
-                            ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                              text=translations["ru"]["contacts_menu"]["deleting_contacts"],
+                            ft.Button(
+                                              translations["ru"]["contacts_menu"]["deleting_contacts"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
                                               on_click=delete_contact),
                             # ➕ Добавление контактов
-                            ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                              text=translations["ru"]["contacts_menu"]["adding_contacts"],
+                            ft.Button(
+                                              translations["ru"]["contacts_menu"]["adding_contacts"],
+                                              width=WIDTH_WIDE_BUTTON,
+                                              height=BUTTON_HEIGHT,
                                               on_click=inviting_contact),
                         ])]))
 
