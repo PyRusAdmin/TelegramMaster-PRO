@@ -211,11 +211,11 @@ class WorkingWithReactions:
 
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 👍 Ставим реакции
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                         ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                            text=translations["ru"]["reactions_menu"]["setting_reactions"],
                                            on_click=send_reaction_request),
                          # 🤖 Автоматическое выставление реакций
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                         ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                            text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
                                            on_click=setting_reactions),
                      ])]))

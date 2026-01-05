@@ -92,7 +92,7 @@ class CreatingGroupsAndChats:
                                                                                                      ft.Colors.PURPLE]))))]),
                                         list_view,
                                         account_drop_down_list,
-                                        ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                        ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                                           text=translations["ru"]["buttons"]["start"],
                                                           on_click=add_items),
                                         ]))

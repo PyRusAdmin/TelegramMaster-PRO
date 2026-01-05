@@ -138,20 +138,20 @@ class TGContact:
 
                             ft.Row([input_numbers,  # Ввод номеров
                                     # 📋 Формирование списка контактов
-                                    ft.ElevatedButton(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
+                                    ft.Button(width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
                                                       text=translations["ru"]["contacts_menu"][
                                                           "creating_a_contact_list"],
                                                       on_click=write_contact_to_db)]),
                             # 👥 Парсинг списка контактов
-                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                               text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
                                               on_click=show_account_contact_list),
                             # 🗑️ Удаление контактов
-                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                               text=translations["ru"]["contacts_menu"]["deleting_contacts"],
                                               on_click=delete_contact),
                             # ➕ Добавление контактов
-                            ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                               text=translations["ru"]["contacts_menu"]["adding_contacts"],
                                               on_click=inviting_contact),
                         ])]))

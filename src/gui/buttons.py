@@ -48,6 +48,6 @@ class FunctionButton:
                     link_channel,  # Поле ввода ссылки на чат
                     link_post,  # Поле ввода ссылки пост
                     ft.Column(),  # Колонка для размещения других элементов (при необходимости)
-                    ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                    ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                       text=translations["ru"]["buttons"]["done"], on_click=btn_click),
                 ]))

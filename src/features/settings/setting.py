@@ -198,7 +198,7 @@ class SettingPage:
                           list_view,  # отображение логов 📝
                           ft.Column(
                               controls=fields + [
-                                  ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                                  ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                                     text=translations["ru"]["buttons"]["done"],
                                                     on_click=btn_click),
                               ]
@@ -307,7 +307,7 @@ class SettingPage:
                           t,
                           ft.Column([ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
                           # Чекбоксы в колонках
-                          ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                          ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                             text=translations["ru"]["buttons"]["done"],
                                             on_click=button_clicked),  # Кнопка "Готово",
                           ]

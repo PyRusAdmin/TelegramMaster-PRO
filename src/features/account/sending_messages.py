@@ -138,7 +138,7 @@ class SendTelegramMessages:
                     limits,
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
-                            ft.ElevatedButton(
+                            ft.Button(
                                 text=translations["ru"]["buttons"]["done"],
                                 width=WIDTH_WIDE_BUTTON,
                                 height=BUTTON_HEIGHT,
@@ -363,7 +363,7 @@ class SendTelegramMessages:
                     chat_list_field,
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
-                            ft.ElevatedButton(
+                            ft.Button(
                                 text=translations["ru"]["buttons"]["done"],
                                 width=WIDTH_WIDE_BUTTON,
                                 height=BUTTON_HEIGHT,

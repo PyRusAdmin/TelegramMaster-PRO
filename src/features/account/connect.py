@@ -187,25 +187,25 @@ class TGConnect:
                      list_view,
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🤖 Проверка через спам бот
-                         ft.ElevatedButton(
+                         ft.Button(
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                              text=translations["ru"]["account_verification"]["spam_check"],
                              on_click=check_for_spam
                          ),
                          # ✅ Проверка на валидность
-                         ft.ElevatedButton(
+                         ft.Button(
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                              text=translations["ru"]["account_verification"]["validation"],
                              on_click=validation_check
                          ),
                          # ✏️ Переименование аккаунтов
-                         ft.ElevatedButton(
+                         ft.Button(
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                              text=translations["ru"]["account_verification"]["renaming"],
                              on_click=renaming_accounts
                          ),
                          # 🔍 Полная проверка
-                         ft.ElevatedButton(
+                         ft.Button(
                              width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                              text=translations["ru"]["account_verification"]["full_verification"],
                              on_click=full_verification
@@ -347,7 +347,7 @@ class TGConnect:
                                 await show_notification(self.page, f"⚠️ Неверный пароль. Попробуйте еще раз.")
                                 self.page.go("/")  # Изменение маршрута в представлении существующих настроек
 
-                        button_password = ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                        button_password = ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                                             text=translations["ru"]["buttons"]["done"],
                                                             on_click=btn_click_password)  # Кнопка "Готово"
                         self.page.views.append(ft.View(controls=[pass_2fa, button_password]))
@@ -363,7 +363,7 @@ class TGConnect:
                         await client.disconnect()  # Отключаемся от Telegram
 
                 self.page.views.append(ft.View(controls=[passww,
-                                                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON,
+                                                         ft.Button(width=WIDTH_WIDE_BUTTON,
                                                                            height=BUTTON_HEIGHT,
                                                                            text=translations["ru"]["buttons"]["done"],
                                                                            on_click=btn_click_code)]))  # Кнопка "Готово"
@@ -432,7 +432,7 @@ class TGConnect:
                      list_view,  # Отображение логов 📝
                      phone_number,
                      # 📞 Подключение аккаунтов по номеру телефона
-                     ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                     ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                        text="Получить код", on_click=connecting_number_accounts),
 
                      await self.gui_program.diver_castom(),  # Горизонтальная линия
@@ -450,7 +450,7 @@ class TGConnect:
                      selected_files,  # Поле для отображения выбранного файла
                      ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                          # 🔑 Подключение session аккаунтов
-                         ft.ElevatedButton(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                         ft.Button(width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
                                            text=translations["ru"]["create_groups_menu"]["choose_session_files"],
                                            on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
                      ])]))
