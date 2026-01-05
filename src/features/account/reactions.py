@@ -157,7 +157,7 @@ class WorkingWithReactions:
 
             # Теперь создаём View ПОСЛЕ объявления chat и message
             view = ft.View(
-                "/working_with_reactions",
+                route="/working_with_reactions",
                 controls=[
                     await self.gui_program.key_app_bar(),
                     ft.Text(
