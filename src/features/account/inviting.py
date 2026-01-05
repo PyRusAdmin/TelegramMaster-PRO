@@ -14,7 +14,7 @@ from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, Sessio
                              FloodWaitError, AuthKeyUnregisteredError, PeerFloodError)
 from telethon.tl.functions.channels import InviteToChannelRequest
 
-from src.core.config.configs import width_tvo_input, width_one_input, wide_single_button
+from src.core.config.configs import width_tvo_input, width_one_input, wide_single_button, window_width, BUTTON_HEIGHT
 from src.core.database.account import getting_account
 from src.core.database.database import select_records_with_limit, get_links_inviting, save_links_inviting
 from src.core.utils import Utils
@@ -256,7 +256,7 @@ class InvitingToAGroup:
 
         # Создаем выпадающий список с названиями групп, для последующего выбора и инвайтинга
         dropdown = ft.Dropdown(
-            width=100,
+            width=window_width,
             options=[ft.DropdownOption(link) for link in self.links_inviting],
             autofocus=True
         )
@@ -320,8 +320,8 @@ class InvitingToAGroup:
 
         start_inviting = ft.Button(
             "Запуск",
-            width=wide_single_button,  # Широкая одиночная кнопка
-            height=20,
+            width=window_width,  # Широкая одиночная кнопка
+            height=BUTTON_HEIGHT,
             on_click=start_inviting_grup,  # Используем синхронную обёртку
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=8),

@@ -24,8 +24,8 @@ PROGRAM_VERSION = "2.8.3"  # Версия программы
 DATE_OF_PROGRAM_CHANGE = "05.01.2026"  # Дата изменения (обновления)
 
 # Ширина программы / высота программы
-WINDOW_WIDTH = 1050  # Ширина программы
-WINDOW_HEIGHT = 725  # Высота программы
+# WINDOW_WIDTH = 1050  # Ширина программы
+# WINDOW_HEIGHT = 725  # Высота программы
 
 # WINDOW_RESIZABLE = config_gui.get('window_resizable', 'window_resizable', fallback=None)  # Ширина программы
 WIDTH_WIDE_BUTTON = config_gui.get('line_width_button', 'line_width_button', fallback=None)  # Ширина кнопки
@@ -47,5 +47,7 @@ wide_single_button = 300  # Применяется: Инвайтинг
 
 BUTTON_HEIGHT = 30  # Высота (кнопок главного меню)
 BUTTON_WIDTH = 400  # Ширина (кнопок главного меню)
+
+# Ширина программы / высота программы
 window_width = 1050  # Ширина (программы)
 window_height = 680  # Высота (программы)
