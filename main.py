@@ -168,27 +168,24 @@ async def main(page: ft.Page):
                         await menu_button(translations["ru"]["inviting_menu"]["inviting"], "/inviting", page),
                         await menu_button(translations["ru"]["menu"]["parsing"], "/parsing", page),
                         await menu_button(translations["ru"]["menu"]["contacts"], "/working_with_contacts", page),
-                        await menu_button(translations["ru"]["menu"]["subscribe_unsubscribe"], "/subscribe_unsubscribe", page),
+                        await menu_button(translations["ru"]["menu"]["subscribe_unsubscribe"], "/subscribe_unsubscribe",
+                                          page),
+                        await menu_button(translations["ru"]["menu"]["account_connect"], "/account_connection_menu",
+                                          page),
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["menu"]["account_connect"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route("/account_connection_menu"),
-                            ),
-                        ),
+                        await menu_button(translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"], "/sending_files_to_personal_account_with_limits",
+                                          page),
 
-                        ft.Container(
-                            content=ft.Button(
-                                content=translations["ru"]["message_sending_menu"][
-                                    "sending_personal_messages_with_limits"],
-                                width=BUTTON_WIDTH,
-                                height=BUTTON_HEIGHT,
-                                on_click=lambda _: page.push_route(
-                                    "/sending_files_to_personal_account_with_limits"),
-                            ),
-                        ),
+                        # ft.Container(
+                        #     content=ft.Button(
+                        #         content=translations["ru"]["message_sending_menu"][
+                        #             "sending_personal_messages_with_limits"],
+                        #         width=BUTTON_WIDTH,
+                        #         height=BUTTON_HEIGHT,
+                        #         on_click=lambda _: page.push_route(
+                        #             "/sending_files_to_personal_account_with_limits"),
+                        #     ),
+                        # ),
 
                         ft.Container(
                             content=ft.Button(
