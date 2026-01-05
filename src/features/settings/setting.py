@@ -35,6 +35,20 @@ class SettingPage:
         self.page = page
         self.gui_program = GUIProgram()
 
+    def get_unique_filename(self, base_filename) -> str:
+        """
+        Генерирует уникальное имя файла, добавляя индекс к базовому имени.
+
+        :param base_filename: Базовое имя файла
+        :return: Уникальное имя файла
+        """
+        index = 1
+        while True:
+            new_filename = f"{base_filename}_{index}.json"
+            if not os.path.isfile(new_filename):
+                return new_filename
+            index += 1
+
     async def settings_page_menu(self):
         """
         Основное меню страницы настроек
@@ -150,6 +164,33 @@ class SettingPage:
 
             await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
 
+        async def recording_text_for_sending_messages(label, unique_filename) -> None:
+            """
+            Создает интерфейс для записи текста в JSON-файл для отправки сообщений в Telegram.
+
+            :param label: Текст для отображения в поле ввода
+            :param unique_filename: Имя файла для записи данных
+            :return: None
+            """
+            self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+            list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+            text_to_send = ft.TextField(label=label, multiline=True, max_lines=19)
+
+            async def btn_click(_) -> None:
+                self.write_data_to_json_file(reactions=text_to_send.value,
+                                             path_to_the_file=unique_filename)  # Сохраняем данные в файл
+                await show_notification(self.page, "Данные успешно записаны!")
+                self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                self.page.update()
+
+            await self.add_view_with_fields_and_button([text_to_send], btn_click)
+
+        async def message_recording():
+            await recording_text_for_sending_messages(
+                label="Введите текст для сообщения",
+                unique_filename=self.get_unique_filename(base_filename='user_data/message/message')
+            )
+
         self.page.views.append(
             ft.View("/settings",
                     [await self.gui_program.key_app_bar(),
@@ -165,13 +206,9 @@ class SettingPage:
                                                creating_the_main_window_for_proxy_data_entry),  # 🔐 Запись proxy
                          await menu_button_fun(translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
                                                writing_api_id_api_hash),  # 📝 Запись api_id, api_hash
+                         await menu_button_fun(translations["ru"]["menu_settings"]["message_recording"],
+                                               message_recording),  # ✉️ Запись сообщений
 
-                         # ✉️ Запись сообщений
-                         ft.Button(
-                             translations["ru"]["menu_settings"]["message_recording"],
-                             width=BUTTON_WIDTH,
-                             height=BUTTON_HEIGHT,
-                             on_click=lambda _: self.page.go("/message_recording")),
                          # 🔗 Запись ссылки для реакций
                          ft.Button(
                              translations["ru"]["menu_settings"]["recording_reaction_link"],
@@ -179,27 +216,6 @@ class SettingPage:
                              height=BUTTON_HEIGHT,
                              on_click=lambda _: self.page.go("/recording_reaction_link")),
                      ])]))
-
-    async def recording_text_for_sending_messages(self, label, unique_filename) -> None:
-        """
-        Создает интерфейс для записи текста в JSON-файл для отправки сообщений в Telegram.
-
-        :param label: Текст для отображения в поле ввода
-        :param unique_filename: Имя файла для записи данных
-        :return: None
-        """
-        self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
-        list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-        text_to_send = ft.TextField(label=label, multiline=True, max_lines=19)
-
-        async def btn_click(_) -> None:
-            self.write_data_to_json_file(reactions=text_to_send.value,
-                                         path_to_the_file=unique_filename)  # Сохраняем данные в файл
-            await show_notification(self.page, "Данные успешно записаны!")
-            self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
-            self.page.update()
-
-        await self.add_view_with_fields_and_button([text_to_send], btn_click)
 
     async def record_setting(self, limit_type: str, limits):
         """
@@ -334,17 +350,3 @@ class SettingPage:
         """
         with open(path_to_the_file, 'w', encoding='utf-8') as file:
             json.dump(reactions, file, ensure_ascii=False, indent=4)
-
-    def get_unique_filename(self, base_filename) -> str:
-        """
-        Генерирует уникальное имя файла, добавляя индекс к базовому имени.
-
-        :param base_filename: Базовое имя файла
-        :return: Уникальное имя файла
-        """
-        index = 1
-        while True:
-            new_filename = f"{base_filename}_{index}.json"
-            if not os.path.isfile(new_filename):
-                return new_filename
-            index += 1

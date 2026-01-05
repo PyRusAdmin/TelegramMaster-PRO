@@ -108,13 +108,11 @@ async def main(page: ft.Page):
         #     await setting_page.creating_the_main_window_for_proxy_data_entry()
         # elif page.route == "/recording_api_id_api_hash":
         #     await setting_page.writing_api_id_api_hash()
-
-        elif page.route == "/message_recording":
-
-            await setting_page.recording_text_for_sending_messages(
-                label="Введите текст для сообщения",
-                unique_filename=setting_page.get_unique_filename(base_filename='user_data/message/message')
-            )
+        # elif page.route == "/message_recording":
+        #     await setting_page.recording_text_for_sending_messages(
+        #         label="Введите текст для сообщения",
+        #         unique_filename=setting_page.get_unique_filename(base_filename='user_data/message/message')
+        #     )
 
         elif page.route == "/recording_reaction_link":
 
