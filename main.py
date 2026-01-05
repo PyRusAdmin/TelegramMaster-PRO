@@ -154,15 +154,12 @@ async def main(page: ft.Page):
 
                         ft.Container(
                             content=ft.Button(
-                                content=ft.Row([
-                                    ft.Text(translations["ru"]["inviting_menu"]["inviting"]),
-                                ], tight=True, spacing=10),
+                                content=translations["ru"]["inviting_menu"]["inviting"],
                                 width=BUTTON_WIDTH,
                                 height=BUTTON_HEIGHT,
                                 on_click=lambda _: asyncio.create_task(page.push_route("/inviting")),
 
                             ),
-                            # # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -175,7 +172,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/parsing"),
                                 style=menu_button_style,
                             ),
-                            # # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -188,7 +184,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/working_with_contacts"),
                                 style=menu_button_style,
                             ),
-                            # # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -201,7 +196,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/subscribe_unsubscribe"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -214,7 +208,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/account_connection_menu"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -229,7 +222,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/sending_files_to_personal_account_with_limits"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -242,7 +234,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/working_with_reactions"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -255,7 +246,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/account_verification_menu"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -268,7 +258,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/creating_groups"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -281,7 +270,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/bio_editing"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -294,7 +282,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/viewing_posts_menu"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -307,7 +294,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/sending_messages_files_via_chats"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(
@@ -320,7 +306,6 @@ async def main(page: ft.Page):
                                 on_click=lambda _: page.push_route("/importing_a_list_of_parsed_data"),
                                 style=menu_button_style,
                             ),
-                            # padding=ft.Padding(0, 5, 0, 5),
                         ),
 
                         ft.Container(content=ft.Button(content=ft.Row([ft.Text(translations["ru"]["menu"]["settings"]),
@@ -330,15 +315,8 @@ async def main(page: ft.Page):
                                                        on_click=lambda _: page.push_route("/settings"),
                                                        style=menu_button_style,
                                                        ),
-                                     # padding=ft.Padding(0, 5, 0, 5),
                                      ), ],
-
-                        # scroll=ft.ScrollMode.AUTO, spacing=0
                     ),
-
-                    # ft.Column([
-                    #     ft.VerticalDivider(width=20, thickness=2, color=ft.Colors.GREY_400),
-                    # ]),
 
                     ft.Column([ft.Text(spans=[ft.TextSpan(
                         f"{PROGRAM_NAME}",
@@ -372,3 +350,5 @@ async def main(page: ft.Page):
 
 
 ft.run(main)
+
+# 352
