@@ -25,15 +25,6 @@ WIDTH_INPUT_FIELD_AND_BUTTON = int(WIDTH_WIDE_BUTTON) / 2 - 5  # Ширина к
 width_one_input = 500  # 2 поля ввода (без кнопки сохранить)
 width_tvo_input = 245  # 4 поля ввода (без кнопки сохранить)
 
-"""Путь к папкам"""
-config_path = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-config_path.read(filenames='user_data/config/config_path.ini', encoding='utf-8')
-# Путь к сообщениям
-path_folder_with_messages = config_path.get('path_folder_with_messages', 'path_folder_with_messages', fallback=None)
-
-# Путь к папке с базой данных
-path_folder_database = config_path.get('path_folder_database', 'path_folder_database', fallback=None)
-
 # Широкая одиночная кнопка
 wide_single_button = 300  # Применяется: Инвайтинг
 
@@ -43,3 +34,12 @@ BUTTON_WIDTH = 400  # Ширина (кнопок главного меню)
 # Ширина программы / высота программы
 window_width = 1050  # Ширина (программы)
 window_height = 680  # Высота (программы)
+
+"""Путь к папкам"""
+config_path = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
+config_path.read(filenames='user_data/config/config_path.ini', encoding='utf-8')
+# Путь к сообщениям
+path_folder_with_messages = config_path.get('path_folder_with_messages', 'path_folder_with_messages', fallback=None)
+
+# Путь к папке с базой данных
+path_folder_database = config_path.get('path_folder_database', 'path_folder_database', fallback=None)
