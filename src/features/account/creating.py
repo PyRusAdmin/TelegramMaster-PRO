@@ -81,21 +81,24 @@ class CreatingGroupsAndChats:
                                     message="🔚 Создания групп (чатов)")  # Выводим уведомление пользователю
 
         # Добавляем элементы интерфейса на страницу
-        self.page.views.append(ft.View("/creating_groups_and_chats_menu",
-                                       [await self.gui_program.key_app_bar(),
-                                        ft.Text(spans=[
-                                            ft.TextSpan(translations["ru"]["menu"]["create_groups"], ft.TextStyle(
-                                                size=20, weight=ft.FontWeight.BOLD,
-                                                foreground=ft.Paint(gradient=ft.PaintLinearGradient((0, 20), (150, 20),
-                                                                                                    [ft.Colors.PINK,
-                                                                                                     ft.Colors.PURPLE]))))]),
-                                        list_view,
-                                        account_drop_down_list,
-                                        ft.Button(
-                                            translations["ru"]["buttons"]["start"],
-                                            width=WIDTH_WIDE_BUTTON,
-                                            height=BUTTON_HEIGHT,
-                                            on_click=add_items),
-                                        ]))
+        self.page.views.append(
+            ft.View(
+                route="/creating_groups_and_chats_menu",
+                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                controls=[
+                    ft.Text(spans=[
+                        ft.TextSpan(translations["ru"]["menu"]["create_groups"], ft.TextStyle(
+                            size=20, weight=ft.FontWeight.BOLD,
+                            foreground=ft.Paint(gradient=ft.PaintLinearGradient((0, 20), (150, 20),
+                                                                                [ft.Colors.PINK,
+                                                                                 ft.Colors.PURPLE]))))]),
+                    list_view,
+                    account_drop_down_list,
+                    ft.Button(
+                        translations["ru"]["buttons"]["start"],
+                        width=WIDTH_WIDE_BUTTON,
+                        height=BUTTON_HEIGHT,
+                        on_click=add_items),
+                ]))
         self.page.update()
 # 144

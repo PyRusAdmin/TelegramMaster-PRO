@@ -121,7 +121,6 @@ class TGContact:
                                      label_style=ft.TextStyle(size=15), autofocus=True,
                                      width=WIDTH_INPUT_FIELD_AND_BUTTON,
                                      text_size=12)
-
         self.page.views.append(
             ft.View(
                 route="/working_with_contacts",  # Маршрут для этого представления
