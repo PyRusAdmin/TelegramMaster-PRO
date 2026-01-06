@@ -94,10 +94,7 @@ async def main_view(page: ft.Page):
         elif page.route == "/bio_editing":
             await account_bio.bio_editing_menu()
         elif page.route == "/settings":
-
-            page.views.append(await setting_page.settings_page_menu())
-
-            # await setting_page.settings_page_menu()
+            await setting_page.settings_page_menu()
 
         page.update()
 
@@ -288,10 +285,7 @@ async def main(page: ft.Page):
         elif page.route == "/bio_editing":
             await account_bio.bio_editing_menu()
         elif page.route == "/settings":
-
-            page.views.append(await setting_page.settings_page_menu())
-
-            # await setting_page.settings_page_menu()
+            await setting_page.settings_page_menu()
 
         page.update()
 

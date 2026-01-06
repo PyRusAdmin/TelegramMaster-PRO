@@ -5,18 +5,20 @@ import os.path
 
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
-from telethon.errors import (ApiIdInvalidError, AuthKeyDuplicatedError, AuthKeyNotFound, AuthKeyUnregisteredError,
-                             PasswordHashInvalidError, PhoneNumberBannedError, SessionPasswordNeededError,
-                             TimedOutError, TypeNotFoundError, UserDeactivatedBanError, YouBlockedUserError,
-                             SessionRevokedError, PhoneCodeInvalidError)
+from telethon.errors import (
+    ApiIdInvalidError, AuthKeyDuplicatedError, AuthKeyNotFound, AuthKeyUnregisteredError, PasswordHashInvalidError,
+    PhoneNumberBannedError, SessionPasswordNeededError, TimedOutError, TypeNotFoundError, UserDeactivatedBanError,
+    YouBlockedUserError, SessionRevokedError, PhoneCodeInvalidError
+)
 from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
 from src.gui.buttons import menu_button_fun
 from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, api_id, api_hash
-from src.core.database.account import (getting_account, write_account_to_db, delete_account_from_db,
-                                       update_phone_by_session)
+from src.core.database.account import (
+    getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session
+)
 from src.core.utils import Utils
 from src.features.proxy.checking_proxy import Proxy
 from src.gui.gui import AppLogger, list_view
@@ -24,6 +26,9 @@ from src.gui.gui_elements import GUIProgram
 from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
+
+# Выбор файла
+# https://docs.flet.dev/services/filepicker/#flet.FilePicker
 
 class TGConnect:
 
@@ -34,6 +39,7 @@ class TGConnect:
         self.proxy = Proxy(page=page)
         self.gui_program = GUIProgram()
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
+        self.pick_files_dialog: ft.FilePicker | None = None
 
     async def check_menu(self):
         """
@@ -382,7 +388,7 @@ class TGConnect:
         selected_files = ft.Text(value="Session файл не выбран", size=12)
 
         async def open_file_picker(e):
-            await pick_files_dialog.pick_files(
+            await self.pick_files_dialog.pick_files(
                 allow_multiple=False
             )
 
@@ -448,10 +454,10 @@ class TGConnect:
             await client.disconnect()
             self.page.update()
 
-        pick_files_dialog = ft.FilePicker()
-        pick_files_dialog.on_result = btn_click
-        self.page.overlay.append(pick_files_dialog)  # Добавляем FilePicker на страницу
-        self.page.update()  # 🔥 КРИТИЧНО
+        if not self.pick_files_dialog:
+            self.pick_files_dialog = ft.FilePicker()
+            self.pick_files_dialog.on_result = btn_click
+            self.page.overlay.append(self.pick_files_dialog)
 
         self.page.views.append(
             ft.View(
@@ -493,7 +499,8 @@ class TGConnect:
 
                         await menu_button_fun(
                             translations["ru"]["create_groups_menu"]["choose_session_files"],
-                            open_file_picker),  # Кнопка выбора файла
+                            open_file_picker
+                        ),  # Кнопка выбора файла
 
                         # ft.Button(
                         #     translations["ru"]["create_groups_menu"]["choose_session_files"],

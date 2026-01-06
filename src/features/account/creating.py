@@ -39,7 +39,7 @@ class CreatingGroupsAndChats:
 
         :return: None
         """
-        self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+        # self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
         # Создаём опции: текст — номер, ключ — session_string
