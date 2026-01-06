@@ -218,36 +218,48 @@ class SettingPage:
                     unique_filename='user_data/reactions/link_channel.json'
                 )
 
+            # Удаляем все views после "/" и добавляем новый view для "/settings"
+            # self.page.views.clear()
+            # self.page.views.append(
+            #     ft.View(
+            #         route="/",
+            #         Главное меню (или заглушка)
+            # controls=[ft.ElevatedButton("Настройки", on_click=lambda _: self.page.go("/settings"))]
+            # )
+            # )
+
             self.page.views.append(
-                ft.View(route="/settings",
-                        controls=[await self.gui_program.key_app_bar(),  # Кнопка назад
-                                  ft.Text(spans=[ft.TextSpan(translations["ru"]["menu"]["settings"],
-                                                             ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
-                                                                          foreground=ft.Paint(
-                                                                              gradient=ft.PaintLinearGradient((0, 20),
-                                                                                                              (150, 20),
-                                                                                                              [ft.Colors.PINK,
-                                                                                                               ft.Colors.PURPLE]))))]),
+                ft.View(
+                    route="/settings",
+                    appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
+                    controls=[
+                        ft.Text(spans=[ft.TextSpan(translations["ru"]["menu"]["settings"],
+                                                   ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
+                                                                foreground=ft.Paint(
+                                                                    gradient=ft.PaintLinearGradient((0, 20),
+                                                                                                    (150, 20),
+                                                                                                    [ft.Colors.PINK,
+                                                                                                     ft.Colors.PURPLE]))))]),
 
-                                  ft.Column(
-                                      controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                                          await menu_button_fun(
-                                              translations["ru"]["menu_settings"]["choice_of_reactions"],
-                                              reaction_gui),  # 👍 Выбор реакций
-                                          await menu_button_fun(translations["ru"]["menu_settings"]["proxy_entry"],
-                                                                creating_the_main_window_for_proxy_data_entry),
-                                          # 🔐 Запись proxy
-                                          await menu_button_fun(
-                                              translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
-                                              writing_api_id_api_hash),  # 📝 Запись api_id, api_hash
-                                          await menu_button_fun(
-                                              translations["ru"]["menu_settings"]["message_recording"],
-                                              message_recording),  # ✉️ Запись сообщений
-                                          await menu_button_fun(
-                                              translations["ru"]["menu_settings"]["recording_reaction_link"],
-                                              recording_reaction_link),  # 🔗 Запись ссылки для реакций
+                        ft.Column(
+                            controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                                await menu_button_fun(
+                                    translations["ru"]["menu_settings"]["choice_of_reactions"],
+                                    reaction_gui),  # 👍 Выбор реакций
+                                await menu_button_fun(translations["ru"]["menu_settings"]["proxy_entry"],
+                                                      creating_the_main_window_for_proxy_data_entry),
+                                # 🔐 Запись proxy
+                                await menu_button_fun(
+                                    translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
+                                    writing_api_id_api_hash),  # 📝 Запись api_id, api_hash
+                                await menu_button_fun(
+                                    translations["ru"]["menu_settings"]["message_recording"],
+                                    message_recording),  # ✉️ Запись сообщений
+                                await menu_button_fun(
+                                    translations["ru"]["menu_settings"]["recording_reaction_link"],
+                                    recording_reaction_link),  # 🔗 Запись ссылки для реакций
 
-                                      ])]))
+                            ])]))
         except Exception as e:
             logger.exception(e)
 
