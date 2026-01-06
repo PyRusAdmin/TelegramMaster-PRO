@@ -123,45 +123,46 @@ class TGContact:
                                      text_size=12)
 
         self.page.views.append(
-            ft.View(route="/working_with_contacts",  # Маршрут для этого представления
-                    controls=[
-                        await self.gui_program.key_app_bar(),
-                        ft.Text(spans=[ft.TextSpan(
-                            translations["ru"]["menu"]["contacts"],
-                            ft.TextStyle(
-                                size=20, weight=ft.FontWeight.BOLD,
-                                foreground=ft.Paint(
-                                    gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                         ft.Colors.PURPLE]))))]),
-                        list_view,  # Отображение логов 📝
-                        ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+            ft.View(
+                route="/working_with_contacts",  # Маршрут для этого представления
+                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                controls=[
+                    ft.Text(spans=[ft.TextSpan(
+                        translations["ru"]["menu"]["contacts"],
+                        ft.TextStyle(
+                            size=20, weight=ft.FontWeight.BOLD,
+                            foreground=ft.Paint(
+                                gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
+                                                                                     ft.Colors.PURPLE]))))]),
+                    list_view,  # Отображение логов 📝
+                    ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
 
-                            ft.Row([input_numbers,  # Ввод номеров
-                                    # 📋 Формирование списка контактов
-                                    ft.Button(
-                                        translations["ru"]["contacts_menu"]["creating_a_contact_list"],
-                                        width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=write_contact_to_db)]),
-                            # 👥 Парсинг списка контактов
-                            ft.Button(
-                                translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=show_account_contact_list),
-                            # 🗑️ Удаление контактов
-                            ft.Button(
-                                translations["ru"]["contacts_menu"]["deleting_contacts"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=delete_contact),
-                            # ➕ Добавление контактов
-                            ft.Button(
-                                translations["ru"]["contacts_menu"]["adding_contacts"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=inviting_contact),
-                        ])]))
+                        ft.Row([input_numbers,  # Ввод номеров
+                                # 📋 Формирование списка контактов
+                                ft.Button(
+                                    translations["ru"]["contacts_menu"]["creating_a_contact_list"],
+                                    width=WIDTH_INPUT_FIELD_AND_BUTTON,
+                                    height=BUTTON_HEIGHT,
+                                    on_click=write_contact_to_db)]),
+                        # 👥 Парсинг списка контактов
+                        ft.Button(
+                            translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
+                            on_click=show_account_contact_list),
+                        # 🗑️ Удаление контактов
+                        ft.Button(
+                            translations["ru"]["contacts_menu"]["deleting_contacts"],
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
+                            on_click=delete_contact),
+                        # ➕ Добавление контактов
+                        ft.Button(
+                            translations["ru"]["contacts_menu"]["adding_contacts"],
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
+                            on_click=inviting_contact),
+                    ])]))
 
     async def parsing_contacts(self, client):
         """
