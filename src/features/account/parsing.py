@@ -5,12 +5,11 @@ import sqlite3
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon import functions
-from telethon.tl.types import Chat, Channel
 from telethon.errors import (AuthKeyUnregisteredError, ChannelPrivateError, ChatAdminRequiredError, FloodWaitError,
                              UsernameInvalidError)
 from telethon.tl.functions.channels import GetParticipantsRequest
 from telethon.tl.functions.messages import GetDialogsRequest
-from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsSearch, InputPeerEmpty, InputUser
+from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsSearch, InputPeerEmpty, InputUser, Chat
 
 from src.core.config.configs import WIDTH_WIDE_BUTTON, TIME_ACTIVITY_USER_2, BUTTON_HEIGHT
 from src.core.database.account import get_account_list
@@ -51,7 +50,6 @@ class ParsingGroupMembers:
         try:
 
             list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
-            # self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
             self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
             """
@@ -255,8 +253,9 @@ class ParsingGroupMembers:
             # Представление (View)
             view = ft.View(
                 route="/parsing",
+                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
                 controls=[
-                    await self.gui_program.key_app_bar(),
+                    # await self.gui_program.key_app_bar(),
                     await self.gui_program.outputs_text_gradient(),
                     list_view,
                     ft.Column([
