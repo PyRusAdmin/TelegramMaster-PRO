@@ -99,20 +99,22 @@ class SettingPage:
 
                     # Добавляем элементы на страницу
                     self.page.views.append(
-                        ft.View(route="/settings",
-                                controls=[await self.gui_program.key_app_bar(),
-                                          # Кнопка для перехода на главную страницу
-                                          t,
-                                          ft.Column(
-                                              [ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
-                                          # Чекбоксы в колонках
-                                          ft.Button(
-                                              translations["ru"]["buttons"]["done"],
-                                              width=WIDTH_WIDE_BUTTON,
-                                              height=BUTTON_HEIGHT,
-                                              on_click=button_clicked),  # Кнопка "Готово"
-                                          ]
-                                )
+                        ft.View(
+                            route="/settings",
+                            appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                            controls=[
+                                # Кнопка для перехода на главную страницу
+                                t,
+                                ft.Column(
+                                    [ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
+                                # Чекбоксы в колонках
+                                ft.Button(
+                                    translations["ru"]["buttons"]["done"],
+                                    width=WIDTH_WIDE_BUTTON,
+                                    height=BUTTON_HEIGHT,
+                                    on_click=button_clicked),  # Кнопка "Готово"
+                            ]
+                        )
                     )
                 except Exception as e:
                     logger.exception(e)
@@ -220,7 +222,6 @@ class SettingPage:
 
             # Удаляем все views после "/" и добавляем новый view для "/settings"
             # self.page.views.clear()
-            # self.page.views.append(
             #     ft.View(
             #         route="/",
             #         Главное меню (или заглушка)
@@ -231,7 +232,7 @@ class SettingPage:
             self.page.views.append(
                 ft.View(
                     route="/settings",
-                    appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
+                    appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
                     controls=[
                         ft.Text(spans=[ft.TextSpan(translations["ru"]["menu"]["settings"],
                                                    ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
@@ -276,17 +277,18 @@ class SettingPage:
         self.page.views.append(
             ft.View(
                 route="/settings",
-                controls=[await self.gui_program.key_app_bar(),  # Кнопка для перехода на главную страницу
-                          list_view,  # отображение логов 📝
-                          ft.Column(
-                              controls=fields + [
-                                  ft.Button(
-                                      translations["ru"]["buttons"]["done"],
-                                      width=WIDTH_WIDE_BUTTON,
-                                      height=BUTTON_HEIGHT,
-                                      on_click=btn_click),
-                              ]
-                          )]))
+                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                controls=[
+                    list_view,  # отображение логов 📝
+                    ft.Column(
+                        controls=fields + [
+                            ft.Button(
+                                translations["ru"]["buttons"]["done"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=btn_click),
+                        ]
+                    )]))
 
     def writing_settings_to_a_file(self, config) -> None:
         """

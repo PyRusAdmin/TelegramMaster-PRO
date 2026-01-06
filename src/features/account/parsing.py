@@ -255,7 +255,6 @@ class ParsingGroupMembers:
                     route="/parsing",
                     appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
                     controls=[
-                        # await self.gui_program.key_app_bar(),
                         await self.gui_program.outputs_text_gradient(),
                         list_view,
                         ft.Column([

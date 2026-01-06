@@ -155,47 +155,49 @@ class WorkingWithReactions:
                     await self.app_logger.end_time(start)
                     await show_notification(self.page, "🔚 Конец Автоматического выставления реакций")
 
-            # Теперь создаём View ПОСЛЕ объявления chat и message
-            view = ft.View(
-                route="/working_with_reactions",
-                controls=[
-                    await self.gui_program.key_app_bar(),
-                    ft.Text(
-                        spans=[
-                            ft.TextSpan(
-                                translations["ru"]["menu"]["reactions"],
-                                ft.TextStyle(
-                                    size=20,
-                                    weight=ft.FontWeight.BOLD,
-                                    foreground=ft.Paint(
-                                        gradient=ft.PaintLinearGradient(
-                                            (0, 20), (150, 20), [ft.Colors.PINK, ft.Colors.PURPLE]
-                                        )
+            self.page.views.append(
+                # Теперь создаём View ПОСЛЕ объявления chat и message
+                ft.View(
+                    route="/working_with_reactions",
+                    appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                    controls=[
+                        ft.Text(
+                            spans=[
+                                ft.TextSpan(
+                                    translations["ru"]["menu"]["reactions"],
+                                    ft.TextStyle(
+                                        size=20,
+                                        weight=ft.FontWeight.BOLD,
+                                        foreground=ft.Paint(
+                                            gradient=ft.PaintLinearGradient(
+                                                (0, 20), (150, 20), [ft.Colors.PINK, ft.Colors.PURPLE]
+                                            )
+                                        ),
                                     ),
                                 ),
+                            ],
+                        ),
+                        list_view,
+                        chat,
+                        message,
+                        ft.Column([
+                            ft.ElevatedButton(
+                                content=ft.Text(translations["ru"]["reactions_menu"]["setting_reactions"]),
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=send_reaction_request,
                             ),
-                        ],
-                    ),
-                    list_view,
-                    chat,
-                    message,
-                    ft.Column([
-                        ft.ElevatedButton(
-                            content=ft.Text(translations["ru"]["reactions_menu"]["setting_reactions"]),
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=send_reaction_request,
-                        ),
-                        ft.ElevatedButton(
-                            content=ft.Text(translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"]),
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=setting_reactions,
-                        ),
-                    ]),
-                ],
+                            ft.ElevatedButton(
+                                content=ft.Text(translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"]),
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=setting_reactions,
+                            ),
+                        ]),
+                    ],
+                )
+
             )
-            self.page.views.append(view)
             self.page.update()
 
         except Exception as e:

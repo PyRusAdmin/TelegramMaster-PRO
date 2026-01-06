@@ -177,41 +177,43 @@ class TGConnect:
                 logger.exception(error)
 
         self.page.views.append(
-            ft.View(route="/account_verification_menu",  # Маршрут для этого представления
-                    controls=[await self.gui_program.key_app_bar(),  # Добавляет кнопку назад на страницу (page)
-                              ft.Text(spans=[ft.TextSpan(
-                                  translations["ru"]["menu"]["account_check"],
-                                  ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
-                                               foreground=ft.Paint(
-                                                   gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                                        ft.Colors.PURPLE])), ), ), ], ),
-                              list_view,
-                              ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                                  # 🤖 Проверка через спам бот
-                                  ft.Button(
-                                      translations["ru"]["account_verification"]["spam_check"],
-                                      width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                      on_click=check_for_spam
-                                  ),
-                                  # ✅ Проверка на валидность
-                                  ft.Button(
-                                      translations["ru"]["account_verification"]["validation"],
-                                      width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                      on_click=validation_check
-                                  ),
-                                  # ✏️ Переименование аккаунтов
-                                  ft.Button(
-                                      translations["ru"]["account_verification"]["renaming"],
-                                      width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                      on_click=renaming_accounts
-                                  ),
-                                  # 🔍 Полная проверка
-                                  ft.Button(
-                                      translations["ru"]["account_verification"]["full_verification"],
-                                      width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
-                                      on_click=full_verification
-                                  ),
-                              ])]))
+            ft.View(
+                route="/account_verification_menu",  # Маршрут для этого представления
+                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                controls=[
+                    ft.Text(spans=[ft.TextSpan(
+                        translations["ru"]["menu"]["account_check"],
+                        ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
+                                     foreground=ft.Paint(
+                                         gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
+                                                                                              ft.Colors.PURPLE])), ), ), ], ),
+                    list_view,
+                    ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                        # 🤖 Проверка через спам бот
+                        ft.Button(
+                            translations["ru"]["account_verification"]["spam_check"],
+                            width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            on_click=check_for_spam
+                        ),
+                        # ✅ Проверка на валидность
+                        ft.Button(
+                            translations["ru"]["account_verification"]["validation"],
+                            width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            on_click=validation_check
+                        ),
+                        # ✏️ Переименование аккаунтов
+                        ft.Button(
+                            translations["ru"]["account_verification"]["renaming"],
+                            width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            on_click=renaming_accounts
+                        ),
+                        # 🔍 Полная проверка
+                        ft.Button(
+                            translations["ru"]["account_verification"]["full_verification"],
+                            width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            on_click=full_verification
+                        ),
+                    ])]))
 
     async def client_connect_string_session(self, session_name: str) -> TelegramClient | None:
         """
@@ -452,49 +454,51 @@ class TGConnect:
         self.page.update()  # 🔥 КРИТИЧНО
 
         self.page.views.append(
-            ft.View(route="/account_connection_menu",  # Маршрут для этого представления
-                    controls=[await self.gui_program.key_app_bar(),
-                              ft.Text(spans=[ft.TextSpan("Подключение аккаунта Telegram по номеру телефона.",
-                                                         ft.TextStyle(
-                                                             size=20,
-                                                             weight=ft.FontWeight.BOLD,
-                                                             foreground=ft.Paint(
-                                                                 gradient=ft.PaintLinearGradient((0, 20), (150, 20),
-                                                                                                 [ft.Colors.PINK,
-                                                                                                  ft.Colors.PURPLE]))))]),
-                              list_view,  # Отображение логов 📝
-                              phone_number,
-                              # 📞 Подключение аккаунтов по номеру телефона
-                              ft.Button(
-                                  "Получить код",
-                                  width=WIDTH_WIDE_BUTTON,
-                                  height=BUTTON_HEIGHT,
-                                  on_click=connecting_number_accounts),
+            ft.View(
+                route="/account_connection_menu",  # Маршрут для этого представления
+                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                controls=[
+                    ft.Text(spans=[ft.TextSpan("Подключение аккаунта Telegram по номеру телефона.",
+                                               ft.TextStyle(
+                                                   size=20,
+                                                   weight=ft.FontWeight.BOLD,
+                                                   foreground=ft.Paint(
+                                                       gradient=ft.PaintLinearGradient((0, 20), (150, 20),
+                                                                                       [ft.Colors.PINK,
+                                                                                        ft.Colors.PURPLE]))))]),
+                    list_view,  # Отображение логов 📝
+                    phone_number,
+                    # 📞 Подключение аккаунтов по номеру телефона
+                    ft.Button(
+                        "Получить код",
+                        width=WIDTH_WIDE_BUTTON,
+                        height=BUTTON_HEIGHT,
+                        on_click=connecting_number_accounts),
 
-                              await self.gui_program.diver_castom(),  # Горизонтальная линия
+                    await self.gui_program.diver_castom(),  # Горизонтальная линия
 
-                              ft.Text(spans=[ft.TextSpan(
-                                  "Подключение session аккаунтов Telegram",
-                                  ft.TextStyle(
-                                      size=20,
-                                      weight=ft.FontWeight.BOLD,
-                                      foreground=ft.Paint(
-                                          gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                               ft.Colors.PURPLE]))))]),
+                    ft.Text(spans=[ft.TextSpan(
+                        "Подключение session аккаунтов Telegram",
+                        ft.TextStyle(
+                            size=20,
+                            weight=ft.FontWeight.BOLD,
+                            foreground=ft.Paint(
+                                gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
+                                                                                     ft.Colors.PURPLE]))))]),
 
-                              ft.Text(f"Выберите session файл\n", size=15),
-                              selected_files,  # Поле для отображения выбранного файла
-                              ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                                  # 🔑 Подключение session аккаунтов
+                    ft.Text(f"Выберите session файл\n", size=15),
+                    selected_files,  # Поле для отображения выбранного файла
+                    ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                        # 🔑 Подключение session аккаунтов
 
-                                  await menu_button_fun(
-                                      translations["ru"]["create_groups_menu"]["choose_session_files"],
-                                      open_file_picker),  # Кнопка выбора файла
+                        await menu_button_fun(
+                            translations["ru"]["create_groups_menu"]["choose_session_files"],
+                            open_file_picker),  # Кнопка выбора файла
 
-                                  # ft.Button(
-                                  #     translations["ru"]["create_groups_menu"]["choose_session_files"],
-                                  #     width=WIDTH_WIDE_BUTTON,
-                                  #     height=BUTTON_HEIGHT,
-                                  #     on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
-                              ])]))
+                        # ft.Button(
+                        #     translations["ru"]["create_groups_menu"]["choose_session_files"],
+                        #     width=WIDTH_WIDE_BUTTON,
+                        #     height=BUTTON_HEIGHT,
+                        #     on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
+                    ])]))
 # 486

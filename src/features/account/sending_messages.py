@@ -129,8 +129,8 @@ class SendTelegramMessages:
         self.page.views.append(
             ft.View(
                 route="/sending_messages_via_chats_menu",
+                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
                 controls=[
-                    await self.gui_program.key_app_bar(),  # Кнопка "Назад"
                     ft.Text("Отправка сообщений в личку", size=18, weight=ft.FontWeight.BOLD),
                     list_view,  # Отображение логов 📝
                     ft.Row(controls=[self.tb_time_from, self.tb_time_to], spacing=20, ),
@@ -339,8 +339,8 @@ class SendTelegramMessages:
         self.page.views.append(
             ft.View(
                 route="/sending_messages_via_chats_menu",
+                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
                 controls=[
-                    await self.gui_program.key_app_bar(),  # Кнопка "Назад"
                     ft.Text(spans=[
                         ft.TextSpan(translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"],
                                     ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
