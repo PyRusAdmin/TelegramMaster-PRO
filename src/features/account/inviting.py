@@ -6,12 +6,13 @@ import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from scheduler.asyncio import Scheduler
 from telethon import TelegramClient
-from telethon.errors import (AuthKeyDuplicatedError, ChannelPrivateError, SessionRevokedError, TypeNotFoundError,
-                             UserBannedInChannelError, UserChannelsTooMuchError, UserNotMutualContactError,
-                             UserKickedError, UserDeactivatedBanError, UsernameInvalidError, UsernameNotOccupiedError,
-                             UserIdInvalidError, ChatAdminRequiredError, UserPrivacyRestrictedError,
-                             BotGroupsBlockedError, BadRequestError, ChatWriteForbiddenError, InviteRequestSentError,
-                             FloodWaitError, AuthKeyUnregisteredError, PeerFloodError)
+from telethon.errors import (
+    AuthKeyDuplicatedError, ChannelPrivateError, SessionRevokedError, TypeNotFoundError, UserBannedInChannelError,
+    UserChannelsTooMuchError, UserNotMutualContactError, UserKickedError, UserDeactivatedBanError, UsernameInvalidError,
+    UsernameNotOccupiedError, UserIdInvalidError, ChatAdminRequiredError, UserPrivacyRestrictedError,
+    BotGroupsBlockedError, BadRequestError, ChatWriteForbiddenError, InviteRequestSentError, FloodWaitError,
+    AuthKeyUnregisteredError, PeerFloodError
+)
 from telethon.tl.functions.channels import InviteToChannelRequest
 
 from src.core.config.configs import width_tvo_input, width_one_input, window_width, BUTTON_HEIGHT

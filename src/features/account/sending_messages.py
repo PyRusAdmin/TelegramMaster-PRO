@@ -7,13 +7,16 @@ import time
 import flet as ft
 from loguru import logger
 from telethon import events, TelegramClient
-from telethon.errors import (ChannelPrivateError, ChatAdminRequiredError, ChatWriteForbiddenError, FloodWaitError,
-                             PeerFloodError, SlowModeWaitError, UserBannedInChannelError, UserIdInvalidError,
-                             UsernameInvalidError, UsernameNotOccupiedError, UserNotMutualContactError, ForbiddenError)
+from telethon.errors import (
+    ChannelPrivateError, ChatAdminRequiredError, ChatWriteForbiddenError, FloodWaitError, PeerFloodError,
+    SlowModeWaitError, UserBannedInChannelError, UserIdInvalidError, UsernameInvalidError, UsernameNotOccupiedError,
+    UserNotMutualContactError, ForbiddenError
+)
 
-from src.core.config.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages,
-                                     TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2, time_subscription_1,
-                                     time_subscription_2, width_one_input)
+from src.core.config.configs import (
+    BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2,
+    time_subscription_1, time_subscription_2, width_one_input
+)
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import select_records_with_limit, get_writing_group_links
 from src.core.utils import Utils

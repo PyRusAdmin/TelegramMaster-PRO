@@ -3,8 +3,10 @@ import asyncio
 import random
 import sqlite3
 
-from telethon.errors import (ChannelPrivateError, SessionRevokedError, UserDeactivatedBanError, UsernameInvalidError,
-                             InviteRequestSentError, FloodWaitError, PeerFloodError, ChannelsTooMuchError)
+from telethon.errors import (
+    ChannelPrivateError, SessionRevokedError, UserDeactivatedBanError, UsernameInvalidError, InviteRequestSentError,
+    FloodWaitError, PeerFloodError, ChannelsTooMuchError
+)
 from telethon.tl.functions.channels import JoinChannelRequest
 
 from src.core.config.configs import time_subscription_1, time_subscription_2

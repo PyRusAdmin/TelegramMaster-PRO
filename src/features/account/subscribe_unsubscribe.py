@@ -5,15 +5,17 @@ import sqlite3
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon import functions, types
-from telethon.errors import (AuthKeyUnregisteredError, ChannelPrivateError, ChannelsTooMuchError, FloodWaitError,
-                             InviteHashExpiredError, InviteHashInvalidError, InviteRequestSentError,
-                             SessionPasswordNeededError, SessionRevokedError, UserNotParticipantError,
-                             UsernameInvalidError)
+from telethon.errors import (
+    AuthKeyUnregisteredError, ChannelPrivateError, ChannelsTooMuchError, FloodWaitError, InviteHashExpiredError,
+    InviteHashInvalidError, InviteRequestSentError, SessionPasswordNeededError, SessionRevokedError,
+    UserNotParticipantError, UsernameInvalidError
+)
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
-from src.core.config.configs import (BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1, time_subscription_2,
-                                     width_one_input)
+from src.core.config.configs import (
+    BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1, time_subscription_2, width_one_input
+)
 from src.core.database.account import getting_account
 from src.core.database.database import get_writing_group_links, write_writing_group_links_to_db
 from src.core.utils import Utils

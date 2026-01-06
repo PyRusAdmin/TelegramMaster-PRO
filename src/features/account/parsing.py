@@ -5,16 +5,18 @@ import sqlite3
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon import functions
-from telethon.errors import (AuthKeyUnregisteredError, ChannelPrivateError, ChatAdminRequiredError, FloodWaitError,
-                             UsernameInvalidError)
+from telethon.errors import (
+    AuthKeyUnregisteredError, ChannelPrivateError, ChatAdminRequiredError, FloodWaitError, UsernameInvalidError
+)
 from telethon.tl.functions.channels import GetParticipantsRequest
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsSearch, InputPeerEmpty, InputUser, Chat
 
 from src.core.config.configs import WIDTH_WIDE_BUTTON, TIME_ACTIVITY_USER_2, BUTTON_HEIGHT
 from src.core.database.account import get_account_list
-from src.core.database.database import (MembersAdmin, add_member_to_db, save_group_channel_info,
-                                        administrators_entries_in_database)
+from src.core.database.database import (
+    MembersAdmin, add_member_to_db, save_group_channel_info, administrators_entries_in_database
+)
 from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
 from src.features.account.switch_controller import ToggleController
