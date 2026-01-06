@@ -250,29 +250,29 @@ class ParsingGroupMembers:
             active_switch.expand = True
             self.page.update()
 
-            # Представление (View)
-            view = ft.View(
-                route="/parsing",
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
-                controls=[
-                    # await self.gui_program.key_app_bar(),
-                    await self.gui_program.outputs_text_gradient(),
-                    list_view,
-                    ft.Column([
-                        account_drop_down_list,  # ⬅️ Выбор аккаунта из выпадающего списка
-                        ft.Row([admin_switch, members_switch, account_groups_switch, account_group_selection_switch,
-                                active_switch]),
-                        chat_input,
-                        await self.gui_program.diver_castom(),  # Горизонтальная линия
-                        ft.Row([limit_active_user]),
-                        await self.gui_program.diver_castom(),  # Горизонтальная линия
-                        result_text,
-                        dropdown,
-                        parse_button,  # ⬅️ Кнопка для парсинга
-                    ])
-                ]
+            self.page.views.append(
+                ft.View(
+                    route="/parsing",
+                    appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                    controls=[
+                        # await self.gui_program.key_app_bar(),
+                        await self.gui_program.outputs_text_gradient(),
+                        list_view,
+                        ft.Column([
+                            account_drop_down_list,  # ⬅️ Выбор аккаунта из выпадающего списка
+                            ft.Row([admin_switch, members_switch, account_groups_switch, account_group_selection_switch,
+                                    active_switch]),
+                            chat_input,
+                            await self.gui_program.diver_castom(),  # Горизонтальная линия
+                            ft.Row([limit_active_user]),
+                            await self.gui_program.diver_castom(),  # Горизонтальная линия
+                            result_text,
+                            dropdown,
+                            parse_button,  # ⬅️ Кнопка для парсинга
+                        ])
+                    ]
+                )
             )
-            self.page.views.append(view)
             self.page.update()
 
         except Exception as e:
