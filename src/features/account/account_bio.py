@@ -51,23 +51,30 @@ class AccountBIO:
             options=account_options,  # ✅ Опции выпадающего списка
             autofocus=True  # ✅ Автозаполнение
         )
-
-        profile_description_input_field = ft.TextField(label="Введите описание профиля, не более 70 символов: ",
-                                                       multiline=True,
-                                                       width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                                       max_lines=19)
-        input_field_username_change = ft.TextField(label="Введите username профиля (не более 32 символов): ",
-                                                   multiline=True,
-                                                   width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                                   max_lines=19)
-        profile_name_input_field = ft.TextField(label="Введите имя профиля, не более 64 символов: ",
-                                                multiline=True,
-                                                width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                                max_lines=19)
-        profile_last_name_input_field = ft.TextField(label="Введите фамилию профиля, не более 64 символов: ",
-                                                     multiline=True,
-                                                     width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                                     max_lines=19)
+        profile_description_input_field = ft.TextField(
+            label="Введите описание профиля, не более 70 символов: ",
+            multiline=True,
+            width=WIDTH_INPUT_FIELD_AND_BUTTON,
+            max_lines=19
+        )
+        input_field_username_change = ft.TextField(
+            label="Введите username профиля (не более 32 символов): ",
+            multiline=True,
+            width=WIDTH_INPUT_FIELD_AND_BUTTON,
+            max_lines=19
+        )
+        profile_name_input_field = ft.TextField(
+            label="Введите имя профиля, не более 64 символов: ",
+            multiline=True,
+            width=WIDTH_INPUT_FIELD_AND_BUTTON,
+            max_lines=19
+        )
+        profile_last_name_input_field = ft.TextField(
+            label="Введите фамилию профиля, не более 64 символов: ",
+            multiline=True,
+            width=WIDTH_INPUT_FIELD_AND_BUTTON,
+            max_lines=19
+        )
 
         async def change_username_profile_gui(_) -> None:
             """
