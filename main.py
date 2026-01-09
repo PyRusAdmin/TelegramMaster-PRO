@@ -206,7 +206,9 @@ async def main_view(page: ft.Page):
                                                     gradient=ft.PaintLinearGradient(
                                                         (0, 20),
                                                         (150, 20),
-                                                        [ft.Colors.PINK, ft.Colors.PURPLE],
+                                                        [
+                                                            ft.Colors.PINK, ft.Colors.PURPLE
+                                                        ],
                                                     )
                                                 ),
                                             ),
