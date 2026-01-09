@@ -387,11 +387,6 @@ class TGConnect:
         # Поле для отображения выбранного файла
         selected_files = ft.Text(value="Session файл не выбран", size=12)
 
-        # async def open_file_picker(e):
-        #     await self.pick_files_dialog.pick_files(
-        #         allow_multiple=False
-        #     )
-
         async def handle_get_directory_path(e: ft.Event[ft.Button]):
             """
             Обработчик события выбора session файлов
@@ -509,70 +504,6 @@ class TGConnect:
                 await self.app_logger.log_and_display(
                     message=f"❌ Ошибка при выборе файлов: {str(error)}"
                 )
-
-        async def btn_click(e) -> None:
-            """Подключение аккаунта Telegram по session файлу"""
-
-            if not e.files:
-                selected_files.value = "Выбор файла отменен"
-                selected_files.update()
-                return
-
-            file = e.files[0]
-            file_name = file.name
-            file_path = file.path
-
-            if not file_name.endswith(".session"):
-                selected_files.value = "Выбранный файл не является session файлом"
-                selected_files.update()
-                return
-
-            selected_files.value = f"Выбран session файл: {file_name}"
-            selected_files.update()
-
-            session_path = os.path.splitext(file_path)[0]
-
-            client = TelegramClient(
-                session=session_path,
-                api_id=api_id,
-                api_hash=api_hash,
-                system_version="4.16.30-vxCUSTOM"
-            )
-
-            await client.connect()
-            session_string = StringSession.save(client.session)
-            await client.disconnect()
-
-            client = TelegramClient(
-                StringSession(session_string),
-                api_id=api_id,
-                api_hash=api_hash,
-                system_version="4.16.30-vxCUSTOM"
-            )
-
-            await client.connect()
-            me = await client.get_me()
-
-            if not me:
-                await show_notification(page=self.page, message="❌ Не валидный аккаунт")
-                await client.disconnect()
-                return
-
-            phone = me.phone or ""
-            logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-
-            write_account_to_db(
-                session_string=session_string,
-                phone_number=phone
-            )
-
-            await client.disconnect()
-            self.page.update()
-
-        # if not self.pick_files_dialog:
-        #     self.pick_files_dialog = ft.FilePicker()
-        #     self.pick_files_dialog.on_result = btn_click
-        #     self.page.overlay.append(self.pick_files_dialog)
 
         self.page.views.append(
             ft.View(
