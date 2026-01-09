@@ -80,7 +80,7 @@ async def main_view(page: ft.Page):
         elif page.route == "/viewing_posts_menu":
             await viewing_posts.viewing_posts_request()
         elif page.route == "/importing_a_list_of_parsed_data":
-            await receiving_and_recording.write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
+            await receiving_and_recording.write_data_to_excel(page, "user_data/parsed_chat_participants.xlsx")
         elif page.route == "/working_with_contacts":
             await tg_contact.working_with_contacts_menu()
         elif page.route == "/account_connection_menu":
@@ -314,7 +314,7 @@ async def main(page: ft.Page):
         elif page.route == "/viewing_posts_menu":
             await viewing_posts.viewing_posts_request()
         elif page.route == "/importing_a_list_of_parsed_data":
-            await receiving_and_recording.write_data_to_excel(file_name="user_data/parsed_chat_participants.xlsx")
+            await receiving_and_recording.write_data_to_excel(page, "user_data/parsed_chat_participants.xlsx")
         elif page.route == "/working_with_contacts":
             await tg_contact.working_with_contacts_menu()
         elif page.route == "/account_connection_menu":
