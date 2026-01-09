@@ -17,8 +17,8 @@ TIME_SENDING_MESSAGES_2 = config.get('time_inviting', 'time_inviting_2', fallbac
 """Настройки внешнего вида программы"""
 
 PROGRAM_NAME = "TelegramMaster-PRO"  # Имя программы
-PROGRAM_VERSION = "2.8.4"  # Версия программы
-DATE_OF_PROGRAM_CHANGE = "05.01.2026"  # Дата изменения (обновления)
+PROGRAM_VERSION = "2.8.5"  # Версия программы
+DATE_OF_PROGRAM_CHANGE = "09.01.2026"  # Дата изменения (обновления)
 
 WIDTH_WIDE_BUTTON = 1010  # Ширина кнопки
 WIDTH_INPUT_FIELD_AND_BUTTON = int(WIDTH_WIDE_BUTTON) / 2 - 5  # Ширина кнопки (окно и поле ввода)
@@ -36,10 +36,8 @@ window_width = 1050  # Ширина (программы)
 window_height = 680  # Высота (программы)
 
 """Путь к папкам"""
-config_path = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-config_path.read(filenames='user_data/config/config_path.ini', encoding='utf-8')
-# Путь к сообщениям
-path_folder_with_messages = config_path.get('path_folder_with_messages', 'path_folder_with_messages', fallback=None)
 
+# Путь к папке с сообщениями, для рассылки сообщений
+path_folder_with_messages = "user_data/message"
 # Путь к папке с базой данных
-path_folder_database = config_path.get('path_folder_database', 'path_folder_database', fallback=None)
+path_folder_database = "user_data/software_database.db"
