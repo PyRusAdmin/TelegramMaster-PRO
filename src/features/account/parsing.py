@@ -435,9 +435,14 @@ class ParsingGroupMembers:
                     try:
                         await self.app_logger.log_and_display(message=f"{message.from_id}")
                         # Получаем входную сущность пользователя
-                        from_user = InputUser(user_id=await UserInfo().get_user_id(user=user),
-                                              access_hash=await UserInfo().get_access_hash(
-                                                  user=user))  # Создаем InputUser
+                        from_user = InputUser(
+                            user_id=await UserInfo().get_user_id(
+                                user=user
+                            ),
+                            access_hash=await UserInfo().get_access_hash(
+                                user=user
+                            )
+                        )  # Создаем InputUser
                         await self.app_logger.log_and_display(message=f"{from_user}")
                         # Получаем данные о пользователе
                         log_data = await self.collect_user_log_data(user=user)
