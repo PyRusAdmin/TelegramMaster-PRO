@@ -102,11 +102,8 @@ class ParsingGroupMembers:
             async def add_items(_):
                 """🚀 Запускает процесс парсинга групп и отображает статус в интерфейсе."""
                 try:
-
                     logger.debug(f"Аккаунт: {account_drop_down_list.value}")
-
                     client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
-
                     data = chat_input.value.split()
                     logger.info(f"Полученные данные: {data}")  # Отладка
                     # Удаляем дубликаты ссылок введенных пользователем
@@ -469,7 +466,6 @@ class ParsingGroupMembers:
                 try:
                     entity = await client.get_entity(dialog.id)
                     # Пропускаем личные чаты
-
                     if isinstance(entity, Chat):
                         logger.debug(f"💬 Пропущен личный чат: {dialog.id}")
                         continue
@@ -490,8 +486,12 @@ class ParsingGroupMembers:
                     await self.app_logger.log_and_display(
                         f"{dialog.id}, {title}, {link or 'без ссылки'}, {participants_count}")
                     save_group_channel_info(
-                        dialog=dialog, title=title, about=about, link=link,
-                        participants_count=participants_count)
+                        dialog=dialog,
+                        title=title,
+                        about=about,
+                        link=link,
+                        participants_count=participants_count
+                    )
                 except TypeError as te:
                     logger.warning(f"❌ TypeError при обработке диалога {dialog.id}: {te}")
                     continue
