@@ -387,10 +387,128 @@ class TGConnect:
         # Поле для отображения выбранного файла
         selected_files = ft.Text(value="Session файл не выбран", size=12)
 
-        async def open_file_picker(e):
-            await self.pick_files_dialog.pick_files(
-                allow_multiple=False
-            )
+        # async def open_file_picker(e):
+        #     await self.pick_files_dialog.pick_files(
+        #         allow_multiple=False
+        #     )
+
+        async def handle_get_directory_path(e: ft.Event[ft.Button]):
+            """
+            Обработчик события выбора session файлов
+
+            Открывает диалоговое окно для выбора session файлов и подключает их к базе данных.
+            :param e: Событие нажатия на кнопку
+            """
+            try:
+                # Открываем диалог выбора файлов
+                file_picker = ft.FilePicker()
+                files = await file_picker.pick_files(
+                    allow_multiple=True,
+                    allowed_extensions=["session"]
+                )
+
+                if not files:
+                    selected_files.value = "Выбор файла отменен"
+                    selected_files.update()
+                    return
+
+                # Обрабатываем каждый выбранный файл
+                for file in files:
+                    file_name = file.name
+                    file_path = file.path
+
+                    # Проверяем расширение файла
+                    if not file_name.endswith(".session"):
+                        await self.app_logger.log_and_display(
+                            message=f"⚠️ Файл {file_name} не является session файлом, пропускаем"
+                        )
+                        continue
+
+                    await self.app_logger.log_and_display(
+                        message=f"📁 Обработка session файла: {file_name}"
+                    )
+                    selected_files.value = f"Обрабатывается: {file_name}"
+                    selected_files.update()
+
+                    # Получаем путь без расширения
+                    session_path = os.path.splitext(file_path)[0]
+
+                    # Создаем клиент с обычной сессией
+                    client = TelegramClient(
+                        session=session_path,
+                        api_id=api_id,
+                        api_hash=api_hash,
+                        system_version="4.16.30-vxCUSTOM"
+                    )
+
+                    try:
+                        await client.connect()
+
+                        # Преобразуем в StringSession
+                        session_string = StringSession.save(client.session)
+                        await client.disconnect()
+
+                        # Переподключаемся через StringSession
+                        client = TelegramClient(
+                            StringSession(session_string),
+                            api_id=api_id,
+                            api_hash=api_hash,
+                            system_version="4.16.30-vxCUSTOM"
+                        )
+
+                        await client.connect()
+                        me = await client.get_me()
+
+                        if not me:
+                            await show_notification(
+                                page=self.page,
+                                message=f"❌ Аккаунт {file_name} не валидный"
+                            )
+                            await self.app_logger.log_and_display(
+                                message=f"❌ Аккаунт {file_name} не валидный"
+                            )
+                            await client.disconnect()
+                            continue
+
+                        phone = me.phone or ""
+                        logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
+                        await self.app_logger.log_and_display(
+                            message=f"✅ Аккаунт добавлен: | ID: {me.id} | Phone: {phone}"
+                        )
+
+                        # Записываем в базу данных
+                        write_account_to_db(
+                            session_string=session_string,
+                            phone_number=phone
+                        )
+
+                        await client.disconnect()
+
+                    except Exception as error:
+                        logger.exception(f"Ошибка при обработке {file_name}: {error}")
+                        await self.app_logger.log_and_display(
+                            message=f"❌ Ошибка при обработке {file_name}: {str(error)}"
+                        )
+                        try:
+                            await client.disconnect()
+                        except:
+                            pass
+
+                # Обновляем интерфейс после обработки всех файлов
+                selected_files.value = f"✅ Обработано файлов: {len(files)}"
+                selected_files.update()
+                self.page.update()
+
+                await show_notification(
+                    page=self.page,
+                    message=f"✅ Успешно обработано {len(files)} session файлов"
+                )
+
+            except Exception as error:
+                logger.exception(error)
+                await self.app_logger.log_and_display(
+                    message=f"❌ Ошибка при выборе файлов: {str(error)}"
+                )
 
         async def btn_click(e) -> None:
             """Подключение аккаунта Telegram по session файлу"""
@@ -403,9 +521,6 @@ class TGConnect:
             file = e.files[0]
             file_name = file.name
             file_path = file.path
-
-            logger.info(f"Выбранный файл: {file_name}")
-            logger.info(f"Путь к файлу: {file_path}")
 
             if not file_name.endswith(".session"):
                 selected_files.value = "Выбранный файл не является session файлом"
@@ -454,10 +569,10 @@ class TGConnect:
             await client.disconnect()
             self.page.update()
 
-        if not self.pick_files_dialog:
-            self.pick_files_dialog = ft.FilePicker()
-            self.pick_files_dialog.on_result = btn_click
-            self.page.overlay.append(self.pick_files_dialog)
+        # if not self.pick_files_dialog:
+        #     self.pick_files_dialog = ft.FilePicker()
+        #     self.pick_files_dialog.on_result = btn_click
+        #     self.page.overlay.append(self.pick_files_dialog)
 
         self.page.views.append(
             ft.View(
@@ -498,10 +613,10 @@ class TGConnect:
                         # 🔑 Подключение session аккаунтов
 
                         await menu_button_fun(
-                            translations["ru"]["create_groups_menu"]["choose_session_files"],
-                            open_file_picker
+                            text=translations["ru"]["create_groups_menu"]["choose_session_files"],
+                            on_click=handle_get_directory_path
                         ),  # Кнопка выбора файла
-
+                        directory_path := ft.Text(),
                         # ft.Button(
                         #     translations["ru"]["create_groups_menu"]["choose_session_files"],
                         #     width=WIDTH_WIDE_BUTTON,
