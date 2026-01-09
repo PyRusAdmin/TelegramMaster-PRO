@@ -126,8 +126,7 @@ class SettingPage:
                 :return: None
                 """
                 try:
-                    # self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
-
+                    list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
                     list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
                     proxy_type = ft.TextField(
                         label="Введите тип прокси, например SOCKS5: ", multiline=True,
