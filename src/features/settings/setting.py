@@ -129,16 +129,30 @@ class SettingPage:
                     # self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
 
                     list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-
-                    proxy_type = ft.TextField(label="Введите тип прокси, например SOCKS5: ", multiline=True,
-                                              max_lines=19)
-                    addr_type = ft.TextField(label="Введите ip адрес, например 194.67.248.9: ", multiline=True,
-                                             max_lines=19)
-                    port_type = ft.TextField(label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19)
-                    username_type = ft.TextField(label="Введите username, например NnbjvX: ", multiline=True,
-                                                 max_lines=19)
-                    password_type = ft.TextField(label="Введите пароль, например ySfCfk: ", multiline=True,
-                                                 max_lines=19)
+                    proxy_type = ft.TextField(
+                        label="Введите тип прокси, например SOCKS5: ", multiline=True,
+                        max_lines=19,
+                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
+                    )
+                    addr_type = ft.TextField(
+                        label="Введите ip адрес, например 194.67.248.9: ", multiline=True,
+                        max_lines=19,
+                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
+                    )
+                    port_type = ft.TextField(
+                        label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19,
+                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
+                    )
+                    username_type = ft.TextField(
+                        label="Введите username, например NnbjvX: ", multiline=True,
+                        max_lines=19,
+                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
+                    )
+                    password_type = ft.TextField(
+                        label="Введите пароль, например ySfCfk: ", multiline=True,
+                        max_lines=19,
+                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
+                    )
 
                     async def btn_click(_) -> None:
                         proxy = {
@@ -166,10 +180,21 @@ class SettingPage:
                 :return: None
                 """
                 try:
-                    # self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
+                    list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
+
                     list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-                    api_id_data = ft.TextField(label="Введите api_id", multiline=True, max_lines=19)
-                    api_hash_data = ft.TextField(label="Введите api_hash", multiline=True, max_lines=19)
+                    api_id_data = ft.TextField(
+                        label="Введите api_id",
+                        multiline=True,
+                        max_lines=19,
+                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
+                    )
+                    api_hash_data = ft.TextField(
+                        label="Введите api_hash",
+                        multiline=True,
+                        max_lines=19,
+                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
+                    )
 
                     def btn_click(_) -> None:
                         config.get("telegram_settings", "id")
