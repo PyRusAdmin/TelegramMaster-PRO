@@ -1,6 +1,5 @@
 /user_data/accounts/
 /user_data/config/
-/user_data/software_database.db
 /user_data/message/
 /user_data/accounts/banned/
 /user_data/accounts/invalid_account/
@@ -116,3 +115,4 @@ celerybeat.pid
 /AGENTS.md
 /user_data/log/
 /user_data/config.ini
+/user_data/software_database.db
