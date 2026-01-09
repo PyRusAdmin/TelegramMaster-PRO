@@ -17,8 +17,11 @@ class ReceivingAndRecording:
         sheet.title = "Chat Participants"
         # Заголовки столбцов
         sheet.append(
-            ["username", "id", "access_hash", "first_name", "last_name", "user_phone", "online_at", "photos_id",
-             "user_premium"])
+            [
+                "username", "id", "access_hash", "first_name", "last_name", "user_phone", "online_at", "photos_id",
+                "user_premium"
+            ]
+        )
         for row in read_parsed_chat_participants_from_db():
             sheet.append(row)  # Запись данных
         workbook.save(file_name)  # Сохранение файла
