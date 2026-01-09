@@ -482,13 +482,11 @@ class TGConnect:
                         await self.app_logger.log_and_display(
                             message=f"✅ Аккаунт добавлен: | ID: {me.id} | Phone: {phone}"
                         )
-
                         # Записываем в базу данных
                         write_account_to_db(
                             session_string=session_string,
                             phone_number=phone
                         )
-
                         await client.disconnect()
 
                     except Exception as error:
@@ -522,14 +520,27 @@ class TGConnect:
                 route="/account_connection_menu",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
                 controls=[
-                    ft.Text(spans=[ft.TextSpan("Подключение аккаунта Telegram по номеру телефона.",
-                                               ft.TextStyle(
-                                                   size=20,
-                                                   weight=ft.FontWeight.BOLD,
-                                                   foreground=ft.Paint(
-                                                       gradient=ft.PaintLinearGradient((0, 20), (150, 20),
-                                                                                       [ft.Colors.PINK,
-                                                                                        ft.Colors.PURPLE]))))]),
+                    ft.Text(
+                        spans=[
+                            ft.TextSpan(
+                                "Подключение аккаунта Telegram по номеру телефона.",
+                                ft.TextStyle(
+                                    size=20,
+                                    weight=ft.FontWeight.BOLD,
+                                    foreground=ft.Paint(
+                                        gradient=ft.PaintLinearGradient(
+                                            (0, 20),
+                                            (150, 20),
+                                            [
+                                                ft.Colors.PINK,
+                                                ft.Colors.PURPLE
+                                            ]
+                                        )
+                                    )
+                                )
+                            )
+                        ]
+                    ),
                     list_view,  # Отображение логов 📝
                     phone_number,
                     # 📞 Подключение аккаунтов по номеру телефона
@@ -539,29 +550,43 @@ class TGConnect:
                         height=BUTTON_HEIGHT,
                         on_click=connecting_number_accounts
                     ),
-
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
-
-                    ft.Text(spans=[ft.TextSpan(
-                        "Подключение session аккаунтов Telegram",
-                        ft.TextStyle(
-                            size=20,
-                            weight=ft.FontWeight.BOLD,
-                            foreground=ft.Paint(
-                                gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                     ft.Colors.PURPLE]))))]),
-
+                    ft.Text(
+                        spans=[
+                            ft.TextSpan(
+                                "Подключение session аккаунтов Telegram",
+                                ft.TextStyle(
+                                    size=20,
+                                    weight=ft.FontWeight.BOLD,
+                                    foreground=ft.Paint(
+                                        gradient=ft.PaintLinearGradient(
+                                            (0, 20),
+                                            (150, 20), [
+                                                ft.Colors.PINK,
+                                                ft.Colors.PURPLE
+                                            ]
+                                        )
+                                    )
+                                )
+                            )
+                        ]
+                    ),
                     ft.Text(f"Выберите session файл\n", size=15),
                     selected_files,  # Поле для отображения выбранного файла
-                    ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                        # 🔑 Подключение session аккаунтов
+                    ft.Column(
+                        [  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                            # 🔑 Подключение session аккаунтов
 
-                        await menu_button_fun(
-                            text=translations["ru"]["create_groups_menu"]["choose_session_files"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=handle_get_directory_path
-                        ),  # Кнопка выбора файла
-                        directory_path := ft.Text(),
-                    ])]))
+                            await menu_button_fun(
+                                text=translations["ru"]["create_groups_menu"]["choose_session_files"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=handle_get_directory_path
+                            ),  # Кнопка выбора файла
+                            directory_path := ft.Text(),
+                        ]
+                    )
+                ]
+            )
+        )
 # 486
