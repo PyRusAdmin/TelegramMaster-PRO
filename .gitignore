@@ -115,3 +115,4 @@ celerybeat.pid
 .ropeproject
 /AGENTS.md
 /user_data/log/
+/user_data/config.ini

@@ -17,7 +17,7 @@ from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-config.read("user_data/config/config.ini")
+config.read("user_data/config.ini")
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
@@ -316,7 +316,7 @@ class SettingPage:
         :param config: Объект конфигурации для записи
         :return: None
         """
-        with open("user_data/config/config.ini", "w") as setup:  # Открываем файл в режиме записи
+        with open("user_data/config.ini", "w") as setup:  # Открываем файл в режиме записи
             config.write(setup)  # Записываем данные в файл
 
     async def recording_limits_file(self, time_1, time_2, variable: str) -> configparser.ConfigParser:
@@ -335,7 +335,7 @@ class SettingPage:
             config.set(f"{variable}", f"{variable}_2", time_2)
         except configparser.NoSectionError as error:
             await self.app_logger.log_and_display(
-                message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config/config.ini")
+                message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config.ini")
         return config
 
     def write_data_to_json_file(self, reactions, path_to_the_file):
