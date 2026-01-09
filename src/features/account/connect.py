@@ -558,13 +558,10 @@ class TGConnect:
 
                         await menu_button_fun(
                             text=translations["ru"]["create_groups_menu"]["choose_session_files"],
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
                             on_click=handle_get_directory_path
                         ),  # Кнопка выбора файла
                         directory_path := ft.Text(),
-                        # ft.Button(
-                        #     translations["ru"]["create_groups_menu"]["choose_session_files"],
-                        #     width=WIDTH_WIDE_BUTTON,
-                        #     height=BUTTON_HEIGHT,
-                        #     on_click=lambda _: pick_files_dialog.pick_files()),  # Кнопка выбора файла
                     ])]))
 # 486

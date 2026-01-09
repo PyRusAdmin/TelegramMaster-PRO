@@ -9,19 +9,21 @@ from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 
-async def menu_button_fun(text: str, on_click):
+async def menu_button_fun(text: str, width, height, on_click):
     """
     :param text: Текст, отображаемый на кнопке меню.
     :type text: str
     :param on_click: Функция, которая должна быть выполнена
+    :param width: Ширина
+    :param height: Высота
     :return: Контейнер с кнопкой меню, готовый для добавления в layout (`Column`, `Row`, `View`).
     :rtype: ft.Container https://docs.flet.dev/controls/container/
     """
     return ft.Container(
         content=ft.Button(
             content=text,
-            width=BUTTON_WIDTH,
-            height=BUTTON_HEIGHT,
+            width=width,
+            height=height,
             on_click=on_click
         ),
     )

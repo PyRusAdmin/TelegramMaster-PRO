@@ -268,24 +268,34 @@ class SettingPage:
                         ft.Column(
                             controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                                 await menu_button_fun(  # 👍 Выбор реакций
-                                    translations["ru"]["menu_settings"]["choice_of_reactions"],
-                                    reaction_gui
+                                    text=translations["ru"]["menu_settings"]["choice_of_reactions"],
+                                    width=WIDTH_WIDE_BUTTON,
+                                    height=BUTTON_HEIGHT,
+                                    on_click=reaction_gui
                                 ),
                                 await menu_button_fun(  # 🔐 Запись proxy
-                                    translations["ru"]["menu_settings"]["proxy_entry"],
-                                    creating_the_main_window_for_proxy_data_entry
+                                    text=translations["ru"]["menu_settings"]["proxy_entry"],
+                                    width=WIDTH_WIDE_BUTTON,
+                                    height=BUTTON_HEIGHT,
+                                    on_click=creating_the_main_window_for_proxy_data_entry
                                 ),
                                 await menu_button_fun(  # 📝 Запись api_id, api_hash
-                                    translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
-                                    writing_api_id_api_hash
+                                    text=translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
+                                    width=WIDTH_WIDE_BUTTON,
+                                    height=BUTTON_HEIGHT,
+                                    on_click=writing_api_id_api_hash
                                 ),
                                 await menu_button_fun(  # ✉️ Запись сообщений
-                                    translations["ru"]["menu_settings"]["message_recording"],
-                                    message_recording
+                                    text=translations["ru"]["menu_settings"]["message_recording"],
+                                    width=WIDTH_WIDE_BUTTON,
+                                    height=BUTTON_HEIGHT,
+                                    on_click=message_recording
                                 ),
                                 await menu_button_fun(  # 🔗 Запись ссылки для реакций
-                                    translations["ru"]["menu_settings"]["recording_reaction_link"],
-                                    recording_reaction_link
+                                    text=translations["ru"]["menu_settings"]["recording_reaction_link"],
+                                    width=WIDTH_WIDE_BUTTON,
+                                    height=BUTTON_HEIGHT,
+                                    on_click=recording_reaction_link
                                 ),
                             ]
                         )
