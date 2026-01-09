@@ -193,18 +193,30 @@ class SettingPage:
                 :return: None
                 """
                 try:
-                    # self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
                     list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-                    text_to_send = ft.TextField(label=label, multiline=True, max_lines=19)
+                    text_to_send = ft.TextField(
+                        label=label,  # ✅ Текстовая метка поля ввода (например, "Введите сообщение")
+                        multiline=True,  # ✅ Разрешает ввод нескольких строк (многострочный режим)
+                        max_lines=19,  # ✅ Ограничивает отображение максимум 19 строками
+                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
+                    )
 
                     async def btn_click(_) -> None:
-                        self.write_data_to_json_file(reactions=text_to_send.value,
-                                                     path_to_the_file=unique_filename)  # Сохраняем данные в файл
-                        await show_notification(self.page, "Данные успешно записаны!")
+                        self.write_data_to_json_file(  # Сохраняем данные в файл
+                            reactions=text_to_send.value,
+                            path_to_the_file=unique_filename
+                        )
+                        await show_notification(
+                            page=self.page,
+                            message="Данные успешно записаны!"
+                        )
                         self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
                         self.page.update()
 
-                    await self.add_view_with_fields_and_button([text_to_send], btn_click)
+                    await self.add_view_with_fields_and_button(
+                        fields=[text_to_send],
+                        btn_click=btn_click
+                    )
                 except Exception as e:
                     logger.exception(e)
 
@@ -255,26 +267,26 @@ class SettingPage:
 
                         ft.Column(
                             controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                                await menu_button_fun(
+                                await menu_button_fun(  # 👍 Выбор реакций
                                     translations["ru"]["menu_settings"]["choice_of_reactions"],
                                     reaction_gui
-                                ),  # 👍 Выбор реакций
-                                await menu_button_fun(
+                                ),
+                                await menu_button_fun(  # 🔐 Запись proxy
                                     translations["ru"]["menu_settings"]["proxy_entry"],
                                     creating_the_main_window_for_proxy_data_entry
-                                ),  # 🔐 Запись proxy
-                                await menu_button_fun(
+                                ),
+                                await menu_button_fun(  # 📝 Запись api_id, api_hash
                                     translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
                                     writing_api_id_api_hash
-                                ),  # 📝 Запись api_id, api_hash
-                                await menu_button_fun(
+                                ),
+                                await menu_button_fun(  # ✉️ Запись сообщений
                                     translations["ru"]["menu_settings"]["message_recording"],
                                     message_recording
-                                ),  # ✉️ Запись сообщений
-                                await menu_button_fun(
+                                ),
+                                await menu_button_fun(  # 🔗 Запись ссылки для реакций
                                     translations["ru"]["menu_settings"]["recording_reaction_link"],
                                     recording_reaction_link
-                                ),  # 🔗 Запись ссылки для реакций
+                                ),
                             ]
                         )
                     ]
@@ -302,12 +314,16 @@ class SettingPage:
                     ft.Column(
                         controls=fields + [
                             ft.Button(
-                                translations["ru"]["buttons"]["done"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=btn_click),
+                                content=translations["ru"]["buttons"]["done"],
+                                width=WIDTH_WIDE_BUTTON,  # Ширина
+                                height=BUTTON_HEIGHT,  # Высота
+                                on_click=btn_click
+                            ),
                         ]
-                    )]))
+                    )
+                ]
+            )
+        )
 
     def writing_settings_to_a_file(self, config) -> None:
         """
