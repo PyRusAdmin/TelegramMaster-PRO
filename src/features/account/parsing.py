@@ -50,7 +50,6 @@ class ParsingGroupMembers:
         :return: None
         """
         try:
-
             list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
             self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
@@ -62,7 +61,10 @@ class ParsingGroupMembers:
 
             # Создаём опции: текст — номер, ключ — session_string
             account_options = [
-                ft.DropdownOption(text=phone, key=session_str)
+                ft.DropdownOption(
+                    text=phone,
+                    key=session_str
+                )
                 for phone, session_str in self.account_data
             ]
             # Создаем выпадающий список с названиями групп

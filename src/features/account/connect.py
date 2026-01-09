@@ -91,12 +91,15 @@ class TGConnect:
                                 await self.app_logger.log_and_display(message=f"⛔ Аккаунт заблокирован")
                                 await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
                                 await self.app_logger.log_and_display(
-                                    message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
+                                    message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}"
+                                )
                                 # Перенос Telegram аккаунта в папку banned, если Telegram аккаунт в бане
-                                await self.app_logger.log_and_display(message=f"{session_name}")
-
+                                await self.app_logger.log_and_display(
+                                    message=f"{session_name}"
+                                )
                             await self.app_logger.log_and_display(
-                                message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
+                                message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}"
+                            )
                             await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
 
                     except (AttributeError, AuthKeyUnregisteredError, YouBlockedUserError) as e:
@@ -106,7 +109,10 @@ class TGConnect:
                         await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
 
                 await self.app_logger.end_time(start)
-                await show_notification(page=self.page, message="🔚 Проверка аккаунтов завершена")
+                await show_notification(
+                    page=self.page,
+                    message="🔚 Проверка аккаунтов завершена"
+                )
             except Exception as error:
                 logger.exception(error)
 
@@ -187,43 +193,61 @@ class TGConnect:
                 route="/account_verification_menu",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
                 controls=[
-                    ft.Text(spans=[ft.TextSpan(
-                        translations["ru"]["menu"]["account_check"],
-                        ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,
-                                     foreground=ft.Paint(
-                                         gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                              ft.Colors.PURPLE])), ), ), ], ),
+                    ft.Text(
+                        spans=[
+                            ft.TextSpan(
+                                translations["ru"]["menu"]["account_check"],
+                                ft.TextStyle(
+                                    size=20,
+                                    weight=ft.FontWeight.BOLD,
+                                    foreground=ft.Paint(
+                                        gradient=ft.PaintLinearGradient(
+                                            (0, 20),
+                                            (150, 20),
+                                            [
+                                                ft.Colors.PINK,
+                                                ft.Colors.PURPLE
+                                            ]
+                                        )
+                                    ),
+                                ),
+                            ),
+                        ],
+                    ),
                     list_view,
-                    ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                        # 🤖 Проверка через спам бот
-                        ft.Button(
-                            content=translations["ru"]["account_verification"]["spam_check"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=check_for_spam
-                        ),
-                        # ✅ Проверка на валидность
-                        ft.Button(
-                            content=translations["ru"]["account_verification"]["validation"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=validation_check
-                        ),
-                        # ✏️ Переименование аккаунтов
-                        ft.Button(
-                            content=translations["ru"]["account_verification"]["renaming"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=renaming_accounts
-                        ),
-                        # 🔍 Полная проверка
-                        ft.Button(
-                            content=translations["ru"]["account_verification"]["full_verification"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=full_verification
-                        ),
-                    ])]))
+                    ft.Column(
+                        [  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                            # 🤖 Проверка через спам бот
+                            ft.Button(
+                                content=translations["ru"]["account_verification"]["spam_check"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=check_for_spam
+                            ),
+                            # ✅ Проверка на валидность
+                            ft.Button(
+                                content=translations["ru"]["account_verification"]["validation"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=validation_check
+                            ),
+                            # ✏️ Переименование аккаунтов
+                            ft.Button(
+                                content=translations["ru"]["account_verification"]["renaming"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=renaming_accounts
+                            ),
+                            # 🔍 Полная проверка
+                            ft.Button(
+                                content=translations["ru"]["account_verification"]["full_verification"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=full_verification
+                            ),
+                        ]
+                    )
+                ]))
 
     async def client_connect_string_session(self, session_name: str) -> TelegramClient | None:
         """

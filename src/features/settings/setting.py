@@ -193,6 +193,7 @@ class SettingPage:
                 :return: None
                 """
                 try:
+                    list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
                     list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
                     text_to_send = ft.TextField(
                         label=label,  # ✅ Текстовая метка поля ввода (например, "Введите сообщение")
