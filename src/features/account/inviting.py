@@ -325,7 +325,7 @@ class InvitingToAGroup:
         ).element_handler_inviting(self.page)
 
         start_inviting = ft.Button(
-            "Запуск",
+            content="Запуск",
             width=window_width,  # Широкая одиночная кнопка
             height=BUTTON_HEIGHT,
             on_click=start_inviting_grup,  # Используем синхронную обёртку

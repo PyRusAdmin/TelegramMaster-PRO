@@ -225,7 +225,7 @@ class ParsingGroupMembers:
             dropdown = ft.Dropdown(width=WIDTH_WIDE_BUTTON, options=[], autofocus=True, disabled=True)
             result_text = ft.Text(value="📂 Группы не загружены")
             parse_button = ft.Button(
-                "🔍 Парсить",
+                content="🔍 Парсить",
                 width=WIDTH_WIDE_BUTTON,
                 height=BUTTON_HEIGHT,
                 on_click=add_items,

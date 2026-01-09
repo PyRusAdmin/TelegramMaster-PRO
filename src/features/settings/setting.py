@@ -109,7 +109,7 @@ class SettingPage:
                                     [ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
                                 # Чекбоксы в колонках
                                 ft.Button(
-                                    translations["ru"]["buttons"]["done"],
+                                    content=translations["ru"]["buttons"]["done"],
                                     width=WIDTH_WIDE_BUTTON,
                                     height=BUTTON_HEIGHT,
                                     on_click=button_clicked),  # Кнопка "Готово"

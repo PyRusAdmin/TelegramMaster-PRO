@@ -141,12 +141,16 @@ class SendTelegramMessages:
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
                             ft.Button(
-                                translations["ru"]["buttons"]["done"],
+                                content=translations["ru"]["buttons"]["done"],
                                 width=WIDTH_WIDE_BUTTON,
                                 height=BUTTON_HEIGHT,
-                                on_click=button_clicked),
-                        ],
-                    ), ], ))
+                                on_click=button_clicked
+                            )
+                        ]
+                    )
+                ]
+            )
+        )
 
     async def performing_the_operation(self, checs: bool, chat_list_fields: list, selected_account: str = None,
                                        auto_reply_text: str = None) -> None:
@@ -365,7 +369,7 @@ class SendTelegramMessages:
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
                             ft.Button(
-                                translations["ru"]["buttons"]["done"],
+                                content=translations["ru"]["buttons"]["done"],
                                 width=WIDTH_WIDE_BUTTON,
                                 height=BUTTON_HEIGHT,
                                 on_click=button_clicked

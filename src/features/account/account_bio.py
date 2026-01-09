@@ -205,7 +205,7 @@ class AccountBIO:
                             input_field_username_change,  # Поле для ввода username Telegram
                             # 🔄 Изменение username
                             ft.Button(
-                                translations["ru"]["edit_bio_menu"]["changing_the_username"],
+                                content=translations["ru"]["edit_bio_menu"]["changing_the_username"],
                                 width=WIDTH_INPUT_FIELD_AND_BUTTON,
                                 height=BUTTON_HEIGHT,
                                 on_click=change_username_profile_gui),
@@ -215,7 +215,7 @@ class AccountBIO:
                             profile_description_input_field,  # Поле для ввода описания профиля Telegram
                             # ✏️ Изменение описания
                             ft.Button(
-                                translations["ru"]["edit_bio_menu"]["changing_the_description"],
+                                content=translations["ru"]["edit_bio_menu"]["changing_the_description"],
                                 width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
                                 on_click=change_bio_profile),
                         ]),
@@ -224,7 +224,7 @@ class AccountBIO:
                             profile_name_input_field,  # Поле для ввода имени профиля Telegram
                             # 📝 Изменение имени
                             ft.Button(
-                                translations["ru"]["edit_bio_menu"]["name_change_n"],
+                                content=translations["ru"]["edit_bio_menu"]["name_change_n"],
                                 width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
                                 on_click=change_name_profile_gui),
                         ]),
@@ -233,7 +233,7 @@ class AccountBIO:
                             profile_last_name_input_field,
                             # 📝 Изменение фамилии
                             ft.Button(
-                                translations["ru"]["edit_bio_menu"]["name_change_f"],
+                                content=translations["ru"]["edit_bio_menu"]["name_change_f"],
                                 width=WIDTH_INPUT_FIELD_AND_BUTTON,
                                 height=BUTTON_HEIGHT,
                                 on_click=change_last_name_profile_gui),
@@ -241,7 +241,7 @@ class AccountBIO:
                         await self.gui_program.diver_castom(),  # Горизонтальная линия
                         # 🖼️ Изменение фото
                         ft.Button(
-                            translations["ru"]["edit_bio_menu"]["changing_the_photo"],
+                            content=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
                             width=WIDTH_WIDE_BUTTON,
                             height=BUTTON_HEIGHT,
                             on_click=change_photo_profile_gui),

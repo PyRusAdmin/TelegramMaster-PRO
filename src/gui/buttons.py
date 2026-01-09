@@ -19,7 +19,7 @@ async def menu_button_fun(text: str, on_click):
     """
     return ft.Container(
         content=ft.Button(
-            text,
+            content=text,
             width=BUTTON_WIDTH,
             height=BUTTON_HEIGHT,
             on_click=on_click
@@ -40,7 +40,7 @@ async def menu_button(text: str, route: str, page: ft.Page):
     """
     return ft.Container(
         content=ft.Button(
-            text,
+            content=text,
             width=BUTTON_WIDTH,
             height=BUTTON_HEIGHT,
             on_click=lambda _: asyncio.create_task(page.push_route(route)),
@@ -89,7 +89,7 @@ class FunctionButton:
                     link_post,  # Поле ввода ссылки пост
                     ft.Column(),  # Колонка для размещения других элементов (при необходимости)
                     ft.Button(
-                        translations["ru"]["buttons"]["done"],
+                        content=translations["ru"]["buttons"]["done"],
                         width=WIDTH_WIDE_BUTTON,
                         height=BUTTON_HEIGHT,
                         on_click=btn_click),

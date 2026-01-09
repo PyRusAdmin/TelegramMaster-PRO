@@ -197,26 +197,30 @@ class TGConnect:
                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                         # 🤖 Проверка через спам бот
                         ft.Button(
-                            translations["ru"]["account_verification"]["spam_check"],
-                            width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            content=translations["ru"]["account_verification"]["spam_check"],
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
                             on_click=check_for_spam
                         ),
                         # ✅ Проверка на валидность
                         ft.Button(
-                            translations["ru"]["account_verification"]["validation"],
-                            width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            content=translations["ru"]["account_verification"]["validation"],
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
                             on_click=validation_check
                         ),
                         # ✏️ Переименование аккаунтов
                         ft.Button(
-                            translations["ru"]["account_verification"]["renaming"],
-                            width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            content=translations["ru"]["account_verification"]["renaming"],
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
                             on_click=renaming_accounts
                         ),
                         # 🔍 Полная проверка
                         ft.Button(
-                            translations["ru"]["account_verification"]["full_verification"],
-                            width=WIDTH_WIDE_BUTTON, height=BUTTON_HEIGHT,
+                            content=translations["ru"]["account_verification"]["full_verification"],
+                            width=WIDTH_WIDE_BUTTON,
+                            height=BUTTON_HEIGHT,
                             on_click=full_verification
                         ),
                     ])]))
@@ -359,10 +363,11 @@ class TGConnect:
                                 self.page.go("/")  # Изменение маршрута в представлении существующих настроек
 
                         button_password = ft.Button(
-                            translations["ru"]["buttons"]["done"],
+                            content=translations["ru"]["buttons"]["done"],
                             width=WIDTH_WIDE_BUTTON,
                             height=BUTTON_HEIGHT,
-                            on_click=btn_click_password)  # Кнопка "Готово"
+                            on_click=btn_click_password
+                        )  # Кнопка "Готово"
                         self.page.views.append(ft.View(controls=[pass_2fa, button_password]))
                         self.page.update()  # Обновляем страницу, чтобы интерфейс отобразился
                     except PhoneCodeInvalidError:
@@ -375,12 +380,19 @@ class TGConnect:
                         logger.exception(error)
                         await client.disconnect()  # Отключаемся от Telegram
 
-                self.page.views.append(ft.View(controls=[passww,
-                                                         ft.Button(
-                                                             translations["ru"]["buttons"]["done"],
-                                                             width=WIDTH_WIDE_BUTTON,
-                                                             height=BUTTON_HEIGHT,
-                                                             on_click=btn_click_code)]))  # Кнопка "Готово"
+                self.page.views.append(
+                    ft.View(
+                        controls=[
+                            passww,
+                            ft.Button(
+                                content=translations["ru"]["buttons"]["done"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=btn_click_code
+                            )
+                        ]
+                    )
+                )  # Кнопка "Готово"
                 self.page.update()  # Обновляем страницу, чтобы отобразился интерфейс для ввода кода
             self.page.update()
 
@@ -522,10 +534,11 @@ class TGConnect:
                     phone_number,
                     # 📞 Подключение аккаунтов по номеру телефона
                     ft.Button(
-                        "Получить код",
+                        content="Получить код",
                         width=WIDTH_WIDE_BUTTON,
                         height=BUTTON_HEIGHT,
-                        on_click=connecting_number_accounts),
+                        on_click=connecting_number_accounts
+                    ),
 
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
 
