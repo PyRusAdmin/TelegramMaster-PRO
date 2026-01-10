@@ -283,7 +283,8 @@ class TGConnect:
             return client
 
         except AuthKeyDuplicatedError:
-            logger.error("❌ AuthKeyDuplicatedError: Повторный ввод ключа авторизации (на данный момент сеесия используется в другом месте)")
+            logger.error(
+                "❌ AuthKeyDuplicatedError: Повторный ввод ключа авторизации (на данный момент сеесия используется в другом месте)")
             await client.disconnect()
             await self.write_csv(data=session_name)
             return None  # Не возвращаем клиента
@@ -346,6 +347,8 @@ class TGConnect:
             logger.info(f"❌ Невалидные сессии: {invalid_sessions}")
             for session in invalid_sessions:
                 await delete_account_from_db(session_string=session, app_logger=self.app_logger)
+
+            os.remove("file.csv")
 
         except Exception as error:
             logger.exception(error)
