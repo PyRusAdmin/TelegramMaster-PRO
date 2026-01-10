@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import asyncio
+import csv
 import os
 import os.path
-import сsv
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon.errors import (
@@ -269,6 +269,7 @@ class TGConnect:
 
             if not await client.is_user_authorized():
                 logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
+                await self.write_csv(data=session_name)
                 try:
                     await client.disconnect()
                 except ValueError:
@@ -290,11 +291,14 @@ class TGConnect:
     async def write_csv(self, data):
         """
         Запись данных в CSV файл. (Аккаунты Telegram)
+        Все данные будут записаны в одну строку.
+        :param data: Список значений (например, список аккаунтов)
         :return:
         """
         with open('file.csv', 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
-            writer.writerows(data)
+            # Записываем данные как одну строку с одним элементом
+            writer.writerow([data])  # Оборачиваем в список, чтобы строка не разбилась по символам
 
     async def read_csv(self):
         """
@@ -322,6 +326,7 @@ class TGConnect:
                     await asyncio.sleep(5)
 
                     await delete_account_from_db(session_string=session_name, app_logger=self.app_logger)
+                    await self.write_csv(data=session_name)
 
                 else:
                     await self.app_logger.log_and_display(message=f"Аккаунт {session_name} авторизован")
