@@ -283,9 +283,9 @@ class TGConnect:
             return client
 
         except AuthKeyDuplicatedError:
-            logger.error(
-                "❌ AuthKeyDuplicatedError: Повторный ввод ключа авторизации (на данный момент сеесия используется в другом месте)")
+            logger.error("❌ AuthKeyDuplicatedError: Повторный ввод ключа авторизации (на данный момент сеесия используется в другом месте)")
             await client.disconnect()
+            await self.write_csv(data=session_name)
             return None  # Не возвращаем клиента
 
     async def write_csv(self, data):
@@ -300,15 +300,16 @@ class TGConnect:
             # Записываем данные как одну строку с одним элементом
             writer.writerow([data])  # Оборачиваем в список, чтобы строка не разбилась по символам
 
-    async def read_csv(self):
-        """
-        Чтение данных из CSV файла. (Аккаунты Telegram)
-        :return:
-        """
-        with open('file.csv', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                print(row)  # каждая строка — список значений
+    async def read_invalid_sessions(self) -> list[str]:
+        """Чтение всех невалидных сессий из CSV"""
+        invalid_sessions = []
+        if os.path.exists('file.csv'):
+            with open('file.csv', encoding='utf-8') as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    if row:  # Проверяем, не пустая ли строка
+                        invalid_sessions.append(row[0])
+        return invalid_sessions
 
     async def verify_account(self, session_name) -> None:
         """
@@ -325,7 +326,7 @@ class TGConnect:
                     await client.disconnect()
                     await asyncio.sleep(5)
 
-                    await delete_account_from_db(session_string=session_name, app_logger=self.app_logger)
+                    # await delete_account_from_db(session_string=session_name, app_logger=self.app_logger)
                     await self.write_csv(data=session_name)
 
                 else:
@@ -340,6 +341,12 @@ class TGConnect:
                 await asyncio.sleep(2)
             except AttributeError:
                 pass
+
+            invalid_sessions = await self.read_invalid_sessions()
+            logger.info(f"❌ Невалидные сессии: {invalid_sessions}")
+            for session in invalid_sessions:
+                await delete_account_from_db(session_string=session, app_logger=self.app_logger)
+
         except Exception as error:
             logger.exception(error)
 
