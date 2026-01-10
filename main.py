@@ -37,8 +37,6 @@ async def main_view(page: ft.Page):
     page.window.width = window_width  # Ширина
     page.window.height = window_height  # Высота
 
-    # create_database()
-
     setting_page = SettingPage(page=page)
     account_bio = AccountBIO(page=page)
     connect = TGConnect(page=page)

@@ -2,7 +2,7 @@
 import asyncio
 import os
 import os.path
-
+import сsv
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon.errors import (
@@ -118,10 +118,10 @@ class TGConnect:
 
         async def validation_check(_) -> None:
             """
-            Проверяет все аккаунты Telegram в указанной директории.
+            Проверяет все аккаунты Telegram из базы данных user_data/software_database.db.
             """
             try:
-                start = await self.app_logger.start_time()
+                start = await self.app_logger.start_time()  # Измеряет начало старта функции
                 await self.proxy.checking_the_proxy_for_work()  # Проверка proxy
                 session_string = getting_account()
                 for session_name in session_string:
@@ -137,6 +137,7 @@ class TGConnect:
         async def renaming_accounts(_):
             """
             Получает информацию о Telegram аккаунте.
+
             """
             try:
                 start = await self.app_logger.start_time()
@@ -146,7 +147,6 @@ class TGConnect:
                     await self.app_logger.log_and_display(message=f"⚠️ Переименовываемый аккаунт: {session_name}")
                     # Переименовывание аккаунтов
                     client = await self.client_connect_string_session(session_name=session_name)
-                    # await self.getting_account_data(client)
                     try:
                         me = await client.get_me()
                         await update_phone_by_session(
@@ -287,6 +287,25 @@ class TGConnect:
             await client.disconnect()
             return None  # Не возвращаем клиента
 
+    async def write_csv(self, data):
+        """
+        Запись данных в CSV файл. (Аккаунты Telegram)
+        :return:
+        """
+        with open('file.csv', 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerows(data)
+
+    async def read_csv(self):
+        """
+        Чтение данных из CSV файла. (Аккаунты Telegram)
+        :return:
+        """
+        with open('file.csv', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                print(row)  # каждая строка — список значений
+
     async def verify_account(self, session_name) -> None:
         """
         Проверяет и сортирует аккаунты.
@@ -303,6 +322,7 @@ class TGConnect:
                     await asyncio.sleep(5)
 
                     await delete_account_from_db(session_string=session_name, app_logger=self.app_logger)
+
                 else:
                     await self.app_logger.log_and_display(message=f"Аккаунт {session_name} авторизован")
                     await client.disconnect()  # Отключаемся после проверки
