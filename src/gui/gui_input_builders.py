@@ -2,8 +2,6 @@
 import flet as ft  # Импортируем библиотеку flet
 
 
-# 344
-
 class TimeInputRowBuilder:
 
     async def build_time_inputs_with_save_button(self, label_min, label_max, width):
