@@ -39,7 +39,7 @@ class ParsingGroupMembers:
         self.connect = TGConnect(page)
         self.app_logger = AppLogger(page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
-        self.gui_program = GUIProgram()  # Инициализация экземпляра класса GUIProgram
+        self.gui_program = GUIProgram(page=page)  # Инициализация экземпляра класса GUIProgram
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
         self.group_map = {}
 
@@ -254,7 +254,7 @@ class ParsingGroupMembers:
             self.page.views.append(
                 ft.View(
                     route="/parsing",
-                    appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                    appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                     controls=[
                         await self.gui_program.outputs_text_gradient(),
                         list_view,

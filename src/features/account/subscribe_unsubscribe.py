@@ -41,7 +41,7 @@ class SubscribeUnsubscribeTelegram:
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.setting_page = SettingPage(page=page)
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram(page=page)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def subscribe_and_unsubscribe_menu(self):
@@ -141,7 +141,7 @@ class SubscribeUnsubscribeTelegram:
         self.page.views.append(
             ft.View(
                 route="/subscribe_unsubscribe",
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     ft.Text(spans=[ft.TextSpan(
                         translations["ru"]["menu"]["subscribe_unsubscribe"],

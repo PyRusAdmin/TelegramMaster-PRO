@@ -32,9 +32,9 @@ class SettingPage:
         """
         self.page = page
         self.app_logger = AppLogger(page=page)
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram(page=page)
         self.page = page
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram(page=page)
 
     def get_unique_filename(self, base_filename) -> str:
         """
@@ -101,7 +101,7 @@ class SettingPage:
                     self.page.views.append(
                         ft.View(
                             route="/settings",
-                            appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                            appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                             controls=[
                                 # Кнопка для перехода на главную страницу
                                 t,
@@ -260,7 +260,7 @@ class SettingPage:
             self.page.views.append(
                 ft.View(
                     route="/settings",
-                    appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                    appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                     controls=[
                         ft.Text(
                             spans=[
@@ -343,7 +343,7 @@ class SettingPage:
         self.page.views.append(
             ft.View(
                 route="/settings",
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     list_view,  # отображение логов 📝
                     ft.Column(

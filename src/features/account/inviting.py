@@ -59,7 +59,7 @@ class InvitingToAGroup:
         self.connect = TGConnect(page=page)
         self.utils = Utils(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram(page=page)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe_unsubscribe_telegram = SubscribeUnsubscribeTelegram(page=page)
 
@@ -344,7 +344,7 @@ class InvitingToAGroup:
         self.page.views.append(
             ft.View(
                 route="/inviting",
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     ft.Text(spans=[ft.TextSpan(translations["ru"]["inviting_menu"]["inviting"],
                                                ft.TextStyle(size=20, weight=ft.FontWeight.BOLD,

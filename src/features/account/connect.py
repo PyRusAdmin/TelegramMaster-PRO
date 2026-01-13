@@ -37,7 +37,7 @@ class TGConnect:
         self.app_logger = AppLogger(page)
         self.utils = Utils(page=page)
         self.proxy = Proxy(page=page)
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram(page=page)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.pick_files_dialog: ft.FilePicker | None = None
 
@@ -191,7 +191,7 @@ class TGConnect:
         self.page.views.append(
             ft.View(
                 route="/account_verification_menu",  # Маршрут для этого представления
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     ft.Text(
                         spans=[
@@ -577,7 +577,7 @@ class TGConnect:
         self.page.views.append(
             ft.View(
                 route="/account_connection_menu",  # Маршрут для этого представления
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     ft.Text(
                         spans=[

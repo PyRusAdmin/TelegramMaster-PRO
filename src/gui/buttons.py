@@ -59,7 +59,7 @@ class FunctionButton:
         :param page: Страница интерфейса Flet для отображения элементов управления
         """
         self.page = page
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram(page=page)
 
     async def function_button_ready_viewing(self, number_views, btn_click, link_channel, link_post):
         """
@@ -75,7 +75,7 @@ class FunctionButton:
         self.page.views.append(
             ft.View(
                 route="/viewing_posts_menu",  # Маршрут для этого представления
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     ft.Text(
                         spans=[

@@ -36,7 +36,7 @@ class WorkingWithReactions:
         self.function_button = FunctionButton(page=page)
         self.session_string = getting_account()
         self.subscribe = Subscribe(page=page)
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram(page=page)
 
     async def reactions_menu(self):
         """
@@ -169,7 +169,7 @@ class WorkingWithReactions:
                 # Теперь создаём View ПОСЛЕ объявления chat и message
                 ft.View(
                     route="/working_with_reactions",
-                    appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                    appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                     controls=[
                         ft.Text(
                             spans=[

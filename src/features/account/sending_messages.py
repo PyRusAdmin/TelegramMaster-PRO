@@ -44,7 +44,7 @@ class SendTelegramMessages:
         self.file_extension = "json"
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram(page=page)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
@@ -75,6 +75,8 @@ class SendTelegramMessages:
             width=WIDTH_WIDE_BUTTON,
             hint_text="Введите сообщение для автоответа...",
         )
+        # Поле для ввода лимита на сообщения
+        self.limits = ft.TextField(label="Введите лимит на сообщения", width=WIDTH_WIDE_BUTTON)
 
     async def send_files_to_personal_chats(self) -> None:
         """
@@ -82,7 +84,6 @@ class SendTelegramMessages:
 
         :return: None
         """
-        limits = ft.TextField(label="Введите лимит на сообщения")
 
         # Группа полей ввода для времени сна
 
@@ -99,7 +100,7 @@ class SendTelegramMessages:
                             session_name=session_name)
 
                         try:
-                            for username in await select_records_with_limit(limit=int(limits.value),
+                            for username in await select_records_with_limit(limit=int(self.limits.value),
                                                                             app_logger=self.app_logger):
                                 logger.info(f"Отправляем сообщение в личку {username}")
                                 await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
@@ -155,12 +156,12 @@ class SendTelegramMessages:
         self.page.views.append(
             ft.View(
                 route="/sending_messages_via_chats_menu",
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     ft.Text("Отправка сообщений в личку", size=18, weight=ft.FontWeight.BOLD),
                     list_view,  # Отображение логов 📝
                     ft.Row(controls=[self.tb_time_from, self.tb_time_to], spacing=20, ),
-                    limits,
+                    self.limits,
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
                             ft.Button(
@@ -357,7 +358,7 @@ class SendTelegramMessages:
         self.page.views.append(
             ft.View(
                 route="/sending_messages_via_chats_menu",
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     ft.Text(spans=[
                         ft.TextSpan(translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"],

@@ -7,8 +7,10 @@ from src.locales.translations_loader import translations
 class GUIProgram:
     """Элементы графического интерфейса программы."""
 
-    @staticmethod
-    async def key_app_bar(page: ft.Page):
+    def __init__(self, page: ft.Page):
+        self.page = page
+
+    async def key_app_bar(self):
         """
         Создает верхнюю панель приложения с кнопкой возврата в главное меню.
         """
@@ -17,7 +19,7 @@ class GUIProgram:
             leading=ft.IconButton(
                 icon=ft.Icons.ARROW_BACK,
                 tooltip="На главную",
-                on_click=lambda _: page.go("/"),
+                on_click=lambda _: self.page.go("/"),
             ),
             title=ft.Text(translations["ru"]["menu"]["main"]),
             bgcolor=ft.Colors.SURFACE_CONTAINER_HIGHEST,

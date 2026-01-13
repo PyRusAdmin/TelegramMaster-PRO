@@ -29,7 +29,7 @@ class AccountBIO:
         self.connect = TGConnect(page=page)
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
-        self.gui_program = GUIProgram()
+        self.gui_program = GUIProgram(page=page)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
 
@@ -189,7 +189,7 @@ class AccountBIO:
         self.page.views.append(
             ft.View(
                 route="/bio_editing",  # Маршрут для этого представления
-                appbar=await self.gui_program.key_app_bar(page=self.page),  # Кнопка назад
+                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     ft.Text(spans=[ft.TextSpan(
                         translations["ru"]["menu"]["edit_bio"],

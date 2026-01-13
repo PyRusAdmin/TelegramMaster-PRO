@@ -48,7 +48,7 @@ async def main_view(page: ft.Page):
     receiving_and_recording = ReceivingAndRecording()
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
-    gui_program = GUIProgram()
+    gui_program = GUIProgram(page=page)
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
