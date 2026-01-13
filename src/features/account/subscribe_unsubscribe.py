@@ -110,7 +110,9 @@ class SubscribeUnsubscribeTelegram:
                                                                       time_2=str(larger_times),
                                                                       variable="time_subscription"))
                     list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
-                    await self.gui_program.show_notification("Данные успешно записаны!")
+                    await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                        message="Данные успешно записаны!"
+                    )
                 else:
                     list_view.controls.append(ft.Text("Ошибка: первое время должно быть меньше второго!"))
             except ValueError:

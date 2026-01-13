@@ -120,13 +120,17 @@ class InvitingToAGroup:
 
             time_inviting_1 = TIME_INVITING_1.value
             if time_inviting_1 == "":
-                await self.gui_program.show_notification(message="Время должно быть больше 0")
+                await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                    message="Время должно быть больше 0"
+                )
                 self.page.go("/inviting")
                 return
 
             time_inviting_2 = TIME_INVITING_2.value
             if time_inviting_2 == "":
-                await self.gui_program.show_notification(message="Время должно быть больше 0")
+                await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                    message="Время должно быть больше 0"
+                )
                 self.page.go("/inviting")
                 return
 
@@ -142,7 +146,9 @@ class InvitingToAGroup:
                 await self.app_logger.log_and_display(
                     message="В таблице members нет пользователей для инвайтинга."
                 )
-                await self.gui_program.show_notification(message="🔚 Нет пользователей для инвайтинга")
+                await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                    message="🔚 Нет пользователей для инвайтинга"
+                )
                 self.page.go("/inviting")
                 return
 
@@ -186,7 +192,9 @@ class InvitingToAGroup:
                 await self.app_logger.log_and_display(message=f"[!] Инвайтинг окончен!")
 
             await self.app_logger.end_time(start=start)
-            await self.gui_program.show_notification(message="🔚 Конец инвайтинга")  # Выводим уведомление пользователю
+            await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю  # Выводим уведомление пользователю
+                message="🔚 Конец инвайтинга"
+            )
             self.page.go("/inviting")  # переходим к основному меню инвайтинга 🏠
 
         async def launching_an_invite_once_an_hour(_):

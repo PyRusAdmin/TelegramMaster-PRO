@@ -108,7 +108,7 @@ class TGConnect:
                         await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
 
                 await self.app_logger.end_time(start)
-                await self.gui_program.show_notification(
+                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                     message="🔚 Проверка аккаунтов завершена"
                 )
             except Exception as error:
@@ -128,7 +128,9 @@ class TGConnect:
                     await self.verify_account(session_name=session_name)
                 await self.app_logger.log_and_display(message=f"Окончание проверки аккаунтов Telegram 📁")
                 await self.app_logger.end_time(start)
-                await self.gui_program.show_notification("🔚 Проверка аккаунтов завершена")
+                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                    message="🔚 Проверка аккаунтов завершена"
+                )
             except Exception as error:
                 logger.exception(error)
 
@@ -166,7 +168,9 @@ class TGConnect:
                         await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
 
                 await self.app_logger.end_time(start)
-                await self.gui_program.show_notification(message="🔚 Проверка аккаунтов завершена")
+                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                    message="🔚 Проверка аккаунтов завершена"
+                )
             except Exception as error:
                 logger.exception(error)
 
@@ -182,7 +186,9 @@ class TGConnect:
                 await renaming_accounts(_)  # Переименование аккаунтов
                 await check_for_spam(_)  # Проверка на спам ботов
                 await self.app_logger.end_time(start)
-                await self.gui_program.show_notification(message="🔚 Проверка аккаунтов завершена")
+                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                    message="🔚 Проверка аккаунтов завершена"
+                )
             except Exception as error:
                 logger.exception(error)
 
@@ -416,7 +422,9 @@ class TGConnect:
                                 self.page.update()
                             except PasswordHashInvalidError:
                                 await self.app_logger.log_and_display(message=f"❌ Неверный пароль.")
-                                await self.gui_program.show_notification(f"⚠️ Неверный пароль. Попробуйте еще раз.")
+                                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                                    message=f"⚠️ Неверный пароль. Попробуйте еще раз."
+                                )
                                 self.page.go("/")  # Изменение маршрута в представлении существующих настроек
 
                         button_password = ft.Button(
@@ -524,7 +532,7 @@ class TGConnect:
                         me = await client.get_me()
 
                         if not me:
-                            await self.gui_program.show_notification(
+                            await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                                 message=f"❌ Аккаунт {file_name} не валидный"
                             )
                             await self.app_logger.log_and_display(
@@ -560,7 +568,7 @@ class TGConnect:
                 selected_files.update()
                 self.page.update()
 
-                await self.gui_program.show_notification(
+                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                     message=f"✅ Успешно обработано {len(files)} session файлов"
                 )
 

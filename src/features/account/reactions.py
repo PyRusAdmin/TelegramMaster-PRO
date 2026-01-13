@@ -162,7 +162,9 @@ class WorkingWithReactions:
                     logger.exception(error)
                 finally:
                     await self.app_logger.end_time(start)
-                    await self.gui_program.show_notification("🔚 Конец Автоматического выставления реакций")
+                    await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                        message="🔚 Конец Автоматического выставления реакций"
+                    )
 
             self.page.views.append(
                 # Теперь создаём View ПОСЛЕ объявления chat и message

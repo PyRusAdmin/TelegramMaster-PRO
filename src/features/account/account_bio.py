@@ -85,14 +85,20 @@ class AccountBIO:
                 try:
                     await client(
                         functions.account.UpdateUsernameRequest(username=input_field_username_change.value))
-                    await self.gui_program.show_notification(f'Работа окончена')  # Выводим уведомление пользователю
+                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                        message="Работа окончена"
+                    )
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["auth_key_unregistered"])
                 except (UsernamePurchaseAvailableError, UsernameOccupiedError):
-                    await self.gui_program.show_notification("❌ Никнейм уже занят")  # Выводим уведомление пользователю
+                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                        message="❌ Никнейм уже занят"
+                    )
                 except UsernameInvalidError:
-                    await self.gui_program.show_notification("❌ Неверный никнейм")  # Выводим уведомление пользователю
+                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                        message="❌ Неверный никнейм"
+                    )
                 finally:
                     await client.disconnect()
             except Exception as e:
@@ -105,8 +111,8 @@ class AccountBIO:
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 if len(profile_description_input_field.value) > 70:
-                    await self.gui_program.show_notification(
-                                            f"❌ Описание профиля превышает 70 символов ({len(profile_description_input_field.value)}).")
+                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                        f"❌ Описание профиля превышает 70 символов ({len(profile_description_input_field.value)}).")
                     return
                 try:
                     result = await client(
@@ -119,7 +125,9 @@ class AccountBIO:
                     await client.disconnect()
             except Exception as e:
                 logger.exception(e)
-            await self.gui_program.show_notification("Работа окончена")  # Выводим уведомление пользователю
+            await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                message="Работа окончена"
+            )
 
         async def change_name_profile_gui(_) -> None:
             """
@@ -138,7 +146,9 @@ class AccountBIO:
                 finally:
 
                     await client.disconnect()
-                await self.gui_program.show_notification(message="Работа окончена")  # Выводим уведомление пользователю
+                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                    message="Работа окончена"
+                )
             except Exception as e:
                 logger.exception(e)
 
@@ -160,7 +170,9 @@ class AccountBIO:
                 finally:
 
                     await client.disconnect()
-                await self.gui_program.show_notification("Работа окончена")  # Выводим уведомление пользователю
+                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                    message="Работа окончена"
+                )
             except Exception as e:
                 logger.exception(e)
 
@@ -182,7 +194,9 @@ class AccountBIO:
                         await client.disconnect()
             except Exception as e:
                 logger.exception(e)
-            await self.gui_program.show_notification(message="Работа окончена")  # Выводим уведомление пользователю
+            await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                message="Работа окончена"
+            )
 
         self.page.views.append(
             ft.View(

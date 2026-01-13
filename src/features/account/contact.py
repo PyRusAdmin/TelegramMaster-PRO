@@ -66,7 +66,7 @@ class TGContact:
                     client.disconnect()  # Разрываем соединение telegram
 
                 await self.app_logger.end_time(start=start)
-                await self.gui_program.show_notification(
+                await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
                     "🔚 Конец парсинга контактов")  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
@@ -85,7 +85,7 @@ class TGContact:
                 client.disconnect()  # Разрываем соединение telegram
 
             await self.app_logger.end_time(start=start)
-            await self.gui_program.show_notification(
+            await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
                 message="🔚 Конец удаления контактов контактов")  # Выводим уведомление пользователю
 
         async def inviting_contact(_) -> None:
@@ -107,7 +107,9 @@ class TGContact:
             """📋 Формирование списка контактов"""
             data = input_numbers.value.strip()
             if not data:
-                await self.gui_program.show_notification("⚠️ Поле пустое")
+                await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                    message="⚠️ Поле пустое"
+                )
                 return
 
             # Разделяем по переносам строк, удаляем пустые и лишние пробелы
@@ -117,7 +119,9 @@ class TGContact:
             for phone in phones:
                 write_contact_db(phone)
 
-            await self.gui_program.show_notification(f"✅ Добавлено {len(phones)} номеров")
+            await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                message=f"✅ Добавлено {len(phones)} номеров"
+            )
 
         input_numbers = ft.TextField(label="Вставьте список номеров для записи в базу данных.",
                                      label_style=ft.TextStyle(size=15), autofocus=True,
