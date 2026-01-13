@@ -48,10 +48,33 @@ class SendTelegramMessages:
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
-        self.tb_time_from = ft.TextField(label="Время сна от", width=width_one_input, hint_text="Введите время",
-                                         border_radius=5)
-        self.tb_time_to = ft.TextField(label="Время сна до", width=width_one_input, hint_text="Введите время",
-                                       border_radius=5)
+        self.tb_time_from = ft.TextField(
+            label="Время сна от",
+            width=width_one_input,
+            hint_text="Введите время",
+            border_radius=5
+        )
+        self.tb_time_to = ft.TextField(
+            label="Время сна до",
+            width=width_one_input,
+            hint_text="Введите время",
+            border_radius=5
+        )
+        # Поле для формирования списка чатов
+        self.chat_list_field = ft.TextField(
+            label="Формирование списка чатов",
+            multiline=True,
+            width=WIDTH_WIDE_BUTTON,
+        )
+        # Поле для текста автоответчика
+        self.auto_reply_text_field = ft.TextField(
+            label="Автоответчик: текст ответа",
+            multiline=True,
+            min_lines=2,
+            max_lines=5,
+            width=WIDTH_WIDE_BUTTON,
+            hint_text="Введите сообщение для автоответа...",
+        )
 
     async def send_files_to_personal_chats(self) -> None:
         """
@@ -290,18 +313,6 @@ class SendTelegramMessages:
         """
         # Чекбокс для работы с автоответчиком
         c = ft.Checkbox(label="Работа с автоответчиком")
-        # Поле для формирования списка чатов
-        chat_list_field = ft.TextField(label="Формирование списка чатов")
-
-        # Поле для текста автоответчика
-        auto_reply_text_field = ft.TextField(
-            label="Автоответчик: текст ответа",
-            multiline=True,
-            min_lines=2,
-            max_lines=5,
-            width=WIDTH_WIDE_BUTTON,
-            hint_text="Введите сообщение для автоответа...",
-        )
 
         # Создаём опции: текст — номер, ключ — session_string
         account_options = [
@@ -319,7 +330,7 @@ class SendTelegramMessages:
         # Обработчик кнопки "Готово"
         async def button_clicked(_):
             # Получаем значение третьего поля и разделяем его на список по пробелам
-            chat_list_input = chat_list_field.value.strip()  # Удаляем лишние пробелы
+            chat_list_input = self.chat_list_field.value.strip()  # Удаляем лишние пробелы
             if chat_list_input:  # Если поле не пустое
                 chat_list_fields = chat_list_input.split()  # Разделяем строку по пробелам
             else:
@@ -334,7 +345,7 @@ class SendTelegramMessages:
                     checs=c.value,
                     chat_list_fields=chat_list_fields,
                     selected_account=selected_account,
-                    auto_reply_text=auto_reply_text_field.value
+                    auto_reply_text=self.auto_reply_text_field.value
                 )
             else:
                 t.value = f"Время сна: Некорректный диапазон, введите корректные значения"
@@ -358,14 +369,14 @@ class SendTelegramMessages:
                                                                                       ft.Colors.PURPLE])), ), ), ], ),
                     list_view,  # Отображение логов 📝
                     account_drop_down_list,  # Выпадающий список с аккаунтами
-                    auto_reply_text_field,  # Поле для текста автоответчика
+                    self.auto_reply_text_field,  # Поле для текста автоответчика
                     c,
                     ft.Row(
                         controls=[self.tb_time_from, self.tb_time_to],
                         spacing=20,
                     ),
                     t,
-                    chat_list_field,
+                    self.chat_list_field,
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
                             ft.Button(

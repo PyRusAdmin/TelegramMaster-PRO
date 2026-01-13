@@ -20,9 +20,13 @@ PROGRAM_NAME = "TelegramMaster-PRO"  # Имя программы
 PROGRAM_VERSION = "2.8.5"  # Версия программы
 DATE_OF_PROGRAM_CHANGE = "09.01.2026"  # Дата изменения (обновления)
 
-WIDTH_WIDE_BUTTON = 1010  # Ширина кнопки
+# Ширина программы / высота программы
+window_width = 1050  # Ширина (программы)
+window_height = 680  # Высота (программы)
+
+WIDTH_WIDE_BUTTON = int(window_width) - 5  # Ширина кнопки
 WIDTH_INPUT_FIELD_AND_BUTTON = int(WIDTH_WIDE_BUTTON) / 2 - 5  # Ширина кнопки (окно и поле ввода)
-width_one_input = 500  # 2 поля ввода (без кнопки сохранить)
+width_one_input = int(window_width) / 2 -27  # 2 поля ввода (без кнопки сохранить)
 width_tvo_input = 245  # 4 поля ввода (без кнопки сохранить)
 
 # Широкая одиночная кнопка
@@ -30,10 +34,6 @@ wide_single_button = 300  # Применяется: Инвайтинг
 
 BUTTON_HEIGHT = 30  # Высота (кнопок главного меню)
 BUTTON_WIDTH = 400  # Ширина (кнопок главного меню)
-
-# Ширина программы / высота программы
-window_width = 1050  # Ширина (программы)
-window_height = 680  # Высота (программы)
 
 """Путь к папкам"""
 
