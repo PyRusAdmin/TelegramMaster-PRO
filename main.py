@@ -4,7 +4,7 @@ import base64
 import flet as ft
 from loguru import logger
 
-from src.core.config.configs import (
+from src.core.configs import (
     PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height
 )
 from src.features.account.account_bio import AccountBIO
@@ -20,7 +20,6 @@ from src.features.account.viewing_posts import ViewingPosts
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage
 from src.gui.buttons import menu_button
-from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")
@@ -281,7 +280,6 @@ async def main(page: ft.Page):
     receiving_and_recording = ReceivingAndRecording()
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
-    gui_program = GUIProgram()
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")

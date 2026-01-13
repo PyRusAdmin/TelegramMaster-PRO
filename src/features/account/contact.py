@@ -7,7 +7,7 @@ from telethon import functions
 from telethon import types, TelegramClient
 from telethon.errors import SessionRevokedError, AuthKeyUnregisteredError
 
-from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, WIDTH_INPUT_FIELD_AND_BUTTON
+from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, WIDTH_INPUT_FIELD_AND_BUTTON
 from src.core.database.account import getting_account
 from src.core.database.database import (
     add_member_to_db, write_to_database_contacts_accounts, write_contact_db, getting_contacts_from_database,

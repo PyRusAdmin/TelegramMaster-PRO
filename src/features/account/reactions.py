@@ -9,7 +9,7 @@ from telethon import events, types, TelegramClient
 from telethon.errors import ReactionInvalidError, TypeNotFoundError
 from telethon.tl.functions.messages import SendReactionRequest
 
-from src.core.config.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
+from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
 from src.core.database.account import getting_account
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect

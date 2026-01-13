@@ -13,7 +13,7 @@ from telethon.errors import (
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
-from src.core.config.configs import (
+from src.core.configs import (
     BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1, time_subscription_2, width_one_input
 )
 from src.core.database.account import getting_account

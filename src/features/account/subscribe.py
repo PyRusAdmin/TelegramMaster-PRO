@@ -9,7 +9,7 @@ from telethon.errors import (
 )
 from telethon.tl.functions.channels import JoinChannelRequest
 
-from src.core.config.configs import time_subscription_1, time_subscription_2
+from src.core.configs import time_subscription_1, time_subscription_2
 from src.core.utils import Utils
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations

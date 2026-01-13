@@ -3,7 +3,7 @@ import asyncio
 
 import flet as ft  # Импортируем библиотеку flet
 
-from src.core.config.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, BUTTON_WIDTH
+from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, BUTTON_WIDTH
 from src.gui.gui import list_view
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations

@@ -8,7 +8,7 @@ import sys
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 
-from src.core.config.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
+from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.database.database import save_proxy_data_to_db
 from src.gui.buttons import menu_button_fun
 from src.gui.gui import AppLogger, list_view

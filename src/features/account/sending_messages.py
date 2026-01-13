@@ -13,7 +13,7 @@ from telethon.errors import (
     UserNotMutualContactError, ForbiddenError
 )
 
-from src.core.config.configs import (
+from src.core.configs import (
     BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2,
     time_subscription_1, time_subscription_2, width_one_input
 )

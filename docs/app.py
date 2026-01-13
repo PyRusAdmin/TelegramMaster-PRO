@@ -11,7 +11,7 @@ from fastapi.templating import Jinja2Templates
 from loguru import logger
 
 # Импорт необходимых переменных и функций
-from src.core.config.configs import (
+from src.core.configs import (
     PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, path_folder_database
 )
 from src.locales.translations_loader import translations
