@@ -36,12 +36,18 @@ class ParsingGroupMembers:
         :param page: Страница интерфейса Flet для отображения элементов управления
         """
         self.page = page
-        self.connect = TGConnect(page)
-        self.app_logger = AppLogger(page)
+        self.connect = TGConnect(page=page)
+        self.app_logger = AppLogger(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram(page=page)  # Инициализация экземпляра класса GUIProgram
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
         self.group_map = {}
+        self.chat_input = ft.TextField(
+            label="🔗 Введите ссылку на чат...",
+            expand=True, # Полноразмерное расширение
+            disabled=True
+        )
+        self.limit_active_user = ft.TextField(label="💬 Кол-во сообщений", expand=True, disabled=True)
 
     async def account_selection_menu(self):
         """
@@ -57,7 +63,6 @@ class ParsingGroupMembers:
             TextField - поле для ввода ссылки на чат
             Dropdown - выпадающий список с названиями групп , аккаунтами
             """
-            chat_input = ft.TextField(label="🔗 Введите ссылку на чат...", disabled=True)
 
             # Создаём опции: текст — номер, ключ — session_string
             account_options = [
@@ -90,7 +95,7 @@ class ParsingGroupMembers:
                 if account_drop_down_list.value:
                     client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
 
-                    await self.load_groups(client, dropdown, result_text)
+                    await load_groups(client, dropdown, result_text)
                     await client.disconnect()
                 else:
                     dropdown.options = []
@@ -104,7 +109,7 @@ class ParsingGroupMembers:
                 try:
                     logger.debug(f"Аккаунт: {account_drop_down_list.value}")
                     client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
-                    data = chat_input.value.split()
+                    data = self.chat_input.value.split()
                     logger.info(f"Полученные данные: {data}")  # Отладка
                     # Удаляем дубликаты ссылок введенных пользователем
                     start = await self.app_logger.start_time()
@@ -120,14 +125,14 @@ class ParsingGroupMembers:
                                 await parse_group(client=client, groups_wr=groups)
                         if active_switch.value:  # ⚠️ Парсинг активных пользователей
                             await self.app_logger.log_and_display(
-                                f"🔍 Сканируем чат: {chat_input.value} на {limit_active_user.value} сообщений")
-                            limit_val = limit_active_user.value.strip()
+                                f"🔍 Сканируем чат: {self.chat_input.value} на {self.limit_active_user.value} сообщений")
+                            limit_val = self.limit_active_user.value.strip()
                             if not limit_val.isdigit():
                                 await self.app_logger.log_and_display(
                                     "⚠️ Укажите корректное число для количества сообщений.")
                                 return
                             await self.parse_active_users(
-                                chat_input=chat_input.value,
+                                chat_input=self.chat_input.value,
                                 limit_active_user=int(limit_val),
                                 client=client
                             )
@@ -219,7 +224,36 @@ class ParsingGroupMembers:
                 except Exception as error:
                     logger.exception(error)
 
-            limit_active_user = ft.TextField(label="💬 Кол-во сообщений", expand=True, disabled=True)
+            async def load_groups(client, dropdown, result_text):
+                """
+                Загружает группы, на которые подписан аккаунт, и сохраняет их в self.group_map.
+                :param client: Сессия Telethon
+                :param dropdown: Выпадающий список
+                :param result_text: Текст
+                """
+                try:
+                    result = await client(GetDialogsRequest(
+                        offset_date=None,
+                        offset_id=0,
+                        offset_peer=InputPeerEmpty(),
+                        limit=200,
+                        hash=0
+                    ))
+                    groups = [chat for chat in result.chats if getattr(chat, 'megagroup', False)]
+                    titles = [group.title for group in groups]
+
+                    # Сохраняем соответствие название → сущность
+                    self.group_map = {group.title: group for group in groups}
+
+                    dropdown.options = [ft.dropdown.Option(title) for title in titles]
+                    result_text.value = f"🔽 Найдено групп: {len(titles)}"
+                    self.page.update()
+                except Exception as e:
+                    logger.exception("Ошибка при загрузке групп")
+                    result_text.value = "❌ Ошибка загрузки групп"
+                    dropdown.options = []
+                    self.page.update()
+
             # Выпадающий список для выбора группы
             dropdown = ft.Dropdown(width=WIDTH_WIDE_BUTTON, options=[], autofocus=True, disabled=True)
             result_text = ft.Text(value="📂 Группы не загружены")
@@ -237,8 +271,8 @@ class ParsingGroupMembers:
             account_groups_switch.disabled = False
             account_group_selection_switch.disabled = False
             active_switch.disabled = False
-            chat_input.disabled = False
-            limit_active_user.disabled = False
+            self.chat_input.disabled = False  # ✅ Включаем поле ввода ссылки на чат
+            self.limit_active_user.disabled = False  # ✅ Включаем поле ввода кол-ва сообщений
             dropdown.disabled = False
             parse_button.disabled = False
 
@@ -258,18 +292,28 @@ class ParsingGroupMembers:
                     controls=[
                         await self.gui_program.outputs_text_gradient(),
                         list_view,
-                        ft.Column([
-                            account_drop_down_list,  # ⬅️ Выбор аккаунта из выпадающего списка
-                            ft.Row([admin_switch, members_switch, account_groups_switch, account_group_selection_switch,
-                                    active_switch]),
-                            chat_input,
-                            await self.gui_program.diver_castom(),  # Горизонтальная линия
-                            ft.Row([limit_active_user]),
-                            await self.gui_program.diver_castom(),  # Горизонтальная линия
-                            result_text,
-                            dropdown,
-                            parse_button,  # ⬅️ Кнопка для парсинга
-                        ])
+                        ft.Column(
+                            [
+                                account_drop_down_list,  # ⬅️ Выбор аккаунта из выпадающего списка
+                                ft.Row(
+                                    [
+                                        admin_switch, members_switch, account_groups_switch,
+                                        account_group_selection_switch,
+                                        active_switch
+                                    ]
+                                ),
+                                self.chat_input,  # ⬅️ Поле для ввода ссылки на чат
+                                await self.gui_program.diver_castom(),  # Горизонтальная линия
+                                ft.Row(
+                                    [
+                                        self.limit_active_user  # ⬅️ Поле для ввода кол-ва сообщений
+                                    ]
+                                ),
+                                await self.gui_program.diver_castom(),  # Горизонтальная линия
+                                result_text,
+                                dropdown,
+                                parse_button,  # ⬅️ Кнопка для парсинга
+                            ])
                     ]
                 )
             )
@@ -290,36 +334,6 @@ class ParsingGroupMembers:
             "photos_id": await UserInfo().get_photo_status(user),
             "user_premium": await UserInfo().get_user_premium_status(user),
         }
-
-    async def load_groups(self, client, dropdown, result_text):
-        """
-        Загружает группы, на которые подписан аккаунт, и сохраняет их в self.group_map.
-        :param client: Сессия Telethon
-        :param dropdown: Выпадающий список
-        :param result_text: Текст
-        """
-        try:
-            result = await client(GetDialogsRequest(
-                offset_date=None,
-                offset_id=0,
-                offset_peer=InputPeerEmpty(),
-                limit=200,
-                hash=0
-            ))
-            groups = [chat for chat in result.chats if getattr(chat, 'megagroup', False)]
-            titles = [group.title for group in groups]
-
-            # Сохраняем соответствие название → сущность
-            self.group_map = {group.title: group for group in groups}
-
-            dropdown.options = [ft.dropdown.Option(title) for title in titles]
-            result_text.value = f"🔽 Найдено групп: {len(titles)}"
-            self.page.update()
-        except Exception as e:
-            logger.exception("Ошибка при загрузке групп")
-            result_text.value = "❌ Ошибка загрузки групп"
-            dropdown.options = []
-            self.page.update()
 
     async def obtaining_administrators(self, client, groups):
         """
@@ -452,7 +466,8 @@ class ParsingGroupMembers:
                         await self.app_logger.log_and_display(
                             message=f"❌ Не удалось найти сущность для пользователя {message.from_id.user_id}: {e}")
                 else:
-                    await self.app_logger.log_and_display(f"Сообщение {message.id} не имеет действительного from_id.")
+                    await self.app_logger.log_and_display(
+                        message=f"Сообщение {message.id} не имеет действительного from_id.")
         except Exception as error:
             logger.exception(error)
 

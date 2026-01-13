@@ -49,13 +49,13 @@ class SendTelegramMessages:
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
         self.tb_time_from = ft.TextField(
             label="Время сна от",
-            width=width_one_input,
+            expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
             hint_text="Введите время",
             border_radius=5
         )
         self.tb_time_to = ft.TextField(
             label="Время сна до",
-            width=width_one_input,
+            expand=True,  # Полноразмерное расширение
             hint_text="Введите время",
             border_radius=5
         )
@@ -63,7 +63,7 @@ class SendTelegramMessages:
         self.chat_list_field = ft.TextField(
             label="Формирование списка чатов",
             multiline=True,
-            width=WIDTH_WIDE_BUTTON,
+            expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
         )
         # Поле для текста автоответчика
         self.auto_reply_text_field = ft.TextField(
@@ -71,11 +71,14 @@ class SendTelegramMessages:
             multiline=True,
             min_lines=2,
             max_lines=5,
-            width=WIDTH_WIDE_BUTTON,
+            expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
             hint_text="Введите сообщение для автоответа...",
         )
         # Поле для ввода лимита на сообщения
-        self.limits = ft.TextField(label="Введите лимит на сообщения", width=WIDTH_WIDE_BUTTON)
+        self.limits = ft.TextField(
+            label="Введите лимит на сообщения",
+            expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
+        )
 
     async def send_files_to_personal_chats(self) -> None:
         """
@@ -143,7 +146,7 @@ class SendTelegramMessages:
                         except KeyError:
                             sys.exit(1)
                     await self.app_logger.end_time(start=start)
-                    await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                         message="🔚 Конец рассылки сообщений")
                 except Exception as error:
                     logger.exception(error)
