@@ -116,3 +116,6 @@ celerybeat.pid
 /user_data/log/
 /user_data/config.ini
 /user_data/software_database.db
+/user_data/parsed_chat_participants.xlsx
+/file.csv
+/uv.lock

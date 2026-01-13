@@ -9,7 +9,7 @@ from telethon import events, types, TelegramClient
 from telethon.errors import ReactionInvalidError, TypeNotFoundError
 from telethon.tl.functions.messages import SendReactionRequest
 
-from src.core.config.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT
+from src.core.config.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, WIDTH_INPUT_FIELD_AND_BUTTON
 from src.core.database.account import getting_account
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
@@ -45,11 +45,21 @@ class WorkingWithReactions:
         :return: None
         """
         try:
-            list_view.controls.clear()
+            list_view.controls.clear()  # Очищаем список контролов
 
-            # Перемещаем объявление chat и message СЮДА (внешне от try)
-            chat = ft.TextField(label="Введите ссылку на группу / чат:", multiline=False, max_lines=1)
-            message = ft.TextField(label="Введите ссылку на сообщение или пост:", multiline=False, max_lines=1)
+            # 2 поля ввода для ссылки на группу и на сообщение, пост.
+            chat = ft.TextField(
+                label="Введите ссылку на группу / чат:",
+                multiline=False,
+                max_lines=1,
+                width=WIDTH_WIDE_BUTTON,
+            )
+            message = ft.TextField(
+                label="Введите ссылку на сообщение или пост:",
+                multiline=False,
+                max_lines=1,
+                width=WIDTH_WIDE_BUTTON,
+            )
 
             async def send_reaction_request(_) -> None:
                 start = await self.app_logger.start_time()
