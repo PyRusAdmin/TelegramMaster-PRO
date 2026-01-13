@@ -11,7 +11,6 @@ from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui_elements import GUIProgram
 from src.gui.gui import AppLogger, list_view
-from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -86,14 +85,14 @@ class AccountBIO:
                 try:
                     await client(
                         functions.account.UpdateUsernameRequest(username=input_field_username_change.value))
-                    await show_notification(self.page, f'Работа окончена')  # Выводим уведомление пользователю
+                    await self.gui_program.show_notification(f'Работа окончена')  # Выводим уведомление пользователю
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["auth_key_unregistered"])
                 except (UsernamePurchaseAvailableError, UsernameOccupiedError):
-                    await show_notification(self.page, "❌ Никнейм уже занят")  # Выводим уведомление пользователю
+                    await self.gui_program.show_notification("❌ Никнейм уже занят")  # Выводим уведомление пользователю
                 except UsernameInvalidError:
-                    await show_notification(self.page, "❌ Неверный никнейм")  # Выводим уведомление пользователю
+                    await self.gui_program.show_notification("❌ Неверный никнейм")  # Выводим уведомление пользователю
                 finally:
                     await client.disconnect()
             except Exception as e:
@@ -106,7 +105,7 @@ class AccountBIO:
                 await self.app_logger.log_and_display(message=f"{account_drop_down_list.value}")
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 if len(profile_description_input_field.value) > 70:
-                    await show_notification(self.page,
+                    await self.gui_program.show_notification(
                                             f"❌ Описание профиля превышает 70 символов ({len(profile_description_input_field.value)}).")
                     return
                 try:
@@ -120,7 +119,7 @@ class AccountBIO:
                     await client.disconnect()
             except Exception as e:
                 logger.exception(e)
-            await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
+            await self.gui_program.show_notification("Работа окончена")  # Выводим уведомление пользователю
 
         async def change_name_profile_gui(_) -> None:
             """
@@ -139,8 +138,7 @@ class AccountBIO:
                 finally:
 
                     await client.disconnect()
-                await show_notification(page=self.page,
-                                        message="Работа окончена")  # Выводим уведомление пользователю
+                await self.gui_program.show_notification(message="Работа окончена")  # Выводим уведомление пользователю
             except Exception as e:
                 logger.exception(e)
 
@@ -162,7 +160,7 @@ class AccountBIO:
                 finally:
 
                     await client.disconnect()
-                await show_notification(self.page, "Работа окончена")  # Выводим уведомление пользователю
+                await self.gui_program.show_notification("Работа окончена")  # Выводим уведомление пользователю
             except Exception as e:
                 logger.exception(e)
 
@@ -184,7 +182,7 @@ class AccountBIO:
                         await client.disconnect()
             except Exception as e:
                 logger.exception(e)
-            await show_notification(page=self.page, message="Работа окончена")  # Выводим уведомление пользователю
+            await self.gui_program.show_notification(message="Работа окончена")  # Выводим уведомление пользователю
 
         self.page.views.append(
             ft.View(

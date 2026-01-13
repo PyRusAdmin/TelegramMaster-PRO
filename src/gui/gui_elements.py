@@ -10,6 +10,19 @@ class GUIProgram:
     def __init__(self, page: ft.Page):
         self.page = page
 
+    async def show_notification(self, message: str):
+        """
+        Показывает пользователю всплывающее уведомление на странице Flet.
+
+        :param message: Текст уведомления
+        :return: None
+        """
+        # Переход обратно после закрытия диалога
+        dlg = ft.AlertDialog(title=ft.Text(message))
+        self.page.overlay.append(dlg)
+        dlg.open = True
+        self.page.update()
+
     async def key_app_bar(self):
         """
         Создает верхнюю панель приложения с кнопкой возврата в главное меню.

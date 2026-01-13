@@ -18,7 +18,6 @@ from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTeleg
 from src.gui.buttons import FunctionButton
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
-from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -163,7 +162,7 @@ class WorkingWithReactions:
                     logger.exception(error)
                 finally:
                     await self.app_logger.end_time(start)
-                    await show_notification(self.page, "🔚 Конец Автоматического выставления реакций")
+                    await self.gui_program.show_notification("🔚 Конец Автоматического выставления реакций")
 
             self.page.views.append(
                 # Теперь создаём View ПОСЛЕ объявления chat и message

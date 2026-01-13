@@ -18,7 +18,6 @@ from src.features.account.connect import TGConnect
 from src.features.account.parsing import UserInfo
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
-from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -67,7 +66,8 @@ class TGContact:
                     client.disconnect()  # Разрываем соединение telegram
 
                 await self.app_logger.end_time(start=start)
-                await show_notification(self.page, "🔚 Конец парсинга контактов")  # Выводим уведомление пользователю
+                await self.gui_program.show_notification(
+                    "🔚 Конец парсинга контактов")  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
 
@@ -85,8 +85,8 @@ class TGContact:
                 client.disconnect()  # Разрываем соединение telegram
 
             await self.app_logger.end_time(start=start)
-            await show_notification(page=self.page,
-                                    message="🔚 Конец удаления контактов контактов")  # Выводим уведомление пользователю
+            await self.gui_program.show_notification(
+                message="🔚 Конец удаления контактов контактов")  # Выводим уведомление пользователю
 
         async def inviting_contact(_) -> None:
             """
@@ -107,7 +107,7 @@ class TGContact:
             """📋 Формирование списка контактов"""
             data = input_numbers.value.strip()
             if not data:
-                await show_notification(self.page, "⚠️ Поле пустое")
+                await self.gui_program.show_notification("⚠️ Поле пустое")
                 return
 
             # Разделяем по переносам строк, удаляем пустые и лишние пробелы
@@ -117,7 +117,7 @@ class TGContact:
             for phone in phones:
                 write_contact_db(phone)
 
-            await show_notification(self.page, f"✅ Добавлено {len(phones)} номеров")
+            await self.gui_program.show_notification(f"✅ Добавлено {len(phones)} номеров")
 
         input_numbers = ft.TextField(label="Вставьте список номеров для записи в базу данных.",
                                      label_style=ft.TextStyle(size=15), autofocus=True,

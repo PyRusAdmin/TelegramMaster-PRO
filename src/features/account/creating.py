@@ -10,7 +10,6 @@ from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
-from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -77,8 +76,8 @@ class CreatingGroupsAndChats:
             except Exception as error:
                 logger.exception(error)
             await self.app_logger.end_time(start=start)
-            await show_notification(page=self.page,
-                                    message="🔚 Создания групп (чатов)")  # Выводим уведомление пользователю
+            await self.gui_program.show_notification(
+                message="🔚 Создания групп (чатов)")  # Выводим уведомление пользователю
 
         # Добавляем элементы интерфейса на страницу
         self.page.views.append(

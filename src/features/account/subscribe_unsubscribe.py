@@ -24,7 +24,6 @@ from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.gui.gui_input_builders import LinkInputRowBuilder, TimeInputRowBuilder
-from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -111,7 +110,7 @@ class SubscribeUnsubscribeTelegram:
                                                                       time_2=str(larger_times),
                                                                       variable="time_subscription"))
                     list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
-                    await show_notification(self.page, "Данные успешно записаны!")
+                    await self.gui_program.show_notification("Данные успешно записаны!")
                 else:
                     list_view.controls.append(ft.Text("Ошибка: первое время должно быть меньше второго!"))
             except ValueError:

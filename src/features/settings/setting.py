@@ -13,7 +13,6 @@ from src.core.database.database import save_proxy_data_to_db
 from src.gui.buttons import menu_button_fun
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
-from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
@@ -32,8 +31,6 @@ class SettingPage:
         """
         self.page = page
         self.app_logger = AppLogger(page=page)
-        self.gui_program = GUIProgram(page=page)
-        self.page = page
         self.gui_program = GUIProgram(page=page)
 
     def get_unique_filename(self, base_filename) -> str:
@@ -94,7 +91,7 @@ class SettingPage:
                         self.write_data_to_json_file(reactions=selected_reactions,
                                                      path_to_the_file='user_data/reactions/reactions.json')
 
-                        await show_notification(page=self.page, message="Данные успешно записаны!")
+                        await self.gui_program.show_notification(message="Данные успешно записаны!")
                         self.page.go("/settings")  # Переход к странице настроек
 
                     # Добавляем элементы на страницу
@@ -163,7 +160,7 @@ class SettingPage:
                             "rdns": "True"
                         }
                         save_proxy_data_to_db(proxy=proxy)
-                        await show_notification(self.page, "Данные успешно записаны!")
+                        await self.gui_program.show_notification("Данные успешно записаны!")
                         self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
                         self.page.update()
 
@@ -231,8 +228,7 @@ class SettingPage:
                             reactions=text_to_send.value,
                             path_to_the_file=unique_filename
                         )
-                        await show_notification(
-                            page=self.page,
+                        await self.gui_program.show_notification(
                             message="Данные успешно записаны!"
                         )
                         self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек

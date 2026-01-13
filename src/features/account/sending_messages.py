@@ -24,7 +24,6 @@ from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
 from src.gui.gui import list_view, AppLogger
 from src.gui.gui_elements import GUIProgram
-from src.gui.notification import show_notification
 from src.locales.translations_loader import translations
 
 
@@ -144,8 +143,8 @@ class SendTelegramMessages:
                         except KeyError:
                             sys.exit(1)
                     await self.app_logger.end_time(start=start)
-                    await show_notification(page=self.page,
-                                            message="🔚 Конец рассылки сообщений")  # Выводим уведомление пользователю
+                    await self.gui_program.show_notification(
+                        message="🔚 Конец рассылки сообщений")  # Выводим уведомление пользователю
                 except Exception as error:
                     logger.exception(error)
             else:
