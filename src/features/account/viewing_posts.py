@@ -36,6 +36,25 @@ class ViewingPosts:
         self.function_button = FunctionButton(page=page)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
+        # Поле для ввода ссылки на чат
+        self.link_channel = ft.TextField(
+            label=f"Введите ссылку на канал:",
+            expand=True,  # Полноразмерное расширение
+            multiline=False,  # Отключение возможности многострочного ввода
+            max_lines=1  # Ограничение на количество строк в поле
+        )
+        self.link_post = ft.TextField(
+            label=f"Введите ссылку на пост:",
+            expand=True,  # Полноразмерное расширение
+            multiline=False,  # Отключение возможности многострочного ввода
+            max_lines=1  # Ограничение на количество строк в поле
+        )
+        self.number_views = ft.TextField(
+            label=f"Введите количество просмотров от 1 до {len(self.session_string)}:",
+            expand=True,  # Полноразмерное расширение
+            multiline=False,
+            max_lines=1
+        )
 
     async def viewing_posts_request(self) -> None:
         """
@@ -52,15 +71,9 @@ class ViewingPosts:
                 )
             )
 
-            # Поле для ввода ссылки на чат
-            link_channel = ft.TextField(label=f"Введите ссылку на канал:", multiline=False, max_lines=1)
-            link_post = ft.TextField(label=f"Введите ссылку на пост:", multiline=False, max_lines=1)
-            number_views = ft.TextField(label=f"Введите количество просмотров от 1 до {len(self.session_string)}:",
-                                        multiline=False, max_lines=1)
-
             async def btn_click(_) -> None:
 
-                number_session = number_views.value
+                number_session = self.number_views.value
                 list_view.controls.append(ft.Text(f"Выбрано просмотров: {number_session}"))
                 views_selected = self.session_string[:int(number_session)]
 
@@ -70,13 +83,19 @@ class ViewingPosts:
                 for session_name in views_selected:
                     client = await self.connect.client_connect_string_session(session_name=session_name)
 
-                    list_view.controls.append(ft.Text(f"➕ Работаем с каналом: {link_channel.value}"))
+                    list_view.controls.append(ft.Text(f"➕ Работаем с каналом: {self.link_channel.value}"))
 
-                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=link_channel.value)
+                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=self.link_channel.value)
 
-                    msg_id = int(re.search(r'/(\d+)$', link_post.value).group(1))  # Получаем id сообщения из ссылки
-                    await self.viewing_posts(client=client, link_post=link_post.value, number=msg_id,
-                                             link_channel=link_channel.value, session_name=session_name)
+                    msg_id = int(
+                        re.search(r'/(\d+)$', self.link_post.value).group(1))  # Получаем id сообщения из ссылки
+                    await self.viewing_posts(
+                        client=client,
+                        link_post=self.link_post.value,
+                        number=msg_id,
+                        link_channel=self.link_channel.value,
+                        session_name=session_name
+                    )
                     await asyncio.sleep(1)
                     await client.disconnect()
                     # Изменение маршрута на новый (если необходимо)
@@ -85,9 +104,12 @@ class ViewingPosts:
 
                 await self.app_logger.end_time(start)  # Завершение таймера
 
-            await self.function_button.function_button_ready_viewing(number_views=number_views, btn_click=btn_click,
-                                                                     link_channel=link_channel,
-                                                                     link_post=link_post)
+            await self.function_button.function_button_ready_viewing(
+                number_views=self.number_views,
+                btn_click=btn_click,
+                link_channel=self.link_channel,
+                link_post=self.link_post
+            )
         except Exception as error:
             logger.exception(error)
 

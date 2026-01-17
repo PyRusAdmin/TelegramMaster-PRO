@@ -44,7 +44,7 @@ class ParsingGroupMembers:
         self.group_map = {}
         self.chat_input = ft.TextField(
             label="🔗 Введите ссылку на чат...",
-            expand=True, # Полноразмерное расширение
+            expand=True,  # Полноразмерное расширение
             disabled=True
         )
         self.limit_active_user = ft.TextField(label="💬 Кол-во сообщений", expand=True, disabled=True)
