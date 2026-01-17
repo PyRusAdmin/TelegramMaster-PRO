@@ -15,7 +15,7 @@ from telethon.errors import (
 
 from src.core.configs import (
     BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2,
-    time_subscription_1, time_subscription_2, width_one_input
+    time_subscription_1, time_subscription_2
 )
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import select_records_with_limit, get_writing_group_links
@@ -59,21 +59,26 @@ class SendTelegramMessages:
             hint_text="Введите время",
             border_radius=5
         )
+
         # Поле для формирования списка чатов
         self.chat_list_field = ft.TextField(
             label="Формирование списка чатов",
-            multiline=True,
             expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
+            multiline=True,
+            min_lines=5,  # Минимальное количество строк
+            max_lines=5,  # Максимальное количество строк
+            # expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
         )
         # Поле для текста автоответчика
         self.auto_reply_text_field = ft.TextField(
-            label="Автоответчик: текст ответа",
-            multiline=True,
-            min_lines=2,
-            max_lines=5,
+            label="Автоответчик: текст ответа",  # Заголовок поля
             expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
-            hint_text="Введите сообщение для автоответа...",
+            multiline=True,  # Многострочное поле
+            min_lines=5,  # Минимальное количество строк
+            max_lines=5,  # Максимальное количество строк
+            hint_text="Введите сообщение для автоответа...",  # Подсказка
         )
+
         # Поле для ввода лимита на сообщения
         self.limits = ft.TextField(
             label="Введите лимит на сообщения",
@@ -372,14 +377,21 @@ class SendTelegramMessages:
                                                                                       ft.Colors.PURPLE])), ), ), ], ),
                     list_view,  # Отображение логов 📝
                     account_drop_down_list,  # Выпадающий список с аккаунтами
-                    self.auto_reply_text_field,  # Поле для текста автоответчика
+
                     c,
                     ft.Row(
                         controls=[self.tb_time_from, self.tb_time_to],
                         spacing=20,
                     ),
                     t,
-                    self.chat_list_field,
+
+                    ft.Row(
+                        controls=[
+                            self.auto_reply_text_field,  # Поле для текста автоответчика
+                            self.chat_list_field,  # Поле для ввода ссылок на группы
+                        ],
+                    ),
+
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
                             ft.Button(
