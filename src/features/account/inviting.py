@@ -120,7 +120,7 @@ class InvitingToAGroup:
 
             time_inviting_1 = TIME_INVITING_1.value
             if time_inviting_1 == "":
-                await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                await self.gui_program.show_notification(
                     message="Время должно быть больше 0"
                 )
                 self.page.go("/inviting")
@@ -128,51 +128,93 @@ class InvitingToAGroup:
 
             time_inviting_2 = TIME_INVITING_2.value
             if time_inviting_2 == "":
-                await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                await self.gui_program.show_notification(
                     message="Время должно быть больше 0"
                 )
                 self.page.go("/inviting")
                 return
 
             start = await self.app_logger.start_time()
-            self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
+            self.page.update()
 
             limit = get_limit(limits)  # Получаем лимит введенный пользователем
 
-            usernames = await select_records_with_limit(limit=limit, app_logger=self.app_logger)
-            await self.app_logger.log_and_display(message=f"Список usernames: {usernames}\n\nЛимит на аккаунт {limit}")
+            # Получаем ВЕСЬ список пользователей для инвайтинга
+            all_usernames = await select_records_with_limit(limit=None, app_logger=self.app_logger)
 
-            if not usernames:
+            if not all_usernames:
                 await self.app_logger.log_and_display(
                     message="В таблице members нет пользователей для инвайтинга."
                 )
-                await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                await self.gui_program.show_notification(
                     message="🔚 Нет пользователей для инвайтинга"
                 )
                 self.page.go("/inviting")
                 return
 
-            for session_name in self.session_string:
+            await self.app_logger.log_and_display(
+                message=f"Всего пользователей для инвайтинга: {len(all_usernames)}\n"
+                        f"Лимит на аккаунт: {limit if limit else 'не установлен'}\n"
+                        f"Количество аккаунтов: {len(self.session_string)}"
+            )
+
+            # 🔄 Индекс для отслеживания текущей позиции в списке пользователей
+            current_user_index = 0
+
+            for account_number, session_name in enumerate(self.session_string, 1):
+                # Проверяем, остались ли пользователи для инвайтинга
+                if current_user_index >= len(all_usernames):
+                    await self.app_logger.log_and_display(
+                        message="✅ Все пользователи обработаны, инвайтинг завершен"
+                    )
+                    break
+
                 client: TelegramClient | None = await self.connect.client_connect_string_session(
-                    session_name=session_name)
+                    session_name=session_name
+                )
 
                 if client is None:
                     await self.app_logger.log_and_display(
-                        message=f"⚠️ Пропускаем сессию {session_name} - не удалось подключиться.")
+                        message=f"⚠️ Пропускаем сессию {session_name} - не удалось подключиться."
+                    )
                     continue  # Переходим к следующему аккаунту
+
+                # 📊 Определяем количество пользователей для текущего аккаунта
+                if limit:
+                    # Если установлен лимит - берем N пользователей
+                    users_for_this_account = all_usernames[current_user_index:current_user_index + limit]
+                    current_user_index += limit
+                else:
+                    # Если лимит не установлен - распределяем поровну между аккаунтами
+                    remaining_accounts = len(self.session_string) - account_number + 1
+                    remaining_users = len(all_usernames) - current_user_index
+                    users_per_account = remaining_users // remaining_accounts
+
+                    users_for_this_account = all_usernames[current_user_index:current_user_index + users_per_account]
+                    current_user_index += users_per_account
+
+                if not users_for_this_account:
+                    await self.app_logger.log_and_display(
+                        message=f"⚠️ Для аккаунта {session_name} нет пользователей"
+                    )
+                    await client.disconnect()
+                    continue
+
+                await self.app_logger.log_and_display(
+                    message=f"🔹 Аккаунт #{account_number}: {session_name}\n"
+                            f"   Будет обработано пользователей: {len(users_for_this_account)}\n"
+                            f"   Диапазон: {current_user_index - len(users_for_this_account) + 1}-{current_user_index}"
+                )
 
                 # Подписываемся на группы
                 await self.subscribe.subscribe_to_group_or_channel(client=client, groups=links)
                 await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {links}")
 
-                if len(usernames) == 0:
-                    await self.app_logger.log_and_display(message=f"В таблице members нет пользователей для инвайтинга")
-                    await self.subscribe_unsubscribe_telegram.unsubscribe_from_the_group(client, links)
-                    break  # Прерываем работу и меняем аккаунт
-
-                for username in usernames:
-                    await self.app_logger.log_and_display(message=f"Приглашение пользователя: {username}")
-                    # Инвайтинг в группу по полученному списку
+                # 🎯 Инвайтим ТОЛЬКО пользователей для этого аккаунта
+                for idx, username in enumerate(users_for_this_account, 1):
+                    await self.app_logger.log_and_display(
+                        message=f"   [{idx}/{len(users_for_this_account)}] Приглашение: {username}"
+                    )
 
                     try:
                         await self.add_user_test(
@@ -182,20 +224,123 @@ class InvitingToAGroup:
                             time_inviting_1=TIME_INVITING_1.value,
                             time_inviting_2=TIME_INVITING_2.value
                         )
-                    except KeyboardInterrupt:  # Закрытие окна программы
-                        await self.app_logger.log_and_display(message=translations["ru"]["errors"]["script_stopped"],
-                                                              level="error")
+                    except KeyboardInterrupt:
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["script_stopped"],
+                            level="error"
+                        )
+                        await client.disconnect()
+                        return  # Полностью прерываем работу
+
+                # Отписываемся от группы после завершения работы аккаунта
                 await self.subscribe_unsubscribe_telegram.unsubscribe_from_the_group(
                     client=client,
                     group_link=links
                 )
-                await self.app_logger.log_and_display(message=f"[!] Инвайтинг окончен!")
+                await self.app_logger.log_and_display(
+                    message=f"✅ Аккаунт {session_name} завершил работу. "
+                            f"Приглашено: {len(users_for_this_account)} пользователей"
+                )
+                await client.disconnect()
 
+            await self.app_logger.log_and_display(
+                message=f"🎉 Инвайтинг полностью завершен!\n"
+                        f"   Всего обработано: {current_user_index} из {len(all_usernames)} пользователей"
+            )
             await self.app_logger.end_time(start=start)
-            await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю  # Выводим уведомление пользователю
+            await self.gui_program.show_notification(
                 message="🔚 Конец инвайтинга"
             )
-            self.page.go("/inviting")  # переходим к основному меню инвайтинга 🏠
+            self.page.go("/inviting")
+
+        # async def general_invitation_to_the_group(_):
+        #     """
+        #     Основной метод для выполнения инвайтинга пользователей в указанные группы.
+        #     """
+        #
+        #     links = await get_invitation_links()
+        #     if not links:
+        #         return  # Нет ссылок — завершаем выполнение
+        #
+        #     time_inviting_1 = TIME_INVITING_1.value
+        #     if time_inviting_1 == "":
+        #         await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+        #             message="Время должно быть больше 0"
+        #         )
+        #         self.page.go("/inviting")
+        #         return
+        #
+        #     time_inviting_2 = TIME_INVITING_2.value
+        #     if time_inviting_2 == "":
+        #         await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+        #             message="Время должно быть больше 0"
+        #         )
+        #         self.page.go("/inviting")
+        #         return
+        #
+        #     start = await self.app_logger.start_time()
+        #     self.page.update()  # Обновите страницу, чтобы сразу показать сообщение 🔄
+        #
+        #     limit = get_limit(limits)  # Получаем лимит введенный пользователем
+        #
+        #     usernames = await select_records_with_limit(limit=limit, app_logger=self.app_logger)
+        #     await self.app_logger.log_and_display(message=f"Список usernames: {usernames}\n\nЛимит на аккаунт {limit}")
+        #
+        #     if not usernames:
+        #         await self.app_logger.log_and_display(
+        #             message="В таблице members нет пользователей для инвайтинга."
+        #         )
+        #         await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+        #             message="🔚 Нет пользователей для инвайтинга"
+        #         )
+        #         self.page.go("/inviting")
+        #         return
+        #
+        #     for session_name in self.session_string:
+        #         client: TelegramClient | None = await self.connect.client_connect_string_session(
+        #             session_name=session_name)
+        #
+        #         if client is None:
+        #             await self.app_logger.log_and_display(
+        #                 message=f"⚠️ Пропускаем сессию {session_name} - не удалось подключиться.")
+        #             continue  # Переходим к следующему аккаунту
+        #
+        #         # Подписываемся на группы
+        #         await self.subscribe.subscribe_to_group_or_channel(client=client, groups=links)
+        #         await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {links}")
+        #
+        #         if len(usernames) == 0:
+        #             await self.app_logger.log_and_display(message=f"В таблице members нет пользователей для инвайтинга")
+        #             await self.subscribe_unsubscribe_telegram.unsubscribe_from_the_group(client, links)
+        #             break  # Прерываем работу и меняем аккаунт
+        #
+        #         for username in usernames:
+        #             await self.app_logger.log_and_display(message=f"Приглашение пользователя: {username}")
+        #             # Инвайтинг в группу по полученному списку
+        #
+        #             try:
+        #                 await self.add_user_test(
+        #                     client=client,
+        #                     username_group=links,
+        #                     username=username,
+        #                     time_inviting_1=TIME_INVITING_1.value,
+        #                     time_inviting_2=TIME_INVITING_2.value
+        #                 )
+        #             except KeyboardInterrupt:  # Закрытие окна программы
+        #                 await self.app_logger.log_and_display(message=translations["ru"]["errors"]["script_stopped"],
+        #                                                       level="error")
+        #         await self.subscribe_unsubscribe_telegram.unsubscribe_from_the_group(
+        #             client=client,
+        #             group_link=links
+        #         )
+        #         await self.app_logger.log_and_display(message=f"[!] Инвайтинг окончен!")
+        #
+        #     await self.app_logger.end_time(start=start)
+        #     await self.gui_program.show_notification(
+        #         # ✅ Показываем уведомление пользователю  # Выводим уведомление пользователю
+        #         message="🔚 Конец инвайтинга"
+        #     )
+        #     self.page.go("/inviting")  # переходим к основному меню инвайтинга 🏠
 
         async def launching_an_invite_once_an_hour(_):
             """
