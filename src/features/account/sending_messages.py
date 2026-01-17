@@ -59,7 +59,6 @@ class SendTelegramMessages:
             hint_text="Введите время",
             border_radius=5
         )
-
         # Поле для формирования списка чатов
         self.chat_list_field = ft.TextField(
             label="Формирование списка чатов",
@@ -67,7 +66,6 @@ class SendTelegramMessages:
             multiline=True,
             min_lines=5,  # Минимальное количество строк
             max_lines=5,  # Максимальное количество строк
-            # expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
         )
         # Поле для текста автоответчика
         self.auto_reply_text_field = ft.TextField(
@@ -78,7 +76,6 @@ class SendTelegramMessages:
             max_lines=5,  # Максимальное количество строк
             hint_text="Введите сообщение для автоответа...",  # Подсказка
         )
-
         # Поле для ввода лимита на сообщения
         self.limits = ft.TextField(
             label="Введите лимит на сообщения",
