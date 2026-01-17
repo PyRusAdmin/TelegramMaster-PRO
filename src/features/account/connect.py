@@ -648,7 +648,6 @@ class TGConnect:
                     ft.Column(
                         [  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                             # 🔑 Подключение session аккаунтов
-
                             await menu_button_fun(
                                 text=translations["ru"]["create_groups_menu"]["choose_session_files"],
                                 width=WIDTH_WIDE_BUTTON,
