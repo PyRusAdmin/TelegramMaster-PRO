@@ -47,7 +47,41 @@ class ParsingGroupMembers:
             expand=True,  # Полноразмерное расширение
             disabled=True
         )
-        self.limit_active_user = ft.TextField(label="💬 Кол-во сообщений", expand=True, disabled=True)
+        self.limit_active_user = ft.TextField(
+            label="💬 Кол-во сообщений",
+            expand=True,
+            disabled=True
+        )
+
+    async def load_groups(self, client, dropdown, result_text):
+        """
+        Загружает группы, на которые подписан аккаунт, и сохраняет их в self.group_map.
+        :param client: Сессия Telethon
+        :param dropdown: Выпадающий список
+        :param result_text: Текст
+        """
+        try:
+            result = await client(GetDialogsRequest(
+                offset_date=None,
+                offset_id=0,
+                offset_peer=InputPeerEmpty(),
+                limit=200,
+                hash=0
+            ))
+            groups = [chat for chat in result.chats if getattr(chat, 'megagroup', False)]
+            titles = [group.title for group in groups]
+
+            # Сохраняем соответствие название → сущность
+            self.group_map = {group.title: group for group in groups}
+
+            dropdown.options = [ft.dropdown.Option(title) for title in titles]
+            result_text.value = f"🔽 Найдено групп: {len(titles)}"
+            self.page.update()
+        except Exception as e:
+            logger.exception("Ошибка при загрузке групп")
+            result_text.value = "❌ Ошибка загрузки групп"
+            dropdown.options = []
+            self.page.update()
 
     async def account_selection_menu(self):
         """
@@ -72,6 +106,7 @@ class ParsingGroupMembers:
                 )
                 for phone, session_str in self.account_data
             ]
+
             # Создаем выпадающий список с названиями групп
             account_drop_down_list = ft.Dropdown(
                 label="📂 Выберите аккаунт",  # ✅ Название выпадающего списка
@@ -79,6 +114,16 @@ class ParsingGroupMembers:
                 options=account_options,  # ✅ Опции выпадающего списка
                 autofocus=True  # ✅ Автозаполнение
             )
+
+            # Выпадающий список для выбора группы
+            dropdown = ft.Dropdown(
+                label="📋 Выберите группу",
+                width=WIDTH_WIDE_BUTTON,
+                options=[],
+                autofocus=True,
+                disabled=True
+            )
+            result_text = ft.Text(value="📂 Сначала выберите аккаунт")
 
             # Кнопки-переключатели
             account_groups_switch = ft.CupertinoSwitch(label="Группы аккаунта", value=False, disabled=True)
@@ -92,17 +137,69 @@ class ParsingGroupMembers:
             ).element_handler(self.page)
 
             async def on_account_change(e):
+                """📂 Обработчик изменения аккаунта."""
                 if account_drop_down_list.value:
-                    client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
-
-                    await load_groups(client, dropdown, result_text)
-                    await client.disconnect()
+                    # Сбрасываем состояние при смене аккаунта
+                    dropdown.options = []
+                    dropdown.value = None
+                    dropdown.disabled = True
+                    result_text.value = "📂 Аккаунт выбран. Включите 'Выбрать группу' для загрузки групп"
+                    self.group_map = {}  # Очищаем предыдущие группы
+                    self.page.update()
                 else:
                     dropdown.options = []
+                    dropdown.value = None
+                    dropdown.disabled = True
                     result_text.value = "📂 Выберите аккаунт"
                     self.page.update()
 
+            async def on_group_selection_switch_change(e):
+                """🔄 Обработчик переключателя 'Выбрать группу'"""
+                if account_group_selection_switch.value:
+                    # Переключатель включен - загружаем группы
+                    if not account_drop_down_list.value:
+                        await self.app_logger.log_and_display("⚠️ Сначала выберите аккаунт")
+                        account_group_selection_switch.value = False
+                        self.page.update()
+                        return
+
+                    # Загружаем группы выбранного аккаунта
+                    result_text.value = "⏳ Загрузка групп..."
+                    dropdown.disabled = True
+                    self.page.update()
+
+                    try:
+                        client = await self.connect.client_connect_string_session(
+                            session_name=account_drop_down_list.value
+                        )
+
+                        if client:
+                            await self.load_groups(client, dropdown, result_text)
+                            dropdown.disabled = False  # ✅ Разблокируем dropdown после загрузки
+                            await client.disconnect()
+                        else:
+                            result_text.value = "❌ Не удалось подключиться к аккаунту"
+                            account_group_selection_switch.value = False
+                            dropdown.disabled = True
+
+                    except Exception as error:
+                        logger.exception(error)
+                        result_text.value = f"❌ Ошибка загрузки групп: {str(error)}"
+                        account_group_selection_switch.value = False
+                        dropdown.disabled = True
+
+                    self.page.update()
+                else:
+                    # Переключатель выключен - очищаем список групп
+                    dropdown.options = []
+                    dropdown.value = None
+                    dropdown.disabled = True
+                    result_text.value = "📂 Включите переключатель для загрузки групп"
+                    self.group_map = {}
+                    self.page.update()
+
             account_drop_down_list.on_change = on_account_change
+            account_group_selection_switch.on_change = on_group_selection_switch_change
 
             async def add_items(_):
                 """🚀 Запускает процесс парсинга групп и отображает статус в интерфейсе."""
@@ -207,7 +304,7 @@ class ParsingGroupMembers:
                             await self.app_logger.log_and_display(translations["ru"]["errors"]["auth_key_unregistered"])
                             await asyncio.sleep(2)
                             break
-                        except sqlite3.DatabaseError:  # TODO Обработка ошибок базы данных (придумать универсальнео наименование)
+                        except sqlite3.DatabaseError:
                             await self.app_logger.log_and_display("Ошибка базы данных аккаунта")
                             await asyncio.sleep(2)
                             break
@@ -220,43 +317,10 @@ class ParsingGroupMembers:
 
                 except TypeError as error:
                     logger.exception(f"❌ Ошибка: {error}")
-                    return []  # Возвращаем пустой список в случае ошибки
+                    return []
                 except Exception as error:
                     logger.exception(error)
 
-            async def load_groups(client, dropdown, result_text):
-                """
-                Загружает группы, на которые подписан аккаунт, и сохраняет их в self.group_map.
-                :param client: Сессия Telethon
-                :param dropdown: Выпадающий список
-                :param result_text: Текст
-                """
-                try:
-                    result = await client(GetDialogsRequest(
-                        offset_date=None,
-                        offset_id=0,
-                        offset_peer=InputPeerEmpty(),
-                        limit=200,
-                        hash=0
-                    ))
-                    groups = [chat for chat in result.chats if getattr(chat, 'megagroup', False)]
-                    titles = [group.title for group in groups]
-
-                    # Сохраняем соответствие название → сущность
-                    self.group_map = {group.title: group for group in groups}
-
-                    dropdown.options = [ft.dropdown.Option(title) for title in titles]
-                    result_text.value = f"🔽 Найдено групп: {len(titles)}"
-                    self.page.update()
-                except Exception as e:
-                    logger.exception("Ошибка при загрузке групп")
-                    result_text.value = "❌ Ошибка загрузки групп"
-                    dropdown.options = []
-                    self.page.update()
-
-            # Выпадающий список для выбора группы
-            dropdown = ft.Dropdown(width=WIDTH_WIDE_BUTTON, options=[], autofocus=True, disabled=True)
-            result_text = ft.Text(value="📂 Группы не загружены")
             parse_button = ft.Button(
                 content="🔍 Парсить",
                 width=WIDTH_WIDE_BUTTON,
@@ -271,16 +335,14 @@ class ParsingGroupMembers:
             account_groups_switch.disabled = False
             account_group_selection_switch.disabled = False
             active_switch.disabled = False
-            self.chat_input.disabled = False  # ✅ Включаем поле ввода ссылки на чат
-            self.limit_active_user.disabled = False  # ✅ Включаем поле ввода кол-ва сообщений
-            dropdown.disabled = False
+            self.chat_input.disabled = False
+            self.limit_active_user.disabled = False
             parse_button.disabled = False
 
             # Выравнивание элементов управления
             admin_switch.expand = True
             members_switch.expand = True
             account_groups_switch.expand = True
-
             account_group_selection_switch.expand = True
             active_switch.expand = True
             self.page.update()
@@ -288,7 +350,7 @@ class ParsingGroupMembers:
             self.page.views.append(
                 ft.View(
                     route="/parsing",
-                    appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
+                    appbar=await self.gui_program.key_app_bar(),
                     controls=[
                         await self.gui_program.outputs_text_gradient(),
                         list_view,
