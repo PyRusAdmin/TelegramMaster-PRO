@@ -31,11 +31,11 @@ class TGContact:
         Инициализация экземпляра класса TGContact
         :param page: Объект страницы ft.Page
         """
-        self.page = page
-        self.connect = TGConnect(page=page)
-        self.app_logger = AppLogger(page=page)
-        self.utils = Utils(page=page)
-        self.user_info = UserInfo()
+        self.page = page  # Ссылка на объект страницы
+        self.connect = TGConnect(page=page)  # Создание экземпляра класса TGConnect
+        self.app_logger = AppLogger(page=page)  # Создание экземпляра класса AppLogger
+        self.utils = Utils(page=page)  # Создание экземпляра класса Utils
+        self.user_info = UserInfo()  # Создание экземпляра класса UserInfo
         self.gui_program = GUIProgram(page=page)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
