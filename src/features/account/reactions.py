@@ -27,15 +27,15 @@ class WorkingWithReactions:
     """
 
     def __init__(self, page: ft.Page):
-        self.page = page
-        self.connect = TGConnect(page=page)
-        self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)
-        self.app_logger = AppLogger(page=page)
-        self.utils = Utils(page=page)
-        self.function_button = FunctionButton(page=page)
-        self.session_string = getting_account()
-        self.subscribe = Subscribe(page=page)
-        self.gui_program = GUIProgram(page=page)
+        self.page = page  # Ссылка на текущую страницу
+        self.connect = TGConnect(page=page)  # Подключение к Telegram
+        self.sub_unsub_tg = SubscribeUnsubscribeTelegram(page=page)  # Подписка и отписка от каналов
+        self.app_logger = AppLogger(page=page)  # Логгер приложения
+        self.utils = Utils(page=page)  # Утилиты
+        self.function_button = FunctionButton(page=page)  # Кнопки функций
+        self.session_string = getting_account()  # Список сессий
+        self.subscribe = Subscribe(page=page)  # Подписка на каналы
+        self.gui_program = GUIProgram(page=page)  # Главный класс приложения
 
     async def reactions_menu(self):
         """

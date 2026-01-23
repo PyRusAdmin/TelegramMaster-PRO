@@ -35,9 +35,9 @@ class ParsingGroupMembers:
 
         :param page: Страница интерфейса Flet для отображения элементов управления
         """
-        self.page = page
-        self.connect = TGConnect(page=page)
-        self.app_logger = AppLogger(page=page)
+        self.page = page  # Сохраняем ссылку на страницу Flet
+        self.connect = TGConnect(page=page)  # Инициализация экземпляра класса TGConnect
+        self.app_logger = AppLogger(page=page)  # Инициализация экземпляра класса AppLogger
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram(page=page)  # Инициализация экземпляра класса GUIProgram
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
