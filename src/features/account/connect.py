@@ -399,9 +399,11 @@ class TGConnect:
             await self.app_logger.log_and_display(message=f"Номер телефона: {phone_number_value}")
 
             # Дальнейшая обработка после записи номера телефона
-            client = TelegramClient(f"{phone_number_value}", api_id=api_id, api_hash=api_hash,
-                                    system_version="4.16.30-vxCUSTOM",
-                                    proxy=self.proxy.reading_proxy_data_from_the_database())
+            client = TelegramClient(
+                session=f"{phone_number_value}", api_id=api_id, api_hash=api_hash,
+                system_version="4.16.30-vxCUSTOM",
+                proxy=self.proxy.reading_proxy_data_from_the_database()
+            )
             await client.connect()  # Подключаемся к Telegram
 
             if not await client.is_user_authorized():
