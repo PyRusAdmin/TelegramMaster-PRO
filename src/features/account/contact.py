@@ -36,7 +36,7 @@ class TGContact:
         self.app_logger = AppLogger(page=page)  # Создание экземпляра класса AppLogger
         self.utils = Utils(page=page)  # Создание экземпляра класса Utils
         self.user_info = UserInfo()  # Создание экземпляра класса UserInfo
-        self.gui_program = GUIProgram(page=page)
+        self.gui_program = GUIProgram(page=page)  # Создание экземпляра класса GUIProgram
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
 
     async def working_with_contacts_menu(self):

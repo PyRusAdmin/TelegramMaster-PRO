@@ -24,11 +24,11 @@ class CreatingGroupsAndChats:
 
         :param page: Страница интерфейса Flet для отображения элементов управления
         """
-        self.page = page
-        self.connect = TGConnect(page=page)
-        self.app_logger = AppLogger(page=page)
-        self.utils = Utils(page=page)
-        self.gui_program = GUIProgram(page=page)
+        self.page = page  # Страница интерфейса Flet для отображения элементов управления
+        self.connect = TGConnect(page=page)  # Класс для подключения к Telegram
+        self.app_logger = AppLogger(page=page)  # Класс для логирования приложения
+        self.utils = Utils(page=page)  # Класс для вспомогательных функций
+        self.gui_program = GUIProgram(page=page)  # Класс для работы с графическим интерфейсом
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
 
