@@ -24,6 +24,7 @@ from src.features.proxy.checking_proxy import Proxy
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
+import io
 
 
 # Выбор файла
@@ -336,7 +337,7 @@ class TGConnect:
 
                 else:
                     await self.app_logger.log_and_display(message=f"Аккаунт {session_name} авторизован")
-                    await client.disconnect()  # Отключаемся после проверки
+                    client.disconnect()  # Отключаемся после проверки
             except (PhoneNumberBannedError, UserDeactivatedBanError, AuthKeyNotFound,
                     AuthKeyUnregisteredError, AuthKeyDuplicatedError) as e:
 
@@ -352,7 +353,10 @@ class TGConnect:
             for session in invalid_sessions:
                 await delete_account_from_db(session_string=session, app_logger=self.app_logger)
 
-            os.remove("file.csv")
+            try:
+                os.remove("file.csv")
+            except FileNotFoundError:
+                pass
 
         except Exception as error:
             logger.exception(error)
