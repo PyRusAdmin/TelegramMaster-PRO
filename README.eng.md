@@ -73,7 +73,8 @@ time and increases work efficiency.
 In addition, <code>TelegramMaster-PRO</code> provides the ability to connect
 proxy servers 🛡️.
 
-It is important to note that <code>TelegramMaster-PRO</code>🚀 has been actively developing since <b>01/29/2022</b> and is
+It is important to note that <code>TelegramMaster-PRO</code>🚀 has been actively developing since <b>01/29/2022</b> and
+is
 regularly updated and supplemented with new
 features to meet the changing market requirements and user needs 🤝.
 

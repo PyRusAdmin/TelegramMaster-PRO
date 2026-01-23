@@ -162,7 +162,7 @@ class WorkingWithReactions:
                     logger.exception(error)
                 finally:
                     await self.app_logger.end_time(start)
-                    await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                         message="🔚 Конец Автоматического выставления реакций"
                     )
 

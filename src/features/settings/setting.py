@@ -91,7 +91,7 @@ class SettingPage:
                         self.write_data_to_json_file(reactions=selected_reactions,
                                                      path_to_the_file='user_data/reactions/reactions.json')
 
-                        await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                        await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                             message="Данные успешно записаны!"
                         )
                         self.page.go("/settings")  # Переход к странице настроек
@@ -162,7 +162,7 @@ class SettingPage:
                             "rdns": "True"
                         }
                         save_proxy_data_to_db(proxy=proxy)
-                        await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                        await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                             message="Данные успешно записаны!"
                         )
                         self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
