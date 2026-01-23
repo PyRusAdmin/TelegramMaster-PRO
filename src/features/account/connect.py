@@ -35,8 +35,8 @@ class TGConnect:
     def __init__(self, page: ft.Page):
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
         self.app_logger = AppLogger(page)  # Инициализация класса AppLogger для логирования и отображения сообщений.
-        self.utils = Utils(page=page)
-        self.proxy = Proxy(page=page)
+        self.utils = Utils(page=page)  # Инициализация класса Utils для работы с утилитами.
+        self.proxy = Proxy(page=page)  # Инициализация класса Proxy для проверки прокси.
         self.gui_program = GUIProgram(page=page)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.pick_files_dialog: ft.FilePicker | None = None
