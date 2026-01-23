@@ -225,16 +225,16 @@ class TGConnect:
                             # 🤖 Проверка через спам бот
                             ft.Button(
                                 content=translations["ru"]["account_verification"]["spam_check"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=check_for_spam
+                                width=WIDTH_WIDE_BUTTON, # Ширина кнопки
+                                height=BUTTON_HEIGHT, # Высота кнопки
+                                on_click=check_for_spam # Вызов функции проверки на спам
                             ),
                             # ✅ Проверка на валидность
                             ft.Button(
                                 content=translations["ru"]["account_verification"]["validation"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=validation_check
+                                width=WIDTH_WIDE_BUTTON, # Ширина кнопки
+                                height=BUTTON_HEIGHT, # Высота кнопки
+                                on_click=validation_check # Вызов функции проверки на валидность
                             ),
                             # ✏️ Переименование аккаунтов
                             ft.Button(
