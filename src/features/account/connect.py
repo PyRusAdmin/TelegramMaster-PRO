@@ -149,11 +149,11 @@ class TGConnect:
                     # Переименовывание аккаунтов
                     client = await self.client_connect_string_session(session_name=session_name)
                     try:
-                        me = await client.get_me()
-                        await update_phone_by_session(
-                            session_string=session_name,
-                            new_phone=me.phone,
-                            app_logger=self.app_logger
+                        me = await client.get_me()  # Получаем информацию о пользователе
+                        await update_phone_by_session(  # Обновляем номер телефона в базе данных
+                            session_string=session_name,  # Строка сессии
+                            new_phone=me.phone,  # Новый номер телефона
+                            app_logger=self.app_logger  # Логгер приложения
                         )
                     except AttributeError:  # Если в get_me приходит NoneType (None)
                         pass
@@ -210,7 +210,7 @@ class TGConnect:
                                             (0, 20), # Начальная точка градиента
                                             (150, 20), # Конечная точка градиента
                                             [
-                                                ft.Colors.PINK, 
+                                                ft.Colors.PINK,
                                                 ft.Colors.PURPLE
                                             ]
                                         )
