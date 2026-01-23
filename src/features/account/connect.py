@@ -37,7 +37,7 @@ class TGConnect:
         self.app_logger = AppLogger(page)  # Инициализация класса AppLogger для логирования и отображения сообщений.
         self.utils = Utils(page=page)  # Инициализация класса Utils для работы с утилитами.
         self.proxy = Proxy(page=page)  # Инициализация класса Proxy для проверки прокси.
-        self.gui_program = GUIProgram(page=page)
+        self.gui_program = GUIProgram(page=page)  # Инициализация класса GUIProgram для работы с графическим интерфейсом.
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.pick_files_dialog: ft.FilePicker | None = None
 
