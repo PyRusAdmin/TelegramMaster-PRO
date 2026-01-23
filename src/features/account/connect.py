@@ -34,7 +34,7 @@ class TGConnect:
 
     def __init__(self, page: ft.Page):
         self.page = page  # Страница интерфейса Flet для отображения элементов управления.
-        self.app_logger = AppLogger(page)
+        self.app_logger = AppLogger(page)  # Инициализация класса AppLogger для логирования и отображения сообщений.
         self.utils = Utils(page=page)
         self.proxy = Proxy(page=page)
         self.gui_program = GUIProgram(page=page)
