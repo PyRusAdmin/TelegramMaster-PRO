@@ -353,9 +353,10 @@ class TGConnect:
             for session in invalid_sessions:
                 await delete_account_from_db(session_string=session, app_logger=self.app_logger)
 
+            # Удаляем файл file.csv, если он существует, чтобы очистить данные о невалидных сессиях перед новой проверкой
             try:
                 os.remove("file.csv")
-            except FileNotFoundError:
+            except FileNotFoundError:  # Игнорируем ошибку, если файл не найден, так как это ожидаемо при первом запуске
                 pass
 
         except Exception as error:
