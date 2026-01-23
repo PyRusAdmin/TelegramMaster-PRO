@@ -203,9 +203,9 @@ class TGConnect:
                             ft.TextSpan( # Стиль для отображения текста
                                 translations["ru"]["menu"]["account_check"], # Текст для отображения
                                 ft.TextStyle( # Стиль текста
-                                    size=20,
-                                    weight=ft.FontWeight.BOLD,
-                                    foreground=ft.Paint(
+                                    size=20, # Размер текста
+                                    weight=ft.FontWeight.BOLD, # Жирный шрифт
+                                    foreground=ft.Paint( # Определяет цвет текста
                                         gradient=ft.PaintLinearGradient(
                                             (0, 20),
                                             (150, 20),
