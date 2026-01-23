@@ -276,16 +276,16 @@ class TGConnect:
                 logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
                 await self.write_csv(data=session_name)
                 try:
-                    await client.disconnect()
+                    await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
                 except ValueError:
                     logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
                 return None  # Не возвращаем клиента
 
-            me = await client.get_me()
+            me = await client.get_me()  # Получаем информацию о пользователе
             phone = me.phone or ""
             logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
             await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-            return client
+            return client  # Возвращаем клиента 
 
         except AuthKeyDuplicatedError:
             logger.error(
