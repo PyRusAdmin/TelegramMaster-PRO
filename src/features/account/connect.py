@@ -206,11 +206,11 @@ class TGConnect:
                                     size=20, # Размер текста
                                     weight=ft.FontWeight.BOLD, # Жирный шрифт
                                     foreground=ft.Paint( # Определяет цвет текста
-                                        gradient=ft.PaintLinearGradient(
-                                            (0, 20),
-                                            (150, 20),
+                                        gradient=ft.PaintLinearGradient( # Градиент для текста
+                                            (0, 20), # Начальная точка градиента
+                                            (150, 20), # Конечная точка градиента
                                             [
-                                                ft.Colors.PINK,
+                                                ft.Colors.PINK, 
                                                 ft.Colors.PURPLE
                                             ]
                                         )
