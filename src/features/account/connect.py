@@ -239,16 +239,16 @@ class TGConnect:
                             # ✏️ Переименование аккаунтов
                             ft.Button(
                                 content=translations["ru"]["account_verification"]["renaming"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=renaming_accounts
+                                width=WIDTH_WIDE_BUTTON, # Ширина кнопки
+                                height=BUTTON_HEIGHT, # Высота кнопки
+                                on_click=renaming_accounts # Вызов функции переименования аккаунтов
                             ),
                             # 🔍 Полная проверка
                             ft.Button(
                                 content=translations["ru"]["account_verification"]["full_verification"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=full_verification
+                                width=WIDTH_WIDE_BUTTON, # Ширина кнопки
+                                height=BUTTON_HEIGHT, # Высота кнопки
+                                on_click=full_verification # Вызов функции полной проверки
                             ),
                         ]
                     )
