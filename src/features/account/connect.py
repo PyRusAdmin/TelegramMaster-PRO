@@ -262,12 +262,12 @@ class TGConnect:
         :return: Клиент Telegram или None, если подключение не удалось
         """
         # Создаем клиент, используя StringSession и вашу строку
-        client = TelegramClient(
-            StringSession(session_name),
-            api_id=api_id,
-            api_hash=api_hash,
-            proxy=self.proxy.reading_proxy_data_from_the_database(),
-            system_version="4.16.30-vxCUSTOM"
+        client = TelegramClient( # Создаем клиента Telegram
+            StringSession(session_name), # Строка сессии
+            api_id=api_id, # ID приложения
+            api_hash=api_hash, # Хэш приложения
+            proxy=self.proxy.reading_proxy_data_from_the_database(), # Прокси
+            system_version="4.16.30-vxCUSTOM" # Версия системы
         )
         try:
             await client.connect()
