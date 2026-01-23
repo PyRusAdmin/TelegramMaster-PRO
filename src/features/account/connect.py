@@ -197,12 +197,12 @@ class TGConnect:
             ft.View(
                 route="/account_verification_menu",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
-                controls=[
-                    ft.Text(
-                        spans=[
-                            ft.TextSpan(
-                                translations["ru"]["menu"]["account_check"],
-                                ft.TextStyle(
+                controls=[  # Содержимое страницы
+                    ft.Text( # Отображение текста с использованием TextSpan для поддержки мультиязычности
+                        spans=[ # Список TextSpan для отображения текста с различными стилями
+                            ft.TextSpan( # Стиль для отображения текста
+                                translations["ru"]["menu"]["account_check"], # Текст для отображения
+                                ft.TextStyle( # Стиль текста
                                     size=20,
                                     weight=ft.FontWeight.BOLD,
                                     foreground=ft.Paint(
@@ -285,7 +285,7 @@ class TGConnect:
             phone = me.phone or ""
             logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
             await self.app_logger.log_and_display(message=f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
-            return client  # Возвращаем клиента 
+            return client  # Возвращаем клиента
 
         except AuthKeyDuplicatedError:
             logger.error(
