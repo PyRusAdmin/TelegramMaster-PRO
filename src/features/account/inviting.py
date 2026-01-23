@@ -54,11 +54,11 @@ class InvitingToAGroup:
         self.page = page
         self.scheduler = Scheduler()  # Создаем экземпляр планировщика
         self.links_inviting = get_links_inviting()  # Получаем список ссылок на группы для инвайтинга из базы данных
-        self.app_logger = AppLogger(page=page)
-        self.connect = TGConnect(page=page)
-        self.utils = Utils(page=page)
+        self.app_logger = AppLogger(page=page)  # Инициализация экземпляра класса AppLogger (Логирование)
+        self.connect = TGConnect(page=page)  # Инициализация экземпляра класса TGConnect (Подключение)
+        self.utils = Utils(page=page)  # Инициализация экземпляра класса Utils (Утилиты)
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
-        self.gui_program = GUIProgram(page=page)
+        self.gui_program = GUIProgram(page=page)  # Инициализация экземпляра класса GUIProgram (GUI)
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe_unsubscribe_telegram = SubscribeUnsubscribeTelegram(page=page)
 
