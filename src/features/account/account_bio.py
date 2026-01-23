@@ -24,11 +24,11 @@ class AccountBIO:
         Инициализация класса AccountBIO.
         :param page: Объект страницы ft.Page
         """
-        self.page = page
-        self.connect = TGConnect(page=page)
-        self.app_logger = AppLogger(page=page)
-        self.utils = Utils(page=page)
-        self.gui_program = GUIProgram(page=page)
+        self.page = page  # Сохраняем объект страницы ft.Page
+        self.connect = TGConnect(page=page)  # Создаем экземпляр класса TGConnect
+        self.app_logger = AppLogger(page=page)  # Создаем экземпляр класса AppLogger
+        self.utils = Utils(page=page)  # Создаем экземпляр класса Utils
+        self.gui_program = GUIProgram(page=page)  # Создаем экземпляр класса GUIProgram
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
 
