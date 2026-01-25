@@ -3,6 +3,7 @@ import asyncio
 import csv
 import os
 import os.path
+
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 from telethon.errors import (
@@ -14,17 +15,16 @@ from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
-from src.gui.buttons import menu_button_fun
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, api_id, api_hash
 from src.core.database.account import (
     getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session
 )
 from src.core.utils import Utils
 from src.features.proxy.checking_proxy import Proxy
+from src.gui.buttons import menu_button_fun
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
-import io
 
 
 # Выбор файла
