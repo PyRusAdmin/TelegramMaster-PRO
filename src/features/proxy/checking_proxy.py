@@ -3,8 +3,8 @@ import random
 
 import flet as ft
 import requests
-from loguru import logger
-
+from loguru import logger  # https://github.com/Delgan/loguru
+import os
 from src.core.database.database import deleting_an_invalid_proxy, get_proxy_database
 from src.gui.gui import AppLogger
 
@@ -21,26 +21,60 @@ class Proxy:
         :param page: Страница интерфейса Flet для отображения элементов управления
         """
         self.page = page
-        self.app_logger = AppLogger(page=page)
+        self.app_logger = AppLogger(page=page)  # Инициализация класса для логирования
 
-    def reading_proxy_data_from_the_database(self):
+    def setup_proxy(self):
         """
-        Считывает данные прокси из базы данных.
+        Настраивает системные переменные окружения для использования HTTP/HTTPS прокси.
 
-        :return: Словарь с данными прокси или None при ошибке
+        Функция устанавливает переменные окружения `http_proxy` и `https_proxy` на основе
+        данных, загруженных из конфигурационного файла (логин, пароль, IP и порт прокси-сервера).
+        Это необходимо для обхода сетевых ограничений при работе с внешними API (например, Groq)
+        или подключении к Telegram.
+
+        Использует прокси-данные из модуля `core.config`:
+            - proxy_user: логин для аутентификации на прокси
+            - proxy_password: пароль
+            - proxy_ip: IP-адрес прокси-сервера
+            - proxy_port: порт прокси
+
+        Прокси настраивается только на время выполнения скрипта.
+        Используется схема 'http' для обоих протоколов (так как многие прокси поддерживают HTTPS через HTTP-туннель).
+
+        Raises:
+            Exception: В случае ошибки устанавливается логирование с помощью `logger.exception`.
         """
+        proxy_random_list = random.choice(get_proxy_database())
+
+        proxy_user = proxy_random_list[3]  # Логин
+        proxy_password = proxy_random_list[4]  # Пароль
+        proxy_ip = proxy_random_list[1]  # IP
+        proxy_port = proxy_random_list[2]  # Порт
         try:
-            proxy_random_list = random.choice(get_proxy_database())
-            proxy = {'proxy_type': (proxy_random_list[0]), 'addr': proxy_random_list[1],
-                     'port': int(proxy_random_list[2]),
-                     'username': proxy_random_list[3], 'password': proxy_random_list[4], 'rdns': proxy_random_list[5]}
-            return proxy
-        except IndexError:
-            proxy = None
-            return proxy
-        except Exception as error:
-            logger.exception(error)
-            return None
+            # Указываем прокси для HTTP и HTTPS
+            os.environ['http_proxy'] = f"http://{proxy_user}:{proxy_password}@{proxy_ip}:{proxy_port}"
+            os.environ['https_proxy'] = f"http://{proxy_user}:{proxy_password}@{proxy_ip}:{proxy_port}"
+        except Exception as e:
+            logger.exception(e)
+
+    # def reading_proxy_data_from_the_database(self):
+    #     """
+    #     Считывает данные прокси из базы данных.
+    #
+    #     :return: Словарь с данными прокси или None при ошибке
+    #     """
+    #     try:
+    #         proxy_random_list = random.choice(get_proxy_database())
+    #         proxy = {'proxy_type': (proxy_random_list[0]), 'addr': proxy_random_list[1],
+    #                  'port': int(proxy_random_list[2]),
+    #                  'username': proxy_random_list[3], 'password': proxy_random_list[4], 'rdns': proxy_random_list[5]}
+    #         return proxy
+    #     except IndexError:
+    #         proxy = None
+    #         return proxy
+    #     except Exception as error:
+    #         logger.exception(error)
+    #         return None
 
     async def checking_the_proxy_for_work(self) -> None:
         """

@@ -37,7 +37,8 @@ class TGConnect:
         self.app_logger = AppLogger(page)  # Инициализация класса AppLogger для логирования и отображения сообщений.
         self.utils = Utils(page=page)  # Инициализация класса Utils для работы с утилитами.
         self.proxy = Proxy(page=page)  # Инициализация класса Proxy для проверки прокси.
-        self.gui_program = GUIProgram(page=page)  # Инициализация класса GUIProgram для работы с графическим интерфейсом.
+        self.gui_program = GUIProgram(
+            page=page)  # Инициализация класса GUIProgram для работы с графическим интерфейсом.
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.pick_files_dialog: ft.FilePicker | None = None
 
@@ -198,17 +199,17 @@ class TGConnect:
                 route="/account_verification_menu",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[  # Содержимое страницы
-                    ft.Text( # Отображение текста с использованием TextSpan для поддержки мультиязычности
-                        spans=[ # Список TextSpan для отображения текста с различными стилями
-                            ft.TextSpan( # Стиль для отображения текста
-                                translations["ru"]["menu"]["account_check"], # Текст для отображения
-                                ft.TextStyle( # Стиль текста
-                                    size=20, # Размер текста
-                                    weight=ft.FontWeight.BOLD, # Жирный шрифт
-                                    foreground=ft.Paint( # Определяет цвет текста
-                                        gradient=ft.PaintLinearGradient( # Градиент для текста
-                                            (0, 20), # Начальная точка градиента
-                                            (150, 20), # Конечная точка градиента
+                    ft.Text(  # Отображение текста с использованием TextSpan для поддержки мультиязычности
+                        spans=[  # Список TextSpan для отображения текста с различными стилями
+                            ft.TextSpan(  # Стиль для отображения текста
+                                translations["ru"]["menu"]["account_check"],  # Текст для отображения
+                                ft.TextStyle(  # Стиль текста
+                                    size=20,  # Размер текста
+                                    weight=ft.FontWeight.BOLD,  # Жирный шрифт
+                                    foreground=ft.Paint(  # Определяет цвет текста
+                                        gradient=ft.PaintLinearGradient(  # Градиент для текста
+                                            (0, 20),  # Начальная точка градиента
+                                            (150, 20),  # Конечная точка градиента
                                             [
                                                 ft.Colors.PINK,
                                                 ft.Colors.PURPLE
@@ -225,30 +226,30 @@ class TGConnect:
                             # 🤖 Проверка через спам бот
                             ft.Button(
                                 content=translations["ru"]["account_verification"]["spam_check"],
-                                width=WIDTH_WIDE_BUTTON, # Ширина кнопки
-                                height=BUTTON_HEIGHT, # Высота кнопки
-                                on_click=check_for_spam # Вызов функции проверки на спам
+                                width=WIDTH_WIDE_BUTTON,  # Ширина кнопки
+                                height=BUTTON_HEIGHT,  # Высота кнопки
+                                on_click=check_for_spam  # Вызов функции проверки на спам
                             ),
                             # ✅ Проверка на валидность
                             ft.Button(
                                 content=translations["ru"]["account_verification"]["validation"],
-                                width=WIDTH_WIDE_BUTTON, # Ширина кнопки
-                                height=BUTTON_HEIGHT, # Высота кнопки
-                                on_click=validation_check # Вызов функции проверки на валидность
+                                width=WIDTH_WIDE_BUTTON,  # Ширина кнопки
+                                height=BUTTON_HEIGHT,  # Высота кнопки
+                                on_click=validation_check  # Вызов функции проверки на валидность
                             ),
                             # ✏️ Переименование аккаунтов
                             ft.Button(
                                 content=translations["ru"]["account_verification"]["renaming"],
-                                width=WIDTH_WIDE_BUTTON, # Ширина кнопки
-                                height=BUTTON_HEIGHT, # Высота кнопки
-                                on_click=renaming_accounts # Вызов функции переименования аккаунтов
+                                width=WIDTH_WIDE_BUTTON,  # Ширина кнопки
+                                height=BUTTON_HEIGHT,  # Высота кнопки
+                                on_click=renaming_accounts  # Вызов функции переименования аккаунтов
                             ),
                             # 🔍 Полная проверка
                             ft.Button(
                                 content=translations["ru"]["account_verification"]["full_verification"],
-                                width=WIDTH_WIDE_BUTTON, # Ширина кнопки
-                                height=BUTTON_HEIGHT, # Высота кнопки
-                                on_click=full_verification # Вызов функции полной проверки
+                                width=WIDTH_WIDE_BUTTON,  # Ширина кнопки
+                                height=BUTTON_HEIGHT,  # Высота кнопки
+                                on_click=full_verification  # Вызов функции полной проверки
                             ),
                         ]
                     )
@@ -261,13 +262,16 @@ class TGConnect:
         :param session_name: Имя аккаунта для подключения (файл .session)
         :return: Клиент Telegram или None, если подключение не удалось
         """
+
+        # self.proxy.setup_proxy()  # Устанавливаем прокси
+
         # Создаем клиент, используя StringSession и вашу строку
-        client = TelegramClient( # Создаем клиента Telegram
-            StringSession(session_name), # Строка сессии
-            api_id=api_id, # ID приложения
-            api_hash=api_hash, # Хэш приложения
-            proxy=self.proxy.reading_proxy_data_from_the_database(), # Прокси
-            system_version="4.16.30-vxCUSTOM" # Версия системы
+        client = TelegramClient(  # Создаем клиента Telegram
+            StringSession(session_name),  # Строка сессии
+            api_id=api_id,  # ID приложения
+            api_hash=api_hash,  # Хэш приложения
+            # proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
+            system_version="4.16.30-vxCUSTOM"  # Версия системы
         )
         try:
             await client.connect()
@@ -395,6 +399,9 @@ class TGConnect:
 
         async def connecting_number_accounts(_) -> None:
             """Подключение аккаунта Telegram по номеру телефона"""
+
+            # self.proxy.setup_proxy()  # Устанавливаем прокси
+
             phone_number_value = phone_number.value
             await self.app_logger.log_and_display(message=f"Номер телефона: {phone_number_value}")
 
@@ -402,7 +409,7 @@ class TGConnect:
             client = TelegramClient(
                 session=f"{phone_number_value}", api_id=api_id, api_hash=api_hash,
                 system_version="4.16.30-vxCUSTOM",
-                proxy=self.proxy.reading_proxy_data_from_the_database()
+                # proxy=self.proxy.reading_proxy_data_from_the_database()
             )
             await client.connect()  # Подключаемся к Telegram
 
