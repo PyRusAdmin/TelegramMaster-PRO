@@ -26,6 +26,14 @@ from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
+mobile_device = {
+    "device_model": "Pixel 5",
+    "system_version": "11",
+    "app_version": "8.4.1",
+    "lang_code": "en",
+    "system_lang_code": "en-US",
+}
+
 
 # Выбор файла
 # https://docs.flet.dev/services/filepicker/#flet.FilePicker
@@ -263,15 +271,20 @@ class TGConnect:
         :return: Клиент Telegram или None, если подключение не удалось
         """
 
-        # self.proxy.setup_proxy()  # Устанавливаем прокси
+        self.proxy.setup_proxy()  # Устанавливаем прокси
 
         # Создаем клиент, используя StringSession и вашу строку
         client = TelegramClient(  # Создаем клиента Telegram
             StringSession(session_name),  # Строка сессии
             api_id=api_id,  # ID приложения
             api_hash=api_hash,  # Хэш приложения
-            # proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
-            system_version="4.16.30-vxCUSTOM"  # Версия системы
+            proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
+            # system_version="4.16.30-vxCUSTOM"  # Версия системы
+            device_model=mobile_device["device_model"],
+            system_version=mobile_device["system_version"],
+            app_version=mobile_device["app_version"],
+            lang_code=mobile_device["lang_code"],
+            system_lang_code=mobile_device["system_lang_code"],
         )
         try:
             await client.connect()
@@ -400,16 +413,23 @@ class TGConnect:
         async def connecting_number_accounts(_) -> None:
             """Подключение аккаунта Telegram по номеру телефона"""
 
-            # self.proxy.setup_proxy()  # Устанавливаем прокси
+            self.proxy.setup_proxy()  # Устанавливаем прокси
 
             phone_number_value = phone_number.value
             await self.app_logger.log_and_display(message=f"Номер телефона: {phone_number_value}")
 
             # Дальнейшая обработка после записи номера телефона
             client = TelegramClient(
-                session=f"{phone_number_value}", api_id=api_id, api_hash=api_hash,
-                system_version="4.16.30-vxCUSTOM",
-                # proxy=self.proxy.reading_proxy_data_from_the_database()
+                session=f"{phone_number_value}",
+                api_id=api_id,
+                api_hash=api_hash,
+                # system_version="4.16.30-vxCUSTOM",
+                proxy=self.proxy.reading_proxy_data_from_the_database(),
+                device_model=mobile_device["device_model"],
+                system_version=mobile_device["system_version"],
+                app_version=mobile_device["app_version"],
+                lang_code=mobile_device["lang_code"],
+                system_lang_code=mobile_device["system_lang_code"],
             )
             await client.connect()  # Подключаемся к Telegram
 
@@ -529,7 +549,13 @@ class TGConnect:
                         session=session_path,
                         api_id=api_id,
                         api_hash=api_hash,
-                        system_version="4.16.30-vxCUSTOM"
+                        # system_version="4.16.30-vxCUSTOM"
+                        proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
+                        device_model=mobile_device["device_model"],
+                        system_version=mobile_device["system_version"],
+                        app_version=mobile_device["app_version"],
+                        lang_code=mobile_device["lang_code"],
+                        system_lang_code=mobile_device["system_lang_code"],
                     )
 
                     try:
@@ -544,7 +570,12 @@ class TGConnect:
                             StringSession(session_string),
                             api_id=api_id,
                             api_hash=api_hash,
-                            system_version="4.16.30-vxCUSTOM"
+                            device_model=mobile_device["device_model"],
+                            system_version=mobile_device["system_version"],
+                            app_version=mobile_device["app_version"],
+                            lang_code=mobile_device["lang_code"],
+                            system_lang_code=mobile_device["system_lang_code"],
+                            proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
                         )
 
                         await client.connect()

@@ -7,7 +7,7 @@ from loguru import logger  # https://github.com/Delgan/loguru
 import os
 from src.core.database.database import deleting_an_invalid_proxy, get_proxy_database
 from src.gui.gui import AppLogger
-
+import python_socks.async_.asyncio
 
 class Proxy:
     """
@@ -57,24 +57,29 @@ class Proxy:
         except Exception as e:
             logger.exception(e)
 
-    # def reading_proxy_data_from_the_database(self):
-    #     """
-    #     Считывает данные прокси из базы данных.
-    #
-    #     :return: Словарь с данными прокси или None при ошибке
-    #     """
-    #     try:
-    #         proxy_random_list = random.choice(get_proxy_database())
-    #         proxy = {'proxy_type': (proxy_random_list[0]), 'addr': proxy_random_list[1],
-    #                  'port': int(proxy_random_list[2]),
-    #                  'username': proxy_random_list[3], 'password': proxy_random_list[4], 'rdns': proxy_random_list[5]}
-    #         return proxy
-    #     except IndexError:
-    #         proxy = None
-    #         return proxy
-    #     except Exception as error:
-    #         logger.exception(error)
-    #         return None
+    def reading_proxy_data_from_the_database(self):
+        """
+        Считывает данные прокси из базы данных.
+
+        :return: Словарь с данными прокси или None при ошибке
+        """
+        try:
+            proxy_random_list = random.choice(get_proxy_database())
+            proxy = {
+                'proxy_type': python_socks.ProxyType.SOCKS5,
+                'addr': proxy_random_list[1],
+                'port': int(proxy_random_list[2]),
+                'username': proxy_random_list[3],
+                'password': proxy_random_list[4],
+                'rdns': True
+            }
+            return proxy
+        except IndexError:
+            proxy = None
+            return proxy
+        except Exception as error:
+            logger.exception(error)
+            return None
 
     async def checking_the_proxy_for_work(self) -> None:
         """

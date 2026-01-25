@@ -21,6 +21,7 @@ from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
 from src.features.account.switch_controller import ToggleController
 from src.features.account.user_info import UserInfo
+from src.features.proxy.checking_proxy import Proxy
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
@@ -41,6 +42,7 @@ class ParsingGroupMembers:
         self.subscribe = Subscribe(page=page)  # Инициализация экземпляра класса Subscribe (Подписка)
         self.gui_program = GUIProgram(page=page)  # Инициализация экземпляра класса GUIProgram
         self.account_data = get_account_list()  # Получаем список аккаунтов из базы данных
+        self.proxy = Proxy(page=page)  # Инициализация класса Proxy для проверки прокси.
         self.group_map = {}
         self.chat_input = ft.TextField(
             label="🔗 Введите ссылку на чат...",
@@ -470,6 +472,8 @@ class ParsingGroupMembers:
         :return: None
         """
         # Обрабатываем все файлы сессий по очереди 📂
+
+        self.proxy.setup_proxy()  # Устанавливаем прокси
 
         await self.forming_a_list_of_groups(client)
 
