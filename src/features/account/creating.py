@@ -85,12 +85,9 @@ class CreatingGroupsAndChats:
                 route="/creating_groups_and_chats_menu",
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
-                    ft.Text(spans=[
-                        ft.TextSpan(translations["ru"]["menu"]["create_groups"], ft.TextStyle(
-                            size=20, weight=ft.FontWeight.BOLD,
-                            foreground=ft.Paint(gradient=ft.PaintLinearGradient((0, 20), (150, 20),
-                                                                                [ft.Colors.PINK,
-                                                                                 ft.Colors.PURPLE]))))]),
+                    await self.gui_program.handle_pick_session_files(
+                        text=translations["ru"]["menu"]["create_groups"]
+                    ),
                     list_view,
                     account_drop_down_list,
                     ft.Button(
