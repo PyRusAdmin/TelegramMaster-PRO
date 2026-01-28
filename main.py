@@ -48,6 +48,7 @@ async def main_view(page: ft.Page):
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
     gui_program = GUIProgram(page=page)  # Создаем экземпляр класса GUIProgram
+    inviting_to_a_group = InvitingToAGroup(page=page)
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
@@ -65,7 +66,7 @@ async def main_view(page: ft.Page):
         if page.route == "/":
             await main_view(page=page)
         elif page.route == "/inviting":
-            await InvitingToAGroup(page=page).inviting_menu()
+            await inviting_to_a_group.inviting_menu()
         elif page.route == "/parsing":
             await parsing_group_members.account_selection_menu()
         elif page.route == "/account_verification_menu":
@@ -268,6 +269,7 @@ async def main(page: ft.Page):
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
     gui_program = GUIProgram(page=page)  # Создаем экземпляр класса GUIProgram
+    inviting_to_a_group = InvitingToAGroup(page=page)
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
@@ -285,7 +287,7 @@ async def main(page: ft.Page):
         if page.route == "/":
             await main_view(page=page)
         elif page.route == "/inviting":
-            await InvitingToAGroup(page=page).inviting_menu()
+            await inviting_to_a_group.inviting_menu()
         elif page.route == "/parsing":
             await parsing_group_members.account_selection_menu()
         elif page.route == "/account_verification_menu":
