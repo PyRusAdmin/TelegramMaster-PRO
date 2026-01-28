@@ -132,16 +132,11 @@ class TGContact:
                 route="/working_with_contacts",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
-                    ft.Text(spans=[ft.TextSpan(
-                        translations["ru"]["menu"]["contacts"],
-                        ft.TextStyle(
-                            size=20, weight=ft.FontWeight.BOLD,
-                            foreground=ft.Paint(
-                                gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                     ft.Colors.PURPLE]))))]),
+                    await self.gui_program.handle_pick_session_files(
+                        text=translations["ru"]["menu"]["contacts"]
+                    ),
                     list_view,  # Отображение логов 📝
                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-
                         ft.Row(
                             [
                                 input_numbers,  # Ввод номеров

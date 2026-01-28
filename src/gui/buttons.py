@@ -56,27 +56,33 @@ class FunctionButton:
                 route="/viewing_posts_menu",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
-                    ft.Text(
-                        spans=[
-                            ft.TextSpan(
-                                translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                                ft.TextStyle(
-                                    size=20,
-                                    weight=ft.FontWeight.BOLD,
-                                    foreground=ft.Paint(
-                                        gradient=ft.PaintLinearGradient(
-                                            (0, 20),
-                                            (150, 20),
-                                            [
-                                                ft.Colors.PINK,
-                                                ft.Colors.PURPLE
-                                            ]
-                                        )
-                                    )
-                                )
-                            )
-                        ]
+
+                    # "Подключение аккаунта Telegram по номеру телефона.",
+                    await self.gui_program.handle_pick_session_files(
+                        text=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"]
                     ),
+
+                    # ft.Text(
+                    #     spans=[
+                    #         ft.TextSpan(
+                    #             translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+                    #             ft.TextStyle(
+                    #                 size=20,
+                    #                 weight=ft.FontWeight.BOLD,
+                    #                 foreground=ft.Paint(
+                    #                     gradient=ft.PaintLinearGradient(
+                    #                         (0, 20),
+                    #                         (150, 20),
+                    #                         [
+                    #                             ft.Colors.PINK,
+                    #                             ft.Colors.PURPLE
+                    #                         ]
+                    #                     )
+                    #                 )
+                    #             )
+                    #         )
+                    #     ]
+                    # ),
 
                     list_view,  # Отображение логов 📝
                     number_views,  # Поле ввода количества просмотров основываясь на количестве аккаунтов

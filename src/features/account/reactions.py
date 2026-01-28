@@ -172,39 +172,32 @@ class WorkingWithReactions:
                     route="/working_with_reactions",
                     appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                     controls=[
-                        ft.Text(
-                            spans=[
-                                ft.TextSpan(
-                                    translations["ru"]["menu"]["reactions"],
-                                    ft.TextStyle(
-                                        size=20,
-                                        weight=ft.FontWeight.BOLD,
-                                        foreground=ft.Paint(
-                                            gradient=ft.PaintLinearGradient(
-                                                (0, 20), (150, 20), [ft.Colors.PINK, ft.Colors.PURPLE]
-                                            )
-                                        ),
-                                    ),
-                                ),
-                            ],
+                        await self.gui_program.handle_pick_session_files(
+                            text=translations["ru"]["menu"]["reactions"]
                         ),
                         list_view,
                         chat,
                         message,
-                        ft.Column([
-                            ft.ElevatedButton(
-                                content=ft.Text(translations["ru"]["reactions_menu"]["setting_reactions"]),
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=send_reaction_request,
-                            ),
-                            ft.ElevatedButton(
-                                content=ft.Text(translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"]),
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=setting_reactions,
-                            ),
-                        ]),
+                        ft.Column(
+                            [
+                                ft.ElevatedButton(
+                                    content=ft.Text(
+                                        translations["ru"]["reactions_menu"]["setting_reactions"]
+                                    ),
+                                    width=WIDTH_WIDE_BUTTON,
+                                    height=BUTTON_HEIGHT,
+                                    on_click=send_reaction_request,
+                                ),
+                                ft.ElevatedButton(
+                                    content=ft.Text(
+                                        translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"]
+                                    ),
+                                    width=WIDTH_WIDE_BUTTON,
+                                    height=BUTTON_HEIGHT,
+                                    on_click=setting_reactions,
+                                ),
+                            ]
+                        ),
                     ],
                 )
 
