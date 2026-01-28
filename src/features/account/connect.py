@@ -264,6 +264,8 @@ class TGConnect:
             )
         )
 
+
+
     async def client_connect_string_session(self, session_name: str) -> TelegramClient | None:
         """
         Подключение к Telegram аккаунту через StringSession
@@ -280,7 +282,6 @@ class TGConnect:
             api_id=api_id,  # ID приложения
             api_hash=api_hash,  # Хэш приложения
             proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
-            # system_version="4.16.30-vxCUSTOM"  # Версия системы
             device_model=mobile_device["device_model"],
             system_version=mobile_device["system_version"],
             app_version=mobile_device["app_version"],
@@ -311,6 +312,13 @@ class TGConnect:
             await client.disconnect()
             await self.write_csv(data=session_name)
             return None  # Не возвращаем клиента
+
+    async def delete_account_databese(self):
+        """
+        Удаление аккаунтов из базы данных
+        :return:
+        """
+
 
     async def write_csv(self, data):
         """
@@ -398,7 +406,9 @@ class TGConnect:
 
     async def account_connection_menu(self):
         """
-        Меню подключения аккаунтов (по телефону и по session)
+        Меню работы с аккаунтами:
+            - Подключение аккаунтов (по телефону и по session)
+            - Очистка базы данных от аккаунтов
         """
 
         list_view.controls.clear()
@@ -424,7 +434,6 @@ class TGConnect:
                 session=f"{phone_number_value}",
                 api_id=api_id,
                 api_hash=api_hash,
-                # system_version="4.16.30-vxCUSTOM",
                 proxy=self.proxy.reading_proxy_data_from_the_database(),
                 device_model=mobile_device["device_model"],
                 system_version=mobile_device["system_version"],
@@ -550,7 +559,6 @@ class TGConnect:
                         session=session_path,
                         api_id=api_id,
                         api_hash=api_hash,
-                        # system_version="4.16.30-vxCUSTOM"
                         proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
                         device_model=mobile_device["device_model"],
                         system_version=mobile_device["system_version"],
