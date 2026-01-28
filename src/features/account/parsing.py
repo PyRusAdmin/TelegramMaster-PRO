@@ -354,7 +354,9 @@ class ParsingGroupMembers:
                     route="/parsing",
                     appbar=await self.gui_program.key_app_bar(),
                     controls=[
-                        await self.gui_program.outputs_text_gradient(),
+                        await self.gui_program.handle_pick_session_files(
+                            text=translations["ru"]["menu"]["parsing"]
+                        ),
                         list_view,
                         ft.Column(
                             [
