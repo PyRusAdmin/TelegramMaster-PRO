@@ -677,26 +677,6 @@ class TGConnect:
                         on_click=connecting_number_accounts
                     ),
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
-                    # ft.Text(
-                    #     spans=[
-                    #         ft.TextSpan(
-                    #             "Подключение session аккаунтов Telegram",
-                    #             ft.TextStyle(
-                    #                 size=20,
-                    #                 weight=ft.FontWeight.BOLD,
-                    #                 foreground=ft.Paint(
-                    #                     gradient=ft.PaintLinearGradient(
-                    #                         (0, 20),
-                    #                         (150, 20), [
-                    #                             ft.Colors.PINK,
-                    #                             ft.Colors.PURPLE
-                    #                         ]
-                    #                     )
-                    #                 )
-                    #             )
-                    #         )
-                    #     ]
-                    # ),
 
                     # "Подключение session аккаунтов Telegram"
                     await self.gui_program.handle_pick_session_files(
