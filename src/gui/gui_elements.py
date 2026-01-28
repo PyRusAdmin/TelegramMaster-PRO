@@ -83,29 +83,6 @@ class GUIProgram:
             bgcolor=ft.Colors.SURFACE_CONTAINER_HIGHEST,
         )
 
-    @staticmethod
-    async def outputs_text_gradient():
-        """
-        Создает текст с градиентным оформлением.
-
-        :return: Объект Text с градиентом
-        """
-        # Создаем текст с градиентным оформлением через TextStyle
-        return ft.Text(
-            spans=[
-                ft.TextSpan(
-                    translations["ru"]["menu"]["parsing"],
-                    ft.TextStyle(
-                        size=20,
-                        weight=ft.FontWeight.NORMAL,
-                        foreground=ft.Paint(
-                            color=ft.Colors.PINK,
-                        ),
-                    ),
-                )
-            ],
-        )
-
     # TODO: Применить во всем проекте, для одинакового оформления GUI программы
     @staticmethod
     async def diver_castom():
