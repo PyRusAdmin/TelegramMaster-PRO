@@ -262,34 +262,9 @@ class SettingPage:
                     route="/settings",
                     appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                     controls=[
-                        ft.Text(
-                            spans=[
-                                ft.TextSpan(
-                                    translations["ru"]["menu"]["settings"],
-                                    ft.TextStyle(
-                                        size=20,
-                                        weight=ft.FontWeight.BOLD,
-                                        foreground=ft.Paint(
-                                            gradient=ft.PaintLinearGradient(
-                                                (
-                                                    0,
-                                                    20
-                                                ),
-                                                (
-                                                    150,
-                                                    20
-                                                ),
-                                                [
-                                                    ft.Colors.PINK,
-                                                    ft.Colors.PURPLE
-                                                ]
-                                            )
-                                        )
-                                    )
-                                )
-                            ]
+                        await self.gui_program.handle_pick_session_files(
+                            text=translations["ru"]["menu"]["settings"]
                         ),
-
                         ft.Column(
                             controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                                 await menu_button_fun(  # 👍 Выбор реакций

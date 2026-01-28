@@ -110,7 +110,7 @@ class SubscribeUnsubscribeTelegram:
                                                                       time_2=str(larger_times),
                                                                       variable="time_subscription"))
                     list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
-                    await self.gui_program.show_notification( # ✅ Показываем уведомление пользователю
+                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                         message="Данные успешно записаны!"
                     )
                 else:
@@ -144,15 +144,10 @@ class SubscribeUnsubscribeTelegram:
                 route="/subscribe_unsubscribe",
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
-                    ft.Text(spans=[ft.TextSpan(
-                        translations["ru"]["menu"]["subscribe_unsubscribe"],
-                        ft.TextStyle(
-                            size=20, weight=ft.FontWeight.BOLD,
-                            foreground=ft.Paint(
-                                gradient=ft.PaintLinearGradient((0, 20), (150, 20),
-                                                                [ft.Colors.PINK, ft.Colors.PURPLE]))))]),
+                    await self.gui_program.handle_pick_session_files(
+                        text=translations["ru"]["menu"]["subscribe_unsubscribe"]
+                    ),
                     list_view,  # Отображение логов 📝
-
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     ft.Text(
                         value="⏱ Укажите интервал времени (в секундах) между подписками на группы.\n"

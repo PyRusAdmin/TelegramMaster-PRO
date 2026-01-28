@@ -203,13 +203,9 @@ class AccountBIO:
                 route="/bio_editing",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
-                    ft.Text(spans=[ft.TextSpan(
-                        translations["ru"]["menu"]["edit_bio"],
-                        ft.TextStyle(
-                            size=20, weight=ft.FontWeight.BOLD,
-                            foreground=ft.Paint(
-                                gradient=ft.PaintLinearGradient((0, 20), (150, 20), [ft.Colors.PINK,
-                                                                                     ft.Colors.PURPLE]))))]),
+                    await self.gui_program.handle_pick_session_files(
+                        text=translations["ru"]["menu"]["edit_bio"]
+                    ),
                     list_view,  # Отображение логов 📝
                     account_drop_down_list,  # Выпадающий список с аккаунтами
                     ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
