@@ -311,30 +311,6 @@ class TGConnect:
             await self.write_csv(data=session_name)
             return None  # Не возвращаем клиента
 
-    async def delete_invalid_accounts_from_database(self):
-        """
-        Удаляет невалидные аккаунты из базы данных на основе данных из CSV-файла.
-        :return: None
-        """
-        accounts = []
-        for record in Account.select(Account.session_string, Account.phone_number):
-            accounts.append(f"{record.session_string};{record.phone_number}")
-
-        logger.info(f"Сохраняем аккаунты в файл: {accounts}")
-
-        # Записываем данные в txt файл
-        with open('user_data/accounts.txt', 'w', encoding='utf-8') as f:
-            for account in accounts:
-                f.write(account + '\n')
-
-        # Очищаем базу данных
-        query = Account.delete()
-        query.execute()
-
-        await self.app_logger.log_and_display(
-            message="✅ Все аккаунты сохранены в user_data/accounts.txt и удалены из базы данных."
-        )
-
     async def write_csv(self, data):
         """
         Запись данных в CSV файл. (Аккаунты Telegram)
@@ -435,6 +411,30 @@ class TGConnect:
             multiline=False,  # Многострочное поле (по умолчанию однострочное)
             max_lines=1
         )
+
+        async def delete_invalid_accounts_from_database():
+            """
+            Удаляет невалидные аккаунты из базы данных на основе данных из CSV-файла.
+            :return: None
+            """
+            accounts = []
+            for record in Account.select(Account.session_string, Account.phone_number):
+                accounts.append(f"{record.session_string};{record.phone_number}")
+
+            logger.info(f"Сохраняем аккаунты в файл: {accounts}")
+
+            # Записываем данные в txt файл
+            with open('user_data/accounts.txt', 'w', encoding='utf-8') as f:
+                for account in accounts:
+                    f.write(account + '\n')
+
+            # Очищаем базу данных
+            query = Account.delete()
+            query.execute()
+
+            await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                message="✅ Все аккаунты сохранены в user_data/accounts.txt и удалены из базы данных."
+            )
 
         async def connecting_number_accounts(_) -> None:
             """Подключение аккаунта Telegram по номеру телефона"""
@@ -657,12 +657,21 @@ class TGConnect:
                 route="/account_connection_menu",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
-
+                    await self.gui_program.create_gradient_text(
+                        text="Удалить подключенные аккаунты"
+                    ),
+                    # 📞 Подключение аккаунтов по номеру телефона
+                    ft.Button(
+                        content="Очистить базу данных",
+                        width=WIDTH_WIDE_BUTTON,
+                        height=BUTTON_HEIGHT,
+                        on_click=delete_invalid_accounts_from_database
+                    ),
+                    await self.gui_program.diver_castom(),  # Горизонтальная линия
                     # "Подключение аккаунта Telegram по номеру телефона.",
                     await self.gui_program.create_gradient_text(
                         text="Подключение аккаунта Telegram по номеру телефона."
                     ),
-
                     list_view,  # Отображение логов 📝
                     ft.Row(
                         [
@@ -677,12 +686,10 @@ class TGConnect:
                         on_click=connecting_number_accounts
                     ),
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
-
                     # "Подключение session аккаунтов Telegram"
                     await self.gui_program.create_gradient_text(
                         text="Подключение session аккаунтов Telegram"
                     ),
-
                     ft.Text(f"Выберите session файл\n", size=15),
                     selected_files,  # Поле для отображения выбранного файла
                     ft.Column(

@@ -162,7 +162,9 @@ class SendTelegramMessages:
                 route="/sending_messages_via_chats_menu",
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
-                    ft.Text("Отправка сообщений в личку", size=18, weight=ft.FontWeight.BOLD),
+                    await self.gui_program.create_gradient_text(
+                        text="Отправка сообщений в личку"
+                    ),
                     list_view,  # Отображение логов 📝
                     ft.Row(controls=[self.tb_time_from, self.tb_time_to], spacing=20, ),
                     self.limits,
