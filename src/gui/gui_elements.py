@@ -13,8 +13,32 @@ class GUIProgram:
     def __init__(self, page: ft.Page):
         self.page = page
 
+    async def handle_pick_session_files(self, text):
+        return ft.Text(
+            spans=[
+                ft.TextSpan(
+                    text=text,
+                    style=ft.TextStyle(
+                        size=20,
+                        weight=ft.FontWeight.BOLD,
+                        foreground=ft.Paint(
+                            gradient=ft.PaintLinearGradient(
+                                (0, 20),
+                                (150, 20),
+                                [
+                                    ft.Colors.PINK,
+                                    ft.Colors.PURPLE
+                                ]
+                            )
+                        )
+                    )
+                )
+            ]
+        )
+
     async def menu_button(self, text: str, route: str):
         """
+        Кнопка-меню главного экрана проекта
         :param text: Текст, отображаемый на кнопке меню.
         :type text: str
         :param route: Путь маршрута (например: "/parsing", "/settings"), на который будет выполнен переход при нажатии.

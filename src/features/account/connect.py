@@ -17,7 +17,7 @@ from thefuzz import fuzz
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, api_id, api_hash
 from src.core.database.account import (
-    getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session
+    getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session, Account
 )
 from src.core.utils import Utils
 from src.features.proxy.checking_proxy import Proxy
@@ -264,8 +264,6 @@ class TGConnect:
             )
         )
 
-
-
     async def client_connect_string_session(self, session_name: str) -> TelegramClient | None:
         """
         Подключение к Telegram аккаунту через StringSession
@@ -313,12 +311,29 @@ class TGConnect:
             await self.write_csv(data=session_name)
             return None  # Не возвращаем клиента
 
-    async def delete_account_databese(self):
+    async def delete_invalid_accounts_from_database(self):
         """
-        Удаление аккаунтов из базы данных
-        :return:
+        Удаляет невалидные аккаунты из базы данных на основе данных из CSV-файла.
+        :return: None
         """
+        accounts = []
+        for record in Account.select(Account.session_string, Account.phone_number):
+            accounts.append(f"{record.session_string};{record.phone_number}")
 
+        logger.info(f"Сохраняем аккаунты в файл: {accounts}")
+
+        # Записываем данные в txt файл
+        with open('user_data/accounts.txt', 'w', encoding='utf-8') as f:
+            for account in accounts:
+                f.write(account + '\n')
+
+        # Очищаем базу данных
+        query = Account.delete()
+        query.execute()
+
+        await self.app_logger.log_and_display(
+            message="✅ Все аккаунты сохранены в user_data/accounts.txt и удалены из базы данных."
+        )
 
     async def write_csv(self, data):
         """
@@ -642,27 +657,12 @@ class TGConnect:
                 route="/account_connection_menu",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
-                    ft.Text(
-                        spans=[
-                            ft.TextSpan(
-                                "Подключение аккаунта Telegram по номеру телефона.",
-                                ft.TextStyle(
-                                    size=20,
-                                    weight=ft.FontWeight.BOLD,
-                                    foreground=ft.Paint(
-                                        gradient=ft.PaintLinearGradient(
-                                            (0, 20),
-                                            (150, 20),
-                                            [
-                                                ft.Colors.PINK,
-                                                ft.Colors.PURPLE
-                                            ]
-                                        )
-                                    )
-                                )
-                            )
-                        ]
+
+                    # "Подключение аккаунта Telegram по номеру телефона.",
+                    await self.gui_program.handle_pick_session_files(
+                        text="Подключение аккаунта Telegram по номеру телефона."
                     ),
+
                     list_view,  # Отображение логов 📝
                     ft.Row(
                         [
@@ -677,26 +677,32 @@ class TGConnect:
                         on_click=connecting_number_accounts
                     ),
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
-                    ft.Text(
-                        spans=[
-                            ft.TextSpan(
-                                "Подключение session аккаунтов Telegram",
-                                ft.TextStyle(
-                                    size=20,
-                                    weight=ft.FontWeight.BOLD,
-                                    foreground=ft.Paint(
-                                        gradient=ft.PaintLinearGradient(
-                                            (0, 20),
-                                            (150, 20), [
-                                                ft.Colors.PINK,
-                                                ft.Colors.PURPLE
-                                            ]
-                                        )
-                                    )
-                                )
-                            )
-                        ]
+                    # ft.Text(
+                    #     spans=[
+                    #         ft.TextSpan(
+                    #             "Подключение session аккаунтов Telegram",
+                    #             ft.TextStyle(
+                    #                 size=20,
+                    #                 weight=ft.FontWeight.BOLD,
+                    #                 foreground=ft.Paint(
+                    #                     gradient=ft.PaintLinearGradient(
+                    #                         (0, 20),
+                    #                         (150, 20), [
+                    #                             ft.Colors.PINK,
+                    #                             ft.Colors.PURPLE
+                    #                         ]
+                    #                     )
+                    #                 )
+                    #             )
+                    #         )
+                    #     ]
+                    # ),
+
+                    # "Подключение session аккаунтов Telegram"
+                    await self.gui_program.handle_pick_session_files(
+                        text="Подключение session аккаунтов Telegram"
                     ),
+
                     ft.Text(f"Выберите session файл\n", size=15),
                     selected_files,  # Поле для отображения выбранного файла
                     ft.Column(
