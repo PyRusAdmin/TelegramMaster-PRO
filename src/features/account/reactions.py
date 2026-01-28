@@ -180,18 +180,14 @@ class WorkingWithReactions:
                         message,
                         ft.Column(
                             [
-                                ft.ElevatedButton(
-                                    content=ft.Text(
-                                        translations["ru"]["reactions_menu"]["setting_reactions"]
-                                    ),
+                                ft.Button(
+                                    content=translations["ru"]["reactions_menu"]["setting_reactions"],
                                     width=WIDTH_WIDE_BUTTON,
                                     height=BUTTON_HEIGHT,
                                     on_click=send_reaction_request,
                                 ),
-                                ft.ElevatedButton(
-                                    content=ft.Text(
-                                        translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"]
-                                    ),
+                                ft.Button(
+                                    content=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
                                     width=WIDTH_WIDE_BUTTON,
                                     height=BUTTON_HEIGHT,
                                     on_click=setting_reactions,
