@@ -339,36 +339,57 @@ async def main(page: ft.Page):
                                     translations["ru"]["inviting_menu"]["inviting"],
                                     "/inviting",
                                 ),
-                                await gui_program.menu_button(translations["ru"]["menu"]["parsing"],
-                                                              "/parsing"),
-                                await gui_program.menu_button(translations["ru"]["menu"]["contacts"],
-                                                              "/working_with_contacts"),
-                                await gui_program.menu_button(translations["ru"]["menu"]["subscribe_unsubscribe"],
-                                                              "/subscribe_unsubscribe"),
-                                await gui_program.menu_button(translations["ru"]["menu"]["account_connect"],
-                                                              "/account_connection_menu"),
+                                await gui_program.menu_button(
+                                    translations["ru"]["menu"]["parsing"],
+                                    "/parsing"
+                                ),
+                                await gui_program.menu_button(
+                                    translations["ru"]["menu"]["contacts"],
+                                    "/working_with_contacts"
+                                ),
+                                await gui_program.menu_button(
+                                    translations["ru"]["menu"]["subscribe_unsubscribe"],
+                                    "/subscribe_unsubscribe"
+                                ),
+                                await gui_program.menu_button(
+                                    translations["ru"]["menu"]["account_connect"],
+                                    "/account_connection_menu"),
                                 await gui_program.menu_button(
                                     translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
-                                    "/sending_files_to_personal_account_with_limits"),
-                                await gui_program.menu_button(translations["ru"]["menu"]["reactions"],
-                                                              "/working_with_reactions"),
-                                await gui_program.menu_button(translations["ru"]["menu"]["account_check"],
-                                                              "/account_verification_menu"),
-                                await gui_program.menu_button(translations["ru"]["menu"]["create_groups"],
-                                                              "/creating_groups"),
-                                await gui_program.menu_button(translations["ru"]["menu"]["edit_bio"],
-                                                              "/bio_editing"),
+                                    "/sending_files_to_personal_account_with_limits"
+                                ),
+                                await gui_program.menu_button(
+                                    translations["ru"]["menu"]["reactions"],
+                                    "/working_with_reactions"
+                                ),
+                                await gui_program.menu_button(
+                                    translations["ru"]["menu"]["account_check"],
+                                    "/account_verification_menu"
+                                ),
+                                await gui_program.menu_button(
+                                    translations["ru"]["menu"]["create_groups"],
+                                    "/creating_groups"
+                                ),
+                                await gui_program.menu_button(
+                                    translations["ru"]["menu"]["edit_bio"],
+                                    "/bio_editing"
+                                ),
                                 await gui_program.menu_button(
                                     translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                                    "/viewing_posts_menu"),
+                                    "/viewing_posts_menu"
+                                ),
                                 await gui_program.menu_button(
                                     translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
-                                    "/sending_messages_files_via_chats"),
+                                    "/sending_messages_files_via_chats"
+                                ),
                                 await gui_program.menu_button(
                                     translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
-                                    "/importing_a_list_of_parsed_data"),
-                                await gui_program.menu_button(translations["ru"]["menu"]["settings"],
-                                                              "/settings"),
+                                    "/importing_a_list_of_parsed_data"
+                                ),
+                                await gui_program.menu_button(
+                                    translations["ru"]["menu"]["settings"],
+                                    "/settings"
+                                ),
                             ],
                         ),
 
