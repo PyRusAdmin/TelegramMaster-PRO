@@ -659,7 +659,7 @@ class TGConnect:
                 controls=[
 
                     # "Подключение аккаунта Telegram по номеру телефона.",
-                    await self.gui_program.handle_pick_session_files(
+                    await self.gui_program.create_gradient_text(
                         text="Подключение аккаунта Telegram по номеру телефона."
                     ),
 
@@ -679,7 +679,7 @@ class TGConnect:
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
 
                     # "Подключение session аккаунтов Telegram"
-                    await self.gui_program.handle_pick_session_files(
+                    await self.gui_program.create_gradient_text(
                         text="Подключение session аккаунтов Telegram"
                     ),
 

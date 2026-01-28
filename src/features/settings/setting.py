@@ -262,7 +262,7 @@ class SettingPage:
                     route="/settings",
                     appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                     controls=[
-                        await self.gui_program.handle_pick_session_files(
+                        await self.gui_program.create_gradient_text(
                             text=translations["ru"]["menu"]["settings"]
                         ),
                         ft.Column(

@@ -13,7 +13,7 @@ class GUIProgram:
     def __init__(self, page: ft.Page):
         self.page = page
 
-    async def handle_pick_session_files(self, text):
+    async def create_gradient_text(self, text):
         return ft.Text(
             spans=[
                 ft.TextSpan(
