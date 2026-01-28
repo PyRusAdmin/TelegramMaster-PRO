@@ -44,7 +44,7 @@ async def main_view(page: ft.Page):
     working_with_reactions = WorkingWithReactions(page=page)
     parsing_group_members = ParsingGroupMembers(page=page)
     viewing_posts = ViewingPosts(page=page)
-    receiving_and_recording = ReceivingAndRecording()
+    receiving_and_recording = ReceivingAndRecording(page=page)
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
 
@@ -59,7 +59,7 @@ async def main_view(page: ft.Page):
     )
 
     # Обработка смены маршрута
-    async def route_change(e):
+    async def route_change(_):
         page.views.clear()
         if page.route == "/":
             await main_view(page=page)
@@ -76,7 +76,7 @@ async def main_view(page: ft.Page):
         elif page.route == "/viewing_posts_menu":
             await viewing_posts.viewing_posts_request()
         elif page.route == "/importing_a_list_of_parsed_data":
-            await receiving_and_recording.write_data_to_excel(page, "user_data/parsed_chat_participants.xlsx")
+            await receiving_and_recording.write_data_to_excel("user_data/parsed_chat_participants.xlsx")
         elif page.route == "/working_with_contacts":
             await tg_contact.working_with_contacts_menu()
         elif page.route == "/account_connection_menu":
@@ -94,7 +94,7 @@ async def main_view(page: ft.Page):
 
         page.update()
 
-    def view_pop(e):
+    def view_pop(_):
         if len(page.views) > 1:
             page.views.pop()
             top_view = page.views[-1]
@@ -277,7 +277,7 @@ async def main(page: ft.Page):
     working_with_reactions = WorkingWithReactions(page=page)
     parsing_group_members = ParsingGroupMembers(page=page)
     viewing_posts = ViewingPosts(page=page)
-    receiving_and_recording = ReceivingAndRecording()
+    receiving_and_recording = ReceivingAndRecording(page=page)
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
 
@@ -292,7 +292,7 @@ async def main(page: ft.Page):
     )
 
     # Обработка смены маршрута
-    async def route_change(e):
+    async def route_change(_):
         page.views.clear()
         if page.route == "/":
             await main_view(page=page)
@@ -309,7 +309,7 @@ async def main(page: ft.Page):
         elif page.route == "/viewing_posts_menu":
             await viewing_posts.viewing_posts_request()
         elif page.route == "/importing_a_list_of_parsed_data":
-            await receiving_and_recording.write_data_to_excel(page, "user_data/parsed_chat_participants.xlsx")
+            await receiving_and_recording.write_data_to_excel("user_data/parsed_chat_participants.xlsx")
         elif page.route == "/working_with_contacts":
             await tg_contact.working_with_contacts_menu()
         elif page.route == "/account_connection_menu":
@@ -327,7 +327,7 @@ async def main(page: ft.Page):
 
         page.update()
 
-    def view_pop(e):
+    def view_pop(_):
         if len(page.views) > 1:
             page.views.pop()
             top_view = page.views[-1]

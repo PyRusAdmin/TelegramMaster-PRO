@@ -260,7 +260,9 @@ class TGConnect:
                             ),
                         ]
                     )
-                ]))
+                ]
+            )
+        )
 
     async def client_connect_string_session(self, session_name: str) -> TelegramClient | None:
         """

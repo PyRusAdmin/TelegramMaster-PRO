@@ -7,12 +7,13 @@ from src.core.database.database import read_parsed_chat_participants_from_db
 
 class ReceivingAndRecording:
 
+    def __init__(self, page: ft.Page):
+        self.page = page  # Сохраняем ссылку на страницу Flet
+
     # В классе ReceivingAndRecording
-    @staticmethod
-    async def write_data_to_excel(page: ft.Page, file_name: str):
+    async def write_data_to_excel(self, file_name: str):
         """
         Запись данных в Excel файл и возврат в главное меню.
-        :param page: Страница Flet
         :param file_name: Имя файла для сохранения данных
         """
         workbook = openpyxl.Workbook()
@@ -28,5 +29,5 @@ class ReceivingAndRecording:
         workbook.save(file_name)
 
         # Возврат в главное меню
-        page.route = "/"
-        page.go("/")  # или page.update() + вызов route_change, но go() лучше
+        self.page.route = "/"
+        self.page.go("/")  # или page.update() + вызов route_change, но go() лучше
