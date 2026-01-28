@@ -19,7 +19,7 @@ from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTeleg
 from src.features.account.viewing_posts import ViewingPosts
 from src.features.recording.receiving_and_recording import ReceivingAndRecording
 from src.features.settings.setting import SettingPage
-from src.gui.buttons import menu_button
+from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")
@@ -47,6 +47,7 @@ async def main_view(page: ft.Page):
     receiving_and_recording = ReceivingAndRecording(page=page)
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
+    gui_program = GUIProgram(page=page)  # Создаем экземпляр класса GUIProgram
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
@@ -114,76 +115,62 @@ async def main_view(page: ft.Page):
                         # ===== Левая колонка — кнопки =====
                         ft.Column(
                             controls=[
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["inviting_menu"]["inviting"],
                                     route="/inviting",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["parsing"],
                                     route="/parsing",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["contacts"],
                                     route="/working_with_contacts",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["subscribe_unsubscribe"],
                                     route="/subscribe_unsubscribe",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["account_connect"],
                                     route="/account_connection_menu",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["message_sending_menu"][
                                         "sending_personal_messages_with_limits"],
                                     route="/sending_files_to_personal_account_with_limits",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["reactions"],
                                     route="/working_with_reactions",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["account_check"],
                                     route="/account_verification_menu",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["create_groups"],
                                     route="/creating_groups",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["edit_bio"],
                                     route="/bio_editing",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
                                     route="/viewing_posts_menu",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
                                     route="/sending_messages_files_via_chats",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
                                     route="/importing_a_list_of_parsed_data",
-                                    page=page
                                 ),
-                                await menu_button(
+                                await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["settings"],
                                     route="/settings",
-                                    page=page
                                 ),
                             ],
                         ),
@@ -280,6 +267,7 @@ async def main(page: ft.Page):
     receiving_and_recording = ReceivingAndRecording(page=page)
     tg_contact = TGContact(page=page)
     send_telegram_messages = SendTelegramMessages(page=page)
+    gui_program = GUIProgram(page=page)  # Создаем экземпляр класса GUIProgram
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
@@ -347,36 +335,40 @@ async def main(page: ft.Page):
                         # ===== Левая колонка — кнопки =====
                         ft.Column(
                             controls=[
-                                await menu_button(translations["ru"]["inviting_menu"]["inviting"],
-                                                  "/inviting", page),
-                                await menu_button(translations["ru"]["menu"]["parsing"],
-                                                  "/parsing", page),
-                                await menu_button(translations["ru"]["menu"]["contacts"],
-                                                  "/working_with_contacts", page),
-                                await menu_button(translations["ru"]["menu"]["subscribe_unsubscribe"],
-                                                  "/subscribe_unsubscribe", page),
-                                await menu_button(translations["ru"]["menu"]["account_connect"],
-                                                  "/account_connection_menu", page),
-                                await menu_button(
+                                await gui_program.menu_button(
+                                    translations["ru"]["inviting_menu"]["inviting"],
+                                    "/inviting",
+                                ),
+                                await gui_program.menu_button(translations["ru"]["menu"]["parsing"],
+                                                              "/parsing"),
+                                await gui_program.menu_button(translations["ru"]["menu"]["contacts"],
+                                                              "/working_with_contacts"),
+                                await gui_program.menu_button(translations["ru"]["menu"]["subscribe_unsubscribe"],
+                                                              "/subscribe_unsubscribe"),
+                                await gui_program.menu_button(translations["ru"]["menu"]["account_connect"],
+                                                              "/account_connection_menu"),
+                                await gui_program.menu_button(
                                     translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
-                                    "/sending_files_to_personal_account_with_limits", page),
-                                await menu_button(translations["ru"]["menu"]["reactions"],
-                                                  "/working_with_reactions", page),
-                                await menu_button(translations["ru"]["menu"]["account_check"],
-                                                  "/account_verification_menu", page),
-                                await menu_button(translations["ru"]["menu"]["create_groups"],
-                                                  "/creating_groups", page),
-                                await menu_button(translations["ru"]["menu"]["edit_bio"],
-                                                  "/bio_editing", page),
-                                await menu_button(translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                                                  "/viewing_posts_menu", page),
-                                await menu_button(
+                                    "/sending_files_to_personal_account_with_limits"),
+                                await gui_program.menu_button(translations["ru"]["menu"]["reactions"],
+                                                              "/working_with_reactions"),
+                                await gui_program.menu_button(translations["ru"]["menu"]["account_check"],
+                                                              "/account_verification_menu"),
+                                await gui_program.menu_button(translations["ru"]["menu"]["create_groups"],
+                                                              "/creating_groups"),
+                                await gui_program.menu_button(translations["ru"]["menu"]["edit_bio"],
+                                                              "/bio_editing"),
+                                await gui_program.menu_button(
+                                    translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+                                    "/viewing_posts_menu"),
+                                await gui_program.menu_button(
                                     translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
-                                    "/sending_messages_files_via_chats", page),
-                                await menu_button(translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
-                                                  "/importing_a_list_of_parsed_data", page),
-                                await menu_button(translations["ru"]["menu"]["settings"],
-                                                  "/settings", page),
+                                    "/sending_messages_files_via_chats"),
+                                await gui_program.menu_button(
+                                    translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
+                                    "/importing_a_list_of_parsed_data"),
+                                await gui_program.menu_button(translations["ru"]["menu"]["settings"],
+                                                              "/settings"),
                             ],
                         ),
 

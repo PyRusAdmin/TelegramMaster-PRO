@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+import asyncio
+
 import flet as ft  # Импортируем библиотеку flet
 
+from src.core.configs import BUTTON_HEIGHT, BUTTON_WIDTH
 from src.locales.translations_loader import translations
 
 
@@ -9,6 +12,24 @@ class GUIProgram:
 
     def __init__(self, page: ft.Page):
         self.page = page
+
+    async def menu_button(self, text: str, route: str):
+        """
+        :param text: Текст, отображаемый на кнопке меню.
+        :type text: str
+        :param route: Путь маршрута (например: "/parsing", "/settings"), на который будет выполнен переход при нажатии.
+        :type route: str
+        :return: Контейнер с кнопкой меню, готовый для добавления в layout (`Column`, `Row`, `View`).
+        :rtype: ft.Container https://docs.flet.dev/controls/container/
+        """
+        return ft.Container(
+            content=ft.Button(
+                content=text,
+                width=BUTTON_WIDTH,
+                height=BUTTON_HEIGHT,
+                on_click=lambda _: asyncio.create_task(self.page.push_route(route)),
+            )
+        )
 
     async def show_notification(self, message: str):
         """

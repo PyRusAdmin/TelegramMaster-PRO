@@ -29,27 +29,6 @@ async def menu_button_fun(text: str, width, height, on_click):
     )
 
 
-async def menu_button(text: str, route: str, page: ft.Page):
-    """
-    :param text: Текст, отображаемый на кнопке меню.
-    :type text: str
-    :param route: Путь маршрута (например: "/parsing", "/settings"), на который будет выполнен переход при нажатии.
-    :type route: str
-    :param page: Экземпляр страницы Flet, используемый для навигации.
-    :type page: ft.Page
-    :return: Контейнер с кнопкой меню, готовый для добавления в layout (`Column`, `Row`, `View`).
-    :rtype: ft.Container https://docs.flet.dev/controls/container/
-    """
-    return ft.Container(
-        content=ft.Button(
-            content=text,
-            width=BUTTON_WIDTH,
-            height=BUTTON_HEIGHT,
-            on_click=lambda _: asyncio.create_task(page.push_route(route)),
-        )
-    )
-
-
 class FunctionButton:
 
     def __init__(self, page: ft.Page):
