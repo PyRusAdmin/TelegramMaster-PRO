@@ -647,31 +647,55 @@ class InvitingToAGroup:
         # Ошибка инвайтинга прерываем работу
         except ChatWriteForbiddenError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["chat_write_forbidden"])
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username
+            )
             # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за того, что запись в чат запрещена")
         except InviteRequestSentError:
-            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["invite_request_sent"])
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["invite_request_sent"]
+            )
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username
+            )
             # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за отправки запроса на приглашение")
         except FloodWaitError as e:
-            await self.app_logger.log_and_display(message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
-                                                  level="error")
-            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            await self.app_logger.log_and_display(
+                message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
+                level="error"
+            )
+            await self.utils.record_and_interrupt(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2
+            )
             # await client.disconnect()  # Прерываем работу и меняем аккаунт
             # return # Прерываем выполнение, чтобы не перегружать API
             raise ConnectionError("Клиент отключен из-за ограничения Flood Wait")  # ⬅️ НОВОЕ!
         except AuthKeyUnregisteredError:
-            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
-            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["auth_key_unregistered"]
+            )
+            await self.utils.record_and_interrupt(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2
+            )
             # await client.disconnect()
             raise ConnectionError("Клиент отключён из-за незарегистрированного ключа аутентификации")
         except PeerFloodError:
-            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["peer_flood"], level="error")
-            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["peer_flood"],
+                level="error"
+            )
+            await self.utils.record_and_interrupt(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2
+            )
             # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за флуда узла")
 
