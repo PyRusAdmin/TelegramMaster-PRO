@@ -567,19 +567,27 @@ class InvitingToAGroup:
             await client(InviteToChannelRequest(username_group, [username]))
             await self.app_logger.log_and_display(
                 message=f"✅  Участник {username} добавлен, если не состоит в чате {username_group}. Спим от {time_inviting_1} до {time_inviting_2}")
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username
+            )
         except UserChannelsTooMuchError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["user_channels_too_much"])
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
-
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username
+            )
 
         except SessionRevokedError as e:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            await self.utils.record_and_interrupt(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2
+            )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
 
@@ -587,7 +595,10 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            await self.utils.record_and_interrupt(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2
+            )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
 
@@ -595,7 +606,10 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            await self.utils.record_and_interrupt(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2
+            )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
 
@@ -603,7 +617,10 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            await self.utils.record_and_interrupt(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2
+            )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
 
@@ -611,34 +628,54 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            await self.utils.record_and_interrupt(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2
+            )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
 
         except UserNotMutualContactError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["user_not_mutual_contact"])
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username
+            )
         except (UserKickedError, UserDeactivatedBanError):
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["user_kicked_or_banned"])
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username
+            )
         except (UserIdInvalidError, UsernameNotOccupiedError, ValueError, UsernameInvalidError):
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["invalid_username"])
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username
+            )
         except ChatAdminRequiredError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["admin_rights_required"])
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username
+            )
         except UserPrivacyRestrictedError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["user_privacy_restricted"])
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username
+            )
         except BotGroupsBlockedError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["bot_group_blocked"])
-            await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
-                                                     username=username)
+            await self.utils.record_inviting_results(
+                time_range_1=time_inviting_1,
+                time_range_2=time_inviting_2,
+                username=username)
         except (TypeError, UnboundLocalError):
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["type_or_scope"])
         except BadRequestError:
