@@ -232,6 +232,13 @@ class InvitingToAGroup:
                         await client.disconnect()
                         return  # Полностью прерываем работу
 
+                    except ConnectionError as e:
+                        await self.app_logger.log_and_display(
+                            message=f"⚠️ Клиент отключен: {str(e)}. Переход к следующему аккаунту.",
+                            level="warning"
+                        )
+                        break  # Прерываем цикл обработки пользователей для этого аккаунта
+
                 # Отписываемся от группы после завершения работы аккаунта
                 await self.subscribe_unsubscribe_telegram.unsubscribe_from_the_group(
                     client=client,
@@ -628,10 +635,12 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
             await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
             await client.disconnect()
+            raise ConnectionError("Клиент отключён из-за незарегистрированного ключа аутентификации")
         except PeerFloodError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["peer_flood"], level="error")
             await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
             await client.disconnect()  # Прерываем работу и меняем аккаунт
+            raise ConnectionError("Клиент отключен из-за флуда узла")
 
         except Exception as e:
             logger.exception(e)
