@@ -99,8 +99,8 @@ class AccountBIO:
                     await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                         message="❌ Неверный никнейм"
                     )
-                finally:
-                    await client.disconnect()
+                # finally:
+                #     await client.disconnect()
             except Exception as e:
                 logger.exception(e)
 
@@ -121,8 +121,8 @@ class AccountBIO:
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["auth_key_unregistered"])
-                finally:
-                    await client.disconnect()
+                # finally:
+                #     await client.disconnect()
             except Exception as e:
                 logger.exception(e)
             await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
@@ -143,9 +143,9 @@ class AccountBIO:
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["auth_key_unregistered"])
-                finally:
-
-                    await client.disconnect()
+                # finally:
+                #
+                #     await client.disconnect()
                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                     message="Работа окончена"
                 )
@@ -167,9 +167,9 @@ class AccountBIO:
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["auth_key_unregistered"])
-                finally:
-
-                    await client.disconnect()
+                # finally:
+                #
+                #     await client.disconnect()
                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                     message="Работа окончена"
                 )
@@ -190,8 +190,8 @@ class AccountBIO:
                     except AuthKeyUnregisteredError:
                         await self.app_logger.log_and_display(
                             message=translations["ru"]["errors"]["auth_key_unregistered"])
-                    finally:
-                        await client.disconnect()
+                    # finally:
+                    #     await client.disconnect()
             except Exception as e:
                 logger.exception(e)
             await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю

@@ -169,7 +169,7 @@ class InvitingToAGroup:
                     )
                     break
 
-                client: TelegramClient | None = await self.connect.client_connect_string_session(
+                client: TelegramClient = await self.connect.client_connect_string_session(
                     session_name=session_name
                 )
 
@@ -197,7 +197,7 @@ class InvitingToAGroup:
                     await self.app_logger.log_and_display(
                         message=f"⚠️ Для аккаунта {session_name} нет пользователей"
                     )
-                    await client.disconnect()
+                    # await client.disconnect()
                     continue
 
                 await self.app_logger.log_and_display(
@@ -229,7 +229,7 @@ class InvitingToAGroup:
                             message=translations["ru"]["errors"]["script_stopped"],
                             level="error"
                         )
-                        await client.disconnect()
+                        # await client.disconnect()
                         return  # Полностью прерываем работу
 
                     except ConnectionError as e:
@@ -578,7 +578,7 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"])
             await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
-            await client.disconnect()
+            # await client.disconnect()
 
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
 
@@ -616,30 +616,30 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["chat_write_forbidden"])
             await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
-            await client.disconnect()  # Прерываем работу и меняем аккаунт
+            # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за того, что запись в чат запрещена")
         except InviteRequestSentError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["invite_request_sent"])
             await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
-            await client.disconnect()  # Прерываем работу и меняем аккаунт
+            # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за отправки запроса на приглашение")
         except FloodWaitError as e:
             await self.app_logger.log_and_display(message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                                   level="error")
             await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
-            await client.disconnect()  # Прерываем работу и меняем аккаунт
+            # await client.disconnect()  # Прерываем работу и меняем аккаунт
             # return # Прерываем выполнение, чтобы не перегружать API
             raise ConnectionError("Клиент отключен из-за ограничения Flood Wait")  # ⬅️ НОВОЕ!
         except AuthKeyUnregisteredError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["auth_key_unregistered"])
             await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
-            await client.disconnect()
+            # await client.disconnect()
             raise ConnectionError("Клиент отключён из-за незарегистрированного ключа аутентификации")
         except PeerFloodError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["peer_flood"], level="error")
             await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
-            await client.disconnect()  # Прерываем работу и меняем аккаунт
+            # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за флуда узла")
 
         except Exception as e:

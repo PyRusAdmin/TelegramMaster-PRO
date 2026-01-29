@@ -53,7 +53,7 @@ class Subscribe:
                 await self.app_logger.log_and_display(f"{dialog.name}, {dialog.id}")
                 try:
                     await client.delete_dialog(dialog)
-                    await client.disconnect()
+                    # await client.disconnect()
                 except ConnectionError:
                     break
             await self.app_logger.log_and_display(f"❌  Список почистили, и в файл записали.")
@@ -62,7 +62,6 @@ class Subscribe:
         except (UsernameInvalidError, ValueError, TypeError):
             await self.app_logger.log_and_display(
                 f"❌ Попытка подписки на группу / канал {groups}. Не верное имя или cсылка {groups} не является группой / каналом: {groups}")
-            # write_data_to_db(writing_group_links=groups)
         except PeerFloodError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["peer_flood"], level="error")
             await asyncio.sleep(random.randrange(50, 60))
@@ -79,4 +78,4 @@ class Subscribe:
                 f"❌ Попытка подписки на группу / канал {groups}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")
 
         except Exception as e:  # Ловим все остальные ошибки
-            logger.exeption(e)
+            logger.exception(e)

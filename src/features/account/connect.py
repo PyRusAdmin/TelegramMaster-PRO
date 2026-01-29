@@ -82,7 +82,7 @@ class TGConnect:
                                                                   "несмотря на ограничения.")
                             if similarity_ratio_ru >= 97:
                                 await self.app_logger.log_and_display(message=f"⛔ Аккаунт заблокирован")
-                                await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
+                                # await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
                                 await self.app_logger.log_and_display(
                                     message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}")
 
@@ -97,7 +97,7 @@ class TGConnect:
                                                                   "contact you first, you can always reply to them.")
                             if similarity_ratio_en >= 97:
                                 await self.app_logger.log_and_display(message=f"⛔ Аккаунт заблокирован")
-                                await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
+                                # await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
                                 await self.app_logger.log_and_display(
                                     message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}"
                                 )
@@ -108,7 +108,7 @@ class TGConnect:
                             await self.app_logger.log_and_display(
                                 message=f"Проверка аккаунтов через SpamBot. {session_name}: {message.message}"
                             )
-                            await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
+                            # await client.disconnect()  # Отключаемся от аккаунта, для освобождения процесса session файла.
 
                     except (AttributeError, AuthKeyUnregisteredError, YouBlockedUserError) as e:
                         await self.app_logger.log_and_display(message=f"❌ Ошибка: {e}")
@@ -166,12 +166,12 @@ class TGConnect:
                     except AttributeError:  # Если в get_me приходит NoneType (None)
                         pass
                     except TypeNotFoundError as e:
-                        await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
+                        # await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
                         await self.app_logger.log_and_display(
                             message=f"⛔ Битый файл или аккаунт banned: {session_name}.session. Возможно, запущен под другим IP")
                         await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
                     except AuthKeyUnregisteredError as e:
-                        await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
+                        # await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
                         await self.app_logger.log_and_display(
                             message=translations["ru"]["errors"]["auth_key_unregistered"])
                         await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
