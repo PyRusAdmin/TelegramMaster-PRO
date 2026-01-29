@@ -573,13 +573,46 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["user_channels_too_much"])
             await self.utils.record_inviting_results(time_range_1=time_inviting_1, time_range_2=time_inviting_2,
                                                      username=username)
-        except (ChannelPrivateError, TypeNotFoundError, AuthKeyDuplicatedError, UserBannedInChannelError,
-                SessionRevokedError):
-            await self.app_logger.log_and_display(
-                message=translations["ru"]["errors"]["invalid_auth_session_terminated"])
-            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
-            # await client.disconnect()
 
+
+        except SessionRevokedError as e:
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
+            )
+            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            logger.error(e)
+            raise ConnectionError("Клиент отключен из-за ошибки сеанса")
+
+        except UserBannedInChannelError as e:
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
+            )
+            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            logger.error(e)
+            raise ConnectionError("Клиент отключен из-за ошибки сеанса")
+
+        except AuthKeyDuplicatedError as e:
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
+            )
+            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            logger.error(e)
+            raise ConnectionError("Клиент отключен из-за ошибки сеанса")
+
+        except TypeNotFoundError as e:
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
+            )
+            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            logger.error(e)
+            raise ConnectionError("Клиент отключен из-за ошибки сеанса")
+
+        except ChannelPrivateError as e:
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
+            )
+            await self.utils.record_and_interrupt(time_range_1=time_inviting_1, time_range_2=time_inviting_2)
+            logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
 
         except UserNotMutualContactError:
