@@ -24,6 +24,7 @@ ru:
   account_connect_menu:
     connecting_accounts_by_phone_number: "📞 Подключение по номеру телефона"
     connecting_session_accounts: "🔑 Подключение session аккаунтов"
+    delete_connected_accounts: "🗑️ Удалить подключенные аккаунты"
 
   main_menu_texts:
     text_1: "Аккаунт Telegram: "

@@ -63,7 +63,8 @@ async def menu(request: Request):
             "program_version": PROGRAM_VERSION,
             "update_date": DATE_OF_PROGRAM_CHANGE,
             "subscribe_unsubscribe": translations["ru"]["menu"]["subscribe_unsubscribe"],
-            "importing_a_list_of_parsed_data": translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"]
+            "importing_a_list_of_parsed_data": translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
+            "account_connect": translations["ru"]["menu"]["account_connect"]
         }
     )
 
@@ -95,7 +96,8 @@ async def sending_messages(request: Request):
                 "request": request,
                 "program_name": PROGRAM_NAME,
                 "sending_messages_via_chats": translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
-                "sending_personal_messages_with_limits": translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
+                "sending_personal_messages_with_limits": translations["ru"]["message_sending_menu"][
+                    "sending_personal_messages_with_limits"],
             }
         )
     except Exception as error:
@@ -206,9 +208,11 @@ async def parsing(request: Request):
             "request": request,
             "program_name": PROGRAM_NAME,
             "parse_single_or_multiple_groups": translations["ru"]["parsing_menu"]["parse_single_or_multiple_groups"],
-            "parse_selected_user_subscribed_group": translations["ru"]["parsing_menu"]["parse_selected_user_subscribed_group"],
+            "parse_selected_user_subscribed_group": translations["ru"]["parsing_menu"][
+                "parse_selected_user_subscribed_group"],
             "parse_active_group_members": translations["ru"]["parsing_menu"]["parse_active_group_members"],
-            "parse_account_subscribed_groups_channels": translations["ru"]["parsing_menu"]["parse_account_subscribed_groups_channels"],
+            "parse_account_subscribed_groups_channels": translations["ru"]["parsing_menu"][
+                "parse_account_subscribed_groups_channels"],
             "importing_a_list_of_parsed_data": translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"]
         }
     )
@@ -238,7 +242,8 @@ async def connect_accounts(request: Request):
             "request": request,
             "program_name": PROGRAM_NAME,
             "connecting_accounts_by_phone_number": translations["ru"]["account_connect_menu"]["connecting_accounts_by_phone_number"],
-            "connecting_session_accounts": translations["ru"]["account_connect_menu"]["connecting_session_accounts"]
+            "connecting_session_accounts": translations["ru"]["account_connect_menu"]["connecting_session_accounts"],
+            "delete_connected_accounts": translations["ru"]["account_connect_menu"]["delete_connected_accounts"]
         }
     )
 

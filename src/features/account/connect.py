@@ -206,26 +206,8 @@ class TGConnect:
                 route="/account_verification_menu",  # Маршрут для этого представления
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[  # Содержимое страницы
-                    ft.Text(  # Отображение текста с использованием TextSpan для поддержки мультиязычности
-                        spans=[  # Список TextSpan для отображения текста с различными стилями
-                            ft.TextSpan(  # Стиль для отображения текста
-                                translations["ru"]["menu"]["account_check"],  # Текст для отображения
-                                ft.TextStyle(  # Стиль текста
-                                    size=20,  # Размер текста
-                                    weight=ft.FontWeight.BOLD,  # Жирный шрифт
-                                    foreground=ft.Paint(  # Определяет цвет текста
-                                        gradient=ft.PaintLinearGradient(  # Градиент для текста
-                                            (0, 20),  # Начальная точка градиента
-                                            (150, 20),  # Конечная точка градиента
-                                            [
-                                                ft.Colors.PINK,
-                                                ft.Colors.PURPLE
-                                            ]
-                                        )
-                                    ),
-                                ),
-                            ),
-                        ],
+                    await self.gui_program.create_gradient_text(
+                        text=translations["ru"]["menu"]["account_check"]
                     ),
                     list_view,
                     ft.Column(
