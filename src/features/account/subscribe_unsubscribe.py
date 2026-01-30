@@ -63,6 +63,10 @@ class SubscribeUnsubscribeTelegram:
                         session_name=session_name
                     )
 
+                    if client is None:
+                        await self.app_logger.log_and_display("❌ Не удалось подключиться к аккаунту. Пропускаем...")
+                        continue  # ← ВАЖНО: выходим из итерации цикла
+
                     dialogs = client.iter_dialogs()
                     await self.app_logger.log_and_display(message=f"Диалоги: {dialogs}")
                     async for dialog in dialogs:
@@ -75,23 +79,33 @@ class SubscribeUnsubscribeTelegram:
 
         async def add_items(_):
             """Подписываемся на группы и каналы"""
-            start = await self.app_logger.start_time()
-            for session_name in self.session_string:
-                client: TelegramClient = await self.connect.client_connect_string_session(
-                    session_name=session_name
-                )
-                if client is None:
-                    logger.error("❌ Не удалось подключиться к Telegram")
-                # Получение ссылки
-                links_inviting: list = get_writing_group_links()  # Открываем базу данных
-                await self.app_logger.log_and_display(message=f"Ссылка для подписки и проверки:  {links_inviting}")
-                for link_tuple in links_inviting:
-                    await self.app_logger.log_and_display(message=f"Ссылка для подписки и проверки:  {link_tuple}")
-                    # Проверка ссылок для подписки и подписка на группу или канал
-                    logger.info(f"Работа с аккаунтом {session_name}")
-                    await self.checking_links(client, link_tuple)
-                await client.disconnect()
-            await self.app_logger.end_time(start)
+
+            try:
+                start = await self.app_logger.start_time()
+                for session_name in self.session_string:
+                    logger.info(session_name)
+                    client: TelegramClient = await self.connect.client_connect_string_session(
+                        session_name=session_name
+                    )
+                    if client is None:
+                        logger.error("❌ Не удалось подключиться к Telegram")
+                    # Получение ссылки
+                    links_inviting: list = get_writing_group_links()  # Открываем базу данных
+                    logger.info(links_inviting)
+                    await self.app_logger.log_and_display(message=f"Ссылка для подписки и проверки:  {links_inviting}")
+                    for link_tuple in links_inviting:
+                        await self.app_logger.log_and_display(message=f"Ссылка для подписки и проверки:  {link_tuple}")
+                        # Проверка ссылок для подписки и подписка на группу или канал
+                        logger.info(f"Работа с аккаунтом {session_name}")
+                        await self.checking_links(client, link_tuple)
+                    # await client.disconnect()
+                await self.app_logger.end_time(start)
+
+            except Exception as e:
+                logger.exception(e)
+            finally:
+                if client:
+                    client.disconnect()
 
         async def save(_):
             """Сохраняет ссылки в базу данных в таблицу writing_group_links, для последующей подписки"""
@@ -170,20 +184,25 @@ class SubscribeUnsubscribeTelegram:
                     ),
                     await LinkInputRowBuilder().compose_link_input_row(link_entry_field),
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
-                    ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                        # 🔔 Подписка
-                        ft.Button(
-                            content=translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=add_items),
-                        # 🚫 Отписываемся
-                        ft.Button(
-                            content=translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=unsubscribe_all),
-                    ])]))
+                    ft.Column(  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                        [
+                            ft.Button(  # 🔔 Подписка
+                                content=translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=add_items
+                            ),
+                            ft.Button(  # 🚫 Отписываемся
+                                content=translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"],
+                                width=WIDTH_WIDE_BUTTON,
+                                height=BUTTON_HEIGHT,
+                                on_click=unsubscribe_all
+                            ),
+                        ]
+                    )
+                ]
+            )
+        )
 
     @staticmethod
     async def extract_channel_id(link):
