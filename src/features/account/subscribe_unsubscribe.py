@@ -4,6 +4,7 @@ import sqlite3
 
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
+from telethon import TelegramClient
 from telethon import functions, types
 from telethon.errors import (
     AuthKeyUnregisteredError, ChannelPrivateError, ChannelsTooMuchError, FloodWaitError, InviteHashExpiredError,
@@ -58,7 +59,9 @@ class SubscribeUnsubscribeTelegram:
             start = await self.app_logger.start_time()
             try:
                 for session_name in self.session_string:
-                    client = await self.connect.connect_string_session(session_name=session_name)
+                    client: TelegramClient = await self.connect.client_connect_string_session(
+                        session_name=session_name
+                    )
 
                     dialogs = client.iter_dialogs()
                     await self.app_logger.log_and_display(message=f"Диалоги: {dialogs}")
@@ -74,7 +77,9 @@ class SubscribeUnsubscribeTelegram:
             """Подписываемся на группы и каналы"""
             start = await self.app_logger.start_time()
             for session_name in self.session_string:
-                client = await self.connect.connect_string_session(session_name=session_name)
+                client: TelegramClient = await self.connect.client_connect_string_session(
+                    session_name=session_name
+                )
                 if client is None:
                     logger.error("❌ Не удалось подключиться к Telegram")
                 # Получение ссылки
