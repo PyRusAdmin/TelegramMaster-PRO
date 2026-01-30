@@ -2,8 +2,9 @@
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger  # Импортируем библиотеку loguru
 from telethon import functions  # Импортируем библиотеку telethon
-from telethon.errors import (AuthKeyUnregisteredError, UsernameInvalidError, UsernameOccupiedError,
-                             UsernamePurchaseAvailableError)
+from telethon.errors import (
+    AuthKeyUnregisteredError, UsernameInvalidError, UsernameOccupiedError, UsernamePurchaseAvailableError
+)
 
 from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT, WIDTH_INPUT_FIELD_AND_BUTTON
 from src.core.database.account import getting_account, get_account_list

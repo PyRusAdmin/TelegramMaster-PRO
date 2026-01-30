@@ -25,7 +25,6 @@ from src.features.account.subscribe_unsubscribe import SubscribeUnsubscribeTeleg
 from src.features.account.switch_controller import ToggleController
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
-from src.gui.gui_input_builders import GUIProgram
 from src.locales.translations_loader import translations
 
 
@@ -360,11 +359,11 @@ class InvitingToAGroup:
         """
 
         # Поле ввода, для ссылок для инвайтинга
-        limits = await GUIProgram().build_link_input_with_save_button(
+        limits = await self.gui_program.build_link_input_with_save_button(
             label_text="Введите лимит на аккаунт",
             width=width_one_input
         )
-        link_entry_field = await GUIProgram().build_link_input_with_save_button(
+        link_entry_field = await self.gui_program.build_link_input_with_save_button(
             label_text="Введите ссылку на группу для инвайтинга",
             width=width_one_input
         )
@@ -435,10 +434,10 @@ class InvitingToAGroup:
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     ft.Row(
                         [
-                            await GUIProgram().compose_link_input_row(
+                            await self.gui_program.compose_link_input_row(
                                 link_input=limits,
                             ),
-                            await GUIProgram().compose_link_input_row(
+                            await self.gui_program.compose_link_input_row(
                                 link_input=link_entry_field,
                             ),
                         ]
