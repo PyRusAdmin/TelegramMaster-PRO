@@ -24,7 +24,7 @@ from src.features.account.connect import TGConnect
 from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
-from src.gui.gui_input_builders import LinkInputRowBuilder, TimeInputRowBuilder
+from src.gui.gui_input_builders import LinkInputRowBuilder, GUIProgram
 from src.locales.translations_loader import translations
 
 
@@ -152,7 +152,7 @@ class SubscribeUnsubscribeTelegram:
         )
 
         # Два поля ввода для времени и кнопка сохранить
-        smaller_timex, larger_timex = await TimeInputRowBuilder().build_time_inputs_with_save_button(
+        smaller_timex, larger_timex = await GUIProgram().build_time_inputs_with_save_button(
             label_min="Время в секундах (меньшее)",
             label_max="Время в секундах (большее)",
             width=width_one_input  # Ширина полей ввода и кнопки сохранения
@@ -174,7 +174,7 @@ class SubscribeUnsubscribeTelegram:
                               "🔁 затем продолжит подписку на следующую группу.",
                         size=14
                     ),
-                    await TimeInputRowBuilder().compose_time_input_row(smaller_timex, larger_timex),
+                    await GUIProgram().compose_time_input_row(smaller_timex, larger_timex),
 
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     ft.Text(
