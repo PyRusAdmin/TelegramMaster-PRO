@@ -396,7 +396,7 @@ class TGConnect:
 
         async def delete_invalid_accounts_from_database():
             """
-            Удаляет невалидные аккаунты из базы данных на основе данных из CSV-файла.
+            Очистка базы данных от аккаунтов, которые были занесены в базу данных. Перед удалением, аккаунты сохраняются в файл.
             :return: None
             """
             accounts = []
@@ -405,8 +405,8 @@ class TGConnect:
 
             logger.info(f"Сохраняем аккаунты в файл: {accounts}")
 
-            # Записываем данные в txt файл
-            with open('user_data/accounts.txt', 'w', encoding='utf-8') as f:
+            # Дозаписываем данные в txt файл (режим 'a')
+            with open('user_data/accounts.txt', 'a', encoding='utf-8') as f:
                 for account in accounts:
                     f.write(account + '\n')
 
