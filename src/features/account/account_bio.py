@@ -197,8 +197,11 @@ class AccountBIO:
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 for photo_file in await self.utils.find_files(directory_path="user_data/bio", extension='jpg'):
                     try:
-                        await client(functions.photos.UploadProfilePhotoRequest(
-                            file=await client.upload_file(f"user_data/bio/{photo_file[0]}.jpg")))
+                        await client(
+                            functions.photos.UploadProfilePhotoRequest(
+                                file=await client.upload_file(f"user_data/bio/{photo_file[0]}.jpg")
+                            )
+                        )
                     except AuthKeyUnregisteredError:
                         await self.app_logger.log_and_display(
                             message=translations["ru"]["errors"]["auth_key_unregistered"])
@@ -220,51 +223,68 @@ class AccountBIO:
                     ),
                     list_view,  # Отображение логов 📝
                     account_drop_down_list,  # Выпадающий список с аккаунтами
-                    ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                        ft.Row([
-                            input_field_username_change,  # Поле для ввода username Telegram
-                            # 🔄 Изменение username
+                    ft.Column(  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                        [
+                            ft.Row(
+                                [
+                                    input_field_username_change,  # Поле для ввода username Telegram
+                                    # 🔄 Изменение username
+                                    ft.Button(
+                                        content=translations["ru"]["edit_bio_menu"]["changing_the_username"],
+                                        width=WIDTH_INPUT_FIELD_AND_BUTTON,
+                                        height=BUTTON_HEIGHT,
+                                        on_click=change_username_profile_gui),
+                                ]
+                            ),
+                            await self.gui_program.diver_castom(),  # Горизонтальная линия
+                            ft.Row(
+                                [
+                                    profile_description_input_field,  # Поле для ввода описания профиля Telegram
+                                    # ✏️ Изменение описания
+                                    ft.Button(
+                                        content=translations["ru"]["edit_bio_menu"]["changing_the_description"],
+                                        width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
+                                        on_click=change_bio_profile
+                                    ),
+                                ]
+                            ),
+                            await self.gui_program.diver_castom(),  # Горизонтальная линия
+                            ft.Row(
+                                [
+                                    profile_name_input_field,  # Поле для ввода имени профиля Telegram
+                                    # 📝 Изменение имени
+                                    ft.Button(
+                                        content=translations["ru"]["edit_bio_menu"]["name_change_n"],
+                                        width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
+                                        on_click=change_name_profile_gui
+                                    ),
+                                ]
+                            ),
+                            await self.gui_program.diver_castom(),  # Горизонтальная линия
+                            ft.Row(
+                                [
+                                    profile_last_name_input_field,
+                                    # 📝 Изменение фамилии
+                                    ft.Button(
+                                        content=translations["ru"]["edit_bio_menu"]["name_change_f"],
+                                        width=WIDTH_INPUT_FIELD_AND_BUTTON,
+                                        height=BUTTON_HEIGHT,
+                                        on_click=change_last_name_profile_gui
+                                    ),
+                                ]
+                            ),
+                            await self.gui_program.diver_castom(),  # Горизонтальная линия
+                            # 🖼️ Изменение фото
                             ft.Button(
-                                content=translations["ru"]["edit_bio_menu"]["changing_the_username"],
-                                width=WIDTH_INPUT_FIELD_AND_BUTTON,
+                                content=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
+                                width=WIDTH_WIDE_BUTTON,
                                 height=BUTTON_HEIGHT,
-                                on_click=change_username_profile_gui),
-                        ]),
-                        await self.gui_program.diver_castom(),  # Горизонтальная линия
-                        ft.Row([
-                            profile_description_input_field,  # Поле для ввода описания профиля Telegram
-                            # ✏️ Изменение описания
-                            ft.Button(
-                                content=translations["ru"]["edit_bio_menu"]["changing_the_description"],
-                                width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
-                                on_click=change_bio_profile),
-                        ]),
-                        await self.gui_program.diver_castom(),  # Горизонтальная линия
-                        ft.Row([
-                            profile_name_input_field,  # Поле для ввода имени профиля Telegram
-                            # 📝 Изменение имени
-                            ft.Button(
-                                content=translations["ru"]["edit_bio_menu"]["name_change_n"],
-                                width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
-                                on_click=change_name_profile_gui),
-                        ]),
-                        await self.gui_program.diver_castom(),  # Горизонтальная линия
-                        ft.Row([
-                            profile_last_name_input_field,
-                            # 📝 Изменение фамилии
-                            ft.Button(
-                                content=translations["ru"]["edit_bio_menu"]["name_change_f"],
-                                width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=change_last_name_profile_gui),
-                        ]),
-                        await self.gui_program.diver_castom(),  # Горизонтальная линия
-                        # 🖼️ Изменение фото
-                        ft.Button(
-                            content=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=change_photo_profile_gui),
-                    ])]))
+                                on_click=change_photo_profile_gui
+                            ),
+                        ]
+                    )
+                ]
+            )
+        )
 
 # 244
