@@ -85,13 +85,15 @@ class AccountBIO:
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 try:
                     await client(
-                        functions.account.UpdateUsernameRequest(username=input_field_username_change.value))
+                        functions.account.UpdateUsernameRequest(username=input_field_username_change.value)
+                    )
                     await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                         message="Работа окончена"
                     )
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
-                        message=translations["ru"]["errors"]["auth_key_unregistered"])
+                        message=translations["ru"]["errors"]["auth_key_unregistered"]
+                    )
                 except (UsernamePurchaseAvailableError, UsernameOccupiedError):
                     await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                         message="❌ Никнейм уже занят"
@@ -117,7 +119,10 @@ class AccountBIO:
                     return
                 try:
                     result = await client(
-                        functions.account.UpdateProfileRequest(about=profile_description_input_field.value))
+                        functions.account.UpdateProfileRequest(
+                            about=profile_description_input_field.value
+                        )
+                    )
                     await self.app_logger.log_and_display(message=f"{result}\nПрофиль успешно обновлен!")
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
@@ -139,7 +144,10 @@ class AccountBIO:
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 try:
                     result = await client(
-                        functions.account.UpdateProfileRequest(first_name=profile_name_input_field.value))
+                        functions.account.UpdateProfileRequest(
+                            first_name=profile_name_input_field.value
+                        )
+                    )
                     await self.app_logger.log_and_display(message=f"{result}\nИмя успешно обновлено!")
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
@@ -163,7 +171,10 @@ class AccountBIO:
 
                 try:
                     result = await client(
-                        functions.account.UpdateProfileRequest(last_name=profile_last_name_input_field.value))
+                        functions.account.UpdateProfileRequest(
+                            last_name=profile_last_name_input_field.value
+                        )
+                    )
                     await self.app_logger.log_and_display(message=f"{result}\nФамилия успешно обновлена!")
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
