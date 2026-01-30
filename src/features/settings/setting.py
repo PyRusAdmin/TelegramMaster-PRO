@@ -345,24 +345,24 @@ class SettingPage:
         with open("user_data/config.ini", "w") as setup:  # Открываем файл в режиме записи
             config.write(setup)  # Записываем данные в файл
 
-    async def recording_limits_file(self, time_1, time_2, variable: str) -> configparser.ConfigParser:
-        """
-        Записывает временные лимиты в конфигурационный файл.
-
-        :param time_1: Начальное время в секундах
-        :param time_2: Конечное время в секундах
-        :param variable: Название переменной в файле config.ini
-        :return: Объект конфигурации
-        """
-        try:
-            config.get(f"{variable}", f"{variable}_1")
-            config.set(f"{variable}", f"{variable}_1", time_1)
-            config.get(f"{variable}", f"{variable}_2")
-            config.set(f"{variable}", f"{variable}_2", time_2)
-        except configparser.NoSectionError as error:
-            await self.app_logger.log_and_display(
-                message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config.ini")
-        return config
+    # async def recording_limits_file(self, time_1, time_2, variable: str) -> configparser.ConfigParser:
+    #     """
+    #     Записывает временные лимиты в конфигурационный файл.
+    #
+    #     :param time_1: Начальное время в секундах
+    #     :param time_2: Конечное время в секундах
+    #     :param variable: Название переменной в файле config.ini
+    #     :return: Объект конфигурации
+    #     """
+    #     try:
+    #         config.get(f"{variable}", f"{variable}_1")
+    #         config.set(f"{variable}", f"{variable}_1", time_1)
+    #         config.get(f"{variable}", f"{variable}_2")
+    #         config.set(f"{variable}", f"{variable}_2", time_2)
+    #     except configparser.NoSectionError as error:
+    #         await self.app_logger.log_and_display(
+    #             message=f"❌ Не удалось получить значение переменной: {error}. Проверьте TelegramMaster/user_data/config.ini")
+    #     return config
 
     def write_data_to_json_file(self, reactions, path_to_the_file):
         """

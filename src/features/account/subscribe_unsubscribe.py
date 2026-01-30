@@ -124,17 +124,19 @@ class SubscribeUnsubscribeTelegram:
                 larger_times = int(larger_timex.value)
                 if smaller_times < larger_times:  # Проверяем, что первое время меньше второго
                     # Если условие прошло проверку, то возвращаем первое и второе время
-                    self.setting_page.writing_settings_to_a_file(
-                        await self.setting_page.recording_limits_file(
-                            time_1=str(smaller_times),
-                            time_2=str(larger_times),
-                            variable="time_subscription"
-                        )
-                    )
-                    list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
-                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                        message="Данные успешно записаны!"
-                    )
+                    # self.setting_page.writing_settings_to_a_file(
+                    #     await self.setting_page.recording_limits_file(
+                    #         time_1=str(smaller_times),
+                    #         time_2=str(larger_times),
+                    #         variable="time_subscription"
+                    #     )
+                    # )
+                    # list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
+                    # await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                    #     message="Данные успешно записаны!"
+                    # )
+                    await save(_)
+                    await add_items(_)
                 else:
                     list_view.controls.append(ft.Text("Ошибка: первое время должно быть меньше второго!"))
             except ValueError:
@@ -193,7 +195,7 @@ class SubscribeUnsubscribeTelegram:
                                 content=translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
                                 width=WIDTH_WIDE_BUTTON,
                                 height=BUTTON_HEIGHT,
-                                on_click=add_items
+                                on_click=btn_click
                             ),
                             ft.Button(  # 🚫 Отписываемся
                                 content=translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"],
@@ -234,6 +236,10 @@ class SubscribeUnsubscribeTelegram:
         :return: None
         """
         try:
+
+            if client is None:
+                logger.error("❌ Не удалось подключиться к Telegram")
+
             if link.startswith("https://t.me/+"):
                 # Извлекаем хэш из ссылки на приглашение
                 link_hash = link.split("+")[-1]
@@ -303,6 +309,8 @@ class SubscribeUnsubscribeTelegram:
                                     f"Мега-группа: {'Да' if getattr(chat, 'megagroup', False) else 'Нет'}")
                     else:
                         await self.app_logger.log_and_display(f"Не удалось найти публичный чат: {link}")
+                except TypeError:
+                    logger.error("❌ Не удалось подключиться к Telegram")
             else:
                 # Считаем, что это просто хэш
                 try:
@@ -365,6 +373,13 @@ class SubscribeUnsubscribeTelegram:
         except SessionPasswordNeededError:
             await self.app_logger.log_and_display(message=translations["ru"]["errors"]["two_factor_required"])
             await asyncio.sleep(2)
+
+        except Exception as e:
+            logger.exception(e)
+
+        finally:
+            if client:
+                client.disconnect()
 
     async def unsubscribe_from_the_group(self, client, group_link) -> None:
         """
