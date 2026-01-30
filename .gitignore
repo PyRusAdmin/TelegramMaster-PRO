@@ -119,3 +119,4 @@ celerybeat.pid
 /user_data/parsed_chat_participants.xlsx
 /file.csv
 /uv.lock
+/user_data/accounts.txt
