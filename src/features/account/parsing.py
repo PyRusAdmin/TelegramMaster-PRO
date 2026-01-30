@@ -475,8 +475,6 @@ class ParsingGroupMembers:
         """
         # Обрабатываем все файлы сессий по очереди 📂
 
-        self.proxy.setup_proxy()  # Устанавливаем прокси
-
         await self.forming_a_list_of_groups(client)
 
     async def parse_active_users(self, chat_input, limit_active_user, client) -> None:

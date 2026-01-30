@@ -2,12 +2,13 @@
 import random
 
 import flet as ft
+import python_socks.async_.asyncio
 import requests
 from loguru import logger  # https://github.com/Delgan/loguru
-import os
+
 from src.core.database.database import deleting_an_invalid_proxy, get_proxy_database
 from src.gui.gui import AppLogger
-import python_socks.async_.asyncio
+
 
 class Proxy:
     """
@@ -22,40 +23,6 @@ class Proxy:
         """
         self.page = page
         self.app_logger = AppLogger(page=page)  # Инициализация класса для логирования
-
-    def setup_proxy(self):
-        """
-        Настраивает системные переменные окружения для использования HTTP/HTTPS прокси.
-
-        Функция устанавливает переменные окружения `http_proxy` и `https_proxy` на основе
-        данных, загруженных из конфигурационного файла (логин, пароль, IP и порт прокси-сервера).
-        Это необходимо для обхода сетевых ограничений при работе с внешними API (например, Groq)
-        или подключении к Telegram.
-
-        Использует прокси-данные из модуля `core.config`:
-            - proxy_user: логин для аутентификации на прокси
-            - proxy_password: пароль
-            - proxy_ip: IP-адрес прокси-сервера
-            - proxy_port: порт прокси
-
-        Прокси настраивается только на время выполнения скрипта.
-        Используется схема 'http' для обоих протоколов (так как многие прокси поддерживают HTTPS через HTTP-туннель).
-
-        Raises:
-            Exception: В случае ошибки устанавливается логирование с помощью `logger.exception`.
-        """
-        proxy_random_list = random.choice(get_proxy_database())
-
-        proxy_user = proxy_random_list[3]  # Логин
-        proxy_password = proxy_random_list[4]  # Пароль
-        proxy_ip = proxy_random_list[1]  # IP
-        proxy_port = proxy_random_list[2]  # Порт
-        try:
-            # Указываем прокси для HTTP и HTTPS
-            os.environ['http_proxy'] = f"http://{proxy_user}:{proxy_password}@{proxy_ip}:{proxy_port}"
-            os.environ['https_proxy'] = f"http://{proxy_user}:{proxy_password}@{proxy_ip}:{proxy_port}"
-        except Exception as e:
-            logger.exception(e)
 
     def reading_proxy_data_from_the_database(self):
         """

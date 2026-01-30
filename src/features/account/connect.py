@@ -253,9 +253,6 @@ class TGConnect:
         :param session_name: Имя аккаунта для подключения (файл .session)
         :return: Клиент Telegram или None, если подключение не удалось
         """
-
-        self.proxy.setup_proxy()  # Устанавливаем прокси
-
         # Создаем клиент, используя StringSession и вашу строку
         client = TelegramClient(  # Создаем клиента Telegram
             StringSession(session_name),  # Строка сессии
@@ -420,9 +417,6 @@ class TGConnect:
 
         async def connecting_number_accounts(_) -> None:
             """Подключение аккаунта Telegram по номеру телефона"""
-
-            self.proxy.setup_proxy()  # Устанавливаем прокси
-
             phone_number_value = phone_number.value
             await self.app_logger.log_and_display(message=f"Номер телефона: {phone_number_value}")
 
