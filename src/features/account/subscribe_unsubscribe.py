@@ -91,6 +91,7 @@ class SubscribeUnsubscribeTelegram:
                     # Получение ссылки
                     links_inviting: list = get_writing_group_links()  # Открываем базу данных
                     logger.info(links_inviting)
+
                     await self.app_logger.log_and_display(message=f"Ссылка для подписки и проверки:  {links_inviting}")
                     for link_tuple in links_inviting:
                         await self.app_logger.log_and_display(message=f"Ссылка для подписки и проверки:  {link_tuple}")
@@ -124,9 +125,12 @@ class SubscribeUnsubscribeTelegram:
                 if smaller_times < larger_times:  # Проверяем, что первое время меньше второго
                     # Если условие прошло проверку, то возвращаем первое и второе время
                     self.setting_page.writing_settings_to_a_file(
-                        await self.setting_page.recording_limits_file(time_1=str(smaller_times),
-                                                                      time_2=str(larger_times),
-                                                                      variable="time_subscription"))
+                        await self.setting_page.recording_limits_file(
+                            time_1=str(smaller_times),
+                            time_2=str(larger_times),
+                            variable="time_subscription"
+                        )
+                    )
                     list_view.controls.append(ft.Text("Данные успешно записаны!"))  # отображаем сообщение в ListView
                     await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                         message="Данные успешно записаны!"
