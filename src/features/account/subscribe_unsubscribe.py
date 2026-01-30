@@ -24,7 +24,7 @@ from src.features.account.connect import TGConnect
 from src.features.settings.setting import SettingPage
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
-from src.gui.gui_input_builders import LinkInputRowBuilder, GUIProgram
+from src.gui.gui_input_builders import GUIProgram, GUIProgram
 from src.locales.translations_loader import translations
 
 
@@ -146,7 +146,7 @@ class SubscribeUnsubscribeTelegram:
             ft.Text(f"Записанные данные в файле {time_range_message}"))  # отображаем сообщение в ListView
 
         # Поле ввода ссылок и кнопка сохранения для подписки
-        link_entry_field = await LinkInputRowBuilder().build_link_input_with_save_button(
+        link_entry_field = await GUIProgram().build_link_input_with_save_button(
             label_text="Введите ссылки для подписки на группы и каналы",
             width=WIDTH_WIDE_BUTTON  # Ширина поля ввода и кнопки сохранения
         )
@@ -182,7 +182,7 @@ class SubscribeUnsubscribeTelegram:
                               "📌 Если вы уже вводили их ранее — ввод не обязателен, данные сохранены в системе.",
                         size=14
                     ),
-                    await LinkInputRowBuilder().compose_link_input_row(link_entry_field),
+                    await GUIProgram().compose_link_input_row(link_entry_field),
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     ft.Column(  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                         [

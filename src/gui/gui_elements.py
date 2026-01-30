@@ -22,10 +22,20 @@ class GUIProgram:
         :param width: Ширина полей ввода
         :return: Кортеж из двух объектов TextField
         """
-        min_time_input = ft.TextField(label=label_min, label_style=ft.TextStyle(size=15), autofocus=True, width=width,
-                                      text_size=12)
-        max_time_input = ft.TextField(label=label_max, label_style=ft.TextStyle(size=15), autofocus=True, width=width,
-                                      text_size=12)
+        min_time_input = ft.TextField(
+            label=label_min,
+            label_style=ft.TextStyle(size=15),
+            autofocus=True,
+            width=width,
+            text_size=12
+        )
+        max_time_input = ft.TextField(
+            label=label_max,
+            label_style=ft.TextStyle(size=15),
+            autofocus=True,
+            width=width,
+            text_size=12
+        )
         return min_time_input, max_time_input
 
     async def compose_time_input_row(self, min_time_input: ft.TextField, max_time_input: ft.TextField):
