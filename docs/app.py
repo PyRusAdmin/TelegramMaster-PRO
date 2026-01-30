@@ -243,7 +243,8 @@ async def connect_accounts(request: Request):
             "program_name": PROGRAM_NAME,
             "connecting_accounts_by_phone_number": translations["ru"]["account_connect_menu"]["connecting_accounts_by_phone_number"],
             "connecting_session_accounts": translations["ru"]["account_connect_menu"]["connecting_session_accounts"],
-            "delete_connected_accounts": translations["ru"]["account_connect_menu"]["delete_connected_accounts"]
+            "delete_connected_accounts": translations["ru"]["account_connect_menu"]["delete_connected_accounts"],
+            "account_connect": translations["ru"]["menu"]["account_connect"]
         }
     )
 

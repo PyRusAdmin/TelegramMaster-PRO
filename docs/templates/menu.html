@@ -1,6 +1,6 @@
 <!-- menu.html -->
 <div class="sidebar">
-{% from 'macros/common_steps.html' import start_program, step_connect_accounts with context %}
+    {% from 'macros/common_steps.html' import start_program, step_connect_accounts with context %}
     <!-- Правильный способ подключения CSS -->
     <link rel="stylesheet" href="/static/css/telegram.css">
     <a href="https://t.me/master_tg_d" target="_blank">
@@ -50,9 +50,7 @@
     <a href="{{ url_for('creating_groups') }}">👥 Создание групп (чатов)</a>
     <a href="{{ url_for('we_are_winding_up_post_views') }}">👁️‍🗨️ Накручиваем просмотры постов</a>
     <a href="{{ url_for('launch_telegrammaster') }}">🚀 Запуск {{ program_name }}</a>
-
     <a href="{{ url_for('importing_a_list_of_parsed_data') }}">{{importing_a_list_of_parsed_data}}</a>
-
     <a href="{{ url_for('telegram_limits') }}">📊 Лимиты Telegram</a>
     <a href="{{ url_for('working_with_errors_telegrammaster') }}">❗ Работа с ошибками</a>
 </div>

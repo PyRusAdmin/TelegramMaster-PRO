@@ -105,7 +105,7 @@
         <ol>
             {{ start_program(program_name) }}
             <li>
-                Запустить функцию «Подключение аккаунтов».
+                Запустить функцию «{{ account_connect }}».
                 <p style="text-align: center;">
                     <img src="/static/images/connect_accounts.png" alt="connect_accounts" width="60%">
                 </p>
@@ -142,7 +142,7 @@
         <ol>
             {{ start_program(program_name) }}
             <li>
-                Запустить функцию «Подключение аккаунтов».
+                Запустить функцию «{{ account_connect }}».
                 <p style="text-align: center;">
                     <img src="/static/images/connect_accounts.png" alt="connect_accounts" width="60%">
                 </p>
@@ -176,34 +176,34 @@
         <ol>
             {{ start_program(program_name) }}
             <li>
-                Запустить функцию «Подключение аккаунтов».
+                Запустить функцию «{{ account_connect }}».
                 <p style="text-align: center;">
                     <img src="/static/images/connect_accounts.png" alt="connect_accounts" width="60%">
                 </p>
             </li>
             <li>
-                Выбрать session файл аккаунта, который хотите подключить к {{program_name}}.
+                Запустить функцию «{{ delete_connected_accounts }}».
                 <p style="text-align: center;">
-                    <img src="/static/images/connect_accounts_2.png" alt="Telegram Master" width="60%">
+                    <img src="/static/images/connect_accounts_5.png" alt="connect_accounts" width="60%">
                 </p>
             </li>
         </ol>
         <p>После успешного подключения в базу данных будет записана строковая сессия в таблицу account.</p>
-        <div
-                style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">
-            <p style="color: #721c24; margin: 0; font-size: 16px;">
-                ⚠️ При использовании номеров телефонов из США рекомендуется использовать VPN или Proxy для
-                безопасности.
-                По опыту пользователей <b>{{program_name}}</b>, рекомендуемыми странами для использования являются
-                Россия, США, Украина, Киргизия, Таджикистан, Узбекистан, Беларусь, Иран, Грузия и Армения, в то
-                время как страны Азии, такие как Индонезия, не рекомендуются.
-            </p>.
-        </div>
-
-
-        <!-- Кнопка "Вверх" -->
-        <a href="#" id="to-top" title="Вверх"><i class="fas fa-chevron-up" aria-hidden="true"></i></a>
+        <!--        <div-->
+        <!--                style="border: 2px solid #f5c6cbf5; background-color: #f8d7da; padding: 20px; border-radius: 10px; margin: 20px 0; font-family: Arial, sans-serif;">-->
+        <!--            <p style="color: #721c24; margin: 0; font-size: 16px;">-->
+        <!--                ⚠️ При использовании номеров телефонов из США рекомендуется использовать VPN или Proxy для-->
+        <!--                безопасности.-->
+        <!--                По опыту пользователей <b>{{program_name}}</b>, рекомендуемыми странами для использования являются-->
+        <!--                Россия, США, Украина, Киргизия, Таджикистан, Узбекистан, Беларусь, Иран, Грузия и Армения, в то-->
+        <!--                время как страны Азии, такие как Индонезия, не рекомендуются.-->
+        <!--            </p>.-->
     </div>
+
+
+    <!-- Кнопка "Вверх" -->
+    <a href="#" id="to-top" title="Вверх"><i class="fas fa-chevron-up" aria-hidden="true"></i></a>
+</div>
 </div>
 </body>
 
