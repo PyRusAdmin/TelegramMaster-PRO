@@ -9,7 +9,7 @@ from telethon import functions, types
 from telethon.errors import (
     AuthKeyUnregisteredError, ChannelPrivateError, ChannelsTooMuchError, FloodWaitError, InviteHashExpiredError,
     InviteHashInvalidError, InviteRequestSentError, SessionPasswordNeededError, SessionRevokedError,
-    UserNotParticipantError, UsernameInvalidError
+    UserNotParticipantError, UsernameInvalidError, UsernameNotOccupiedError
 )
 from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
@@ -382,23 +382,37 @@ class SubscribeUnsubscribeTelegram:
             entity = await client.get_entity(group_link)
             if entity:
                 await client(LeaveChannelRequest(entity))
-
+        except UsernameNotOccupiedError:
+            await self.app_logger.log_and_display(
+                message="❌ Аккаунту не удалось найти группу или канал, возможно региональные ограничения."
+            )
         except ChannelPrivateError:  # Аккаунт Telegram не может отписаться так как не имеет доступа
-            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["channel_private"])
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["channel_private"]
+            )
         except UserNotParticipantError:
-            await self.app_logger.log_and_display(message=translations["ru"]["errors"]["unsubscribe_not_member"])
+            await self.app_logger.log_and_display(
+                message=translations["ru"]["errors"]["unsubscribe_not_member"]
+            )
         except SessionRevokedError:
             await self.app_logger.log_and_display(
-                message=translations["ru"]["errors"]["invalid_auth_session_terminated"])
-
+                message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
+            )
         except FloodWaitError as e:
-            await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
+            await self.app_logger.log_and_display(
+                f"{translations["ru"]["errors"]["flood_wait"]}{e}",
+                level="error"
+            )
             await self.utils.record_and_interrupt(time_subscription_1, time_subscription_2)
-
         except sqlite3.DatabaseError:
             await self.app_logger.log_and_display(
-                message=f"❌ Попытка подписки на группу / канал {group_link}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")
+                message=f"❌ Попытка подписки на группу / канал {group_link}. Ошибка базы данных, аккаунта или аккаунт заблокирован."
+            )
         except ConnectionError:
-            await self.app_logger.log_and_display(message="Ошибка соединения с Telegram")
+            await self.app_logger.log_and_display(
+                message="Ошибка соединения с Telegram"
+            )
+        except Exception as e:
+            logger.exception(e)
 
 # 409
