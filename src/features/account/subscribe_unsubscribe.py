@@ -382,6 +382,11 @@ class SubscribeUnsubscribeTelegram:
             entity = await client.get_entity(group_link)
             if entity:
                 await client(LeaveChannelRequest(entity))
+
+        except ValueError:
+            await self.app_logger.log_and_display(
+                message="❌ Аккаунту не удалось найти группу или канал, возможно региональные ограничения."
+            )
         except UsernameNotOccupiedError:
             await self.app_logger.log_and_display(
                 message="❌ Аккаунту не удалось найти группу или канал, возможно региональные ограничения."
