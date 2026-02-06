@@ -260,10 +260,10 @@ class SendTelegramMessages:
                     await self.app_logger.log_and_display(
                         message=f"🔒 Группа {group_link} приватная или недоступна.")
                 except PeerFloodError:
-                    await self.utils.random_dream(
-                        TIME_1=time_subscription_1,
-                        TIME_2=time_subscription_2
-                    )
+                    # await self.utils.random_dream(
+                    #     TIME_1=time_subscription_1,
+                    #     TIME_2=time_subscription_2
+                    # )
                     break  # Прерываем работу и меняем аккаунт
                 except FloodWaitError as e:
                     await self.app_logger.log_and_display(
@@ -286,10 +286,10 @@ class SendTelegramMessages:
                 except ChatWriteForbiddenError:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["chat_write_forbidden"])
-                    await self.utils.random_dream(
-                        TIME_1=time_subscription_1,
-                        TIME_2=time_subscription_2
-                    )
+                    # await self.utils.random_dream(
+                    #     TIME_1=time_subscription_1,
+                    #     TIME_2=time_subscription_2
+                    # )
                     break  # Прерываем работу и меняем аккаунт
                 except SlowModeWaitError as e:
                     await self.app_logger.log_and_display(
