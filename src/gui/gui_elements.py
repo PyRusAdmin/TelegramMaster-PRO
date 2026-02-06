@@ -3,7 +3,7 @@ import asyncio
 
 import flet as ft  # Импортируем библиотеку flet
 
-from src.core.configs import BUTTON_HEIGHT, BUTTON_WIDTH
+from src.core.configs import BUTTON_HEIGHT, BUTTON_WIDTH, WIDTH_WIDE_BUTTON
 from src.locales.translations_loader import translations
 
 
@@ -163,3 +163,28 @@ class GUIProgram:
         :return: Объект Divider
         """
         return ft.Divider(height=1, color="red")
+
+    def create_account_dropdown(self, account_data):
+        """
+        Создаёт выпадающий список (Dropdown) для выбора аккаунта.
+
+        :param account_data: Список кортежей вида (phone: str, session_str: str)
+        :param width: Ширина выпадающего списка
+        :return: Экземпляр ft.Dropdown
+        """
+        # Создаём опции: текст — номер, ключ — session_string
+        account_options = [
+            ft.DropdownOption(
+                text=phone,
+                key=session_str
+            )
+            for phone, session_str in account_data
+        ]
+
+        # Создаем выпадающий список с названием "Выберите аккаунт"
+        return ft.Dropdown(
+            label="📂 Выберите аккаунт",
+            width=WIDTH_WIDE_BUTTON,
+            options=account_options,
+            autofocus=True
+        )

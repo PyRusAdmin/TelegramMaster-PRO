@@ -207,9 +207,9 @@ class SendTelegramMessages:
             # Обычный режим: все аккаунты
             sessions_to_use = self.session_string
 
-        if not sessions_to_use:
-            await self.app_logger.log_and_display("❌ Нет доступных аккаунтов для работы.")
-            return
+        # if not sessions_to_use:
+        #     await self.app_logger.log_and_display("❌ Нет доступных аккаунтов для работы.")
+        #     return
 
         if checs:
             # === РЕЖИМ АВТООТВЕТЧИКА ===
@@ -336,17 +336,22 @@ class SendTelegramMessages:
         c = ft.Checkbox(label="Работа с автоответчиком")
 
         # Создаём опции: текст — номер, ключ — session_string
-        account_options = [
-            ft.DropdownOption(text=phone, key=session_str)
-            for phone, session_str in self.account_data
-        ]
+        # account_options = [
+        #     ft.DropdownOption(
+        #         text=phone,
+        #         key=session_str
+        #     )
+        #     for phone, session_str in self.account_data
+        # ]
+
         # Создаем выпадающий список с названиями групп
-        account_drop_down_list = ft.Dropdown(
-            label="📂 Выберите аккаунт",  # ✅ Название выпадающего списка
-            width=WIDTH_WIDE_BUTTON,  # ✅ Ширина выпадающего списка
-            options=account_options,  # ✅ Опции выпадающего списка
-            autofocus=True  # ✅ Автозаполнение
-        )
+        # account_drop_down_list = ft.Dropdown(
+        #     label="📂 Выберите аккаунт",  # ✅ Название выпадающего списка
+        #     width=WIDTH_WIDE_BUTTON,  # ✅ Ширина выпадающего списка
+        #     options=account_options,  # ✅ Опции выпадающего списка
+        #     autofocus=True  # ✅ Автозаполнение
+        # )
+        account_drop_down_list = self.gui_program.create_account_dropdown(self.account_data)
 
         # Обработчик кнопки "Готово"
         async def button_clicked(_):
