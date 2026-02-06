@@ -268,7 +268,6 @@ class SendTelegramMessages:
                 await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
                 for group_link in chat_list_fields:  # Поочередно выводим записанные группы
                     try:
-
                         # Подписываемся на группы
                         await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
                         await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
@@ -276,7 +275,14 @@ class SendTelegramMessages:
                         # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
                         messages, files = await self.all_find_and_all_files()
                         # Отправляем сообщения и файлы в группу
-                        await self.send_content(client, group_link, messages, files)
+                        await self.send_content(
+                            client=client,
+                            target=group_link,
+                            messages=messages,
+                            files=files,
+                            TIME_1=TIME_1,
+                            TIME_2=TIME_2
+                        )
                     except ChannelPrivateError:
                         await self.app_logger.log_and_display(
                             message=f"🔒 Группа {group_link} приватная или недоступна.")
