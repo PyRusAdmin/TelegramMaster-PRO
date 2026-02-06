@@ -109,6 +109,20 @@ class Utils:
         # Смена username через случайное количество секунд
         await self.record_and_interrupt(time_range_1, time_range_2)
 
+    async def random_dream(self, TIME_1, TIME_2):
+        """
+        Выполняет случайную задержку между операциями. (Рассылка сообщений, инвайтинг, и т.д)
+        :param TIME_1: - диапазон времени смены аккаунта
+        :param TIME_2: - диапазон времени смены аккаунта
+        :return: None
+        """
+        try:
+            time_in_seconds = random.randrange(TIME_1, TIME_2)
+            await self.app_logger.log_and_display(f"Спим {time_in_seconds} секунд...")
+            await asyncio.sleep(time_in_seconds)  # Спим 1 секунду
+        except Exception as error:
+            logger.exception(error)
+
     async def record_and_interrupt(self, time_range_1, time_range_2) -> None:
         """
         Запись данных в базу данных и прерывание выполнения кода.

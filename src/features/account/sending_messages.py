@@ -103,6 +103,9 @@ class SendTelegramMessages:
                         client: TelegramClient = await self.connect.client_connect_string_session(
                             session_name=session_name)
 
+                        # if client is None:
+                        #     logger.warning("Не валидный аккаунт, выполните проверку аккаунтов")
+
                         try:
                             for username in await select_records_with_limit(limit=int(self.limits.value),
                                                                             app_logger=self.app_logger):
@@ -183,7 +186,7 @@ class SendTelegramMessages:
         )
 
     async def performing_the_operation(self, checs: bool, chat_list_fields: list, selected_account: str = None,
-                                       auto_reply_text: str = None) -> None:
+                                       auto_reply_text: str = None, TIME_1=None, TIME_2=None) -> None:
         """
         Выполняет рассылку сообщений по чатам или работу с автоответчиком.
 
@@ -191,6 +194,8 @@ class SendTelegramMessages:
         :param chat_list_fields: Список ссылок на группы для рассылки
         :param selected_account: Выбранный аккаунт (для автоответчика)
         :param auto_reply_text: Текст сообщения для автоответчика
+        :param TIME_1: Время сна от
+        :param TIME_2: Время сна до
         :return: None
         """
 
@@ -235,7 +240,14 @@ class SendTelegramMessages:
                             # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
                             messages, files = await self.all_find_and_all_files()
                             # Отправляем сообщения и файлы в группу
-                            await self.send_content(client, group_link, messages, files)
+                            await self.send_content(
+                                client=client,
+                                target=group_link,
+                                messages=messages,
+                                files=files,
+                                TIME_1=TIME_1,
+                                TIME_2=TIME_2
+                            )
                         except UserBannedInChannelError:
                             await self.app_logger.log_and_display(
                                 message=f"❌ Запрещено отправлять сообщения в супергруппы/каналы.")
@@ -243,7 +255,7 @@ class SendTelegramMessages:
                             await self.app_logger.log_and_display(
                                 message=f"❌ Ошибка рассылки, проверьте ссылку: {group_link}")
                             break
-                        await self.random_dream()  # Прерываем работу и меняем аккаунт
+                        await self.utils.random_dream(TIME_1=TIME_1, TIME_2=TIME_2)  # Прерываем работу и меняем аккаунт
                     await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
             except Exception as error:
                 logger.exception(error)
@@ -251,7 +263,9 @@ class SendTelegramMessages:
             # === ОБЫЧНЫЙ РЕЖИМ РАССЫЛКИ ===
             try:
                 start = await self.app_logger.start_time()
-                for session_name in self.sessions_to_use:  # Перебор всех сессий
+
+                for session_name in sessions_to_use:  # Перебор всех сессий
+
                     client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
                     # await self.connect.getting_account_data(client)
 
@@ -306,7 +320,7 @@ class SendTelegramMessages:
                             continue  # Записываем ошибку в software_database.db и продолжаем работу
                         except Exception as error:
                             logger.exception(error)
-                    await client.disconnect()  # Разрываем соединение Telegram
+                    # await client.disconnect()  # Разрываем соединение Telegram
                 await self.app_logger.log_and_display(message="🔚 Конец отправки сообщений + файлов по чатам")
                 await self.app_logger.end_time(start)
             except Exception as error:
@@ -352,7 +366,9 @@ class SendTelegramMessages:
                     checs=c.value,
                     chat_list_fields=chat_list_fields,
                     selected_account=selected_account,
-                    auto_reply_text=self.auto_reply_text_field.value
+                    auto_reply_text=self.auto_reply_text_field.value,
+                    TIME_1=int(self.tb_time_from.value),
+                    TIME_2=int(self.tb_time_to.value),
                 )
             else:
                 t.value = f"Время сна: Некорректный диапазон, введите корректные значения"
@@ -400,7 +416,7 @@ class SendTelegramMessages:
             )
         )
 
-    async def send_content(self, client, target, messages, files):
+    async def send_content(self, client, target, messages, files, TIME_1, TIME_2):
         """
         Отправляет сообщения и файлы в указанную цель (личку или группу).
 
@@ -420,6 +436,8 @@ class SendTelegramMessages:
             if not files:
                 try:
                     await client.send_message(entity=target, message=message)
+                except AttributeError:
+                    logger.warning("Не валидный аккаунт, выполните проверку аккаунтов")
                 except ForbiddenError as e:
                     if "ALLOW_PAYMENT_REQUIRED" in str(e):
                         await self.app_logger.log_and_display(
@@ -430,7 +448,8 @@ class SendTelegramMessages:
                 for file in files:
                     await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
                     await self.app_logger.log_and_display(f"Сообщение и файл отправлены: {target}")
-        await self.random_dream()
+
+        await self.utils.random_dream(TIME_1=TIME_1, TIME_2=TIME_2)
 
     async def all_find_and_all_files(self):
         """
@@ -440,19 +459,6 @@ class SendTelegramMessages:
         """
         return (await self.utils.find_files(directory_path=path_folder_with_messages, extension=self.file_extension),
                 await self.utils.all_find_files(directory_path="user_data/files_to_send"))
-
-    async def random_dream(self):
-        """
-        Выполняет случайную задержку между операциями.
-
-        :return: None
-        """
-        try:
-            time_in_seconds = random.randrange(TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2)
-            await self.app_logger.log_and_display(f"Спим {time_in_seconds} секунд...")
-            await asyncio.sleep(time_in_seconds)  # Спим 1 секунду
-        except Exception as error:
-            logger.exception(error)
 
     async def select_and_read_random_file(self, entities, folder):
         """
