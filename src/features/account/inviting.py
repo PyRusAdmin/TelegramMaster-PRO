@@ -500,9 +500,9 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(
-                time_range_1=time_inviting_1,
-                time_range_2=time_inviting_2
+            await self.utils.random_dream(
+                TIME_1=time_inviting_1,
+                TIME_2=time_inviting_2
             )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
@@ -511,9 +511,9 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(
-                time_range_1=time_inviting_1,
-                time_range_2=time_inviting_2
+            await self.utils.random_dream(
+                TIME_1=time_inviting_1,
+                TIME_2=time_inviting_2
             )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
@@ -522,9 +522,9 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(
-                time_range_1=time_inviting_1,
-                time_range_2=time_inviting_2
+            await self.utils.random_dream(
+                TIME_1=time_inviting_1,
+                TIME_2=time_inviting_2
             )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
@@ -533,9 +533,9 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(
-                time_range_1=time_inviting_1,
-                time_range_2=time_inviting_2
+            await self.utils.random_dream(
+                TIME_1=time_inviting_1,
+                TIME_2=time_inviting_2
             )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
@@ -544,9 +544,9 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["invalid_auth_session_terminated"]
             )
-            await self.utils.record_and_interrupt(
-                time_range_1=time_inviting_1,
-                time_range_2=time_inviting_2
+            await self.utils.random_dream(
+                TIME_1=time_inviting_1,
+                TIME_2=time_inviting_2
             )
             logger.error(e)
             raise ConnectionError("Клиент отключен из-за ошибки сеанса")
@@ -623,9 +623,9 @@ class InvitingToAGroup:
                 message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                 level="error"
             )
-            await self.utils.record_and_interrupt(
-                time_range_1=time_inviting_1,
-                time_range_2=time_inviting_2
+            await self.utils.random_dream(
+                TIME_1=time_inviting_1,
+                TIME_2=time_inviting_2
             )
             # await client.disconnect()  # Прерываем работу и меняем аккаунт
             # return # Прерываем выполнение, чтобы не перегружать API
@@ -634,9 +634,9 @@ class InvitingToAGroup:
             await self.app_logger.log_and_display(
                 message=translations["ru"]["errors"]["auth_key_unregistered"]
             )
-            await self.utils.record_and_interrupt(
-                time_range_1=time_inviting_1,
-                time_range_2=time_inviting_2
+            await self.utils.random_dream(
+                TIME_1=time_inviting_1,
+                TIME_2=time_inviting_2
             )
             # await client.disconnect()
             raise ConnectionError("Клиент отключён из-за незарегистрированного ключа аутентификации")
@@ -645,9 +645,9 @@ class InvitingToAGroup:
                 message=translations["ru"]["errors"]["peer_flood"],
                 level="error"
             )
-            await self.utils.record_and_interrupt(
-                time_range_1=time_inviting_1,
-                time_range_2=time_inviting_2
+            await self.utils.random_dream(
+                TIME_1=time_inviting_1,
+                TIME_2=time_inviting_2
             )
             # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за флуда узла")

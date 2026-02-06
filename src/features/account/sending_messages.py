@@ -127,12 +127,12 @@ class SendTelegramMessages:
                                     await self.app_logger.log_and_display(
                                         message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                         level="error")
-                                    await self.utils.record_and_interrupt(time_range_1=self.tb_time_from.value,
-                                                                          time_range_2=self.tb_time_to.value)
+                                    await self.utils.random_dream(TIME_1=self.tb_time_from.value,
+                                                                  TIME_2=self.tb_time_to.value)
                                     break  # Прерываем работу и меняем аккаунт
                                 except PeerFloodError:
-                                    await self.utils.record_and_interrupt(time_range_1=self.tb_time_from.value,
-                                                                          time_range_2=self.tb_time_to.value)
+                                    await self.utils.random_dream(TIME_1=self.tb_time_from.value,
+                                                                  TIME_2=self.tb_time_to.value)
                                     break  # Прерываем работу и меняем аккаунт
                                 except UserNotMutualContactError:
                                     await self.app_logger.log_and_display(
@@ -143,8 +143,8 @@ class SendTelegramMessages:
                                 except ChatWriteForbiddenError:
                                     await self.app_logger.log_and_display(
                                         message=translations["ru"]["errors"]["chat_write_forbidden"])
-                                    await self.utils.record_and_interrupt(time_range_1=self.tb_time_from.value,
-                                                                          time_range_2=self.tb_time_to.value)
+                                    await self.utils.random_dream(TIME_1=self.tb_time_from.value,
+                                                                  TIME_2=self.tb_time_to.value)
                                     break  # Прерываем работу и меняем аккаунт
                                 except (TypeError, UnboundLocalError):
                                     continue  # Записываем ошибку в software_database.db и продолжаем работу
@@ -260,9 +260,9 @@ class SendTelegramMessages:
                     await self.app_logger.log_and_display(
                         message=f"🔒 Группа {group_link} приватная или недоступна.")
                 except PeerFloodError:
-                    await self.utils.record_and_interrupt(
-                        time_range_1=time_subscription_1,
-                        time_range_2=time_subscription_2
+                    await self.utils.random_dream(
+                        TIME_1=time_subscription_1,
+                        TIME_2=time_subscription_2
                     )
                     break  # Прерываем работу и меняем аккаунт
                 except FloodWaitError as e:
@@ -286,9 +286,9 @@ class SendTelegramMessages:
                 except ChatWriteForbiddenError:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["chat_write_forbidden"])
-                    await self.utils.record_and_interrupt(
-                        time_range_1=time_subscription_1,
-                        time_range_2=time_subscription_2
+                    await self.utils.random_dream(
+                        TIME_1=time_subscription_1,
+                        TIME_2=time_subscription_2
                     )
                     break  # Прерываем работу и меняем аккаунт
                 except SlowModeWaitError as e:

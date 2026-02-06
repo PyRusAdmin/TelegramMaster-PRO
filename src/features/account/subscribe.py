@@ -68,7 +68,7 @@ class Subscribe:
 
         except FloodWaitError as e:
             await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
-            await self.utils.record_and_interrupt(time_subscription_1, time_subscription_2)
+            await self.utils.random_dream(time_subscription_1, time_subscription_2)
 
         except InviteRequestSentError:
             await self.app_logger.log_and_display(
