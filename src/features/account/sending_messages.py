@@ -185,7 +185,7 @@ class SendTelegramMessages:
             )
         )
 
-    async def performing_the_operation(self, checs: bool, chat_list_fields: list, selected_account: str = None,
+    async def performing_the_operation(self, checs: bool, chat_list_fields: list, selected_account,
                                        auto_reply_text: str = None, TIME_1=None, TIME_2=None) -> None:
         """
         Выполняет рассылку сообщений по чатам или работу с автоответчиком.
@@ -198,65 +198,63 @@ class SendTelegramMessages:
         :param TIME_2: Время сна до
         :return: None
         """
-
+        logger.warning(f"Выбранный аккаунт: {selected_account}")
         # Определяем, какие сессии использовать
-        if checs and selected_account:
-            # Режим автоответчика: только один выбранный аккаунт
-            sessions_to_use = [selected_account]
-        else:
-            # Обычный режим: все аккаунты
-            sessions_to_use = self.session_string
-
+        # if checs and selected_account:
+        # Режим автоответчика: только один выбранный аккаунт
+        # sessions_to_use = [selected_account]
+        # else:
+        # Обычный режим: все аккаунты
+        # sessions_to_use = self.session_string
         # if not sessions_to_use:
         #     await self.app_logger.log_and_display("❌ Нет доступных аккаунтов для работы.")
         #     return
-
         if checs:
             # === РЕЖИМ АВТООТВЕТЧИКА ===
             try:
-                for session_name in sessions_to_use:  # Перебор всех сессий
-                    # Пользователь должен сам выбрать аккаунт
-                    # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                    client: TelegramClient = await self.connect.client_connect_string_session(session_name=session_name)
+                # for session_name in sessions_to_use:  # Перебор всех сессий
+                # Пользователь должен сам выбрать аккаунт
+                # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                client: TelegramClient = await self.connect.client_connect_string_session(session_name=selected_account)
 
-                    @client.on(events.NewMessage(incoming=True))  # Обработчик личных сообщений
-                    async def handle_private_messages(event):
-                        """Обрабатывает входящие личные сообщения"""
-                        if event.is_private:  # Проверяем, является ли сообщение личным
-                            await self.app_logger.log_and_display(
-                                message=f"📩 Входящее сообщение: {event.message.message}")
-                            reply_text = auto_reply_text or "Спасибо за сообщение! Мы ответим позже."
-                            await event.respond(reply_text)
-                            await self.app_logger.log_and_display(f"🤖 Ответ отправлен: {reply_text}")
+                @client.on(events.NewMessage(incoming=True))  # Обработчик личных сообщений
+                async def handle_private_messages(event):
+                    """Обрабатывает входящие личные сообщения"""
+                    if event.is_private:  # Проверяем, является ли сообщение личным
+                        await self.app_logger.log_and_display(
+                            message=f"📩 Входящее сообщение: {event.message.message}")
+                        reply_text = auto_reply_text or "Спасибо за сообщение! Мы ответим позже."
+                        await event.respond(reply_text)
+                        await self.app_logger.log_and_display(f"🤖 Ответ отправлен: {reply_text}")
 
-                    # Получаем список чатов, которым нужно отправить сообщение
-                    await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
-                    for group_link in chat_list_fields:
-                        try:
-                            # Подписываемся на группы
-                            await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
-                            await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
+                # Получаем список чатов, которым нужно отправить сообщение
+                await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
+                for group_link in chat_list_fields:
+                    try:
+                        # Подписываемся на группы
+                        await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
+                        await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
 
-                            # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
-                            messages, files = await self.all_find_and_all_files()
-                            # Отправляем сообщения и файлы в группу
-                            await self.send_content(
-                                client=client,
-                                target=group_link,
-                                messages=messages,
-                                files=files,
-                                TIME_1=TIME_1,
-                                TIME_2=TIME_2
-                            )
-                        except UserBannedInChannelError:
-                            await self.app_logger.log_and_display(
-                                message=f"❌ Запрещено отправлять сообщения в супергруппы/каналы.")
-                        except ValueError:
-                            await self.app_logger.log_and_display(
-                                message=f"❌ Ошибка рассылки, проверьте ссылку: {group_link}")
-                            break
-                        await self.utils.random_dream(TIME_1=TIME_1, TIME_2=TIME_2)  # Прерываем работу и меняем аккаунт
-                    await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
+                        # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
+                        messages, files = await self.all_find_and_all_files()
+                        # Отправляем сообщения и файлы в группу
+                        await self.send_content(
+                            client=client,
+                            target=group_link,
+                            messages=messages,
+                            files=files,
+                            TIME_1=TIME_1,
+                            TIME_2=TIME_2
+                        )
+                    except UserBannedInChannelError:
+                        await self.app_logger.log_and_display(
+                            message=f"❌ Запрещено отправлять сообщения в супергруппы/каналы.")
+                    except ValueError:
+                        await self.app_logger.log_and_display(
+                            message=f"❌ Ошибка рассылки, проверьте ссылку: {group_link}")
+                        break
+                    await self.utils.random_dream(TIME_1=TIME_1, TIME_2=TIME_2)  # Прерываем работу и меняем аккаунт
+                await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
             except Exception as error:
                 logger.exception(error)
         else:
@@ -334,7 +332,6 @@ class SendTelegramMessages:
         """
         # Чекбокс для работы с автоответчиком
         c = ft.Checkbox(label="Работа с автоответчиком")
-
         account_drop_down_list = self.gui_program.create_account_dropdown(self.account_data)
 
         # Обработчик кнопки "Готово"
@@ -376,21 +373,21 @@ class SendTelegramMessages:
                     ),
                     list_view,  # Отображение логов 📝
                     account_drop_down_list,  # Выпадающий список с аккаунтами
-
                     c,
                     ft.Row(
-                        controls=[self.tb_time_from, self.tb_time_to],
+                        controls=[
+                            self.tb_time_from,
+                            self.tb_time_to
+                        ],
                         spacing=20,
                     ),
                     t,
-
                     ft.Row(
                         controls=[
                             self.auto_reply_text_field,  # Поле для текста автоответчика
                             self.chat_list_field,  # Поле для ввода ссылок на группы
                         ],
                     ),
-
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
                             ft.Button(
