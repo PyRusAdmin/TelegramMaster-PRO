@@ -14,8 +14,7 @@ from telethon.errors import (
 )
 
 from src.core.configs import (
-    BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2,
-    time_subscription_1, time_subscription_2
+    BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages, TIME_SENDING_MESSAGES_1, TIME_SENDING_MESSAGES_2
 )
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import select_records_with_limit, get_writing_group_links
