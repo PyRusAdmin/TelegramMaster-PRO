@@ -368,6 +368,8 @@ class SendTelegramMessages:
             )
             await performing_operation(
                 chat_list_fields=chat_list_fields,
+                min_seconds=min_seconds,
+                max_seconds=min_seconds
             )
             # else:
             #     t.value = f"Время сна: Некорректный диапазон, введите корректные значения"
