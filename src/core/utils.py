@@ -41,21 +41,6 @@ class Utils:
                 entities.append(x)  # Добавляем имя файла в список
         return entities  # Возвращаем список файлов
 
-    # async def find_filess(self, directory_path, extension):
-    #     """
-    #     Поиск файлов с определенным расширением в директории. Расширение файла должно быть указанно без точки.
-    #
-    #     :param directory_path: Путь к директории
-    #     :param extension: Расширение файла (указанное без точки)
-    #     :return list: Список имен найденных файлов
-    #     """
-    #     entities = []  # Создаем словарь с именами найденных аккаунтов в папке user_data/accounts
-    #     for x in os.listdir(directory_path):
-    #         if x.endswith(f".{extension}"):  # Проверяем, заканчивается ли имя файла на заданное расширение
-    #             file = os.path.splitext(x)[0]  # Разделяем имя файла на имя без расширения и расширение
-    #             entities.append(file)  # Добавляем информацию о файле в список
-    #     return entities  # Возвращаем список json файлов
-
     async def find_files(self, directory_path, extension) -> list:
         """
         Поиск файлов с определенным расширением в директории. Расширение файла должно быть указанно без точки.
@@ -73,25 +58,6 @@ class Utils:
         await self.app_logger.log_and_display(f"🔍 Найденные файлы: {entities}")
 
         return entities  # Возвращаем список json файлов
-
-    # async def working_with_accounts(self, account_folder, new_account_folder) -> None:
-    #     """
-    #     Работа с аккаунтами
-    #
-    #     :param account_folder: Исходный путь к файлу
-    #     :param new_account_folder: Путь к новой папке, куда нужно переместить файл
-    #     """
-    #     try:  # Переносим файлы в нужную папку
-    #         os.replace(account_folder, new_account_folder)
-    #     except FileNotFoundError:  # Если в папке нет нужной папки, то создаем ее
-    #         try:
-    #             os.makedirs(new_account_folder)
-    #             os.replace(account_folder, new_account_folder)
-    #         except FileExistsError:  # Если файл уже существует, то удаляем его
-    #             os.remove(account_folder)
-    #     except PermissionError as error:
-    #         logger.error(f"❌ Ошибка: {error}")
-    #         logger.error("❌ Не удалось перенести файлы в нужную папку")
 
     async def record_inviting_results(self, time_range_1: int, time_range_2: int, username: str) -> None:
         """
@@ -120,3 +86,18 @@ class Utils:
             await asyncio.sleep(time_in_seconds)  # Спим 1 секунду
         except Exception as error:
             logger.exception(error)
+
+    async def verifies_time_range_entered_correctly(self, min_seconds: int, max_seconds: int):
+        """
+        Проверяет введенный пользователем интервал
+        :param min_seconds: - диапазон времени смены аккаунта
+        :param max_seconds: - диапазон времени смены аккаунта
+        :return: None
+        """
+        logger.info("Проверка корректности ввода временного диапазона.")
+        if min_seconds < max_seconds:
+            logger.success(
+                f'Временной промежуток ({min_seconds}-{max_seconds}) успешно установлен!')
+            return min_seconds, max_seconds
+        else:
+            raise ValueError('Введен некорректный временной период.')
