@@ -387,7 +387,8 @@ class SendTelegramMessages:
                         )
                 except UsernameInvalidError:
                     await self.app_logger.log_and_display(
-                        message=translations["ru"]["errors"]["invalid_username"])
+                        message=translations["ru"]["errors"]["invalid_username"]
+                    )
             else:
                 for file in files:
                     await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
