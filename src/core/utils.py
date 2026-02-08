@@ -117,7 +117,7 @@ class Utils:
         :return: None
         """
         try:
-            time_in_seconds = random.randrange(min_seconds, max_seconds)
+            time_in_seconds = random.randrange(int(min_seconds), int(max_seconds))
             await self.app_logger.log_and_display(f"Спим {time_in_seconds} секунд...")
             await asyncio.sleep(time_in_seconds)  # Спим 1 секунду
         except Exception as error:

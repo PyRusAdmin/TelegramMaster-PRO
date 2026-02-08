@@ -307,7 +307,8 @@ class SendTelegramMessages:
                     logger.exception(error)
 
                 finally:
-                    await self.utils.random_dream(min_seconds=TIME_1, max_seconds=TIME_2)  # Прерываем работу и меняем аккаунт
+                    await self.utils.random_dream(min_seconds=TIME_1,
+                                                  max_seconds=TIME_2)  # Прерываем работу и меняем аккаунт
 
             await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
 
