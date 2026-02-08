@@ -162,7 +162,8 @@ class SendTelegramMessages:
                             sys.exit(1)
                     await self.app_logger.end_time(start=start)
                     await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                        message="🔚 Конец рассылки сообщений")
+                        message="🔚 Конец рассылки сообщений"
+                    )
                 except Exception as error:
                     logger.exception(error)
             else:
@@ -238,7 +239,7 @@ class SendTelegramMessages:
                 try:
                     # Подписываемся на группы
                     await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
-                    await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
+                    # await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
 
                     # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
                     messages, files = await self.all_find_and_all_files()
@@ -304,6 +305,7 @@ class SendTelegramMessages:
 
         :return: None
         """
+        list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
         # Чекбокс для работы с автоответчиком
         # c = ft.Checkbox(label="Работа с автоответчиком")
         account_drop_down_list = self.gui_program.create_account_dropdown(self.account_data)

@@ -38,10 +38,10 @@ class Subscribe:
         """
         # цикл for нужен для того, что бы сработала команда brake команда break в Python используется только для выхода из
         # цикла, а не выхода из программы в целом.
-        await self.app_logger.log_and_display(f"Группа для подписки {groups}")
+        await self.app_logger.log_and_display(f"✅ Группа для подписки {groups}")
         try:
             await client(JoinChannelRequest(groups))
-            await self.app_logger.log_and_display(f"Аккаунт подписался на группу / канал: {groups}")
+            await self.app_logger.log_and_display(f"✅ Аккаунт подписался на группу / канал: {groups}")
         except SessionRevokedError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["invalid_auth_session_terminated"])
         except UserDeactivatedBanError:
@@ -53,7 +53,6 @@ class Subscribe:
                 await self.app_logger.log_and_display(f"{dialog.name}, {dialog.id}")
                 try:
                     await client.delete_dialog(dialog)
-                    # await client.disconnect()
                 except ConnectionError:
                     break
             await self.app_logger.log_and_display(f"❌  Список почистили, и в файл записали.")
@@ -65,17 +64,14 @@ class Subscribe:
         except PeerFloodError:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["peer_flood"], level="error")
             await asyncio.sleep(random.randrange(50, 60))
-
         except FloodWaitError as e:
             await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
             await self.utils.random_dream(min_seconds=time_subscription_1, max_seconds=time_subscription_2)
-
         except InviteRequestSentError:
             await self.app_logger.log_and_display(
                 f"❌ Попытка подписки на группу / канал {groups}. Действия будут доступны после одобрения администратором на вступление в группу")
         except sqlite3.DatabaseError:
             await self.app_logger.log_and_display(
                 f"❌ Попытка подписки на группу / канал {groups}. Ошибка базы данных, аккаунта или аккаунт заблокирован.")
-
         except Exception as e:  # Ловим все остальные ошибки
             logger.exception(e)
