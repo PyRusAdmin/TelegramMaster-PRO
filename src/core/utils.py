@@ -7,7 +7,7 @@ import random  # Импортируем модуль random, чтобы гене
 
 from loguru import logger
 
-from src.core.database.database import delete_row_db
+from src.core.database.database import delete_row_db, get_writing_group_links
 from src.gui.gui import AppLogger
 
 
@@ -104,3 +104,17 @@ class Utils:
         except (ValueError, AttributeError) as e:
             raise ValueError(
                 f"Некорректный ввод времени: {min_seconds!r} – {max_seconds!r}. Введите целые числа.") from e
+
+    async def get_chat_list(self, chat_input: str) -> list[str]:
+        """
+        Получает список чатов из пользовательского ввода или базы данных.
+
+        :param chat_input: Строка с ссылками на чаты, разделёнными пробелами
+        :return: Список очищенных ссылок на чаты
+        """
+        chat_input = chat_input.strip()
+        if chat_input:
+            return [link.strip() for link in chat_input.split() if link.strip()]
+        else:
+            links = get_writing_group_links()
+            return [link.strip() for link in links if isinstance(link, str) and link.strip()]

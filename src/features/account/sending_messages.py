@@ -50,13 +50,13 @@ class SendTelegramMessages:
             label="Время сна от",
             expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
             hint_text="Введите время",
-            border_radius=5
+            # border_radius=5
         )
         self.tb_time_to = ft.TextField(
             label="Время сна до",
             expand=True,  # Полноразмерное расширение
             hint_text="Введите время",
-            border_radius=5
+            # border_radius=5
         )
         # Поле для формирования списка чатов
         self.chat_list_field = ft.TextField(
@@ -95,7 +95,6 @@ class SendTelegramMessages:
         async def button_clicked(_):
             """Обработчик кнопки "Готово" """
             try:
-                # if self.tb_time_from.value < self.tb_time_to.value:
                 min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
                     min_seconds=self.tb_time_from.value,
                     max_seconds=self.tb_time_to.value
@@ -262,6 +261,8 @@ class SendTelegramMessages:
                             target=group_link,
                             messages=messages,
                             files=files,
+                            min_seconds=min_seconds,
+                            max_seconds=max_seconds
                         )
                     except ChannelPrivateError:
                         await self.app_logger.log_and_display(
@@ -354,18 +355,16 @@ class SendTelegramMessages:
                 max_seconds=max_seconds
             )  # Прерываем работу и меняем аккаунт
 
-        # Обработчик кнопки "Готово"
         async def button_clicked(_):
-            # Получаем значение третьего поля и разделяем его на список по пробелам
-            chat_list_input = self.chat_list_field.value.strip()  # Удаляем лишние пробелы
-            if chat_list_input:  # Если поле не пустое
-                chat_list_fields = chat_list_input.split()  # Разделяем строку по пробелам
-            else:
-                # Если поле пустое, используем данные из базы данных
-                links: list = get_writing_group_links()  # Открываем базу данных # Получение ссылки
-                logger.info(links)
-                chat_list_fields = [group for group in links]  # Извлекаем только ссылки из кортежей
-                logger.info(chat_list_fields)
+            """
+            Обработчик кнопки "Готово"
+            """
+            chat_list_fields = await self.utils.get_chat_list(self.chat_list_field.value)
+
+            if not chat_list_fields:
+                await self.gui_program.show_notification(
+                    message="❌ Нет чатов для рассылки. Укажите ссылки или сохраните группы в настройках.")
+                return
 
             try:
                 min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
@@ -382,7 +381,7 @@ class SendTelegramMessages:
                     message=f"❌ Ошибка валидации времени: {e}"
                 )
 
-        t = ft.Text()
+        # t = ft.Text()
         # Разделение интерфейса на верхнюю и нижнюю части
         self.page.views.append(
             ft.View(
@@ -401,7 +400,7 @@ class SendTelegramMessages:
                         ],
                         spacing=20,
                     ),
-                    t,
+                    # t,
                     ft.Row(
                         controls=[
                             self.auto_reply_text_field,  # Поле для текста автоответчика
