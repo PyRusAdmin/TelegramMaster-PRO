@@ -202,6 +202,8 @@ class SendTelegramMessages:
             )
         )
 
+    """Рассылка сообщений по чатам"""
+
     async def sending_messages_files_via_chats(self) -> None:
         """
         Отображает интерфейс для рассылки сообщений и файлов по чатам Telegram.
@@ -213,8 +215,7 @@ class SendTelegramMessages:
         # c = ft.Checkbox(label="Работа с автоответчиком")
         account_drop_down_list = self.gui_program.create_account_dropdown(self.account_data)
 
-        async def performing_the_operation(chat_list_fields: list, selected_account, TIME_1, TIME_2,
-                                           auto_reply_text: str = None) -> None:
+        async def performing_operation(chat_list_fields: list, selected_account, auto_reply_text: str = None) -> None:
             """
             Выполняет рассылку сообщений по чатам или работу с автоответчиком.
 
@@ -260,8 +261,8 @@ class SendTelegramMessages:
                             target=group_link,
                             messages=messages,
                             files=files,
-                            TIME_1=TIME_1,
-                            TIME_2=TIME_2
+                            # TIME_1=TIME_1,
+                            # TIME_2=TIME_2
                         )
                     except ChannelPrivateError:
                         await self.app_logger.log_and_display(
@@ -299,8 +300,9 @@ class SendTelegramMessages:
                     except Exception as error:
                         logger.exception(error)
                     finally:
-                        await self.utils.random_dream(min_seconds=TIME_1,
-                                                      max_seconds=TIME_2)  # Прерываем работу и меняем аккаунт
+                        await self.utils.random_dream(min_seconds=int(self.tb_time_from.value),
+                                                      max_seconds=int(
+                                                          self.tb_time_to.value))  # Прерываем работу и меняем аккаунт
 
                 await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
 
@@ -310,7 +312,7 @@ class SendTelegramMessages:
             except Exception as error:
                 logger.exception(error)
 
-        async def send_content(client, target, messages, files, TIME_1, TIME_2):
+        async def send_content(client, target, messages, files):
             """
             Отправляет сообщения и файлы в указанную цель (личку или группу).
 
@@ -318,8 +320,6 @@ class SendTelegramMessages:
             :param target: Ссылка на группу или личку
             :param messages: Список сообщений для отправки
             :param files: Список файлов для отправки
-            :param TIME_1: Время сна от
-            :param TIME_2: Время сна до
             :return: None
             """
             await self.app_logger.log_and_display(f"Отправляем сообщение: {target}")
@@ -349,7 +349,8 @@ class SendTelegramMessages:
                         await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
                         await self.app_logger.log_and_display(f"Сообщение и файл отправлены: {target}")
 
-            await self.utils.random_dream(min_seconds=TIME_1, max_seconds=TIME_2)
+            await self.utils.random_dream(min_seconds=int(self.tb_time_from.value),
+                                          max_seconds=int(self.tb_time_to.value))
 
         # Обработчик кнопки "Готово"
         async def button_clicked(_):
@@ -365,13 +366,13 @@ class SendTelegramMessages:
                 logger.info(chat_list_fields)
             if self.tb_time_from.value or TIME_SENDING_MESSAGES_1 < self.tb_time_to.value or TIME_SENDING_MESSAGES_2:
                 selected_account = account_drop_down_list.value  # ← Получаем key выбранного аккаунта
-                await performing_the_operation(
+                await performing_operation(
                     # checs=c.value,
                     chat_list_fields=chat_list_fields,
                     selected_account=selected_account,
                     auto_reply_text=self.auto_reply_text_field.value,
-                    TIME_1=int(self.tb_time_from.value),
-                    TIME_2=int(self.tb_time_to.value),
+                    # TIME_1=int(self.tb_time_from.value),
+                    # TIME_2=int(self.tb_time_to.value),
                 )
             else:
                 t.value = f"Время сна: Некорректный диапазон, введите корректные значения"
