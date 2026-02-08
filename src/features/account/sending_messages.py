@@ -216,6 +216,11 @@ class SendTelegramMessages:
         # Чекбокс для работы с автоответчиком
         account_drop_down_list = self.gui_program.create_account_dropdown(self.account_data)
 
+        min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
+            min_seconds=int(self.tb_time_from.value),
+            max_seconds=int(self.tb_time_to.value)
+        )
+
         async def performing_operation(chat_list_fields: list) -> None:
             """
             Выполняет рассылку сообщений по чатам или работу с автоответчиком.
@@ -295,8 +300,8 @@ class SendTelegramMessages:
                         logger.exception(error)
                     finally:
                         await self.utils.random_dream(
-                            min_seconds=int(self.tb_time_from.value),
-                            max_seconds=int(self.tb_time_to.value)
+                            min_seconds=min_seconds,
+                            max_seconds=max_seconds
                         )  # Прерываем работу и меняем аккаунт
 
                 await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
@@ -344,8 +349,10 @@ class SendTelegramMessages:
                         await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
                         await self.app_logger.log_and_display(f"Сообщение и файл отправлены: {target}")
 
-            await self.utils.random_dream(min_seconds=int(self.tb_time_from.value),
-                                          max_seconds=int(self.tb_time_to.value))
+            await self.utils.random_dream(
+                min_seconds=min_seconds,
+                max_seconds=max_seconds
+            )  # Прерываем работу и меняем аккаунт
 
         # Обработчик кнопки "Готово"
         async def button_clicked(_):
@@ -359,12 +366,6 @@ class SendTelegramMessages:
                 logger.info(links)
                 chat_list_fields = [group for group in links]  # Извлекаем только ссылки из кортежей
                 logger.info(chat_list_fields)
-
-            min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
-                min_seconds=int(self.tb_time_from.value),
-                max_seconds=int(self.tb_time_to.value)
-            )
-
             # if self.tb_time_from.value or TIME_SENDING_MESSAGES_1 < self.tb_time_to.value or TIME_SENDING_MESSAGES_2:
             await performing_operation(
                 chat_list_fields=chat_list_fields,
