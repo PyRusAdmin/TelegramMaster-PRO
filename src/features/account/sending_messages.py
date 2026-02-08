@@ -126,12 +126,12 @@ class SendTelegramMessages:
                                     await self.app_logger.log_and_display(
                                         message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                         level="error")
-                                    await self.utils.random_dream(TIME_1=self.tb_time_from.value,
-                                                                  TIME_2=self.tb_time_to.value)
+                                    await self.utils.random_dream(min_seconds=self.tb_time_from.value,
+                                                                  max_seconds=self.tb_time_to.value)
                                     break  # Прерываем работу и меняем аккаунт
                                 except PeerFloodError:
-                                    await self.utils.random_dream(TIME_1=self.tb_time_from.value,
-                                                                  TIME_2=self.tb_time_to.value)
+                                    await self.utils.random_dream(min_seconds=self.tb_time_from.value,
+                                                                  max_seconds=self.tb_time_to.value)
                                     break  # Прерываем работу и меняем аккаунт
                                 except UserNotMutualContactError:
                                     await self.app_logger.log_and_display(
@@ -142,8 +142,8 @@ class SendTelegramMessages:
                                 except ChatWriteForbiddenError:
                                     await self.app_logger.log_and_display(
                                         message=translations["ru"]["errors"]["chat_write_forbidden"])
-                                    await self.utils.random_dream(TIME_1=self.tb_time_from.value,
-                                                                  TIME_2=self.tb_time_to.value)
+                                    await self.utils.random_dream(min_seconds=self.tb_time_from.value,
+                                                                  max_seconds=self.tb_time_to.value)
                                     break  # Прерываем работу и меняем аккаунт
                                 except (TypeError, UnboundLocalError):
                                     continue  # Записываем ошибку в software_database.db и продолжаем работу
@@ -307,7 +307,7 @@ class SendTelegramMessages:
                     logger.exception(error)
 
                 finally:
-                    await self.utils.random_dream(TIME_1=TIME_1, TIME_2=TIME_2)  # Прерываем работу и меняем аккаунт
+                    await self.utils.random_dream(min_seconds=TIME_1, max_seconds=TIME_2)  # Прерываем работу и меняем аккаунт
 
             await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
 
@@ -506,7 +506,7 @@ class SendTelegramMessages:
                     await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
                     await self.app_logger.log_and_display(f"Сообщение и файл отправлены: {target}")
 
-        await self.utils.random_dream(TIME_1=TIME_1, TIME_2=TIME_2)
+        await self.utils.random_dream(min_seconds=TIME_1, max_seconds=TIME_2)
 
     async def all_find_and_all_files(self):
         """
