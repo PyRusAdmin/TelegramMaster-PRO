@@ -359,7 +359,6 @@ class SendTelegramMessages:
                 chat_list_fields = [group for group in links]  # Извлекаем только ссылки из кортежей
                 logger.info(chat_list_fields)
             if self.tb_time_from.value or TIME_SENDING_MESSAGES_1 < self.tb_time_to.value or TIME_SENDING_MESSAGES_2:
-                # selected_account = account_drop_down_list.value  # ← Получаем key выбранного аккаунта
                 await performing_operation(
                     chat_list_fields=chat_list_fields,
                 )
