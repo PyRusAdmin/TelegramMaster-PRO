@@ -87,7 +87,7 @@ class Utils:
         except Exception as error:
             logger.exception(error)
 
-    async def verifies_time_range_entered_correctly(self, min_seconds: int, max_seconds: int):
+    async def verifies_time_range_entered_correctly(self, min_seconds, max_seconds):
         """
         Проверяет введенный пользователем интервал
         :param min_seconds: - диапазон времени смены аккаунта
@@ -95,7 +95,7 @@ class Utils:
         :return: None
         """
         logger.info("Проверка корректности ввода временного диапазона.")
-        if min_seconds < max_seconds:
+        if int(min_seconds) < int(max_seconds):
             logger.success(
                 f'Временной промежуток ({min_seconds}-{max_seconds}) успешно установлен!')
             return min_seconds, max_seconds
