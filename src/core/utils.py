@@ -122,15 +122,3 @@ class Utils:
             await asyncio.sleep(time_in_seconds)  # Спим 1 секунду
         except Exception as error:
             logger.exception(error)
-
-    # async def random_dream(self, TIME_1, TIME_2) -> None:
-    #     """
-    #     Запись данных в базу данных и прерывание выполнения кода.
-    #
-    #     :param TIME_1:  - диапазон времени смены аккаунта
-    #     :param TIME_2:  - диапазон времени смены аккаунта
-    #     """
-    #     # Смена аккаунта через случайное количество секунд
-    #     selected_shift_time = random.randrange(int(TIME_1), int(TIME_2))
-    #     await self.app_logger.log_and_display(f"Переход к новому username через {selected_shift_time} секунд")
-    #     await asyncio.sleep(selected_shift_time)

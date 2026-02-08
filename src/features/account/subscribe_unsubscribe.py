@@ -408,7 +408,7 @@ class SubscribeUnsubscribeTelegram:
                 f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                 level="error"
             )
-            await self.utils.random_dream(time_subscription_1, time_subscription_2)
+            await self.utils.random_dream(min_seconds=time_subscription_1, max_seconds=time_subscription_2)
         except sqlite3.DatabaseError:
             await self.app_logger.log_and_display(
                 message=f"❌ Попытка подписки на группу / канал {group_link}. Ошибка базы данных, аккаунта или аккаунт заблокирован."
