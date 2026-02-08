@@ -202,103 +202,6 @@ class SendTelegramMessages:
             )
         )
 
-    async def performing_the_operation(self, chat_list_fields: list, selected_account,
-                                       auto_reply_text: str = None, TIME_1=None, TIME_2=None) -> None:
-        """
-        Выполняет рассылку сообщений по чатам или работу с автоответчиком.
-
-        :param chat_list_fields: Список ссылок на группы для рассылки
-        :param selected_account: Выбранный аккаунт (для автоответчика)
-        :param auto_reply_text: Текст сообщения для автоответчика
-        :param TIME_1: Время сна от
-        :param TIME_2: Время сна до
-        :return: None
-        """
-        logger.warning(f"Выбранный аккаунт: {selected_account}")
-        # Определяем, какие сессии использовать
-
-        # === РЕЖИМ АВТООТВЕТЧИКА ===
-        try:
-            # Пользователь должен сам выбрать аккаунт
-            # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-            start = await self.app_logger.start_time()
-            client: TelegramClient = await self.connect.client_connect_string_session(session_name=selected_account)
-
-            @client.on(events.NewMessage(incoming=True))  # Обработчик личных сообщений
-            async def handle_private_messages(event):
-                """Обрабатывает входящие личные сообщения"""
-                if event.is_private:  # Проверяем, является ли сообщение личным
-                    await self.app_logger.log_and_display(message=f"📩 Входящее сообщение: {event.message.message}")
-                    reply_text = auto_reply_text or "Спасибо за сообщение! Мы ответим позже."
-                    await event.respond(reply_text)
-                    await self.app_logger.log_and_display(f"🤖 Ответ отправлен: {reply_text}")
-
-            # Получаем список чатов, которым нужно отправить сообщение
-            await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
-            for group_link in chat_list_fields:
-                try:
-                    # Подписываемся на группы
-                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
-                    # await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
-
-                    # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
-                    messages, files = await self.all_find_and_all_files()
-                    # Отправляем сообщения и файлы в группу
-                    await self.send_content(
-                        client=client,
-                        target=group_link,
-                        messages=messages,
-                        files=files,
-                        TIME_1=TIME_1,
-                        TIME_2=TIME_2
-                    )
-                except ChannelPrivateError:
-                    await self.app_logger.log_and_display(
-                        message=f"🔒 Группа {group_link} приватная или недоступна.")
-                except PeerFloodError:
-                    break  # Прерываем работу и меняем аккаунт
-                except FloodWaitError as e:
-                    await self.app_logger.log_and_display(
-                        message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
-                        level="error")
-                    await asyncio.sleep(e.seconds)
-                except UserBannedInChannelError:
-                    await self.app_logger.log_and_display(
-                        message=f"❌ Запрещено отправлять сообщения в супергруппы/каналы."
-                    )
-                except ChatAdminRequiredError:  # TODO проверить функцию и добавить удаление группы по списка
-                    await self.app_logger.log_and_display(
-                        message=translations["ru"]["errors"]["admin_rights_required"])
-                except ChatWriteForbiddenError:
-                    await self.app_logger.log_and_display(
-                        message=translations["ru"]["errors"]["chat_write_forbidden"])
-                    break  # Прерываем работу и меняем аккаунт
-                except SlowModeWaitError as e:
-                    await self.app_logger.log_and_display(
-                        message=translations["ru"]["errors"]["slow_mode_wait"])
-                    await asyncio.sleep(e.seconds)
-                except ValueError:
-                    await self.app_logger.log_and_display(
-                        message=f"❌ Ошибка рассылки, проверьте ссылку: {group_link}"
-                    )
-                    await self.app_logger.log_and_display(
-                        message=translations["ru"]["errors"]["sending_error_check_link"])
-                except (TypeError, UnboundLocalError):
-                    continue  # Записываем ошибку в software_database.db и продолжаем работу
-                except Exception as error:
-                    logger.exception(error)
-                finally:
-                    await self.utils.random_dream(min_seconds=TIME_1,
-                                                  max_seconds=TIME_2)  # Прерываем работу и меняем аккаунт
-
-            await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
-
-            await self.app_logger.log_and_display(message="🔚 Конец отправки сообщений + файлов по чатам")
-            await self.app_logger.end_time(start)
-
-        except Exception as error:
-            logger.exception(error)
-
     async def sending_messages_files_via_chats(self) -> None:
         """
         Отображает интерфейс для рассылки сообщений и файлов по чатам Telegram.
@@ -309,6 +212,144 @@ class SendTelegramMessages:
         # Чекбокс для работы с автоответчиком
         # c = ft.Checkbox(label="Работа с автоответчиком")
         account_drop_down_list = self.gui_program.create_account_dropdown(self.account_data)
+
+        async def performing_the_operation(chat_list_fields: list, selected_account, TIME_1, TIME_2,
+                                           auto_reply_text: str = None) -> None:
+            """
+            Выполняет рассылку сообщений по чатам или работу с автоответчиком.
+
+            :param chat_list_fields: Список ссылок на группы для рассылки
+            :param selected_account: Выбранный аккаунт (для автоответчика)
+            :param auto_reply_text: Текст сообщения для автоответчика
+            :param TIME_1: Время сна от
+            :param TIME_2: Время сна до
+            :return: None
+            """
+            logger.warning(f"Выбранный аккаунт: {selected_account}")
+            # Определяем, какие сессии использовать
+
+            # === РЕЖИМ АВТООТВЕТЧИКА ===
+            try:
+                # Пользователь должен сам выбрать аккаунт
+                # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                start = await self.app_logger.start_time()
+                client: TelegramClient = await self.connect.client_connect_string_session(session_name=selected_account)
+
+                @client.on(events.NewMessage(incoming=True))  # Обработчик личных сообщений
+                async def handle_private_messages(event):
+                    """Обрабатывает входящие личные сообщения"""
+                    if event.is_private:  # Проверяем, является ли сообщение личным
+                        await self.app_logger.log_and_display(message=f"📩 Входящее сообщение: {event.message.message}")
+                        reply_text = auto_reply_text or "Спасибо за сообщение! Мы ответим позже."
+                        await event.respond(reply_text)
+                        await self.app_logger.log_and_display(f"🤖 Ответ отправлен: {reply_text}")
+
+                # Получаем список чатов, которым нужно отправить сообщение
+                await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
+                for group_link in chat_list_fields:
+                    try:
+                        # Подписываемся на группы
+                        await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
+                        # await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
+
+                        # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
+                        messages, files = await self.all_find_and_all_files()
+                        # Отправляем сообщения и файлы в группу
+                        await send_content(
+                            client=client,
+                            target=group_link,
+                            messages=messages,
+                            files=files,
+                            TIME_1=TIME_1,
+                            TIME_2=TIME_2
+                        )
+                    except ChannelPrivateError:
+                        await self.app_logger.log_and_display(
+                            message=f"🔒 Группа {group_link} приватная или недоступна.")
+                    except PeerFloodError:
+                        break  # Прерываем работу и меняем аккаунт
+                    except FloodWaitError as e:
+                        await self.app_logger.log_and_display(
+                            message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
+                            level="error")
+                        await asyncio.sleep(e.seconds)
+                    except UserBannedInChannelError:
+                        await self.app_logger.log_and_display(
+                            message=f"❌ Запрещено отправлять сообщения в супергруппы/каналы."
+                        )
+                    except ChatAdminRequiredError:  # TODO проверить функцию и добавить удаление группы по списка
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["admin_rights_required"])
+                    except ChatWriteForbiddenError:
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["chat_write_forbidden"])
+                        break  # Прерываем работу и меняем аккаунт
+                    except SlowModeWaitError as e:
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["slow_mode_wait"])
+                        await asyncio.sleep(e.seconds)
+                    except ValueError:
+                        await self.app_logger.log_and_display(
+                            message=f"❌ Ошибка рассылки, проверьте ссылку: {group_link}"
+                        )
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["sending_error_check_link"])
+                    except (TypeError, UnboundLocalError):
+                        continue  # Записываем ошибку в software_database.db и продолжаем работу
+                    except Exception as error:
+                        logger.exception(error)
+                    finally:
+                        await self.utils.random_dream(min_seconds=TIME_1,
+                                                      max_seconds=TIME_2)  # Прерываем работу и меняем аккаунт
+
+                await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
+
+                await self.app_logger.log_and_display(message="🔚 Конец отправки сообщений + файлов по чатам")
+                await self.app_logger.end_time(start)
+
+            except Exception as error:
+                logger.exception(error)
+
+        async def send_content(client, target, messages, files, TIME_1, TIME_2):
+            """
+            Отправляет сообщения и файлы в указанную цель (личку или группу).
+
+            :param client: Экземпляр клиента Telegram
+            :param target: Ссылка на группу или личку
+            :param messages: Список сообщений для отправки
+            :param files: Список файлов для отправки
+            :param TIME_1: Время сна от
+            :param TIME_2: Время сна до
+            :return: None
+            """
+            await self.app_logger.log_and_display(f"Отправляем сообщение: {target}")
+            if not messages:
+                for file in files:
+                    await client.send_file(target, f"user_data/files_to_send/{file}")
+                    await self.app_logger.log_and_display(f"Файл {file} отправлен в {target}.")
+            else:
+                message = await self.select_and_read_random_file(messages, folder="message")
+                if not files:
+                    try:
+                        await client.send_message(entity=target, message=message)
+                    except AttributeError:
+                        logger.warning("Не валидный аккаунт, выполните проверку аккаунтов")
+                    except ForbiddenError as e:
+                        if "ALLOW_PAYMENT_REQUIRED" in str(e):
+                            await self.app_logger.log_and_display(
+                                f"❌ Невозможно отправить сообщение: пользователь закрыл личку от незнакомцев.",
+                                level="warning"
+                            )
+                    except UsernameInvalidError:
+                        await self.app_logger.log_and_display(
+                            message=translations["ru"]["errors"]["invalid_username"]
+                        )
+                else:
+                    for file in files:
+                        await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
+                        await self.app_logger.log_and_display(f"Сообщение и файл отправлены: {target}")
+
+            await self.utils.random_dream(min_seconds=TIME_1, max_seconds=TIME_2)
 
         # Обработчик кнопки "Готово"
         async def button_clicked(_):
@@ -324,7 +365,7 @@ class SendTelegramMessages:
                 logger.info(chat_list_fields)
             if self.tb_time_from.value or TIME_SENDING_MESSAGES_1 < self.tb_time_to.value or TIME_SENDING_MESSAGES_2:
                 selected_account = account_drop_down_list.value  # ← Получаем key выбранного аккаунта
-                await self.performing_the_operation(
+                await performing_the_operation(
                     # checs=c.value,
                     chat_list_fields=chat_list_fields,
                     selected_account=selected_account,
@@ -377,47 +418,6 @@ class SendTelegramMessages:
                 ],
             )
         )
-
-    async def send_content(self, client, target, messages, files, TIME_1, TIME_2):
-        """
-        Отправляет сообщения и файлы в указанную цель (личку или группу).
-
-        :param client: Экземпляр клиента Telegram
-        :param target: Ссылка на группу или личку
-        :param messages: Список сообщений для отправки
-        :param files: Список файлов для отправки
-        :param TIME_1: Время сна от
-        :param TIME_2: Время сна до
-        :return: None
-        """
-        await self.app_logger.log_and_display(f"Отправляем сообщение: {target}")
-        if not messages:
-            for file in files:
-                await client.send_file(target, f"user_data/files_to_send/{file}")
-                await self.app_logger.log_and_display(f"Файл {file} отправлен в {target}.")
-        else:
-            message = await self.select_and_read_random_file(messages, folder="message")
-            if not files:
-                try:
-                    await client.send_message(entity=target, message=message)
-                except AttributeError:
-                    logger.warning("Не валидный аккаунт, выполните проверку аккаунтов")
-                except ForbiddenError as e:
-                    if "ALLOW_PAYMENT_REQUIRED" in str(e):
-                        await self.app_logger.log_and_display(
-                            f"❌ Невозможно отправить сообщение: пользователь закрыл личку от незнакомцев.",
-                            level="warning"
-                        )
-                except UsernameInvalidError:
-                    await self.app_logger.log_and_display(
-                        message=translations["ru"]["errors"]["invalid_username"]
-                    )
-            else:
-                for file in files:
-                    await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
-                    await self.app_logger.log_and_display(f"Сообщение и файл отправлены: {target}")
-
-        await self.utils.random_dream(min_seconds=TIME_1, max_seconds=TIME_2)
 
     async def all_find_and_all_files(self):
         """
