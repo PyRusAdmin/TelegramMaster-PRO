@@ -100,7 +100,8 @@ class SendTelegramMessages:
                     for session_name in self.session_string:  # Перебор всех сессий
                         # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                         client: TelegramClient = await self.connect.client_connect_string_session(
-                            session_name=session_name)
+                            session_name=session_name
+                        )
                         try:
                             for username in await select_records_with_limit(limit=int(self.limits.value),
                                                                             app_logger=self.app_logger):
@@ -109,25 +110,37 @@ class SendTelegramMessages:
                                 try:
                                     user_to_add = await client.get_input_entity(username)
                                     messages, files = await self.all_find_and_all_files()
-                                    await self.send_content(client, user_to_add, messages, files)
+                                    await self.send_content(
+                                        client=client,
+                                        target=user_to_add,
+                                        messages=messages,
+                                        files=files,
+                                        TIME_1=self.tb_time_from.value,
+                                        TIME_2=self.tb_time_to.value
+                                    )
                                     await self.app_logger.log_and_display(
                                         message=f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
-                                    await self.utils.record_inviting_results(time_range_1=int(self.tb_time_from.value),
-                                                                             time_range_2=int(self.tb_time_to.value),
-                                                                             username=username)
+                                    await self.utils.record_inviting_results(
+                                        time_range_1=int(self.tb_time_from.value),
+                                        time_range_2=int(self.tb_time_to.value),
+                                        username=username
+                                    )
                                     await self.app_logger.log_and_display(message=f"Смена аккаунта, ожидайте 8 секунд")
                                     time.sleep(8)
-
                                 except FloodWaitError as e:
                                     await self.app_logger.log_and_display(
                                         message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                         level="error")
-                                    await self.utils.random_dream(min_seconds=self.tb_time_from.value,
-                                                                  max_seconds=self.tb_time_to.value)
+                                    await self.utils.random_dream(
+                                        min_seconds=int(self.tb_time_from.value),
+                                        max_seconds=int(self.tb_time_to.value)
+                                    )
                                     break  # Прерываем работу и меняем аккаунт
                                 except PeerFloodError:
-                                    await self.utils.random_dream(min_seconds=self.tb_time_from.value,
-                                                                  max_seconds=self.tb_time_to.value)
+                                    await self.utils.random_dream(
+                                        min_seconds=int(self.tb_time_from.value),
+                                        max_seconds=int(self.tb_time_to.value)
+                                    )
                                     break  # Прерываем работу и меняем аккаунт
                                 except UserNotMutualContactError:
                                     await self.app_logger.log_and_display(
@@ -138,8 +151,10 @@ class SendTelegramMessages:
                                 except ChatWriteForbiddenError:
                                     await self.app_logger.log_and_display(
                                         message=translations["ru"]["errors"]["chat_write_forbidden"])
-                                    await self.utils.random_dream(min_seconds=self.tb_time_from.value,
-                                                                  max_seconds=self.tb_time_to.value)
+                                    await self.utils.random_dream(
+                                        min_seconds=int(self.tb_time_from.value),
+                                        max_seconds=int(self.tb_time_to.value)
+                                    )
                                     break  # Прерываем работу и меняем аккаунт
                                 except (TypeError, UnboundLocalError):
                                     continue  # Записываем ошибку в software_database.db и продолжаем работу
@@ -164,7 +179,13 @@ class SendTelegramMessages:
                         text="Отправка сообщений в личку"
                     ),
                     list_view,  # Отображение логов 📝
-                    ft.Row(controls=[self.tb_time_from, self.tb_time_to], spacing=20, ),
+                    ft.Row(
+                        controls=[
+                            self.tb_time_from,
+                            self.tb_time_to
+                        ],
+                        spacing=20,
+                    ),
                     self.limits,
                     ft.Column(  # Верхняя часть: контрольные элементы
                         controls=[
@@ -180,12 +201,11 @@ class SendTelegramMessages:
             )
         )
 
-    async def performing_the_operation(self, checs: bool, chat_list_fields: list, selected_account,
+    async def performing_the_operation(self, chat_list_fields: list, selected_account,
                                        auto_reply_text: str = None, TIME_1=None, TIME_2=None) -> None:
         """
         Выполняет рассылку сообщений по чатам или работу с автоответчиком.
 
-        :param checs: Флаг режима автоответчика
         :param chat_list_fields: Список ссылок на группы для рассылки
         :param selected_account: Выбранный аккаунт (для автоответчика)
         :param auto_reply_text: Текст сообщения для автоответчика
@@ -266,7 +286,6 @@ class SendTelegramMessages:
                     continue  # Записываем ошибку в software_database.db и продолжаем работу
                 except Exception as error:
                     logger.exception(error)
-
                 finally:
                     await self.utils.random_dream(min_seconds=TIME_1,
                                                   max_seconds=TIME_2)  # Прерываем работу и меняем аккаунт
@@ -286,7 +305,7 @@ class SendTelegramMessages:
         :return: None
         """
         # Чекбокс для работы с автоответчиком
-        c = ft.Checkbox(label="Работа с автоответчиком")
+        # c = ft.Checkbox(label="Работа с автоответчиком")
         account_drop_down_list = self.gui_program.create_account_dropdown(self.account_data)
 
         # Обработчик кнопки "Готово"
@@ -304,7 +323,7 @@ class SendTelegramMessages:
             if self.tb_time_from.value or TIME_SENDING_MESSAGES_1 < self.tb_time_to.value or TIME_SENDING_MESSAGES_2:
                 selected_account = account_drop_down_list.value  # ← Получаем key выбранного аккаунта
                 await self.performing_the_operation(
-                    checs=c.value,
+                    # checs=c.value,
                     chat_list_fields=chat_list_fields,
                     selected_account=selected_account,
                     auto_reply_text=self.auto_reply_text_field.value,
@@ -328,7 +347,7 @@ class SendTelegramMessages:
                     ),
                     list_view,  # Отображение логов 📝
                     account_drop_down_list,  # Выпадающий список с аккаунтами
-                    c,
+                    # c,
                     ft.Row(
                         controls=[
                             self.tb_time_from,
@@ -365,6 +384,8 @@ class SendTelegramMessages:
         :param target: Ссылка на группу или личку
         :param messages: Список сообщений для отправки
         :param files: Список файлов для отправки
+        :param TIME_1: Время сна от
+        :param TIME_2: Время сна до
         :return: None
         """
         await self.app_logger.log_and_display(f"Отправляем сообщение: {target}")
@@ -433,4 +454,4 @@ class SendTelegramMessages:
             logger.exception(error)
             return None
 
-# 455
+# 446
