@@ -361,7 +361,6 @@ class SendTelegramMessages:
                 logger.info(links)
                 chat_list_fields = [group for group in links]  # Извлекаем только ссылки из кортежей
                 logger.info(chat_list_fields)
-            # if self.tb_time_from.value or TIME_SENDING_MESSAGES_1 < self.tb_time_to.value or TIME_SENDING_MESSAGES_2:
             min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
                 min_seconds=self.tb_time_from.value,
                 max_seconds=self.tb_time_to.value
@@ -371,10 +370,6 @@ class SendTelegramMessages:
                 min_seconds=min_seconds,
                 max_seconds=min_seconds
             )
-            # else:
-            #     t.value = f"Время сна: Некорректный диапазон, введите корректные значения"
-            #     t.update()
-            # self.page.update()
 
         t = ft.Text()
         # Разделение интерфейса на верхнюю и нижнюю части
