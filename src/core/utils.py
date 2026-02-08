@@ -89,15 +89,18 @@ class Utils:
 
     async def verifies_time_range_entered_correctly(self, min_seconds, max_seconds):
         """
-        Проверяет введенный пользователем интервал
-        :param min_seconds: - диапазон времени смены аккаунта
-        :param max_seconds: - диапазон времени смены аккаунта
-        :return: None
+        Проверяет корректность временного диапазона.
+        :return: Кортеж (min, max) как целые числа
+        :raises ValueError: При некорректном вводе
         """
-        logger.info("Проверка корректности ввода временного диапазона.")
-        if int(min_seconds) < int(max_seconds):
-            logger.success(
-                f'Временной промежуток ({min_seconds}-{max_seconds}) успешно установлен!')
-            return min_seconds, max_seconds
-        else:
-            raise ValueError('Введен некорректный временной период.')
+        try:
+            min_val = int(min_seconds.strip())
+            max_val = int(max_seconds.strip())
+            if min_val < 0 or max_val < 0:
+                raise ValueError("Время не может быть отрицательным")
+            if min_val > max_val:
+                raise ValueError(f"Минимум ({min_val}) не может быть больше максимума ({max_val})")
+            return min_val, max_val
+        except (ValueError, AttributeError) as e:
+            raise ValueError(
+                f"Некорректный ввод времени: {min_seconds!r} – {max_seconds!r}. Введите целые числа.") from e

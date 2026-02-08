@@ -361,15 +361,21 @@ class SendTelegramMessages:
                 logger.info(links)
                 chat_list_fields = [group for group in links]  # Извлекаем только ссылки из кортежей
                 logger.info(chat_list_fields)
-            min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
-                min_seconds=self.tb_time_from.value,
-                max_seconds=self.tb_time_to.value
-            )
-            await performing_operation(
-                chat_list_fields=chat_list_fields,
-                min_seconds=min_seconds,
-                max_seconds=min_seconds
-            )
+
+            try:
+                min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
+                    min_seconds=self.tb_time_from.value,
+                    max_seconds=self.tb_time_to.value
+                )
+                await performing_operation(
+                    chat_list_fields=chat_list_fields,
+                    min_seconds=min_seconds,
+                    max_seconds=max_seconds
+                )
+            except ValueError as e:
+                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                    message=f"❌ Ошибка валидации времени: {e}"
+                )
 
         t = ft.Text()
         # Разделение интерфейса на верхнюю и нижнюю части
