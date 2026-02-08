@@ -101,10 +101,6 @@ class SendTelegramMessages:
                         # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                         client: TelegramClient = await self.connect.client_connect_string_session(
                             session_name=session_name)
-
-                        # if client is None:
-                        #     logger.warning("Не валидный аккаунт, выполните проверку аккаунтов")
-
                         try:
                             for username in await select_records_with_limit(limit=int(self.limits.value),
                                                                             app_logger=self.app_logger):
@@ -199,32 +195,19 @@ class SendTelegramMessages:
         """
         logger.warning(f"Выбранный аккаунт: {selected_account}")
         # Определяем, какие сессии использовать
-        # if checs and selected_account:
-        # Режим автоответчика: только один выбранный аккаунт
-        # sessions_to_use = [selected_account]
-        # else:
-        # Обычный режим: все аккаунты
-        # sessions_to_use = self.session_string
-        # if not sessions_to_use:
-        #     await self.app_logger.log_and_display("❌ Нет доступных аккаунтов для работы.")
-        #     return
-        # if checs:
+
         # === РЕЖИМ АВТООТВЕТЧИКА ===
         try:
-            # for session_name in sessions_to_use:  # Перебор всех сессий
             # Пользователь должен сам выбрать аккаунт
             # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
             start = await self.app_logger.start_time()
             client: TelegramClient = await self.connect.client_connect_string_session(session_name=selected_account)
 
-            # await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
-
             @client.on(events.NewMessage(incoming=True))  # Обработчик личных сообщений
             async def handle_private_messages(event):
                 """Обрабатывает входящие личные сообщения"""
                 if event.is_private:  # Проверяем, является ли сообщение личным
-                    await self.app_logger.log_and_display(
-                        message=f"📩 Входящее сообщение: {event.message.message}")
+                    await self.app_logger.log_and_display(message=f"📩 Входящее сообщение: {event.message.message}")
                     reply_text = auto_reply_text or "Спасибо за сообщение! Мы ответим позже."
                     await event.respond(reply_text)
                     await self.app_logger.log_and_display(f"🤖 Ответ отправлен: {reply_text}")
@@ -248,21 +231,10 @@ class SendTelegramMessages:
                         TIME_1=TIME_1,
                         TIME_2=TIME_2
                     )
-                # except UserBannedInChannelError:
-                #     await self.app_logger.log_and_display(
-                #         message=f"❌ Запрещено отправлять сообщения в супергруппы/каналы.")
-                # except ValueError:
-                #     await self.app_logger.log_and_display(
-                #         message=f"❌ Ошибка рассылки, проверьте ссылку: {group_link}")
-                #     break
                 except ChannelPrivateError:
                     await self.app_logger.log_and_display(
                         message=f"🔒 Группа {group_link} приватная или недоступна.")
                 except PeerFloodError:
-                    # await self.utils.random_dream(
-                    #     TIME_1=time_subscription_1,
-                    #     TIME_2=time_subscription_2
-                    # )
                     break  # Прерываем работу и меняем аккаунт
                 except FloodWaitError as e:
                     await self.app_logger.log_and_display(
@@ -273,22 +245,12 @@ class SendTelegramMessages:
                     await self.app_logger.log_and_display(
                         message=f"❌ Запрещено отправлять сообщения в супергруппы/каналы."
                     )
-                    # await self.utils.record_and_interrupt(
-                    #     time_range_1=time_subscription_1,
-                    #     time_range_2=time_subscription_2
-                    # )
-                    # break # Прерываем работу и меняем аккаунт
                 except ChatAdminRequiredError:  # TODO проверить функцию и добавить удаление группы по списка
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["admin_rights_required"])
-                    # break
                 except ChatWriteForbiddenError:
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["chat_write_forbidden"])
-                    # await self.utils.random_dream(
-                    #     TIME_1=time_subscription_1,
-                    #     TIME_2=time_subscription_2
-                    # )
                     break  # Прерываем работу и меняем аккаунт
                 except SlowModeWaitError as e:
                     await self.app_logger.log_and_display(
@@ -300,7 +262,6 @@ class SendTelegramMessages:
                     )
                     await self.app_logger.log_and_display(
                         message=translations["ru"]["errors"]["sending_error_check_link"])
-                    # break
                 except (TypeError, UnboundLocalError):
                     continue  # Записываем ошибку в software_database.db и продолжаем работу
                 except Exception as error:
@@ -317,81 +278,6 @@ class SendTelegramMessages:
 
         except Exception as error:
             logger.exception(error)
-            # else:
-            # === ОБЫЧНЫЙ РЕЖИМ РАССЫЛКИ ===
-            # try:
-            # start = await self.app_logger.start_time()
-            # for session_name in sessions_to_use:  # Перебор всех сессий
-            # client: TelegramClient = await self.connect.client_connect_string_session(session_name=selected_account)
-            # await self.connect.getting_account_data(client)
-            # Открываем базу данных с группами, в которые будут рассылаться сообщения
-            # await self.app_logger.log_and_display(message=f"Всего групп: {len(chat_list_fields)}")
-            # for group_link in chat_list_fields:  # Поочередно выводим записанные группы
-            #     try:
-            # Подписываемся на группы
-            # await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
-            # await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {group_link}")
-
-            # Находит все файлы в папке с сообщениями и папке с файлами для отправки.
-            # messages, files = await self.all_find_and_all_files()
-            # Отправляем сообщения и файлы в группу
-            # await self.send_content(
-            #     client=client,
-            #     target=group_link,
-            #     messages=messages,
-            #     files=files,
-            #     TIME_1=TIME_1,
-            #     TIME_2=TIME_2
-            # )
-            # except ChannelPrivateError:
-            #     await self.app_logger.log_and_display(
-            #         message=f"🔒 Группа {group_link} приватная или недоступна.")
-            # except PeerFloodError:
-            #     await self.utils.record_and_interrupt(time_range_1=time_subscription_1,
-            #                                           time_range_2=time_subscription_2)
-            #     break  # Прерываем работу и меняем аккаунт
-            # except FloodWaitError as e:
-            #     await self.app_logger.log_and_display(
-            #         message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
-            #         level="error")
-            #     await asyncio.sleep(e.seconds)
-            # except UserBannedInChannelError:
-            #     await self.app_logger.log_and_display(
-            #         message=f"❌ Запрещено отправлять сообщения в супергруппы/каналы."
-            #     )
-            #     await self.utils.record_and_interrupt(time_range_1=time_subscription_1,
-            #                                           time_range_2=time_subscription_2)
-            #     break  # Прерываем работу и меняем аккаунт
-            # except ChatAdminRequiredError:
-            #     await self.app_logger.log_and_display(
-            #         message=translations["ru"]["errors"]["admin_rights_required"])
-            #     break
-            # except ChatWriteForbiddenError:
-            #     await self.app_logger.log_and_display(
-            #         message=translations["ru"]["errors"]["chat_write_forbidden"])
-            #     await self.utils.record_and_interrupt(time_range_1=time_subscription_1,
-            #                                           time_range_2=time_subscription_2)
-            #     break  # Прерываем работу и меняем аккаунт
-            # except SlowModeWaitError as e:
-            #     await self.app_logger.log_and_display(
-            #         message=translations["ru"]["errors"]["slow_mode_wait"])
-            #     await asyncio.sleep(e.seconds)
-            # except ValueError:
-            #     await self.app_logger.log_and_display(
-            #         message=f"❌ Ошибка рассылки, проверьте ссылку: {group_link}"
-            #     )
-            #     await self.app_logger.log_and_display(
-            #         message=translations["ru"]["errors"]["sending_error_check_link"])
-            #     break
-            # except (TypeError, UnboundLocalError):
-            #     continue  # Записываем ошибку в software_database.db и продолжаем работу
-            # except Exception as error:
-            #     logger.exception(error)
-            # await client.disconnect()  # Разрываем соединение Telegram
-            # await self.app_logger.log_and_display(message="🔚 Конец отправки сообщений + файлов по чатам")
-            # await self.app_logger.end_time(start)
-        # except Exception as error:
-        #     logger.exception(error)
 
     async def sending_messages_files_via_chats(self) -> None:
         """
