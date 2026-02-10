@@ -72,6 +72,14 @@ def write_group_send_message_table(chat_input):
         group.save()
 
 
+def get_links_table_group_send_messages():
+    writing_group_links = []
+    for link in GroupsSendMessages.select(GroupsSendMessages.link):
+        writing_group_links.append(link.link)
+    logger.warning(writing_group_links)
+    return writing_group_links
+
+
 class GroupsAndChannels(Model):
     """
     Список групп и каналов в таблице groups_and_channels
