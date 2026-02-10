@@ -7,6 +7,7 @@ from loguru import logger
 from src.core.configs import (
     PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height
 )
+from src.core.database.create_database import create_database
 from src.features.account.account_bio import AccountBIO
 from src.features.account.connect import TGConnect
 from src.features.account.contact import TGContact
@@ -25,6 +26,7 @@ from src.locales.translations_loader import translations
 logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")
 
+create_database()
 
 async def main_view(page: ft.Page):
     """

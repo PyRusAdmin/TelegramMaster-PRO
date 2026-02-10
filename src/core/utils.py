@@ -113,6 +113,9 @@ class Utils:
         :return: Список очищенных ссылок на чаты
         """
         chat_input = chat_input.strip()
+
+
+
         if chat_input:
             return [link.strip() for link in chat_input.split() if link.strip()]
         else:

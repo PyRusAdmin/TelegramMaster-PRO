@@ -17,7 +17,7 @@ from src.core.configs import (
     BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages
 )
 from src.core.database.account import getting_account, get_account_list
-from src.core.database.database import select_records_with_limit
+from src.core.database.database import select_records_with_limit, write_group_send_message_table
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
@@ -225,6 +225,8 @@ class SendTelegramMessages:
             Выполняет рассылку сообщений по чатам или работу с автоответчиком.
 
             :param chat_list_fields: Список ссылок на группы для рассылки
+            :param min_seconds: минимальная задержка между действиям
+            :param max_seconds: максимально возможной случайной временной интервале
             :return: None
             """
             logger.warning(f"Выбранный аккаунт: {account_drop_down_list.value}")
@@ -359,6 +361,8 @@ class SendTelegramMessages:
             """
             Обработчик кнопки "Готово"
             """
+            write_group_send_message_table(self.chat_list_field.value)
+
             chat_list_fields = await self.utils.get_chat_list(self.chat_list_field.value)
 
             if not chat_list_fields:

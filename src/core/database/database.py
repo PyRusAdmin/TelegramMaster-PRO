@@ -49,6 +49,29 @@ def get_writing_group_links():
     return writing_group_links
 
 
+class GroupsSendMessages(Model):
+    """Группы для рассылки сообщений"""
+    link = CharField()  # Ссылки на группы для рассылки сообщений
+
+    class Meta:
+        database = db
+        table_name = "group_send_messages"
+
+
+def write_group_send_message_table(chat_input):
+    chat_input = chat_input.strip()
+    logger.info(f"Записываем данные: {chat_input}")
+
+    # Разделяем по строкам и фильтруем пустые значения
+    links = [link.strip() for link in chat_input.splitlines() if link.strip()]
+
+    logger.info(f"Найдено ссылок: {len(links)}")
+    for link in links:
+        logger.debug(f"Сохраняем ссылку: {link}")
+        group = GroupsSendMessages(link=link)
+        group.save()
+
+
 class GroupsAndChannels(Model):
     """
     Список групп и каналов в таблице groups_and_channels
@@ -170,19 +193,19 @@ def delete_contact_db(phone: str):
 
 
 # TODO добавить все используемые таблицы
-def cleaning_db(table_name):
-    """
-    Очистка базы данных
-    :param table_name: Название таблицы, данные из которой требуется очистить.
-    """
-    if table_name == 'members':  # Удаляем все записи из таблицы members
-        MembersGroups.delete().execute()
-    if table_name == 'contact':  # Удаляем все записи из таблицы contact
-        Contact.delete().execute()
-    if table_name == 'writing_group_links':  # Удаляем все записи из таблицы writing_group_links
-        WritingGroupLinks.delete().execute()
-    if table_name == 'links_inviting':  # Удаляем все записи из таблицы links_inviting
-        LinksInviting.delete().execute()
+# def cleaning_db(table_name):
+#     """
+#     Очистка базы данных
+#     :param table_name: Название таблицы, данные из которой требуется очистить.
+#     """
+#     if table_name == 'members':  # Удаляем все записи из таблицы members
+#         MembersGroups.delete().execute()
+#     if table_name == 'contact':  # Удаляем все записи из таблицы contact
+#         Contact.delete().execute()
+#     if table_name == 'writing_group_links':  # Удаляем все записи из таблицы writing_group_links
+#         WritingGroupLinks.delete().execute()
+#     if table_name == 'links_inviting':  # Удаляем все записи из таблицы links_inviting
+#         LinksInviting.delete().execute()
 
 
 """Работа с таблицей members"""

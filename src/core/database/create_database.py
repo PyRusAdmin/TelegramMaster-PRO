@@ -1,6 +1,8 @@
 from src.core.database.account import Account
-from src.core.database.database import (db, AccountContacts, WritingGroupLinks, GroupsAndChannels, MembersAdmin,
-                                        LinksInviting, MembersGroups, Contact, Proxy)
+from src.core.database.database import (
+    db, AccountContacts, WritingGroupLinks, GroupsAndChannels, MembersAdmin, LinksInviting, MembersGroups, Contact,
+    Proxy, GroupsSendMessages
+)
 
 
 def create_database():
@@ -13,3 +15,4 @@ def create_database():
     db.create_tables([Contact])  # Создаем таблицу для хранения контактов
     db.create_tables([Proxy])  # Создаем таблицу для хранения прокси
     db.create_tables([Account])
+    db.create_tables([GroupsSendMessages])
