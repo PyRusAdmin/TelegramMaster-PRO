@@ -4,8 +4,9 @@ import datetime
 import flet as ft
 import peewee
 from loguru import logger
-from peewee import (SqliteDatabase, Model, CharField, BigIntegerField, TextField, DateTimeField, BooleanField,
-                    IntegerField)
+from peewee import (
+    SqliteDatabase, Model, CharField, BigIntegerField, TextField, DateTimeField, BooleanField, IntegerField
+)
 
 from src.core.configs import path_folder_database
 from src.gui.gui import AppLogger
