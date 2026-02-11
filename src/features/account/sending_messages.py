@@ -454,14 +454,11 @@ class SendTelegramMessages:
                             f"ID: {channel_info['id']}, Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}, Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
                         # logger.info(f"")
                         # logger.info(f"")
-
-                        if channel_info['level']:
-                            logger.info(f"Уровень канала: {channel_info['level']}")
-
+                        # if channel_info['level']:
+                        #     logger.info(f"Уровень канала: {channel_info['level']}")
                         if channel_info['about']:
                             logger.info(
                                 f"Описание: {channel_info['about'][:200]}{'...' if len(channel_info['about']) > 200 else ''}")
-
                         # Статистика
                         # logger.info(f"\n📊 СТАТИСТИКА:")
                         if channel_info['participants_count']:
@@ -474,9 +471,8 @@ class SendTelegramMessages:
                         #     logger.info(f"Непрочитанных сообщений: {channel_info['unread_count']:,}")
                         # if channel_info['pinned_msg_id']:
                         #     logger.info(f"Закрепленное сообщение: ID {channel_info['pinned_msg_id']}")
-                        if channel_info['stargifts_count']:
-                            logger.info(f"Звездных подарков: {channel_info['stargifts_count']}")
-
+                        # if channel_info['stargifts_count']:
+                        #     logger.info(f"Звездных подарков: {channel_info['stargifts_count']}")
                         # Slowmode - детальная расшифровка
                         logger.info(f"\n⏱️  SLOWMODE (ЗАДЕРЖКА МЕЖДУ СООБЩЕНИЯМИ):")
                         if channel_info['slowmode_seconds']:
@@ -484,7 +480,6 @@ class SendTelegramMessages:
                             hours = seconds // 3600
                             minutes = (seconds % 3600) // 60
                             secs = seconds % 60
-
                             time_parts = []
                             if hours > 0:
                                 time_parts.append(f"{hours} ч")
@@ -492,32 +487,25 @@ class SendTelegramMessages:
                                 time_parts.append(f"{minutes} мин")
                             if secs > 0:
                                 time_parts.append(f"{secs} сек")
-
                             time_str = " ".join(time_parts)
-
                             logger.info(f"⚠️  АКТИВЕН: {seconds} секунд ({time_str})")
                             logger.info(f"❌ МОЖНО ПИСАТЬ РАЗ В {time_str.upper()}")
                         else:
                             logger.info(f"✅ ОТСУТСТВУЕТ - можно писать без задержки")
-
                         # Права на отправку сообщений
                         logger.info(f"\n🔐 ПРАВА НА ОТПРАВКУ СООБЩЕНИЙ:")
-
                         if channel_info['default_banned_rights']:
                             rights = channel_info['default_banned_rights']
-
                             # Основные права
                             if rights.send_messages:
                                 logger.info(f"❌ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: ЗАПРЕЩЕНА")
                             else:
                                 logger.info(f"✅ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: разрешена")
-
                             # Медиа
                             if rights.send_media:
                                 logger.info(f"❌ ОТПРАВКА МЕДИА (фото/видео/файлы): ЗАПРЕЩЕНА")
                             else:
                                 logger.info(f"✅ ОТПРАВКА МЕДИА: разрешена")
-
                                 # Детализация медиа
                                 media_restrictions = []
                                 if rights.send_photos:
@@ -536,7 +524,6 @@ class SendTelegramMessages:
                                 if media_restrictions:
                                     for r in media_restrictions:
                                         logger.info(f"      {r}")
-
                             # Стикеры и GIF
                             if rights.send_stickers:
                                 logger.info(f"❌ СТИКЕРЫ: запрещены")
@@ -547,25 +534,21 @@ class SendTelegramMessages:
                                 logger.info(f"❌ GIF: запрещены")
                             else:
                                 logger.info(f"✅ GIF: разрешены")
-
                             # Ссылки
                             if rights.embed_links:
                                 logger.info(f"❌ ВСТАВКА ССЫЛОК: запрещена")
                             else:
                                 logger.info(f"✅ ВСТАВКА ССЫЛОК: разрешена")
-
                             # Опросы
                             if rights.send_polls:
                                 logger.info(f"❌ ОПРОСЫ: запрещены")
                             else:
                                 logger.info(f"✅ ОПРОСЫ: разрешены")
-
                             # Другие права
                             if rights.invite_users:
                                 logger.info(f"❌ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: запрещено")
                             else:
                                 logger.info(f"✅ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: разрешено")
-
                             if rights.change_info:
                                 logger.info(f"❌ ИЗМЕНЕНИЕ ИНФОРМАЦИИ: запрещено")
 
@@ -573,22 +556,18 @@ class SendTelegramMessages:
                                 logger.info(f"❌ ЗАКРЕПЛЕНИЕ СООБЩЕНИЙ: запрещено")
                         else:
                             logger.info(f"✅ ВСЕ ПРАВА: разрешены (нет ограничений)")
-
                         # Видимость и приватность
                         logger.info(f"\n👁️ВИДИМОСТЬ И ПРИВАТНОСТЬ:")
                         if channel_info['can_view_participants']:
                             logger.info(f"✅ СПИСОК УЧАСТНИКОВ: можно просматривать")
                         else:
                             logger.info(f"❌ СПИСОК УЧАСТНИКОВ: скрыт")
-
                         if channel_info['participants_hidden']:
                             logger.info(f"🔒 УЧАСТНИКИ СКРЫТЫ: от публичного просмотра")
-
                         # Реакции
                         logger.info(f"\n❤️РЕАКЦИИ:")
                         if channel_info['reactions_limit']:
                             logger.info(f"Лимит: {channel_info['reactions_limit']} реакций на сообщение")
-
                             if channel_info['available_reactions']:
                                 if hasattr(channel_info['available_reactions'], 'reactions'):
                                     emojis = [r.emoticon for r in channel_info['available_reactions'].reactions if
@@ -599,7 +578,6 @@ class SendTelegramMessages:
                                     logger.info(f"✅ Разрешены кастомные реакции")
                         else:
                             logger.info(f"   Реакции отключены")
-
                         # Платные функции
                         logger.info(f"\n💰 ПЛАТНЫЕ ФУНКЦИИ:")
                         paid_features = []
@@ -611,40 +589,31 @@ class SendTelegramMessages:
                             paid_features.append("✅ Платные сообщения: доступны")
                         if channel_info['stargifts_available']:
                             paid_features.append("✅ Звездные подарки: доступны")
-
                         if paid_features:
                             for f in paid_features:
                                 logger.info(f"{f}")
                         else:
                             logger.info(f"❌ Платные функции недоступны")
-
                         # Дополнительные функции
                         logger.info(f"\n⚙️  ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ:")
-
                         features = []
                         if channel_info['antispam']:
                             features.append("🛡️ Антиспам включен")
-
                         if not channel_info['translations_disabled']:
                             features.append("🌐 Автоперевод включен")
                         else:
                             features.append("❌ Автоперевод отключен")
-
                         if channel_info['can_set_username']:
                             features.append("✏️ Можно изменять username")
-
                         if channel_info['can_view_stats']:
                             features.append("📈 Доступна статистика")
-
                         if channel_info['linked_chat_id']:
                             features.append(f"🔗 Есть связанный чат (ID: {channel_info['linked_chat_id']})")
-
                         if features:
                             for f in features:
                                 logger.info(f"{f}")
                         else:
                             logger.info(f"Стандартные настройки")
-
                         # Боты (если есть)
                         if hasattr(full_entity, 'users') and full_entity.users:
                             bots = [u for u in full_entity.users if u.bot]
@@ -657,12 +626,9 @@ class SendTelegramMessages:
 
                                     if hasattr(bot, 'bot_active_users') and bot.bot_active_users:
                                         logger.info(f"Активных пользователей: {bot.bot_active_users:,}")
-
                                 # if len(bots) > 5:
                                 #     logger.info(f"   ... и ещё {len(bots) - 5} ботов")
-
                         # logger.info(f"{'=' * 100}\n")
-
                 except ValueError as e:
                     logger.error(f"❌ Не найдена сущность для '{link}': {e}")
                 except Exception as e:
