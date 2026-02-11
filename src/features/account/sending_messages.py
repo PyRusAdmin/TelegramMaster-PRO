@@ -450,37 +450,33 @@ class SendTelegramMessages:
 
                         # Основная информация
                         logger.info(f"\n📋 ОСНОВНАЯ ИНФОРМАЦИЯ:")
-                        logger.info(f"   ID: {channel_info['id']}")
+                        logger.info(f"ID: {channel_info['id']}")
                         logger.info(
-                            f"   Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}")
+                            f"Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}")
                         logger.info(
-                            f"   Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
+                            f"Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
 
                         if channel_info['level']:
-                            logger.info(f"   Уровень канала: {channel_info['level']}")
+                            logger.info(f"Уровень канала: {channel_info['level']}")
 
                         if channel_info['about']:
                             logger.info(
-                                f"   Описание: {channel_info['about'][:200]}{'...' if len(channel_info['about']) > 200 else ''}")
+                                f"Описание: {channel_info['about'][:200]}{'...' if len(channel_info['about']) > 200 else ''}")
 
                         # Статистика
                         logger.info(f"\n📊 СТАТИСТИКА:")
                         if channel_info['participants_count']:
-                            logger.info(f"   Участников: {channel_info['participants_count']:,}")
+                            logger.info(f"Участников: {channel_info['participants_count']:,}")
                         else:
-                            logger.info(f"   Участников: скрыто")
-
+                            logger.info(f"Участников: скрыто")
                         if channel_info['online_count'] is not None:
-                            logger.info(f"   Онлайн сейчас: {channel_info['online_count']:,}")
-
+                            logger.info(f"Онлайн сейчас: {channel_info['online_count']:,}")
                         if channel_info['unread_count']:
-                            logger.info(f"   Непрочитанных сообщений: {channel_info['unread_count']:,}")
-
+                            logger.info(f"Непрочитанных сообщений: {channel_info['unread_count']:,}")
                         if channel_info['pinned_msg_id']:
-                            logger.info(f"   Закрепленное сообщение: ID {channel_info['pinned_msg_id']}")
-
+                            logger.info(f"Закрепленное сообщение: ID {channel_info['pinned_msg_id']}")
                         if channel_info['stargifts_count']:
-                            logger.info(f"   Звездных подарков: {channel_info['stargifts_count']}")
+                            logger.info(f"Звездных подарков: {channel_info['stargifts_count']}")
 
                         # Slowmode - детальная расшифровка
                         logger.info(f"\n⏱️  SLOWMODE (ЗАДЕРЖКА МЕЖДУ СООБЩЕНИЯМИ):")
@@ -500,10 +496,10 @@ class SendTelegramMessages:
 
                             time_str = " ".join(time_parts)
 
-                            logger.info(f"   ⚠️  АКТИВЕН: {seconds} секунд ({time_str})")
-                            logger.info(f"   ❌ МОЖНО ПИСАТЬ РАЗ В {time_str.upper()}")
+                            logger.info(f"⚠️  АКТИВЕН: {seconds} секунд ({time_str})")
+                            logger.info(f"❌ МОЖНО ПИСАТЬ РАЗ В {time_str.upper()}")
                         else:
-                            logger.info(f"   ✅ ОТСУТСТВУЕТ - можно писать без задержки")
+                            logger.info(f"✅ ОТСУТСТВУЕТ - можно писать без задержки")
 
                         # Права на отправку сообщений
                         logger.info(f"\n🔐 ПРАВА НА ОТПРАВКУ СООБЩЕНИЙ:")
@@ -513,15 +509,15 @@ class SendTelegramMessages:
 
                             # Основные права
                             if rights.send_messages:
-                                logger.info(f"   ❌ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: ЗАПРЕЩЕНА")
+                                logger.info(f"❌ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: ЗАПРЕЩЕНА")
                             else:
-                                logger.info(f"   ✅ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: разрешена")
+                                logger.info(f"✅ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: разрешена")
 
                             # Медиа
                             if rights.send_media:
-                                logger.info(f"   ❌ ОТПРАВКА МЕДИА (фото/видео/файлы): ЗАПРЕЩЕНА")
+                                logger.info(f"❌ ОТПРАВКА МЕДИА (фото/видео/файлы): ЗАПРЕЩЕНА")
                             else:
-                                logger.info(f"   ✅ ОТПРАВКА МЕДИА: разрешена")
+                                logger.info(f"✅ ОТПРАВКА МЕДИА: разрешена")
 
                                 # Детализация медиа
                                 media_restrictions = []
@@ -544,64 +540,64 @@ class SendTelegramMessages:
 
                             # Стикеры и GIF
                             if rights.send_stickers:
-                                logger.info(f"   ❌ СТИКЕРЫ: запрещены")
+                                logger.info(f"❌ СТИКЕРЫ: запрещены")
                             else:
-                                logger.info(f"   ✅ СТИКЕРЫ: разрешены")
+                                logger.info(f"✅ СТИКЕРЫ: разрешены")
 
                             if rights.send_gifs:
-                                logger.info(f"   ❌ GIF: запрещены")
+                                logger.info(f"❌ GIF: запрещены")
                             else:
-                                logger.info(f"   ✅ GIF: разрешены")
+                                logger.info(f"✅ GIF: разрешены")
 
                             # Ссылки
                             if rights.embed_links:
-                                logger.info(f"   ❌ ВСТАВКА ССЫЛОК: запрещена")
+                                logger.info(f"❌ ВСТАВКА ССЫЛОК: запрещена")
                             else:
-                                logger.info(f"   ✅ ВСТАВКА ССЫЛОК: разрешена")
+                                logger.info(f"✅ ВСТАВКА ССЫЛОК: разрешена")
 
                             # Опросы
                             if rights.send_polls:
-                                logger.info(f"   ❌ ОПРОСЫ: запрещены")
+                                logger.info(f"❌ ОПРОСЫ: запрещены")
                             else:
-                                logger.info(f"   ✅ ОПРОСЫ: разрешены")
+                                logger.info(f"✅ ОПРОСЫ: разрешены")
 
                             # Другие права
                             if rights.invite_users:
-                                logger.info(f"   ❌ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: запрещено")
+                                logger.info(f"❌ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: запрещено")
                             else:
-                                logger.info(f"   ✅ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: разрешено")
+                                logger.info(f"✅ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: разрешено")
 
                             if rights.change_info:
-                                logger.info(f"   ❌ ИЗМЕНЕНИЕ ИНФОРМАЦИИ: запрещено")
+                                logger.info(f"❌ ИЗМЕНЕНИЕ ИНФОРМАЦИИ: запрещено")
 
                             if rights.pin_messages:
-                                logger.info(f"   ❌ ЗАКРЕПЛЕНИЕ СООБЩЕНИЙ: запрещено")
+                                logger.info(f"❌ ЗАКРЕПЛЕНИЕ СООБЩЕНИЙ: запрещено")
                         else:
-                            logger.info(f"   ✅ ВСЕ ПРАВА: разрешены (нет ограничений)")
+                            logger.info(f"✅ ВСЕ ПРАВА: разрешены (нет ограничений)")
 
                         # Видимость и приватность
-                        logger.info(f"\n👁️  ВИДИМОСТЬ И ПРИВАТНОСТЬ:")
+                        logger.info(f"\n👁️ВИДИМОСТЬ И ПРИВАТНОСТЬ:")
                         if channel_info['can_view_participants']:
-                            logger.info(f"   ✅ СПИСОК УЧАСТНИКОВ: можно просматривать")
+                            logger.info(f"✅ СПИСОК УЧАСТНИКОВ: можно просматривать")
                         else:
-                            logger.info(f"   ❌ СПИСОК УЧАСТНИКОВ: скрыт")
+                            logger.info(f"❌ СПИСОК УЧАСТНИКОВ: скрыт")
 
                         if channel_info['participants_hidden']:
-                            logger.info(f"   🔒 УЧАСТНИКИ СКРЫТЫ: от публичного просмотра")
+                            logger.info(f"🔒 УЧАСТНИКИ СКРЫТЫ: от публичного просмотра")
 
                         # Реакции
-                        logger.info(f"\n❤️  РЕАКЦИИ:")
+                        logger.info(f"\n❤️РЕАКЦИИ:")
                         if channel_info['reactions_limit']:
-                            logger.info(f"   Лимит: {channel_info['reactions_limit']} реакций на сообщение")
+                            logger.info(f"Лимит: {channel_info['reactions_limit']} реакций на сообщение")
 
                             if channel_info['available_reactions']:
                                 if hasattr(channel_info['available_reactions'], 'reactions'):
                                     emojis = [r.emoticon for r in channel_info['available_reactions'].reactions if
                                               hasattr(r, 'emoticon')]
                                     if emojis:
-                                        logger.info(f"   Доступные: {' '.join(emojis)}")
+                                        logger.info(f"Доступные: {' '.join(emojis)}")
                                 elif hasattr(channel_info['available_reactions'], 'allow_custom'):
-                                    logger.info(f"   ✅ Разрешены кастомные реакции")
+                                    logger.info(f"✅ Разрешены кастомные реакции")
                         else:
                             logger.info(f"   Реакции отключены")
 
@@ -619,9 +615,9 @@ class SendTelegramMessages:
 
                         if paid_features:
                             for f in paid_features:
-                                logger.info(f"   {f}")
+                                logger.info(f"{f}")
                         else:
-                            logger.info(f"   ❌ Платные функции недоступны")
+                            logger.info(f"❌ Платные функции недоступны")
 
                         # Дополнительные функции
                         logger.info(f"\n⚙️  ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ:")
@@ -646,9 +642,9 @@ class SendTelegramMessages:
 
                         if features:
                             for f in features:
-                                logger.info(f"   {f}")
+                                logger.info(f"{f}")
                         else:
-                            logger.info(f"   Стандартные настройки")
+                            logger.info(f"Стандартные настройки")
 
                         # Боты (если есть)
                         if hasattr(full_entity, 'users') and full_entity.users:
@@ -659,7 +655,7 @@ class SendTelegramMessages:
                                     bot_name = f"@{bot.username}" if bot.username else bot.first_name
                                     logger.info(f"   • {bot_name}")
                                     if hasattr(bot, 'bot_active_users') and bot.bot_active_users:
-                                        logger.info(f"     Активных пользователей: {bot.bot_active_users:,}")
+                                        logger.info(f"Активных пользователей: {bot.bot_active_users:,}")
 
                                 if len(bots) > 5:
                                     logger.info(f"   ... и ещё {len(bots) - 5} ботов")
@@ -699,7 +695,6 @@ class SendTelegramMessages:
                     message=f"❌ Ошибка валидации времени: {e}"
                 )
 
-        # t = ft.Text()
         # Разделение интерфейса на верхнюю и нижнюю части
         self.page.views.append(
             ft.View(

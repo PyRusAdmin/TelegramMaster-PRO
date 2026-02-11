@@ -69,7 +69,8 @@ class ParsingGroupMembers:
                 offset_peer=InputPeerEmpty(),
                 limit=200,
                 hash=0
-            ))
+            )
+            )
             groups = [chat for chat in result.chats if getattr(chat, 'megagroup', False)]
             titles = [group.title for group in groups]
 
