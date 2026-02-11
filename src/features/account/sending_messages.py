@@ -445,11 +445,13 @@ class SendTelegramMessages:
 
                         # Детальный вывод в логи с расшифровкой
                         # logger.info(f"\n{'=' * 100}")
-                        logger.info(f"✅ Канал '{channel_info['title']}' (участников: {channel_info['participants_count']})")
+                        logger.info(
+                            f"✅ Канал '{channel_info['title']}' (участников: {channel_info['participants_count']})")
                         # logger.info(f"{'=' * 100}")
                         # Основная информация
                         # logger.info(f"\n📋 ОСНОВНАЯ ИНФОРМАЦИЯ:")
-                        logger.info(f"ID: {channel_info['id']}, Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}, Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
+                        logger.info(
+                            f"ID: {channel_info['id']}, Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}, Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
                         # logger.info(f"")
                         # logger.info(f"")
 
@@ -468,8 +470,8 @@ class SendTelegramMessages:
                             logger.info(f"Участников: скрыто")
                         # if channel_info['online_count'] is not None:
                         #     logger.info(f"Онлайн сейчас: {channel_info['online_count']:,}")
-                        if channel_info['unread_count']:
-                            logger.info(f"Непрочитанных сообщений: {channel_info['unread_count']:,}")
+                        # if channel_info['unread_count']:
+                        #     logger.info(f"Непрочитанных сообщений: {channel_info['unread_count']:,}")
                         # if channel_info['pinned_msg_id']:
                         #     logger.info(f"Закрепленное сообщение: ID {channel_info['pinned_msg_id']}")
                         if channel_info['stargifts_count']:
