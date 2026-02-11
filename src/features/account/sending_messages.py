@@ -529,18 +529,19 @@ class SendTelegramMessages:
                             #     logger.info(f"❌ СТИКЕРЫ: запрещены")
                             # else:
                             #     logger.info(f"✅ СТИКЕРЫ: разрешены")
-
                             logger.info(f"{'✅ СТИКЕРЫ: разрешены' if rights.send_stickers else '❌ СТИКЕРЫ: запрещены'}")
-
-                            if rights.send_gifs:
-                                logger.info(f"❌ GIF: запрещены")
-                            else:
-                                logger.info(f"✅ GIF: разрешены")
+                            # if rights.send_gifs:
+                            #     logger.info(f"❌ GIF: запрещены")
+                            # else:
+                            #     logger.info(f"✅ GIF: разрешены")
+                            logger.info(f"{'✅ GIF: разрешены' if rights.send_gifs else '❌ GIF: запрещены'}")
                             # Ссылки
-                            if rights.embed_links:
-                                logger.info(f"❌ ВСТАВКА ССЫЛОК: запрещена")
-                            else:
-                                logger.info(f"✅ ВСТАВКА ССЫЛОК: разрешена")
+                            # if rights.embed_links:
+                            #     logger.info(f"❌ ВСТАВКА ССЫЛОК: запрещена")
+                            # else:
+                            #     logger.info(f"✅ ВСТАВКА ССЫЛОК: разрешена")
+                            logger.info(f"{'✅ ВСТАВКА ССЫЛОК: разрешена' if rights.embed_links else '❌ ВСТАВКА ССЫЛОК: запрещена'}")
+
                             # Опросы
                             if rights.send_polls:
                                 logger.info(f"❌ ОПРОСЫ: запрещены")
