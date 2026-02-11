@@ -444,35 +444,18 @@ class SendTelegramMessages:
                         }
 
                         # Детальный вывод в логи с расшифровкой
-                        # logger.info(f"\n{'=' * 100}")
                         logger.info(
                             f"✅ Канал '{channel_info['title']}' (участников: {channel_info['participants_count']})")
-                        # logger.info(f"{'=' * 100}")
-                        # Основная информация
-                        # logger.info(f"\n📋 ОСНОВНАЯ ИНФОРМАЦИЯ:")
                         logger.info(
                             f"ID: {channel_info['id']}, Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}, Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
-                        # logger.info(f"")
-                        # logger.info(f"")
-                        # if channel_info['level']:
-                        #     logger.info(f"Уровень канала: {channel_info['level']}")
                         if channel_info['about']:
                             logger.info(
                                 f"Описание: {channel_info['about'][:200]}{'...' if len(channel_info['about']) > 200 else ''}")
-                        # Статистика
-                        # logger.info(f"\n📊 СТАТИСТИКА:")
                         if channel_info['participants_count']:
                             logger.info(f"Участников: {channel_info['participants_count']:,}")
                         else:
                             logger.info(f"Участников: скрыто")
-                        # if channel_info['online_count'] is not None:
-                        #     logger.info(f"Онлайн сейчас: {channel_info['online_count']:,}")
-                        # if channel_info['unread_count']:
-                        #     logger.info(f"Непрочитанных сообщений: {channel_info['unread_count']:,}")
-                        # if channel_info['pinned_msg_id']:
-                        #     logger.info(f"Закрепленное сообщение: ID {channel_info['pinned_msg_id']}")
-                        # if channel_info['stargifts_count']:
-                        #     logger.info(f"Звездных подарков: {channel_info['stargifts_count']}")
+
                         # Slowmode - детальная расшифровка
                         logger.info(f"\n⏱️  SLOWMODE (ЗАДЕРЖКА МЕЖДУ СООБЩЕНИЯМИ):")
                         if channel_info['slowmode_seconds']:
@@ -524,22 +507,9 @@ class SendTelegramMessages:
                                 if media_restrictions:
                                     for r in media_restrictions:
                                         logger.info(f"      {r}")
-                            # Стикеры и GIF
-                            # if rights.send_stickers:
-                            #     logger.info(f"❌ СТИКЕРЫ: запрещены")
-                            # else:
-                            #     logger.info(f"✅ СТИКЕРЫ: разрешены")
+
                             logger.info(f"{'✅ СТИКЕРЫ: разрешены' if rights.send_stickers else '❌ СТИКЕРЫ: запрещены'}")
-                            # if rights.send_gifs:
-                            #     logger.info(f"❌ GIF: запрещены")
-                            # else:
-                            #     logger.info(f"✅ GIF: разрешены")
                             logger.info(f"{'✅ GIF: разрешены' if rights.send_gifs else '❌ GIF: запрещены'}")
-                            # Ссылки
-                            # if rights.embed_links:
-                            #     logger.info(f"❌ ВСТАВКА ССЫЛОК: запрещена")
-                            # else:
-                            #     logger.info(f"✅ ВСТАВКА ССЫЛОК: разрешена")
                             logger.info(f"{'✅ ВСТАВКА ССЫЛОК: разрешена' if rights.embed_links else '❌ ВСТАВКА ССЫЛОК: запрещена'}")
 
                             # Опросы
