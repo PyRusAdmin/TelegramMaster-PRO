@@ -366,7 +366,8 @@ class SendTelegramMessages:
             logger.warning(f"Выбранный аккаунт: {account_drop_down_list.value}")
 
             client: TelegramClient = await self.connect.client_connect_string_session(
-                session_name=account_drop_down_list.value)
+                session_name=account_drop_down_list.value
+            )
 
             writing_group_links = get_links_table_group_send_messages()
 
@@ -443,18 +444,14 @@ class SendTelegramMessages:
                         }
 
                         # Детальный вывод в логи с расшифровкой
-                        logger.info(f"\n{'=' * 100}")
-                        logger.info(
-                            f"✅ Канал '{channel_info['title']}' (участников: {channel_info['participants_count']})")
-                        logger.info(f"{'=' * 100}")
-
+                        # logger.info(f"\n{'=' * 100}")
+                        logger.info(f"✅ Канал '{channel_info['title']}' (участников: {channel_info['participants_count']})")
+                        # logger.info(f"{'=' * 100}")
                         # Основная информация
-                        logger.info(f"\n📋 ОСНОВНАЯ ИНФОРМАЦИЯ:")
+                        # logger.info(f"\n📋 ОСНОВНАЯ ИНФОРМАЦИЯ:")
                         logger.info(f"ID: {channel_info['id']}")
-                        logger.info(
-                            f"Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}")
-                        logger.info(
-                            f"Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
+                        logger.info(f"Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}")
+                        logger.info(f"Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
 
                         if channel_info['level']:
                             logger.info(f"Уровень канала: {channel_info['level']}")
