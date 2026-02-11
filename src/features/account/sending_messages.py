@@ -649,13 +649,15 @@ class SendTelegramMessages:
                             if bots:
                                 logger.info(f"\n🤖 БОТЫ В ГРУППЕ ({len(bots)}):")
                                 for bot in bots[:5]:  # Показываем первые 5
+
                                     bot_name = f"@{bot.username}" if bot.username else bot.first_name
-                                    logger.info(f"   • {bot_name}")
+                                    logger.info(f"{bot_name}")
+
                                     if hasattr(bot, 'bot_active_users') and bot.bot_active_users:
                                         logger.info(f"Активных пользователей: {bot.bot_active_users:,}")
 
-                                if len(bots) > 5:
-                                    logger.info(f"   ... и ещё {len(bots) - 5} ботов")
+                                # if len(bots) > 5:
+                                #     logger.info(f"   ... и ещё {len(bots) - 5} ботов")
 
                         # logger.info(f"{'=' * 100}\n")
 
