@@ -449,9 +449,9 @@ class SendTelegramMessages:
                         # logger.info(f"{'=' * 100}")
                         # Основная информация
                         # logger.info(f"\n📋 ОСНОВНАЯ ИНФОРМАЦИЯ:")
-                        logger.info(f"ID: {channel_info['id']}")
-                        logger.info(f"Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}")
-                        logger.info(f"Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
+                        logger.info(f"ID: {channel_info['id']}, Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}, Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
+                        # logger.info(f"")
+                        # logger.info(f"")
 
                         if channel_info['level']:
                             logger.info(f"Уровень канала: {channel_info['level']}")
@@ -461,17 +461,17 @@ class SendTelegramMessages:
                                 f"Описание: {channel_info['about'][:200]}{'...' if len(channel_info['about']) > 200 else ''}")
 
                         # Статистика
-                        logger.info(f"\n📊 СТАТИСТИКА:")
+                        # logger.info(f"\n📊 СТАТИСТИКА:")
                         if channel_info['participants_count']:
                             logger.info(f"Участников: {channel_info['participants_count']:,}")
                         else:
                             logger.info(f"Участников: скрыто")
-                        if channel_info['online_count'] is not None:
-                            logger.info(f"Онлайн сейчас: {channel_info['online_count']:,}")
+                        # if channel_info['online_count'] is not None:
+                        #     logger.info(f"Онлайн сейчас: {channel_info['online_count']:,}")
                         if channel_info['unread_count']:
                             logger.info(f"Непрочитанных сообщений: {channel_info['unread_count']:,}")
-                        if channel_info['pinned_msg_id']:
-                            logger.info(f"Закрепленное сообщение: ID {channel_info['pinned_msg_id']}")
+                        # if channel_info['pinned_msg_id']:
+                        #     logger.info(f"Закрепленное сообщение: ID {channel_info['pinned_msg_id']}")
                         if channel_info['stargifts_count']:
                             logger.info(f"Звездных подарков: {channel_info['stargifts_count']}")
 
@@ -657,7 +657,7 @@ class SendTelegramMessages:
                                 if len(bots) > 5:
                                     logger.info(f"   ... и ещё {len(bots) - 5} ботов")
 
-                        logger.info(f"{'=' * 100}\n")
+                        # logger.info(f"{'=' * 100}\n")
 
                 except ValueError as e:
                     logger.error(f"❌ Не найдена сущность для '{link}': {e}")
