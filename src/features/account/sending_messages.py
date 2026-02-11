@@ -525,10 +525,12 @@ class SendTelegramMessages:
                                     for r in media_restrictions:
                                         logger.info(f"      {r}")
                             # Стикеры и GIF
-                            if rights.send_stickers:
-                                logger.info(f"❌ СТИКЕРЫ: запрещены")
-                            else:
-                                logger.info(f"✅ СТИКЕРЫ: разрешены")
+                            # if rights.send_stickers:
+                            #     logger.info(f"❌ СТИКЕРЫ: запрещены")
+                            # else:
+                            #     logger.info(f"✅ СТИКЕРЫ: разрешены")
+
+                            logger.info(f"{'✅ СТИКЕРЫ: разрешены' if rights.send_stickers else '❌ СТИКЕРЫ: запрещены'}")
 
                             if rights.send_gifs:
                                 logger.info(f"❌ GIF: запрещены")
