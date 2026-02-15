@@ -413,13 +413,15 @@ class SendTelegramMessages:
                     if entity and full_entity:
                         # Собираем базовую информацию в словарь
                         channel_info = {
-                            'id': full_entity.full_chat.id,
-                            'title': entity.title,
+                            'id': full_entity.full_chat.id,  # ID канала/группы в Telegram
+                            'title': entity.title,  # Название группы
                             'username': entity.username if hasattr(entity, 'username') else None,
-                            'about': full_entity.full_chat.about,
-                            'participants_count': full_entity.full_chat.participants_count,
-                            'online_count': full_entity.full_chat.online_count,
-                            'unread_count': full_entity.full_chat.unread_count,
+                            # Username группы (без @)
+                            'about': full_entity.full_chat.about,  # Описание группы
+                            'participants_count': full_entity.full_chat.participants_count,  # Количество участников
+                            # 'online_count': full_entity.full_chat.online_count,
+                            # 'unread_count': full_entity.full_chat.unread_count,
+                            'participants_hidden': full_entity.full_chat.participants_hidden,  # Участники скрыты
                             'is_broadcast': entity.broadcast if hasattr(entity, 'broadcast') else False,
                             'is_megagroup': entity.megagroup if hasattr(entity, 'megagroup') else False,
                             'slowmode_seconds': full_entity.full_chat.slowmode_seconds,
@@ -428,7 +430,6 @@ class SendTelegramMessages:
                             'reactions_limit': full_entity.full_chat.reactions_limit,
                             'can_set_username': full_entity.full_chat.can_set_username,
                             'can_view_stats': full_entity.full_chat.can_view_stats,
-                            'participants_hidden': full_entity.full_chat.participants_hidden,
                             'paid_media_allowed': full_entity.full_chat.paid_media_allowed,
                             'paid_reactions_available': full_entity.full_chat.paid_reactions_available,
                             'stargifts_available': full_entity.full_chat.stargifts_available,
@@ -445,7 +446,16 @@ class SendTelegramMessages:
 
                         update_group_send_messages_table(
                             link=link,
-                            telegram_id=channel_info['id']
+                            telegram_id=channel_info['id'],
+                            title=channel_info['title'],
+                            username=channel_info['username'] if channel_info['username'] else 'отсутствует',
+                            about=(
+                                channel_info['about'][:200] + '...'
+                                if channel_info['about'] and len(channel_info['about']) > 200
+                                else channel_info['about']
+                            ),
+                            participants_count=channel_info['participants_count'],
+                            participants_hidden=channel_info['participants_hidden'],
                         )
 
                         # Детальный вывод в логи с расшифровкой

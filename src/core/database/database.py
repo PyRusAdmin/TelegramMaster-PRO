@@ -51,23 +51,40 @@ def get_writing_group_links():
 
 class GroupsSendMessages(Model):
     """Группы для рассылки сообщений"""
+
+    # Основная информация
     link = CharField()  # Исходная ссылка на группу
     telegram_id = BigIntegerField(null=True)  # ID канала/группы в Telegram
+    title = CharField(null=True)  # Название группы
+    username = CharField(null=True)  # Username группы (без @)
+    about = TextField(null=True)  # Описание группы
+
+    # Статистика участников
+    participants_count = IntegerField(null=True)  # Количество участников
+    participants_hidden = BooleanField(default=False)  # Участники скрыты
 
     class Meta:
         database = db
         table_name = "group_send_messages"
 
-def update_group_send_messages_table(link, telegram_id):
+
+def update_group_send_messages_table(link, telegram_id, title, username, about, participants_count,
+                                     participants_hidden):
     # Ищем запись по ссылке
     group = GroupsSendMessages.get_or_none(GroupsSendMessages.link == link)
 
     if group:
-        group.telegram_id = telegram_id
+        group.telegram_id = telegram_id  # ID канала/группы в Telegram
+        group.title = title  # Название группы
+        group.username = username  # Username группы (без @)
+        group.about = about  # Описание группы
+        group.participants_count = participants_count  # Количество участников
+        group.participants_hidden = participants_hidden  # Участники скрыты
         group.save()
         print(f"Обновлён telegram_id для {link}: {telegram_id}")
     else:
         print(f"Запись с ссылкой {link} не найдена в базе")
+
 
 def write_group_send_message_table(chat_input):
     chat_input = chat_input.strip()
