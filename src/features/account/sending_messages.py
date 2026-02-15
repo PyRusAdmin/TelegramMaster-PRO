@@ -221,7 +221,6 @@ class SendTelegramMessages:
         :return: None
         """
         list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
-        # Чекбокс для работы с автоответчиком
         account_drop_down_list = self.gui_program.create_account_dropdown(self.account_data)
 
         async def performing_operation(chat_list_fields: list, min_seconds, max_seconds) -> None:
@@ -669,9 +668,11 @@ class SendTelegramMessages:
             """
             write_group_send_message_table(self.chat_list_field.value)
 
-            chat_list_fields = await self.utils.get_chat_list(self.chat_list_field.value)
+            writing_group_links = get_links_table_group_send_messages()
 
-            if not chat_list_fields:
+            # chat_list_fields = await self.utils.get_chat_list(self.chat_list_field.value)
+
+            if not writing_group_links:
                 await self.gui_program.show_notification(
                     message="❌ Нет чатов для рассылки. Укажите ссылки или сохраните группы в настройках.")
                 return
@@ -682,7 +683,7 @@ class SendTelegramMessages:
                     max_seconds=self.tb_time_to.value
                 )
                 await performing_operation(
-                    chat_list_fields=chat_list_fields,
+                    chat_list_fields=writing_group_links,
                     min_seconds=min_seconds,
                     max_seconds=max_seconds
                 )

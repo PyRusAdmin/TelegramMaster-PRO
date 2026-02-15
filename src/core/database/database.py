@@ -567,7 +567,7 @@ def save_group_channel_info(dialog, title, about, link, participants_count):
             about=about,
             link=link,
             members_count=participants_count,
-            parsing_time=datetime.datetime.now()
+            parsing_time=datetime.now
         ).on_conflict(
             conflict_target=[GroupsAndChannels.id],
             preserve=[GroupsAndChannels.id],
@@ -576,7 +576,7 @@ def save_group_channel_info(dialog, title, about, link, participants_count):
                 GroupsAndChannels.about: about,
                 GroupsAndChannels.link: link,
                 GroupsAndChannels.members_count: participants_count,
-                GroupsAndChannels.parsing_time: datetime.datetime.now(),
+                GroupsAndChannels.parsing_time: datetime.now,
             }
         ).execute()
 
