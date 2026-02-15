@@ -20,7 +20,7 @@ from src.core.configs import (
 )
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import select_records_with_limit, write_group_send_message_table, \
-    get_links_table_group_send_messages
+    get_links_table_group_send_messages, update_group_send_messages_table
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
@@ -443,6 +443,11 @@ class SendTelegramMessages:
                             'available_reactions': full_entity.full_chat.available_reactions,
                         }
 
+                        update_group_send_messages_table(
+                            link=link,
+                            telegram_id=channel_info['id']
+                        )
+
                         # Детальный вывод в логи с расшифровкой
                         logger.info(
                             f"✅ Канал '{channel_info['title']}' (участников: {channel_info['participants_count']})")
@@ -479,11 +484,8 @@ class SendTelegramMessages:
                         logger.info(f"\n🔐 ПРАВА НА ОТПРАВКУ СООБЩЕНИЙ:")
                         if channel_info['default_banned_rights']:
                             rights = channel_info['default_banned_rights']
-                            # Основные права
-                            if rights.send_messages:
-                                logger.info(f"❌ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: ЗАПРЕЩЕНА")
-                            else:
-                                logger.info(f"✅ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: разрешена")
+                            logger.info(
+                                f"{'✅ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: разрешена' if rights.send_messages else '❌ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: ЗАПРЕЩЕНА'}")
                             # Медиа
                             if rights.send_media:
                                 logger.info(f"❌ ОТПРАВКА МЕДИА (фото/видео/файлы): ЗАПРЕЩЕНА")
@@ -503,28 +505,19 @@ class SendTelegramMessages:
                                     media_restrictions.append("❌ Голосовые: запрещены")
                                 if rights.send_roundvideos:
                                     media_restrictions.append("❌ Кружки: запрещены")
-
                                 if media_restrictions:
                                     for r in media_restrictions:
                                         logger.info(f"      {r}")
 
                             logger.info(f"{'✅ СТИКЕРЫ: разрешены' if rights.send_stickers else '❌ СТИКЕРЫ: запрещены'}")
                             logger.info(f"{'✅ GIF: разрешены' if rights.send_gifs else '❌ GIF: запрещены'}")
-                            logger.info(f"{'✅ ВСТАВКА ССЫЛОК: разрешена' if rights.embed_links else '❌ ВСТАВКА ССЫЛОК: запрещена'}")
-
-                            # Опросы
-                            if rights.send_polls:
-                                logger.info(f"❌ ОПРОСЫ: запрещены")
-                            else:
-                                logger.info(f"✅ ОПРОСЫ: разрешены")
-                            # Другие права
-                            if rights.invite_users:
-                                logger.info(f"❌ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: запрещено")
-                            else:
-                                logger.info(f"✅ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: разрешено")
+                            logger.info(
+                                f"{'✅ ВСТАВКА ССЫЛОК: разрешена' if rights.embed_links else '❌ ВСТАВКА ССЫЛОК: запрещена'}")
+                            logger.info(f"{'✅ ОПРОСЫ: разрешены' if rights.send_polls else '❌ ОПРОСЫ: запрещены'}")
+                            logger.info(
+                                f"{'✅ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: разрешено' if rights.invite_users else '❌ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: запрещено'}")
                             if rights.change_info:
                                 logger.info(f"❌ ИЗМЕНЕНИЕ ИНФОРМАЦИИ: запрещено")
-
                             if rights.pin_messages:
                                 logger.info(f"❌ ЗАКРЕПЛЕНИЕ СООБЩЕНИЙ: запрещено")
                         else:
