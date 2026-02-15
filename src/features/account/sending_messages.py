@@ -3,6 +3,7 @@ import asyncio
 import random
 import sys
 import time
+from datetime import datetime  # Импортируем класс datetime
 
 import flet as ft
 from loguru import logger
@@ -411,205 +412,251 @@ class SendTelegramMessages:
 
                     # Если получили данные - обрабатываем
                     if entity and full_entity:
+
+                        # Извлекаем права доступа
+                        banned_rights = getattr(entity, 'default_banned_rights', None)
+
                         # Собираем базовую информацию в словарь
                         channel_info = {
-                            'id': full_entity.full_chat.id,  # ID канала/группы в Telegram
-                            'title': entity.title,  # Название группы
-                            'username': entity.username if hasattr(entity, 'username') else None,
-                            # Username группы (без @)
-                            'about': full_entity.full_chat.about,  # Описание группы
-                            'participants_count': full_entity.full_chat.participants_count,  # Количество участников
-                            # 'online_count': full_entity.full_chat.online_count,
-                            # 'unread_count': full_entity.full_chat.unread_count,
-                            'participants_hidden': full_entity.full_chat.participants_hidden,  # Участники скрыты
-                            'is_broadcast': entity.broadcast if hasattr(entity, 'broadcast') else False,
-                            'is_megagroup': entity.megagroup if hasattr(entity, 'megagroup') else False,
-
-                            'level': entity.level if hasattr(entity, 'level') else None,
-
-                            'slowmode_seconds': full_entity.full_chat.slowmode_seconds,
-                            'pinned_msg_id': full_entity.full_chat.pinned_msg_id,
-                            'can_view_participants': full_entity.full_chat.can_view_participants,
-                            'reactions_limit': full_entity.full_chat.reactions_limit,
-                            'can_set_username': full_entity.full_chat.can_set_username,
-                            'can_view_stats': full_entity.full_chat.can_view_stats,
-                            'paid_media_allowed': full_entity.full_chat.paid_media_allowed,
-                            'paid_reactions_available': full_entity.full_chat.paid_reactions_available,
-                            'stargifts_available': full_entity.full_chat.stargifts_available,
-                            'paid_messages_available': full_entity.full_chat.paid_messages_available,
-                            'antispam': full_entity.full_chat.antispam,
-                            'translations_disabled': full_entity.full_chat.translations_disabled,
-                            'linked_chat_id': full_entity.full_chat.linked_chat_id,
-                            'stargifts_count': full_entity.full_chat.stargifts_count,
-
-                            'default_banned_rights': entity.default_banned_rights if hasattr(entity,
-                                                                                             'default_banned_rights') else None,
-                            'available_reactions': full_entity.full_chat.available_reactions,
+                            'id': getattr(full_entity.full_chat, 'id', entity.id),
+                            'title': getattr(entity, 'title', 'Без названия'),
+                            'username': getattr(entity, 'username', None),
+                            'about': getattr(full_entity.full_chat, 'about', None),
+                            'participants_count': getattr(full_entity.full_chat, 'participants_count', None),
+                            'participants_hidden': getattr(full_entity.full_chat, 'participants_hidden', False),
+                            'is_broadcast': getattr(entity, 'broadcast', False),
+                            'is_megagroup': getattr(entity, 'megagroup', False),
+                            'level': getattr(entity, 'level', None),
+                            'slowmode_seconds': getattr(full_entity.full_chat, 'slowmode_seconds', 0),
+                            'pinned_msg_id': getattr(full_entity.full_chat, 'pinned_msg_id', None),
+                            'can_view_participants': getattr(full_entity.full_chat, 'can_view_participants', False),
+                            'reactions_limit': getattr(full_entity.full_chat, 'reactions_limit', None),
+                            'can_set_username': getattr(full_entity.full_chat, 'can_set_username', False),
+                            'can_view_stats': getattr(full_entity.full_chat, 'can_view_stats', False),
+                            'paid_media_allowed': getattr(full_entity.full_chat, 'paid_media_allowed', False),
+                            'paid_reactions_available': getattr(full_entity.full_chat, 'paid_reactions_available',
+                                                                False),
+                            'paid_messages_available': getattr(full_entity.full_chat, 'paid_messages_available', False),
+                            'stargifts_available': getattr(full_entity.full_chat, 'stargifts_available', False),
+                            'stargifts_count': getattr(full_entity.full_chat, 'stargifts_count', 0),
+                            'antispam': getattr(full_entity.full_chat, 'antispam', False),
+                            'translations_disabled': getattr(full_entity.full_chat, 'translations_disabled', True),
+                            'linked_chat_id': getattr(full_entity.full_chat, 'linked_chat_id', None),
+                            'default_banned_rights': banned_rights,
+                            'available_reactions': getattr(full_entity.full_chat, 'available_reactions', None),
                         }
+
+                        # Обрезаем описание до 200 символов с многоточием
+                        about_text = channel_info['about']
+                        if about_text and len(about_text) > 200:
+                            about_text = about_text[:200] + '...'
+
+                        # Определяем права на отправку контента из banned_rights
+                        can_send_messages = not (banned_rights.send_messages if banned_rights else False)
+                        can_send_media = not (banned_rights.send_media if banned_rights else False)
+                        can_send_photos = not (banned_rights.send_photos if banned_rights else False)
+                        can_send_videos = not (banned_rights.send_videos if banned_rights else False)
+                        can_send_docs = not (banned_rights.send_docs if banned_rights else False)
+                        can_send_audios = not (banned_rights.send_audios if banned_rights else False)
+                        can_send_voices = not (banned_rights.send_voices if banned_rights else False)
+                        can_send_roundvideos = not (banned_rights.send_roundvideos if banned_rights else False)
+                        can_send_stickers = not (banned_rights.send_stickers if banned_rights else False)
+                        can_send_gifs = not (banned_rights.send_gifs if banned_rights else False)
+                        can_send_polls = not (banned_rights.send_polls if banned_rights else False)
+                        can_embed_links = not (banned_rights.embed_links if banned_rights else False)
+                        can_invite_users = not (banned_rights.invite_users if banned_rights else False)
+
+                        chat_type_display = (
+                            "📢 Канал" if channel_info['is_broadcast']
+                            else "👥 Супергруппа" if channel_info['is_megagroup']
+                            else "👥 Группа"
+                        )
 
                         update_group_send_messages_table(
                             link=link,
                             telegram_id=channel_info['id'],
                             title=channel_info['title'],
                             username=channel_info['username'] if channel_info['username'] else 'отсутствует',
-                            about=(
-                                channel_info['about'][:200] + '...'
-                                if channel_info['about'] and len(channel_info['about']) > 200
-                                else channel_info['about']
-                            ),
+                            about=about_text,
                             participants_count=channel_info['participants_count'],
                             participants_hidden=channel_info['participants_hidden'],
-                            is_broadcast=channel_info['is_broadcast'],
-                            is_megagroup=channel_info['is_megagroup'],
+                            type_display=chat_type_display,
                             level=channel_info['level'],
+                            slowmode_seconds=channel_info['slowmode_seconds'],
+                            can_send_messages=can_send_messages,
+                            can_send_media=can_send_media,
+                            can_send_photos=can_send_photos,
+                            can_send_videos=can_send_videos,
+                            can_send_docs=can_send_docs,
+                            can_send_audios=can_send_audios,
+                            can_send_voices=can_send_voices,
+                            can_send_roundvideos=can_send_roundvideos,
+                            can_send_stickers=can_send_stickers,
+                            can_send_gifs=can_send_gifs,
+                            can_send_polls=can_send_polls,
+                            can_embed_links=can_embed_links,
+                            can_invite_users=can_invite_users,
+                            reactions_limit=channel_info['reactions_limit'],
+                            available_reactions=str(channel_info['available_reactions']) if channel_info[
+                                'available_reactions'] else None,
+                            paid_media_allowed=channel_info['paid_media_allowed'],
+                            paid_reactions_available=channel_info['paid_reactions_available'],
+                            paid_messages_available=channel_info['paid_messages_available'],
+                            stargifts_available=channel_info['stargifts_available'],
+                            stargifts_count=channel_info['stargifts_count'],
+                            antispam=channel_info['antispam'],
+                            translations_disabled=channel_info['translations_disabled'],
+                            linked_chat_id=channel_info['linked_chat_id'],
+                            last_checked=datetime.now(),  # ← Текущее время
+                            is_active=True  # ← Группа активна (проверена сейчас)
                         )
 
                         # Детальный вывод в логи с расшифровкой
-                        logger.info(
-                            f"✅ Канал '{channel_info['title']}' (участников: {channel_info['participants_count']})")
-                        logger.info(
-                            f"ID: {channel_info['id']}, Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}, Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
-                        if channel_info['about']:
-                            logger.info(
-                                f"Описание: {channel_info['about'][:200]}{'...' if len(channel_info['about']) > 200 else ''}")
-                        if channel_info['participants_count']:
-                            logger.info(f"Участников: {channel_info['participants_count']:,}")
-                        else:
-                            logger.info(f"Участников: скрыто")
+                        # logger.info(
+                        #     f"✅ Канал '{channel_info['title']}' (участников: {channel_info['participants_count']})")
+                        # logger.info(
+                        #     f"ID: {channel_info['id']}, Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}, Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
+                        # if channel_info['about']:
+                        #     logger.info(
+                        #         f"Описание: {channel_info['about'][:200]}{'...' if len(channel_info['about']) > 200 else ''}")
+                        # if channel_info['participants_count']:
+                        #     logger.info(f"Участников: {channel_info['participants_count']:,}")
+                        # else:
+                        #     logger.info(f"Участников: скрыто")
 
                         # Slowmode - детальная расшифровка
-                        logger.info(f"\n⏱️  SLOWMODE (ЗАДЕРЖКА МЕЖДУ СООБЩЕНИЯМИ):")
-                        if channel_info['slowmode_seconds']:
-                            seconds = channel_info['slowmode_seconds']
-                            hours = seconds // 3600
-                            minutes = (seconds % 3600) // 60
-                            secs = seconds % 60
-                            time_parts = []
-                            if hours > 0:
-                                time_parts.append(f"{hours} ч")
-                            if minutes > 0:
-                                time_parts.append(f"{minutes} мин")
-                            if secs > 0:
-                                time_parts.append(f"{secs} сек")
-                            time_str = " ".join(time_parts)
-                            logger.info(f"⚠️  АКТИВЕН: {seconds} секунд ({time_str})")
-                            logger.info(f"❌ МОЖНО ПИСАТЬ РАЗ В {time_str.upper()}")
-                        else:
-                            logger.info(f"✅ ОТСУТСТВУЕТ - можно писать без задержки")
+                        # logger.info(f"\n⏱️  SLOWMODE (ЗАДЕРЖКА МЕЖДУ СООБЩЕНИЯМИ):")
+                        # if channel_info['slowmode_seconds']:
+                        #     seconds = channel_info['slowmode_seconds']
+                        #     hours = seconds // 3600
+                        #     minutes = (seconds % 3600) // 60
+                        #     secs = seconds % 60
+                        #     time_parts = []
+                        #     if hours > 0:
+                        #         time_parts.append(f"{hours} ч")
+                        #     if minutes > 0:
+                        #         time_parts.append(f"{minutes} мин")
+                        #     if secs > 0:
+                        #         time_parts.append(f"{secs} сек")
+                        #     time_str = " ".join(time_parts)
+                        #     logger.info(f"⚠️  АКТИВЕН: {seconds} секунд ({time_str})")
+                        #     logger.info(f"❌ МОЖНО ПИСАТЬ РАЗ В {time_str.upper()}")
+                        # else:
+                        #     logger.info(f"✅ ОТСУТСТВУЕТ - можно писать без задержки")
                         # Права на отправку сообщений
-                        logger.info(f"\n🔐 ПРАВА НА ОТПРАВКУ СООБЩЕНИЙ:")
-                        if channel_info['default_banned_rights']:
-                            rights = channel_info['default_banned_rights']
-                            logger.info(
-                                f"{'✅ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: разрешена' if rights.send_messages else '❌ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: ЗАПРЕЩЕНА'}")
-                            # Медиа
-                            if rights.send_media:
-                                logger.info(f"❌ ОТПРАВКА МЕДИА (фото/видео/файлы): ЗАПРЕЩЕНА")
-                            else:
-                                logger.info(f"✅ ОТПРАВКА МЕДИА: разрешена")
-                                # Детализация медиа
-                                media_restrictions = []
-                                if rights.send_photos:
-                                    media_restrictions.append("❌ Фото: запрещены")
-                                if rights.send_videos:
-                                    media_restrictions.append("❌ Видео: запрещены")
-                                if rights.send_docs:
-                                    media_restrictions.append("❌ Документы: запрещены")
-                                if rights.send_audios:
-                                    media_restrictions.append("❌ Аудио: запрещены")
-                                if rights.send_voices:
-                                    media_restrictions.append("❌ Голосовые: запрещены")
-                                if rights.send_roundvideos:
-                                    media_restrictions.append("❌ Кружки: запрещены")
-                                if media_restrictions:
-                                    for r in media_restrictions:
-                                        logger.info(f"      {r}")
+                        # logger.info(f"\n🔐 ПРАВА НА ОТПРАВКУ СООБЩЕНИЙ:")
+                        # if channel_info['default_banned_rights']:
+                        #     rights = channel_info['default_banned_rights']
+                        #     logger.info(
+                        #         f"{'✅ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: разрешена' if rights.send_messages else '❌ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: ЗАПРЕЩЕНА'}")
+                        #     Медиа
+                        # if rights.send_media:
+                        #     logger.info(f"❌ ОТПРАВКА МЕДИА (фото/видео/файлы): ЗАПРЕЩЕНА")
+                        # else:
+                        #     logger.info(f"✅ ОТПРАВКА МЕДИА: разрешена")
+                        # Детализация медиа
+                        # media_restrictions = []
+                        # if rights.send_photos:
+                        #     media_restrictions.append("❌ Фото: запрещены")
+                        # if rights.send_videos:
+                        #     media_restrictions.append("❌ Видео: запрещены")
+                        # if rights.send_docs:
+                        #     media_restrictions.append("❌ Документы: запрещены")
+                        # if rights.send_audios:
+                        #     media_restrictions.append("❌ Аудио: запрещены")
+                        # if rights.send_voices:
+                        #     media_restrictions.append("❌ Голосовые: запрещены")
+                        # if rights.send_roundvideos:
+                        #     media_restrictions.append("❌ Кружки: запрещены")
+                        # if media_restrictions:
+                        #     for r in media_restrictions:
+                        #         logger.info(f"      {r}")
 
-                            logger.info(f"{'✅ СТИКЕРЫ: разрешены' if rights.send_stickers else '❌ СТИКЕРЫ: запрещены'}")
-                            logger.info(f"{'✅ GIF: разрешены' if rights.send_gifs else '❌ GIF: запрещены'}")
-                            logger.info(
-                                f"{'✅ ВСТАВКА ССЫЛОК: разрешена' if rights.embed_links else '❌ ВСТАВКА ССЫЛОК: запрещена'}")
-                            logger.info(f"{'✅ ОПРОСЫ: разрешены' if rights.send_polls else '❌ ОПРОСЫ: запрещены'}")
-                            logger.info(
-                                f"{'✅ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: разрешено' if rights.invite_users else '❌ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: запрещено'}")
-                            if rights.change_info:
-                                logger.info(f"❌ ИЗМЕНЕНИЕ ИНФОРМАЦИИ: запрещено")
-                            if rights.pin_messages:
-                                logger.info(f"❌ ЗАКРЕПЛЕНИЕ СООБЩЕНИЙ: запрещено")
-                        else:
-                            logger.info(f"✅ ВСЕ ПРАВА: разрешены (нет ограничений)")
+                        # logger.info(f"{'✅ СТИКЕРЫ: разрешены' if rights.send_stickers else '❌ СТИКЕРЫ: запрещены'}")
+                        # logger.info(f"{'✅ GIF: разрешены' if rights.send_gifs else '❌ GIF: запрещены'}")
+                        # logger.info(
+                        #     f"{'✅ ВСТАВКА ССЫЛОК: разрешена' if rights.embed_links else '❌ ВСТАВКА ССЫЛОК: запрещена'}")
+                        # logger.info(f"{'✅ ОПРОСЫ: разрешены' if rights.send_polls else '❌ ОПРОСЫ: запрещены'}")
+                        # logger.info(
+                        #     f"{'✅ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: разрешено' if rights.invite_users else '❌ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: запрещено'}")
+                        # if rights.change_info:
+                        #     logger.info(f"❌ ИЗМЕНЕНИЕ ИНФОРМАЦИИ: запрещено")
+                        # if rights.pin_messages:
+                        #     logger.info(f"❌ ЗАКРЕПЛЕНИЕ СООБЩЕНИЙ: запрещено")
+                        # else:
+                        #     logger.info(f"✅ ВСЕ ПРАВА: разрешены (нет ограничений)")
                         # Видимость и приватность
-                        logger.info(f"\n👁️ВИДИМОСТЬ И ПРИВАТНОСТЬ:")
-                        if channel_info['can_view_participants']:
-                            logger.info(f"✅ СПИСОК УЧАСТНИКОВ: можно просматривать")
-                        else:
-                            logger.info(f"❌ СПИСОК УЧАСТНИКОВ: скрыт")
-                        if channel_info['participants_hidden']:
-                            logger.info(f"🔒 УЧАСТНИКИ СКРЫТЫ: от публичного просмотра")
+                        # logger.info(f"\n👁️ВИДИМОСТЬ И ПРИВАТНОСТЬ:")
+                        # if channel_info['can_view_participants']:
+                        #     logger.info(f"✅ СПИСОК УЧАСТНИКОВ: можно просматривать")
+                        # else:
+                        #     logger.info(f"❌ СПИСОК УЧАСТНИКОВ: скрыт")
+                        # if channel_info['participants_hidden']:
+                        #     logger.info(f"🔒 УЧАСТНИКИ СКРЫТЫ: от публичного просмотра")
                         # Реакции
-                        logger.info(f"\n❤️РЕАКЦИИ:")
-                        if channel_info['reactions_limit']:
-                            logger.info(f"Лимит: {channel_info['reactions_limit']} реакций на сообщение")
-                            if channel_info['available_reactions']:
-                                if hasattr(channel_info['available_reactions'], 'reactions'):
-                                    emojis = [r.emoticon for r in channel_info['available_reactions'].reactions if
-                                              hasattr(r, 'emoticon')]
-                                    if emojis:
-                                        logger.info(f"Доступные: {' '.join(emojis)}")
-                                elif hasattr(channel_info['available_reactions'], 'allow_custom'):
-                                    logger.info(f"✅ Разрешены кастомные реакции")
-                        else:
-                            logger.info(f"   Реакции отключены")
+                        # logger.info(f"\n❤️РЕАКЦИИ:")
+                        # if channel_info['reactions_limit']:
+                        #     logger.info(f"Лимит: {channel_info['reactions_limit']} реакций на сообщение")
+                        #     if channel_info['available_reactions']:
+                        #         if hasattr(channel_info['available_reactions'], 'reactions'):
+                        #             emojis = [r.emoticon for r in channel_info['available_reactions'].reactions if
+                        #                       hasattr(r, 'emoticon')]
+                        #             if emojis:
+                        #                 logger.info(f"Доступные: {' '.join(emojis)}")
+                        #         elif hasattr(channel_info['available_reactions'], 'allow_custom'):
+                        #             logger.info(f"✅ Разрешены кастомные реакции")
+                        # else:
+                        #     logger.info(f"   Реакции отключены")
                         # Платные функции
-                        logger.info(f"\n💰 ПЛАТНЫЕ ФУНКЦИИ:")
-                        paid_features = []
-                        if channel_info['paid_media_allowed']:
-                            paid_features.append("✅ Платные медиа: разрешены")
-                        if channel_info['paid_reactions_available']:
-                            paid_features.append("✅ Платные реакции: доступны")
-                        if channel_info['paid_messages_available']:
-                            paid_features.append("✅ Платные сообщения: доступны")
-                        if channel_info['stargifts_available']:
-                            paid_features.append("✅ Звездные подарки: доступны")
-                        if paid_features:
-                            for f in paid_features:
-                                logger.info(f"{f}")
-                        else:
-                            logger.info(f"❌ Платные функции недоступны")
+                        # logger.info(f"\n💰 ПЛАТНЫЕ ФУНКЦИИ:")
+                        # paid_features = []
+                        # if channel_info['paid_media_allowed']:
+                        #     paid_features.append("✅ Платные медиа: разрешены")
+                        # if channel_info['paid_reactions_available']:
+                        #     paid_features.append("✅ Платные реакции: доступны")
+                        # if channel_info['paid_messages_available']:
+                        #     paid_features.append("✅ Платные сообщения: доступны")
+                        # if channel_info['stargifts_available']:
+                        #     paid_features.append("✅ Звездные подарки: доступны")
+                        # if paid_features:
+                        #     for f in paid_features:
+                        #         logger.info(f"{f}")
+                        # else:
+                        #     logger.info(f"❌ Платные функции недоступны")
                         # Дополнительные функции
-                        logger.info(f"\n⚙️  ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ:")
-                        features = []
-                        if channel_info['antispam']:
-                            features.append("🛡️ Антиспам включен")
-                        if not channel_info['translations_disabled']:
-                            features.append("🌐 Автоперевод включен")
-                        else:
-                            features.append("❌ Автоперевод отключен")
-                        if channel_info['can_set_username']:
-                            features.append("✏️ Можно изменять username")
-                        if channel_info['can_view_stats']:
-                            features.append("📈 Доступна статистика")
-                        if channel_info['linked_chat_id']:
-                            features.append(f"🔗 Есть связанный чат (ID: {channel_info['linked_chat_id']})")
-                        if features:
-                            for f in features:
-                                logger.info(f"{f}")
-                        else:
-                            logger.info(f"Стандартные настройки")
+                        # logger.info(f"\n⚙️  ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ:")
+                        # features = []
+                        # if channel_info['antispam']:
+                        #     features.append("🛡️ Антиспам включен")
+                        # if not channel_info['translations_disabled']:
+                        #     features.append("🌐 Автоперевод включен")
+                        # else:
+                        #     features.append("❌ Автоперевод отключен")
+                        # if channel_info['can_set_username']:
+                        #     features.append("✏️ Можно изменять username")
+                        # if channel_info['can_view_stats']:
+                        #     features.append("📈 Доступна статистика")
+                        # if channel_info['linked_chat_id']:
+                        #     features.append(f"🔗 Есть связанный чат (ID: {channel_info['linked_chat_id']})")
+                        # if features:
+                        #     for f in features:
+                        #         logger.info(f"{f}")
+                        # else:
+                        #     logger.info(f"Стандартные настройки")
                         # Боты (если есть)
-                        if hasattr(full_entity, 'users') and full_entity.users:
-                            bots = [u for u in full_entity.users if u.bot]
-                            if bots:
-                                logger.info(f"\n🤖 БОТЫ В ГРУППЕ ({len(bots)}):")
-                                for bot in bots[:5]:  # Показываем первые 5
-
-                                    bot_name = f"@{bot.username}" if bot.username else bot.first_name
-                                    logger.info(f"{bot_name}")
-
-                                    if hasattr(bot, 'bot_active_users') and bot.bot_active_users:
-                                        logger.info(f"Активных пользователей: {bot.bot_active_users:,}")
-                                # if len(bots) > 5:
-                                #     logger.info(f"   ... и ещё {len(bots) - 5} ботов")
+                        # if hasattr(full_entity, 'users') and full_entity.users:
+                        #     bots = [u for u in full_entity.users if u.bot]
+                        #     if bots:
+                        #         logger.info(f"\n🤖 БОТЫ В ГРУППЕ ({len(bots)}):")
+                        #         for bot in bots[:5]:  # Показываем первые 5
+                        #
+                        #             bot_name = f"@{bot.username}" if bot.username else bot.first_name
+                        #             logger.info(f"{bot_name}")
+                        #
+                        #             if hasattr(bot, 'bot_active_users') and bot.bot_active_users:
+                        #                 logger.info(f"Активных пользователей: {bot.bot_active_users:,}")
+                        # if len(bots) > 5:
+                        #     logger.info(f"   ... и ещё {len(bots) - 5} ботов")
                         # logger.info(f"{'=' * 100}\n")
                 except ValueError as e:
                     logger.error(f"❌ Не найдена сущность для '{link}': {e}")

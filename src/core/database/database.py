@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from datetime import datetime  # Импортируем класс datetime
 
 import flet as ft
 import peewee
@@ -64,9 +64,47 @@ class GroupsSendMessages(Model):
     participants_hidden = BooleanField(default=False)  # Участники скрыты
 
     # Тип группы
-    is_broadcast = BooleanField(default=False)  # Является ли канал broadcast
-    is_megagroup = BooleanField(default=False)  # Является ли мегагруппой
+    # is_broadcast = BooleanField(default=False)  # Является ли канал broadcast
+    type_display = TextField(null=True)  # Является ли мегагруппой
     level = IntegerField(null=True)  # Уровень группы
+
+    # Настройки сообщений
+    slowmode_seconds = IntegerField(null=True)  # Задержка между сообщениями (slowmode)
+
+    # Права на отправку (из default_banned_rights)
+    can_send_messages = BooleanField(default=True)  # Можно отправлять текстовые сообщения
+    can_send_media = BooleanField(default=True)  # Можно отправлять медиа
+    can_send_photos = BooleanField(default=True)  # Можно отправлять фото
+    can_send_videos = BooleanField(default=True)  # Можно отправлять видео
+    can_send_docs = BooleanField(default=True)  # Можно отправлять документы
+    can_send_audios = BooleanField(default=True)  # Можно отправлять аудио
+    can_send_voices = BooleanField(default=True)  # Можно отправлять голосовые
+    can_send_roundvideos = BooleanField(default=True)  # Можно отправлять видео-кружки
+    can_send_stickers = BooleanField(default=True)  # Можно отправлять стикеры
+    can_send_gifs = BooleanField(default=True)  # Можно отправлять GIF
+    can_send_polls = BooleanField(default=True)  # Можно отправлять опросы
+    can_embed_links = BooleanField(default=True)  # Можно вставлять ссылки
+    can_invite_users = BooleanField(default=True)  # Можно приглашать пользователей
+
+    # Реакции
+    reactions_limit = IntegerField(null=True)  # Лимит реакций на сообщение
+    available_reactions = TextField(null=True)  # JSON со списком доступных реакций
+
+    # Платные функции
+    paid_media_allowed = BooleanField(default=False)  # Разрешены платные медиа
+    paid_reactions_available = BooleanField(default=False)  # Доступны платные реакции
+    paid_messages_available = BooleanField(default=False)  # Доступны платные сообщения
+    stargifts_available = BooleanField(default=False)  # Доступны звездные подарки
+    stargifts_count = IntegerField(null=True)  # Количество звездных подарков
+
+    # Дополнительные функции
+    antispam = BooleanField(default=False)  # Включен антиспам
+    translations_disabled = BooleanField(default=False)  # Отключен автоперевод
+    linked_chat_id = BigIntegerField(null=True)  # ID связанного чата
+
+    # Метаданные
+    last_checked = DateTimeField(default=datetime.now)  # Время последней проверки
+    is_active = BooleanField(default=True)  # Активна ли группа
 
     class Meta:
         database = db
@@ -74,7 +112,13 @@ class GroupsSendMessages(Model):
 
 
 def update_group_send_messages_table(link, telegram_id, title, username, about, participants_count,
-                                     participants_hidden, is_broadcast, is_megagroup, level):
+                                     participants_hidden, type_display, level, slowmode_seconds,
+                                     can_send_messages, can_send_media, can_send_photos, can_send_videos, can_send_docs,
+                                     can_send_audios, can_send_voices, can_send_roundvideos, can_send_stickers,
+                                     can_send_gifs, can_send_polls, can_embed_links, can_invite_users, reactions_limit,
+                                     available_reactions, paid_media_allowed, paid_reactions_available,
+                                     paid_messages_available, stargifts_available, stargifts_count, antispam,
+                                     translations_disabled, linked_chat_id, last_checked, is_active):
     # Ищем запись по ссылке
     group = GroupsSendMessages.get_or_none(GroupsSendMessages.link == link)
 
@@ -86,9 +130,46 @@ def update_group_send_messages_table(link, telegram_id, title, username, about, 
         group.participants_count = participants_count  # Количество участников
         group.participants_hidden = participants_hidden  # Участники скрыты
 
-        group.is_broadcast = is_broadcast  # Является ли канал broadcast
-        group.is_megagroup = is_megagroup  # Является ли мегагруппой
+        # group.is_broadcast = is_broadcast  # Является ли канал broadcast
+        group.type_display = type_display  # Является ли мегагруппой
+
         group.level = level  # Уровень группы
+
+        group.slowmode_seconds = slowmode_seconds  # Задержка между сообщениями (slowmode)
+        group.can_send_messages = can_send_messages  # Можно отправлять текстовые сообщения
+
+        group.can_send_media = can_send_media  # Можно отправлять медиа
+        group.can_send_photos = can_send_photos  # Можно отправлять фото
+        group.can_send_videos = can_send_videos  # Можно отправлять видео
+        group.can_send_docs = can_send_docs  # Можно отправлять документы
+        group.can_send_audios = can_send_audios  # Можно отправлять аудио
+        group.can_send_voices = can_send_voices  # Можно отправлять голосовые
+        group.can_send_roundvideos = can_send_roundvideos  # Можно отправлять видео-кружки
+        group.can_send_stickers = can_send_stickers  # Можно отправлять стикеры
+        group.can_send_gifs = can_send_gifs  # Можно отправлять GIF
+        group.can_send_polls = can_send_polls  # Можно отправлять опросы
+        group.can_embed_links = can_embed_links  # Можно вставлять ссылки
+        group.can_invite_users = can_invite_users  # Можно приглашать пользователей
+
+        # Реакции
+        group.reactions_limit = reactions_limit  # Лимит реакций на сообщение
+        group.available_reactions = available_reactions  # JSON со списком доступных реакций
+
+        # Платные функции
+        group.paid_media_allowed = paid_media_allowed  # Разрешены платные медиа
+        group.paid_reactions_available = paid_reactions_available  # Доступны платные реакции
+        group.paid_messages_available = paid_messages_available  # Доступны платные сообщения
+        group.stargifts_available = stargifts_available  # Доступны звездные подарки
+        group.stargifts_count = stargifts_count  # Количество звездных подарков
+
+        # Дополнительные функции
+        group.antispam = antispam  # Включен антиспам
+        group.translations_disabled = translations_disabled  # Отключен автоперевод
+        group.linked_chat_id = linked_chat_id  # ID связанного чата
+
+        # Метаданные
+        group.last_checked = last_checked  # Время последней проверки
+        group.is_active = is_active  # Активна ли группа
 
         group.save()
         print(f"Обновлён telegram_id для {link}: {telegram_id}")
@@ -127,7 +208,7 @@ class GroupsAndChannels(Model):
     about = TextField(null=True)
     link = CharField(max_length=255, null=True)
     members_count = IntegerField(default=0)
-    parsing_time = DateTimeField(default=datetime.datetime.now)
+    parsing_time = DateTimeField(default=datetime.now)
 
     class Meta:
         database = db
