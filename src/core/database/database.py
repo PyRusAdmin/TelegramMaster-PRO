@@ -61,7 +61,7 @@ class GroupsSendMessages(Model):
 
     # Статистика участников
     participants_count = IntegerField(null=True)  # Количество участников
-    participants_hidden = BooleanField(default=False)  # Участники скрыты
+    participants_hidden = TextField(null=True)  # Участники скрыты
 
     # Тип группы
     # is_broadcast = BooleanField(default=False)  # Является ли канал broadcast
