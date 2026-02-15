@@ -63,13 +63,18 @@ class GroupsSendMessages(Model):
     participants_count = IntegerField(null=True)  # Количество участников
     participants_hidden = BooleanField(default=False)  # Участники скрыты
 
+    # Тип группы
+    is_broadcast = BooleanField(default=False)  # Является ли канал broadcast
+    is_megagroup = BooleanField(default=False)  # Является ли мегагруппой
+    level = IntegerField(null=True)  # Уровень группы
+
     class Meta:
         database = db
         table_name = "group_send_messages"
 
 
 def update_group_send_messages_table(link, telegram_id, title, username, about, participants_count,
-                                     participants_hidden):
+                                     participants_hidden, is_broadcast, is_megagroup, level):
     # Ищем запись по ссылке
     group = GroupsSendMessages.get_or_none(GroupsSendMessages.link == link)
 
@@ -80,6 +85,11 @@ def update_group_send_messages_table(link, telegram_id, title, username, about, 
         group.about = about  # Описание группы
         group.participants_count = participants_count  # Количество участников
         group.participants_hidden = participants_hidden  # Участники скрыты
+
+        group.is_broadcast = is_broadcast  # Является ли канал broadcast
+        group.is_megagroup = is_megagroup  # Является ли мегагруппой
+        group.level = level  # Уровень группы
+
         group.save()
         print(f"Обновлён telegram_id для {link}: {telegram_id}")
     else:

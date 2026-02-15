@@ -424,6 +424,9 @@ class SendTelegramMessages:
                             'participants_hidden': full_entity.full_chat.participants_hidden,  # Участники скрыты
                             'is_broadcast': entity.broadcast if hasattr(entity, 'broadcast') else False,
                             'is_megagroup': entity.megagroup if hasattr(entity, 'megagroup') else False,
+
+                            'level': entity.level if hasattr(entity, 'level') else None,
+
                             'slowmode_seconds': full_entity.full_chat.slowmode_seconds,
                             'pinned_msg_id': full_entity.full_chat.pinned_msg_id,
                             'can_view_participants': full_entity.full_chat.can_view_participants,
@@ -438,7 +441,7 @@ class SendTelegramMessages:
                             'translations_disabled': full_entity.full_chat.translations_disabled,
                             'linked_chat_id': full_entity.full_chat.linked_chat_id,
                             'stargifts_count': full_entity.full_chat.stargifts_count,
-                            'level': entity.level if hasattr(entity, 'level') else None,
+
                             'default_banned_rights': entity.default_banned_rights if hasattr(entity,
                                                                                              'default_banned_rights') else None,
                             'available_reactions': full_entity.full_chat.available_reactions,
@@ -456,6 +459,9 @@ class SendTelegramMessages:
                             ),
                             participants_count=channel_info['participants_count'],
                             participants_hidden=channel_info['participants_hidden'],
+                            is_broadcast=channel_info['is_broadcast'],
+                            is_megagroup=channel_info['is_megagroup'],
+                            level=channel_info['level'],
                         )
 
                         # Детальный вывод в логи с расшифровкой
