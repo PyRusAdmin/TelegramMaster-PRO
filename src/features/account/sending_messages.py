@@ -276,8 +276,9 @@ class SendTelegramMessages:
                         break  # Прерываем работу и меняем аккаунт
                     except FloodWaitError as e:
                         await self.app_logger.log_and_display(
-                            message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
-                            level="error")
+                            message=f"{translations['ru']['errors']['flood_wait']}{e}",
+                            level="error"
+                        )
                         await asyncio.sleep(e.seconds)
                     except UserBannedInChannelError:
                         await self.app_logger.log_and_display(
@@ -310,7 +311,7 @@ class SendTelegramMessages:
                             max_seconds=max_seconds
                         )  # Прерываем работу и меняем аккаунт
 
-                await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
+                # await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
 
                 await self.app_logger.log_and_display(message="🔚 Конец отправки сообщений + файлов по чатам")
                 await self.app_logger.end_time(start)
