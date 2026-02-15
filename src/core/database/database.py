@@ -64,7 +64,6 @@ class GroupsSendMessages(Model):
     participants_hidden = TextField(null=True)  # Участники скрыты
 
     # Тип группы
-    # is_broadcast = BooleanField(default=False)  # Является ли канал broadcast
     type_display = TextField(null=True)  # Является ли мегагруппой
     level = IntegerField(null=True)  # Уровень группы
 
@@ -72,7 +71,7 @@ class GroupsSendMessages(Model):
     slowmode_seconds = IntegerField(null=True)  # Задержка между сообщениями (slowmode)
 
     # Права на отправку (из default_banned_rights)
-    can_send_messages = BooleanField(default=True)  # Можно отправлять текстовые сообщения
+    can_send_messages = TextField(null=True)  # Можно отправлять текстовые сообщения
     can_send_media = BooleanField(default=True)  # Можно отправлять медиа
     can_send_photos = BooleanField(default=True)  # Можно отправлять фото
     can_send_videos = BooleanField(default=True)  # Можно отправлять видео
