@@ -125,7 +125,8 @@ class SendTelegramMessages:
                 # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                 start = await self.app_logger.start_time()
                 client: TelegramClient = await self.connect.client_connect_string_session(
-                    session_name=account_drop_down_list.value)
+                    session_name=account_drop_down_list.value
+                )
 
                 @client.on(events.NewMessage(incoming=True))  # Обработчик личных сообщений
                 async def handle_private_messages(event):

@@ -28,6 +28,7 @@ logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", 
 
 create_database()
 
+
 async def main_view(page: ft.Page):
     """
     Главное меню программы
@@ -138,11 +139,10 @@ async def main_view(page: ft.Page):
                                     text=translations["ru"]["menu"]["account_connect"],
                                     route="/account_connection_menu",
                                 ),
-                                await gui_program.menu_button(
-                                    text=translations["ru"]["message_sending_menu"][
-                                        "sending_personal_messages_with_limits"],
-                                    route="/sending_files_to_personal_account_with_limits",
-                                ),
+                                # await gui_program.menu_button(
+                                #     text=translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
+                                #     route="/sending_files_to_personal_account_with_limits",
+                                # ),
                                 await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["reactions"],
                                     route="/working_with_reactions",
@@ -358,10 +358,10 @@ async def main(page: ft.Page):
                                 await gui_program.menu_button(
                                     translations["ru"]["menu"]["account_connect"],
                                     "/account_connection_menu"),
-                                await gui_program.menu_button(
-                                    translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
-                                    "/sending_files_to_personal_account_with_limits"
-                                ),
+                                # await gui_program.menu_button(
+                                #     translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
+                                #     "/sending_files_to_personal_account_with_limits"
+                                # ),
                                 await gui_program.menu_button(
                                     translations["ru"]["menu"]["reactions"],
                                     "/working_with_reactions"

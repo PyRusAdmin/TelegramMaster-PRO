@@ -1,8 +1,8 @@
 ru:
   message_sending_menu:
-    sending_messages_via_chats: "💬 Рассылка сообщений по чатам"
-    sending_messages_files_via_chats: "💬 Рассылка сообщений по чатам"
-    sending_personal_messages_with_limits: "📨 Отправка сообщений в личку"
+    sending_messages_via_chats: "💬 Рассылка сообщений"
+    sending_messages_files_via_chats: "💬 Рассылка сообщений"
+    sending_personal_messages_with_limits: "💬 Рассылка сообщений"
 
   edit_bio_menu:
     changing_the_username: "🔄 Изменение username"
