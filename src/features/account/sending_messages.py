@@ -56,13 +56,11 @@ class SendTelegramMessages:
             label="Время сна от",
             expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
             hint_text="Введите время",
-            # border_radius=5
         )
         self.tb_time_to = ft.TextField(
             label="Время сна до",
             expand=True,  # Полноразмерное расширение
             hint_text="Введите время",
-            # border_radius=5
         )
         # Поле для формирования списка чатов
         self.chat_list_field = ft.TextField(
