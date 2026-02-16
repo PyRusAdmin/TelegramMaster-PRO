@@ -84,6 +84,17 @@ class SendTelegramMessages:
             label="Введите лимит на сообщения",
             expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
         )
+        # Кнопки-переключатели
+        self.send_message_personal_switch = ft.CupertinoSwitch(
+            label="Рассылка сообщений в личку",
+            value=False,
+            disabled=True
+        )
+        self.send_message_group_switch = ft.CupertinoSwitch(
+            label="Рассылка сообщений по чатам",
+            value=False,
+            disabled=True
+        )
 
     """Рассылка сообщений в личку"""
 
@@ -706,6 +717,14 @@ class SendTelegramMessages:
                     ),
                     list_view,  # Отображение логов 📝
                     account_drop_down_list,  # Выпадающий список с аккаунтами
+
+                    ft.Row(
+                        controls=[
+                            self.send_message_personal_switch,  # Рассылка сообщений в личку
+                            self.send_message_group_switch,  # Рассылка сообщений по чатам
+                        ]
+                    ),
+
                     ft.Row(
                         controls=[
                             self.tb_time_from,
