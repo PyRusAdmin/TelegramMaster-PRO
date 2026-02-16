@@ -96,133 +96,6 @@ class SendTelegramMessages:
             disabled=True
         )
 
-    """Рассылка сообщений в личку"""
-
-    async def send_files_to_personal_chats(self) -> None:
-        """
-        Отображает интерфейс для отправки файлов в личные сообщения пользователей Telegram.
-
-        :return: None
-        """
-
-        # Группа полей ввода для времени сна
-
-        async def button_clicked(_):
-            """Обработчик кнопки "Готово" """
-            try:
-                min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
-                    min_seconds=self.tb_time_from.value,
-                    max_seconds=self.tb_time_to.value
-                )
-                start = await self.app_logger.start_time()
-                # Просим пользователя ввести расширение сообщения
-                for session_name in self.session_string:  # Перебор всех сессий
-                    # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
-                    client: TelegramClient = await self.connect.client_connect_string_session(
-                        session_name=session_name
-                    )
-                    try:
-                        for username in await select_records_with_limit(limit=int(self.limits.value),
-                                                                        app_logger=self.app_logger):
-                            logger.info(f"Отправляем сообщение в личку {username}")
-                            await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
-                            try:
-                                user_to_add = await client.get_input_entity(username)
-                                messages, files = await self.all_find_and_all_files()
-                                await self.send_content(
-                                    client=client,
-                                    target=user_to_add,
-                                    messages=messages,
-                                    files=files,
-                                    TIME_1=self.tb_time_from.value,
-                                    TIME_2=self.tb_time_to.value
-                                )
-                                await self.app_logger.log_and_display(
-                                    message=f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
-                                await self.utils.record_inviting_results(
-                                    time_range_1=min_seconds,
-                                    time_range_2=max_seconds,
-                                    username=username
-                                )
-                                await self.app_logger.log_and_display(message=f"Смена аккаунта, ожидайте 8 секунд")
-                                time.sleep(8)
-                            except FloodWaitError as e:
-                                await self.app_logger.log_and_display(
-                                    message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
-                                    level="error")
-                                # await self.utils.random_dream(
-                                #     min_seconds=min_seconds,
-                                #     max_seconds=max_seconds
-                                # )
-                                break  # Прерываем работу и меняем аккаунт
-                            except PeerFloodError:
-                                await self.utils.random_dream(
-                                    min_seconds=min_seconds,
-                                    max_seconds=max_seconds
-                                )
-                                break  # Прерываем работу и меняем аккаунт
-                            except UserNotMutualContactError:
-                                await self.app_logger.log_and_display(
-                                    message=translations["ru"]["errors"]["user_not_mutual_contact"])
-                            except (UserIdInvalidError, UsernameNotOccupiedError, ValueError, UsernameInvalidError):
-                                await self.app_logger.log_and_display(
-                                    message=translations["ru"]["errors"]["invalid_username"])
-                            except ChatWriteForbiddenError:
-                                await self.app_logger.log_and_display(
-                                    message=translations["ru"]["errors"]["chat_write_forbidden"])
-                                await self.utils.random_dream(
-                                    min_seconds=min_seconds,
-                                    max_seconds=max_seconds
-                                )
-                                break  # Прерываем работу и меняем аккаунт
-                            except (TypeError, UnboundLocalError):
-                                continue  # Записываем ошибку в software_database.db и продолжаем работу
-                    except KeyError:
-                        sys.exit(1)
-                    await self.app_logger.end_time(start=start)
-                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                        message="🔚 Конец рассылки сообщений"
-                    )
-            except ValueError as e:
-                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                    message=f"❌ Ошибка валидации времени: {e}"
-                )
-            except Exception as error:
-                logger.exception(error)
-            self.page.update()
-
-        # Разделение интерфейса на верхнюю и нижнюю части
-        self.page.views.append(
-            ft.View(
-                route="/sending_messages_via_chats_menu",
-                appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
-                controls=[
-                    await self.gui_program.create_gradient_text(
-                        text="Отправка сообщений в личку"
-                    ),
-                    list_view,  # Отображение логов 📝
-                    ft.Row(
-                        controls=[
-                            self.tb_time_from,
-                            self.tb_time_to
-                        ],
-                        spacing=20,
-                    ),
-                    self.limits,
-                    ft.Column(  # Верхняя часть: контрольные элементы
-                        controls=[
-                            ft.Button(
-                                content=translations["ru"]["buttons"]["done"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=button_clicked
-                            )
-                        ]
-                    )
-                ]
-            )
-        )
-
     """Рассылка сообщений по чатам"""
 
     async def sending_messages_files_via_chats(self) -> None:
@@ -276,9 +149,7 @@ class SendTelegramMessages:
                             client=client,
                             target=group_link,
                             messages=messages,
-                            files=files,
-                            min_seconds=min_seconds,
-                            max_seconds=max_seconds
+                            files=files
                         )
                     except ChannelPrivateError:
                         await self.app_logger.log_and_display(
@@ -330,12 +201,10 @@ class SendTelegramMessages:
             except Exception as error:
                 logger.exception(error)
 
-        async def send_content(client, target, messages, files, min_seconds, max_seconds):
+        async def send_content(client, target, messages, files):
             """
             Отправляет сообщения и файлы в указанную цель (личку или группу).
 
-            :param max_seconds:
-            :param min_seconds:
             :param client: Экземпляр клиента Telegram
             :param target: Ссылка на группу или личку
             :param messages: Список сообщений для отправки
@@ -676,6 +545,133 @@ class SendTelegramMessages:
                 except Exception as e:
                     logger.error(f"❌ Ошибка обработки '{link}': {str(e)[:100]}")
 
+        """Рассылка сообщений в личку"""
+
+        async def send_files_to_personal_chats() -> None:
+            """
+            Отображает интерфейс для отправки файлов в личные сообщения пользователей Telegram.
+
+            :return: None
+            """
+
+            # Группа полей ввода для времени сна
+
+            async def button_clicked(_):
+                """Обработчик кнопки "Готово" """
+                try:
+                    min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
+                        min_seconds=self.tb_time_from.value,
+                        max_seconds=self.tb_time_to.value
+                    )
+                    start = await self.app_logger.start_time()
+                    # Просим пользователя ввести расширение сообщения
+                    for session_name in self.session_string:  # Перебор всех сессий
+                        # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
+                        client: TelegramClient = await self.connect.client_connect_string_session(
+                            session_name=session_name
+                        )
+                        try:
+                            for username in await select_records_with_limit(limit=int(self.limits.value),
+                                                                            app_logger=self.app_logger):
+                                logger.info(f"Отправляем сообщение в личку {username}")
+                                await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
+                                try:
+                                    user_to_add = await client.get_input_entity(username)
+                                    messages, files = await self.all_find_and_all_files()
+                                    await self.send_content(
+                                        client=client,
+                                        target=user_to_add,
+                                        messages=messages,
+                                        files=files,
+                                        TIME_1=self.tb_time_from.value,
+                                        TIME_2=self.tb_time_to.value
+                                    )
+                                    await self.app_logger.log_and_display(
+                                        message=f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
+                                    await self.utils.record_inviting_results(
+                                        time_range_1=min_seconds,
+                                        time_range_2=max_seconds,
+                                        username=username
+                                    )
+                                    await self.app_logger.log_and_display(message=f"Смена аккаунта, ожидайте 8 секунд")
+                                    time.sleep(8)
+                                except FloodWaitError as e:
+                                    await self.app_logger.log_and_display(
+                                        message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
+                                        level="error")
+                                    # await self.utils.random_dream(
+                                    #     min_seconds=min_seconds,
+                                    #     max_seconds=max_seconds
+                                    # )
+                                    break  # Прерываем работу и меняем аккаунт
+                                except PeerFloodError:
+                                    await self.utils.random_dream(
+                                        min_seconds=min_seconds,
+                                        max_seconds=max_seconds
+                                    )
+                                    break  # Прерываем работу и меняем аккаунт
+                                except UserNotMutualContactError:
+                                    await self.app_logger.log_and_display(
+                                        message=translations["ru"]["errors"]["user_not_mutual_contact"])
+                                except (UserIdInvalidError, UsernameNotOccupiedError, ValueError, UsernameInvalidError):
+                                    await self.app_logger.log_and_display(
+                                        message=translations["ru"]["errors"]["invalid_username"])
+                                except ChatWriteForbiddenError:
+                                    await self.app_logger.log_and_display(
+                                        message=translations["ru"]["errors"]["chat_write_forbidden"])
+                                    await self.utils.random_dream(
+                                        min_seconds=min_seconds,
+                                        max_seconds=max_seconds
+                                    )
+                                    break  # Прерываем работу и меняем аккаунт
+                                except (TypeError, UnboundLocalError):
+                                    continue  # Записываем ошибку в software_database.db и продолжаем работу
+                        except KeyError:
+                            sys.exit(1)
+                        await self.app_logger.end_time(start=start)
+                        await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                            message="🔚 Конец рассылки сообщений"
+                        )
+                except ValueError as e:
+                    await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+                        message=f"❌ Ошибка валидации времени: {e}"
+                    )
+                except Exception as error:
+                    logger.exception(error)
+                self.page.update()
+
+            # Разделение интерфейса на верхнюю и нижнюю части
+            # self.page.views.append(
+            #     ft.View(
+            #         route="/sending_messages_via_chats_menu",
+            #         appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
+            #         controls=[
+            #             await self.gui_program.create_gradient_text(
+            #                 text="Отправка сообщений в личку"
+            #             ),
+            #             list_view,  # Отображение логов 📝
+            #             ft.Row(
+            #                 controls=[
+            #                     self.tb_time_from,
+            #                     self.tb_time_to
+            #                 ],
+            #                 spacing=20,
+            #             ),
+            #             self.limits,
+            #             ft.Column(  # Верхняя часть: контрольные элементы
+            #                 controls=[
+            #                     ft.Button(
+            #                         content=translations["ru"]["buttons"]["done"],
+            #                         width=WIDTH_WIDE_BUTTON,
+            #                         height=BUTTON_HEIGHT,
+            #                         on_click=button_clicked
+            #                     )
+            #                 ]
+            #             )
+            #         ]
+            #     )
+            # )
+
         async def button_clicked(_):
             """
             Обработчик кнопки "Готово"
@@ -713,7 +709,7 @@ class SendTelegramMessages:
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
                 controls=[
                     await self.gui_program.create_gradient_text(
-                        text=translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"]
+                        text=f"{translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"]} и Отправка сообщений в личку"
                     ),
                     list_view,  # Отображение логов 📝
                     account_drop_down_list,  # Выпадающий список с аккаунтами
