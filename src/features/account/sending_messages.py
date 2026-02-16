@@ -20,8 +20,10 @@ from src.core.configs import (
     BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages
 )
 from src.core.database.account import getting_account, get_account_list
-from src.core.database.database import select_records_with_limit, write_group_send_message_table, \
-    get_links_table_group_send_messages, update_group_send_messages_table
+from src.core.database.database import (
+    select_records_with_limit, write_group_send_message_table, get_links_table_group_send_messages,
+    update_group_send_messages_table
+)
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.subscribe import Subscribe
