@@ -725,6 +725,8 @@ class SendTelegramMessages:
                         ]
                     ),
 
+                    self.limits,  # Ввод лимита на аккаунт при рассылках в личку
+
                     ft.Row(
                         controls=[
                             self.tb_time_from,
