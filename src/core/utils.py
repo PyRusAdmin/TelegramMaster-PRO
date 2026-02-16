@@ -7,7 +7,7 @@ import random  # Импортируем модуль random, чтобы гене
 
 from loguru import logger
 
-from src.core.database.database import delete_row_db, get_writing_group_links
+from src.core.database.database import delete_row_db
 from src.gui.gui import AppLogger
 
 
