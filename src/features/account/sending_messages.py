@@ -83,6 +83,7 @@ class SendTelegramMessages:
         self.limits = ft.TextField(
             label="Введите лимит на сообщения",
             expand=True,  # Полноразмерное расширение (при изменении размера окна, подстраивается под размер)
+            hint_text="Введите лимит на сообщения",
         )
         # Кнопки-переключатели
         self.send_message_personal_switch = ft.CupertinoSwitch(
@@ -702,6 +703,14 @@ class SendTelegramMessages:
                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                     message=f"❌ Ошибка валидации времени: {e}"
                 )
+
+        # После успешного выбора файла (включаем переключатели):
+        self.send_message_personal_switch.disabled = False
+        self.send_message_group_switch.disabled = False
+
+        # Выравнивание элементов управления
+        self.send_message_personal_switch.expand = True
+        self.send_message_group_switch.expand = True
 
         # Разделение интерфейса на верхнюю и нижнюю части
         self.page.views.append(
