@@ -623,10 +623,10 @@ class InvitingToAGroup:
                 message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                 level="error"
             )
-            await self.utils.random_dream(
-                min_seconds=time_inviting_1,
-                max_seconds=time_inviting_2
-            )
+            # await self.utils.random_dream(
+            #     min_seconds=time_inviting_1,
+            #     max_seconds=time_inviting_2
+            # )
             # await client.disconnect()  # Прерываем работу и меняем аккаунт
             # return # Прерываем выполнение, чтобы не перегружать API
             raise ConnectionError("Клиент отключен из-за ограничения Flood Wait")  # ⬅️ НОВОЕ!

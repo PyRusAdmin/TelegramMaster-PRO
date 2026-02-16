@@ -3,17 +3,16 @@ import asyncio
 import random
 import sqlite3
 
+from loguru import logger
 from telethon.errors import (
     ChannelPrivateError, SessionRevokedError, UserDeactivatedBanError, UsernameInvalidError, InviteRequestSentError,
     FloodWaitError, PeerFloodError, ChannelsTooMuchError
 )
 from telethon.tl.functions.channels import JoinChannelRequest
 
-from src.core.configs import time_subscription_1, time_subscription_2
 from src.core.utils import Utils
 from src.gui.gui import AppLogger
 from src.locales.translations_loader import translations
-from loguru import logger
 
 
 class Subscribe:
@@ -66,7 +65,7 @@ class Subscribe:
             await asyncio.sleep(random.randrange(50, 60))
         except FloodWaitError as e:
             await self.app_logger.log_and_display(f"{translations["ru"]["errors"]["flood_wait"]}{e}", level="error")
-            await self.utils.random_dream(min_seconds=time_subscription_1, max_seconds=time_subscription_2)
+            # await self.utils.random_dream(min_seconds=min_seconds, max_seconds=max_seconds)
         except InviteRequestSentError:
             await self.app_logger.log_and_display(
                 f"❌ Попытка подписки на группу / канал {groups}. Действия будут доступны после одобрения администратором на вступление в группу")
