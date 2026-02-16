@@ -578,13 +578,11 @@ class SendTelegramMessages:
                             try:
                                 user_to_add = await client.get_input_entity(username)
                                 messages, files = await self.all_find_and_all_files()
-                                await self.send_content(
+                                await send_content(
                                     client=client,
                                     target=user_to_add,
                                     messages=messages,
-                                    files=files,
-                                    TIME_1=self.tb_time_from.value,
-                                    TIME_2=self.tb_time_to.value
+                                    files=files
                                 )
                                 await self.app_logger.log_and_display(
                                     message=f"Отправляем сообщение в личку {username}. Файл {files} отправлен пользователю {username}.")
@@ -682,20 +680,18 @@ class SendTelegramMessages:
             try:
                 if self.send_message_personal_switch.value:
                     logger.info("Выбрано рассылка сообщений в личку")
+
+                    await send_files_to_personal_chats()
+
                 if self.send_message_group_switch.value:
                     logger.info("Выбрано рассылка сообщений по чатам")
-
                     write_group_send_message_table(self.chat_list_field.value)
-
                     writing_group_links = get_links_table_group_send_messages()
-
                     # chat_list_fields = await self.utils.get_chat_list(self.chat_list_field.value)
-
                     if not writing_group_links:
                         await self.gui_program.show_notification(
                             message="❌ Нет чатов для рассылки. Укажите ссылки или сохраните группы в настройках.")
                         return
-
                     try:
                         min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
                             min_seconds=self.tb_time_from.value,
@@ -710,7 +706,6 @@ class SendTelegramMessages:
                         await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                             message=f"❌ Ошибка валидации времени: {e}"
                         )
-
             except Exception as e:
                 logger.exception(e)
 
