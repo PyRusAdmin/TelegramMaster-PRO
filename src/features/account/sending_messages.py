@@ -358,10 +358,10 @@ class SendTelegramMessages:
                         await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
                         await self.app_logger.log_and_display(f"Сообщение и файл отправлены: {target}")
 
-            await self.utils.random_dream(
-                min_seconds=min_seconds,
-                max_seconds=max_seconds
-            )  # Прерываем работу и меняем аккаунт
+            # await self.utils.random_dream(
+            #     min_seconds=min_seconds,
+            #     max_seconds=max_seconds
+            # )  # Прерываем работу и меняем аккаунт
 
         async def checking_links_group(_):
             """Проверка ссылок пользователя для рассылки с детальной информацией"""
