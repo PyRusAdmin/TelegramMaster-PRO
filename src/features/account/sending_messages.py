@@ -139,10 +139,10 @@ class SendTelegramMessages:
                                 await self.app_logger.log_and_display(
                                     message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                     level="error")
-                                await self.utils.random_dream(
-                                    min_seconds=min_seconds,
-                                    max_seconds=max_seconds
-                                )
+                                # await self.utils.random_dream(
+                                #     min_seconds=min_seconds,
+                                #     max_seconds=max_seconds
+                                # )
                                 break  # Прерываем работу и меняем аккаунт
                             except PeerFloodError:
                                 await self.utils.random_dream(
@@ -293,7 +293,7 @@ class SendTelegramMessages:
                         break  # Прерываем работу и меняем аккаунт
                     except SlowModeWaitError as e:
                         await self.app_logger.log_and_display(
-                            message=translations["ru"]["errors"]["slow_mode_wait"])
+                            message=f"{translations["ru"]["errors"]["slow_mode_wait"]}{e}")
                         await asyncio.sleep(e.seconds)
                     except ValueError:
                         await self.app_logger.log_and_display(
@@ -323,6 +323,8 @@ class SendTelegramMessages:
             """
             Отправляет сообщения и файлы в указанную цель (личку или группу).
 
+            :param max_seconds:
+            :param min_seconds:
             :param client: Экземпляр клиента Telegram
             :param target: Ссылка на группу или личку
             :param messages: Список сообщений для отправки
