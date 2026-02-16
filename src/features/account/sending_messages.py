@@ -704,6 +704,16 @@ class SendTelegramMessages:
                     message=f"❌ Ошибка валидации времени: {e}"
                 )
 
+        async def launching_action():
+            """Запускает процесс рассылки сообщений в личку или по чатам"""
+            try:
+                if self.send_message_personal_switch.value:
+                    logger.info("Выбрано рассылка сообщений в личку")
+                if self.send_message_group_switch.value:
+                    logger.info("Выбрано рассылка сообщений по чатам")
+            except Exception as e:
+                logger.exception(e)
+
         # После успешного выбора файла (включаем переключатели):
         self.send_message_personal_switch.disabled = False
         self.send_message_group_switch.disabled = False
@@ -761,7 +771,7 @@ class SendTelegramMessages:
                                 content=translations["ru"]["buttons"]["done"],
                                 width=WIDTH_WIDE_BUTTON,
                                 height=BUTTON_HEIGHT,
-                                on_click=button_clicked
+                                on_click=launching_action
                             ),
                         ],
                     ),
