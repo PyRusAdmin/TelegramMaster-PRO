@@ -556,13 +556,13 @@ class SendTelegramMessages:
         #     """
         # Группа полей ввода для времени сна
 
-        async def send_files_to_personal_chats(_):
+        async def send_files_to_personal_chats(min_seconds, max_seconds):
             """Обработчик кнопки "Готово" Рассылка сообщений в личку"""
             try:
-                min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
-                    min_seconds=self.tb_time_from.value,
-                    max_seconds=self.tb_time_to.value
-                )
+                # min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
+                #     min_seconds=self.tb_time_from.value,
+                #     max_seconds=self.tb_time_to.value
+                # )
                 start = await self.app_logger.start_time()
                 # Просим пользователя ввести расширение сообщения
                 for session_name in self.session_string:  # Перебор всех сессий
@@ -681,7 +681,15 @@ class SendTelegramMessages:
                 if self.send_message_personal_switch.value:
                     logger.info("Выбрано рассылка сообщений в личку")
 
-                    await send_files_to_personal_chats()
+                    min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
+                        min_seconds=self.tb_time_from.value,
+                        max_seconds=self.tb_time_to.value
+                    )
+
+                    await send_files_to_personal_chats(
+                        min_seconds=min_seconds,
+                        max_seconds=max_seconds
+                    )
 
                 if self.send_message_group_switch.value:
                     logger.info("Выбрано рассылка сообщений по чатам")
