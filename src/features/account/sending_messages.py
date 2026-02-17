@@ -466,7 +466,8 @@ class SendTelegramMessages:
                             logger.info(f"Отправляем сообщение в личку {username}")
                             await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
                             try:
-                                user_to_add = await client.get_input_entity(username)
+                                # user_to_add = await client.get_input_entity(username)
+                                user_to_add = await client.get_entity(username)
                                 messages, files = await self.all_find_and_all_files()
                                 await send_content(
                                     client=client,
@@ -494,12 +495,26 @@ class SendTelegramMessages:
                                     max_seconds=max_seconds
                                 )
                                 break  # Прерываем работу и меняем аккаунт
-                            except UserNotMutualContactError:
+                            except UserNotMutualContactError as e:
                                 await self.app_logger.log_and_display(
                                     message=translations["ru"]["errors"]["user_not_mutual_contact"])
-                            except (UserIdInvalidError, UsernameNotOccupiedError, ValueError, UsernameInvalidError):
+                                logger.error(e)
+                            except UserIdInvalidError as e:
                                 await self.app_logger.log_and_display(
                                     message=translations["ru"]["errors"]["invalid_username"])
+                                logger.error(e)
+                            except UsernameNotOccupiedError as e:
+                                await self.app_logger.log_and_display(
+                                    message=translations["ru"]["errors"]["invalid_username"])
+                                logger.error(e)
+                            except ValueError as e:
+                                await self.app_logger.log_and_display(
+                                    message=translations["ru"]["errors"]["invalid_username"])
+                                logger.error(e)
+                            except UsernameInvalidError as e:
+                                await self.app_logger.log_and_display(
+                                    message=translations["ru"]["errors"]["invalid_username"])
+                                logger.error(e)
                             except ChatWriteForbiddenError:
                                 await self.app_logger.log_and_display(
                                     message=translations["ru"]["errors"]["chat_write_forbidden"])
