@@ -21,8 +21,7 @@ from src.core.configs import (
 )
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import (
-    select_records_with_limit, write_group_send_message_table, get_links_table_group_send_messages,
-    update_group_send_messages_table
+    write_group_send_message_table, get_links_table_group_send_messages, update_group_send_messages_table
 )
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
@@ -98,7 +97,7 @@ class SendTelegramMessages:
             disabled=True
         )
 
-    """Рассылка сообщений по чатам"""
+    """Рассылка сообщений по чатам, в личку"""
 
     async def sending_messages_files_via_chats(self) -> None:
         """
@@ -402,7 +401,8 @@ class SendTelegramMessages:
 
                 all_usernames = await load_and_validate_users(
                     app_logger=self.app_logger, gui_program=self.gui_program, page=self.page, limit=limit,
-                    session_string=self.session_string
+                    session_string=self.session_string, page_go="/sending_messages_files_via_chats",
+                    action_text="Рассылки сообщений"
                 )
 
                 # 🔄 Индекс для отслеживания текущей позиции в списке пользователей

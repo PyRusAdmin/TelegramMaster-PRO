@@ -42,26 +42,26 @@ def get_limit(limits):
     return limits
 
 
-async def load_and_validate_users(app_logger, gui_program, page, limit, session_string):
+async def load_and_validate_users(app_logger, gui_program, page, limit, session_string, page_go, action_text):
     """
-    Загружает всех пользователей для инвайтинга и проверяет наличие данных.
+    Загружает всех пользователей для (инвайтинга, рассылки сообщений) и проверяет наличие данных.
     Возвращает список пользователей или None, если загрузка не удалась.
     """
-    # Получаем ВЕСЬ список пользователей для инвайтинга
+    # Получаем ВЕСЬ список пользователей для (инвайтинга, рассылки сообщений)
     all_usernames = await select_records_with_limit(limit=None, app_logger=app_logger)
 
     if not all_usernames:
         await app_logger.log_and_display(
-            message="В таблице members нет пользователей для инвайтинга."
+            message=f"В таблице members нет пользователей для {action_text}."
         )
         await gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-            message="🔚 Нет пользователей для инвайтинга"
+            message=f"🔚 Нет пользователей для {action_text}"
         )
-        page.go("/inviting")
+        page.go(page_go)
         return None
 
     await app_logger.log_and_display(
-        message=f"Всего пользователей для инвайтинга: {len(all_usernames)}\n"
+        message=f"Всего пользователей для {action_text}: {len(all_usernames)}\n"
                 f"Лимит на аккаунт: {limit if limit else 'не установлен'}\n"
                 f"Количество аккаунтов: {len(session_string)}"
     )
@@ -185,7 +185,8 @@ class InvitingToAGroup:
             # )
 
             all_usernames = await load_and_validate_users(
-                self.app_logger, self.gui_program, self.page, limit, self.session_string
+                app_logger=self.app_logger, gui_program=self.gui_program, page=self.page, limit=limit,
+                session_string=self.session_string, page_go="/inviting", action_text="Инвайтинга"
             )
 
             # 🔄 Индекс для отслеживания текущей позиции в списке пользователей
