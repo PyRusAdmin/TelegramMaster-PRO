@@ -459,8 +459,10 @@ class SendTelegramMessages:
                     )
 
                     try:
+                        # 🎯 Рассылаем сообщения ТОЛЬКО пользователей для этого аккаунта
+                        for idx, username in enumerate(users_for_this_account, 1):
 
-                        # for username in await select_records_with_limit(limit=limit, app_logger=self.app_logger):
+                            # for username in await select_records_with_limit(limit=limit, app_logger=self.app_logger):
                             logger.info(f"Отправляем сообщение в личку {username}")
                             await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
                             try:
