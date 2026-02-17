@@ -592,7 +592,14 @@ class SendTelegramMessages:
                             self.send_message_group_switch,  # Рассылка сообщений по чатам
                         ]
                     ),
-                    self.limits,  # Ввод лимита на аккаунт при рассылках в личку
+                    # self.limits,  # Ввод лимита на аккаунт при рассылках в личку
+
+                    ft.Row(
+                        controls=[
+                            self.limits
+                        ]
+                    ),
+
                     ft.Row(
                         controls=[
                             self.tb_time_from,
