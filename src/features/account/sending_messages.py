@@ -405,12 +405,31 @@ class SendTelegramMessages:
                     session_string=self.session_string
                 )
 
-                # Просим пользователя ввести расширение сообщения
-                for session_name in self.session_string:  # Перебор всех сессий
+                # 🔄 Индекс для отслеживания текущей позиции в списке пользователей
+                current_user_index = 0
+
+                for account_number, session_name in enumerate(self.session_string, 1):
+                    # Проверяем, остались ли пользователи для рассылки сообщений
+
+                    if current_user_index >= len(all_usernames):
+                        await self.app_logger.log_and_display(
+                            message="✅ Все пользователи обработаны, рассылка сообщений завершена"
+                        )
+                        break
+
+                    # Просим пользователя ввести расширение сообщения
+                    # for session_name in self.session_string:  # Перебор всех сессий
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                     client: TelegramClient = await self.connect.client_connect_string_session(
                         session_name=session_name
                     )
+
+                    if client is None:
+                        await self.app_logger.log_and_display(
+                            message=f"⚠️ Пропускаем сессию {session_name} - не удалось подключиться."
+                        )
+                        continue  # Переходим к следующему аккаунту
+
                     try:
 
                         for username in await select_records_with_limit(limit=limit, app_logger=self.app_logger):
