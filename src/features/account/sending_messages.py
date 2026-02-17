@@ -26,7 +26,7 @@ from src.core.database.database import (
 )
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
-from src.features.account.inviting import get_limit
+from src.features.account.inviting import get_limit, load_and_validate_users
 from src.features.account.subscribe import Subscribe
 from src.gui.gui import list_view, AppLogger
 from src.gui.gui_elements import GUIProgram
@@ -397,6 +397,14 @@ class SendTelegramMessages:
             """Обработчик кнопки "Готово" Рассылка сообщений в личку"""
             try:
                 start = await self.app_logger.start_time()
+                self.page.update()
+                limit = get_limit(self.limits)  # Получаем лимит введенный пользователем
+
+                all_usernames = await load_and_validate_users(
+                    app_logger=self.app_logger, gui_program=self.gui_program, page=self.page, limit=limit,
+                    session_string=self.session_string
+                )
+
                 # Просим пользователя ввести расширение сообщения
                 for session_name in self.session_string:  # Перебор всех сессий
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
@@ -404,7 +412,7 @@ class SendTelegramMessages:
                         session_name=session_name
                     )
                     try:
-                        limit = get_limit(self.limits)  # Получаем лимит введенный пользователем
+
                         for username in await select_records_with_limit(limit=limit, app_logger=self.app_logger):
                             logger.info(f"Отправляем сообщение в личку {username}")
                             await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
