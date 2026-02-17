@@ -90,8 +90,8 @@ async def main_view(page: ft.Page):
             await creating_groups_and_chats.creating_groups_and_chats()
         elif page.route == "/sending_messages_files_via_chats":
             await send_telegram_messages.sending_messages_files_via_chats()
-        elif page.route == "/sending_files_to_personal_account_with_limits":
-            await send_telegram_messages.send_files_to_personal_chats()
+        # elif page.route == "/sending_files_to_personal_account_with_limits":
+        #     await send_telegram_messages.send_files_to_personal_chats()
         elif page.route == "/bio_editing":
             await account_bio.bio_editing_menu()
         elif page.route == "/settings":
@@ -310,8 +310,8 @@ async def main(page: ft.Page):
             await creating_groups_and_chats.creating_groups_and_chats()
         elif page.route == "/sending_messages_files_via_chats":
             await send_telegram_messages.sending_messages_files_via_chats()
-        elif page.route == "/sending_files_to_personal_account_with_limits":
-            await send_telegram_messages.send_files_to_personal_chats()
+        # elif page.route == "/sending_files_to_personal_account_with_limits":
+        #     await send_telegram_messages.send_files_to_personal_chats()
         elif page.route == "/bio_editing":
             await account_bio.bio_editing_menu()
         elif page.route == "/settings":

@@ -195,8 +195,6 @@ class SendTelegramMessages:
                             max_seconds=max_seconds
                         )  # Прерываем работу и меняем аккаунт
 
-                # await client.run_until_disconnected()  # Запускаем программу и ждем отключения клиента
-
                 await self.app_logger.log_and_display(message="🔚 Конец отправки сообщений + файлов по чатам")
                 await self.app_logger.end_time(start)
 
@@ -239,11 +237,6 @@ class SendTelegramMessages:
                     for file in files:
                         await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
                         await self.app_logger.log_and_display(f"Сообщение и файл отправлены: {target}")
-
-            # await self.utils.random_dream(
-            #     min_seconds=min_seconds,
-            #     max_seconds=max_seconds
-            # )  # Прерываем работу и меняем аккаунт
 
         async def checking_links_group(_):
             """Проверка ссылок пользователя для рассылки с детальной информацией"""
@@ -394,175 +387,14 @@ class SendTelegramMessages:
                             last_checked=datetime.now(),  # ← Текущее время
                             is_active=True  # ← Группа активна (проверена сейчас)
                         )
-
-                        # Детальный вывод в логи с расшифровкой
-                        # logger.info(
-                        #     f"✅ Канал '{channel_info['title']}' (участников: {channel_info['participants_count']})")
-                        # logger.info(
-                        #     f"ID: {channel_info['id']}, Username: @{channel_info['username'] if channel_info['username'] else 'отсутствует'}, Тип: {'📢 Broadcast канал' if channel_info['is_broadcast'] else '👥 Мегагруппа' if channel_info['is_megagroup'] else '👥 Обычная группа'}")
-                        # if channel_info['about']:
-                        #     logger.info(
-                        #         f"Описание: {channel_info['about'][:200]}{'...' if len(channel_info['about']) > 200 else ''}")
-                        # if channel_info['participants_count']:
-                        #     logger.info(f"Участников: {channel_info['participants_count']:,}")
-                        # else:
-                        #     logger.info(f"Участников: скрыто")
-
-                        # Slowmode - детальная расшифровка
-                        # logger.info(f"\n⏱️  SLOWMODE (ЗАДЕРЖКА МЕЖДУ СООБЩЕНИЯМИ):")
-                        # if channel_info['slowmode_seconds']:
-                        #     seconds = channel_info['slowmode_seconds']
-                        #     hours = seconds // 3600
-                        #     minutes = (seconds % 3600) // 60
-                        #     secs = seconds % 60
-                        #     time_parts = []
-                        #     if hours > 0:
-                        #         time_parts.append(f"{hours} ч")
-                        #     if minutes > 0:
-                        #         time_parts.append(f"{minutes} мин")
-                        #     if secs > 0:
-                        #         time_parts.append(f"{secs} сек")
-                        #     time_str = " ".join(time_parts)
-                        #     logger.info(f"⚠️  АКТИВЕН: {seconds} секунд ({time_str})")
-                        #     logger.info(f"❌ МОЖНО ПИСАТЬ РАЗ В {time_str.upper()}")
-                        # else:
-                        #     logger.info(f"✅ ОТСУТСТВУЕТ - можно писать без задержки")
-                        # Права на отправку сообщений
-                        # logger.info(f"\n🔐 ПРАВА НА ОТПРАВКУ СООБЩЕНИЙ:")
-                        # if channel_info['default_banned_rights']:
-                        #     rights = channel_info['default_banned_rights']
-                        #     logger.info(
-                        #         f"{'✅ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: разрешена' if rights.send_messages else '❌ ОТПРАВКА ТЕКСТОВЫХ СООБЩЕНИЙ: ЗАПРЕЩЕНА'}")
-                        #     Медиа
-                        # if rights.send_media:
-                        #     logger.info(f"❌ ОТПРАВКА МЕДИА (фото/видео/файлы): ЗАПРЕЩЕНА")
-                        # else:
-                        #     logger.info(f"✅ ОТПРАВКА МЕДИА: разрешена")
-                        # Детализация медиа
-                        # media_restrictions = []
-                        # if rights.send_photos:
-                        #     media_restrictions.append("❌ Фото: запрещены")
-                        # if rights.send_videos:
-                        #     media_restrictions.append("❌ Видео: запрещены")
-                        # if rights.send_docs:
-                        #     media_restrictions.append("❌ Документы: запрещены")
-                        # if rights.send_audios:
-                        #     media_restrictions.append("❌ Аудио: запрещены")
-                        # if rights.send_voices:
-                        #     media_restrictions.append("❌ Голосовые: запрещены")
-                        # if rights.send_roundvideos:
-                        #     media_restrictions.append("❌ Кружки: запрещены")
-                        # if media_restrictions:
-                        #     for r in media_restrictions:
-                        #         logger.info(f"      {r}")
-
-                        # logger.info(f"{'✅ СТИКЕРЫ: разрешены' if rights.send_stickers else '❌ СТИКЕРЫ: запрещены'}")
-                        # logger.info(f"{'✅ GIF: разрешены' if rights.send_gifs else '❌ GIF: запрещены'}")
-                        # logger.info(
-                        #     f"{'✅ ВСТАВКА ССЫЛОК: разрешена' if rights.embed_links else '❌ ВСТАВКА ССЫЛОК: запрещена'}")
-                        # logger.info(f"{'✅ ОПРОСЫ: разрешены' if rights.send_polls else '❌ ОПРОСЫ: запрещены'}")
-                        # logger.info(
-                        #     f"{'✅ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: разрешено' if rights.invite_users else '❌ ПРИГЛАШЕНИЕ ПОЛЬЗОВАТЕЛЕЙ: запрещено'}")
-                        # if rights.change_info:
-                        #     logger.info(f"❌ ИЗМЕНЕНИЕ ИНФОРМАЦИИ: запрещено")
-                        # if rights.pin_messages:
-                        #     logger.info(f"❌ ЗАКРЕПЛЕНИЕ СООБЩЕНИЙ: запрещено")
-                        # else:
-                        #     logger.info(f"✅ ВСЕ ПРАВА: разрешены (нет ограничений)")
-                        # Видимость и приватность
-                        # logger.info(f"\n👁️ВИДИМОСТЬ И ПРИВАТНОСТЬ:")
-                        # if channel_info['can_view_participants']:
-                        #     logger.info(f"✅ СПИСОК УЧАСТНИКОВ: можно просматривать")
-                        # else:
-                        #     logger.info(f"❌ СПИСОК УЧАСТНИКОВ: скрыт")
-                        # if channel_info['participants_hidden']:
-                        #     logger.info(f"🔒 УЧАСТНИКИ СКРЫТЫ: от публичного просмотра")
-                        # Реакции
-                        # logger.info(f"\n❤️РЕАКЦИИ:")
-                        # if channel_info['reactions_limit']:
-                        #     logger.info(f"Лимит: {channel_info['reactions_limit']} реакций на сообщение")
-                        #     if channel_info['available_reactions']:
-                        #         if hasattr(channel_info['available_reactions'], 'reactions'):
-                        #             emojis = [r.emoticon for r in channel_info['available_reactions'].reactions if
-                        #                       hasattr(r, 'emoticon')]
-                        #             if emojis:
-                        #                 logger.info(f"Доступные: {' '.join(emojis)}")
-                        #         elif hasattr(channel_info['available_reactions'], 'allow_custom'):
-                        #             logger.info(f"✅ Разрешены кастомные реакции")
-                        # else:
-                        #     logger.info(f"   Реакции отключены")
-                        # Платные функции
-                        # logger.info(f"\n💰 ПЛАТНЫЕ ФУНКЦИИ:")
-                        # paid_features = []
-                        # if channel_info['paid_media_allowed']:
-                        #     paid_features.append("✅ Платные медиа: разрешены")
-                        # if channel_info['paid_reactions_available']:
-                        #     paid_features.append("✅ Платные реакции: доступны")
-                        # if channel_info['paid_messages_available']:
-                        #     paid_features.append("✅ Платные сообщения: доступны")
-                        # if channel_info['stargifts_available']:
-                        #     paid_features.append("✅ Звездные подарки: доступны")
-                        # if paid_features:
-                        #     for f in paid_features:
-                        #         logger.info(f"{f}")
-                        # else:
-                        #     logger.info(f"❌ Платные функции недоступны")
-                        # Дополнительные функции
-                        # logger.info(f"\n⚙️  ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ:")
-                        # features = []
-                        # if channel_info['antispam']:
-                        #     features.append("🛡️ Антиспам включен")
-                        # if not channel_info['translations_disabled']:
-                        #     features.append("🌐 Автоперевод включен")
-                        # else:
-                        #     features.append("❌ Автоперевод отключен")
-                        # if channel_info['can_set_username']:
-                        #     features.append("✏️ Можно изменять username")
-                        # if channel_info['can_view_stats']:
-                        #     features.append("📈 Доступна статистика")
-                        # if channel_info['linked_chat_id']:
-                        #     features.append(f"🔗 Есть связанный чат (ID: {channel_info['linked_chat_id']})")
-                        # if features:
-                        #     for f in features:
-                        #         logger.info(f"{f}")
-                        # else:
-                        #     logger.info(f"Стандартные настройки")
-                        # Боты (если есть)
-                        # if hasattr(full_entity, 'users') and full_entity.users:
-                        #     bots = [u for u in full_entity.users if u.bot]
-                        #     if bots:
-                        #         logger.info(f"\n🤖 БОТЫ В ГРУППЕ ({len(bots)}):")
-                        #         for bot in bots[:5]:  # Показываем первые 5
-                        #
-                        #             bot_name = f"@{bot.username}" if bot.username else bot.first_name
-                        #             logger.info(f"{bot_name}")
-                        #
-                        #             if hasattr(bot, 'bot_active_users') and bot.bot_active_users:
-                        #                 logger.info(f"Активных пользователей: {bot.bot_active_users:,}")
-                        # if len(bots) > 5:
-                        #     logger.info(f"   ... и ещё {len(bots) - 5} ботов")
-                        # logger.info(f"{'=' * 100}\n")
                 except ValueError as e:
                     logger.error(f"❌ Не найдена сущность для '{link}': {e}")
                 except Exception as e:
                     logger.error(f"❌ Ошибка обработки '{link}': {str(e)[:100]}")
 
-        # """Рассылка сообщений в личку"""
-        # async def send_files_to_personal_chats() -> None:
-        #     """
-        #     Отображает интерфейс для отправки файлов в личные сообщения пользователей Telegram.
-        #
-        #     :return: None
-        #     """
-        # Группа полей ввода для времени сна
-
         async def send_files_to_personal_chats(min_seconds, max_seconds):
             """Обработчик кнопки "Готово" Рассылка сообщений в личку"""
             try:
-                # min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
-                #     min_seconds=self.tb_time_from.value,
-                #     max_seconds=self.tb_time_to.value
-                # )
                 start = await self.app_logger.start_time()
                 # Просим пользователя ввести расширение сообщения
                 for session_name in self.session_string:  # Перебор всех сессий
@@ -597,10 +429,6 @@ class SendTelegramMessages:
                                 await self.app_logger.log_and_display(
                                     message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                                     level="error")
-                                # await self.utils.random_dream(
-                                #     min_seconds=min_seconds,
-                                #     max_seconds=max_seconds
-                                # )
                                 break  # Прерываем работу и меняем аккаунт
                             except PeerFloodError:
                                 await self.utils.random_dream(
@@ -637,43 +465,6 @@ class SendTelegramMessages:
             except Exception as error:
                 logger.exception(error)
             self.page.update()
-
-            # Разделение интерфейса на верхнюю и нижнюю части
-            # self.page.views.append(
-            #     ft.View(
-            #         route="/sending_messages_via_chats_menu",
-            #         appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
-            #         controls=[
-            #             await self.gui_program.create_gradient_text(
-            #                 text="Отправка сообщений в личку"
-            #             ),
-            #             list_view,  # Отображение логов 📝
-            #             ft.Row(
-            #                 controls=[
-            #                     self.tb_time_from,
-            #                     self.tb_time_to
-            #                 ],
-            #                 spacing=20,
-            #             ),
-            #             self.limits,
-            #             ft.Column(  # Верхняя часть: контрольные элементы
-            #                 controls=[
-            #                     ft.Button(
-            #                         content=translations["ru"]["buttons"]["done"],
-            #                         width=WIDTH_WIDE_BUTTON,
-            #                         height=BUTTON_HEIGHT,
-            #                         on_click=button_clicked
-            #                     )
-            #                 ]
-            #             )
-            #         ]
-            #     )
-            # )
-
-        # async def button_clicked(_):
-        #     """
-        #     Обработчик кнопки "Готово"
-        #     """
 
         async def launching_action():
             """Запускает процесс рассылки сообщений в личку или по чатам"""

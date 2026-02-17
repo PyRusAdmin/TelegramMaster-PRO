@@ -120,3 +120,4 @@ celerybeat.pid
 /file.csv
 /uv.lock
 /user_data/accounts.txt
+/.venv/
