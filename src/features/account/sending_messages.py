@@ -398,38 +398,30 @@ class SendTelegramMessages:
                 start = await self.app_logger.start_time()
                 self.page.update()
                 limit = get_limit(self.limits)  # Получаем лимит введенный пользователем
-
                 all_usernames = await load_and_validate_users(
                     app_logger=self.app_logger, gui_program=self.gui_program, page=self.page, limit=limit,
                     session_string=self.session_string, page_go="/sending_messages_files_via_chats",
                     action_text="Рассылки сообщений"
                 )
-
                 # 🔄 Индекс для отслеживания текущей позиции в списке пользователей
                 current_user_index = 0
-
                 for account_number, session_name in enumerate(self.session_string, 1):
                     # Проверяем, остались ли пользователи для рассылки сообщений
-
                     if current_user_index >= len(all_usernames):
                         await self.app_logger.log_and_display(
                             message="✅ Все пользователи обработаны, рассылка сообщений завершена"
                         )
                         break
-
                     # Просим пользователя ввести расширение сообщения
-                    # for session_name in self.session_string:  # Перебор всех сессий
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                     client: TelegramClient = await self.connect.client_connect_string_session(
                         session_name=session_name
                     )
-
                     if client is None:
                         await self.app_logger.log_and_display(
                             message=f"⚠️ Пропускаем сессию {session_name} - не удалось подключиться."
                         )
                         continue  # Переходим к следующему аккаунту
-
                     # 📊 Определяем количество пользователей для текущего аккаунта
                     if limit:
                         # Если установлен лимит - берем N пользователей
@@ -444,14 +436,12 @@ class SendTelegramMessages:
                         users_for_this_account = all_usernames[
                             current_user_index:current_user_index + users_per_account]
                         current_user_index += users_per_account
-
                     if not users_for_this_account:
                         await self.app_logger.log_and_display(
                             message=f"⚠️ Для аккаунта {session_name} нет пользователей"
                         )
                         # await client.disconnect()
                         continue
-
                     await self.app_logger.log_and_display(
                         message=f"🔹 Аккаунт #{account_number}: {session_name}\n"
                                 f"   Будет обработано пользователей: {len(users_for_this_account)}\n"
@@ -461,8 +451,6 @@ class SendTelegramMessages:
                     try:
                         # 🎯 Рассылаем сообщения ТОЛЬКО пользователей для этого аккаунта
                         for idx, username in enumerate(users_for_this_account, 1):
-
-                            # for username in await select_records_with_limit(limit=limit, app_logger=self.app_logger):
                             logger.info(f"Отправляем сообщение в личку {username}")
                             await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
                             try:
@@ -598,16 +586,13 @@ class SendTelegramMessages:
                     ),
                     list_view,  # Отображение логов 📝
                     account_drop_down_list,  # Выпадающий список с аккаунтами
-
                     ft.Row(
                         controls=[
                             self.send_message_personal_switch,  # Рассылка сообщений в личку
                             self.send_message_group_switch,  # Рассылка сообщений по чатам
                         ]
                     ),
-
                     self.limits,  # Ввод лимита на аккаунт при рассылках в личку
-
                     ft.Row(
                         controls=[
                             self.tb_time_from,
@@ -615,7 +600,6 @@ class SendTelegramMessages:
                         ],
                         spacing=20,
                     ),
-                    # t,
                     ft.Row(
                         controls=[
                             self.auto_reply_text_field,  # Поле для текста автоответчика
