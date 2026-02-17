@@ -545,17 +545,14 @@ class SendTelegramMessages:
             try:
                 if self.send_message_personal_switch.value:
                     logger.info("Выбрано рассылка сообщений в личку")
-
                     min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
                         min_seconds=self.tb_time_from.value,
                         max_seconds=self.tb_time_to.value
                     )
-
                     await send_files_to_personal_chats(
                         min_seconds=min_seconds,
                         max_seconds=max_seconds
                     )
-
                 if self.send_message_group_switch.value:
                     logger.info("Выбрано рассылка сообщений по чатам")
                     write_group_send_message_table(self.chat_list_field.value)
