@@ -42,6 +42,33 @@ def get_limit(limits):
     return limits
 
 
+async def load_and_validate_users(app_logger, gui_program, page, limit, session_string):
+    """
+    Загружает всех пользователей для инвайтинга и проверяет наличие данных.
+    Возвращает список пользователей или None, если загрузка не удалась.
+    """
+    # Получаем ВЕСЬ список пользователей для инвайтинга
+    all_usernames = await select_records_with_limit(limit=None, app_logger=app_logger)
+
+    if not all_usernames:
+        await app_logger.log_and_display(
+            message="В таблице members нет пользователей для инвайтинга."
+        )
+        await gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+            message="🔚 Нет пользователей для инвайтинга"
+        )
+        page.go("/inviting")
+        return None
+
+    await app_logger.log_and_display(
+        message=f"Всего пользователей для инвайтинга: {len(all_usernames)}\n"
+                f"Лимит на аккаунт: {limit if limit else 'не установлен'}\n"
+                f"Количество аккаунтов: {len(session_string)}"
+    )
+
+    return all_usernames
+
+
 class InvitingToAGroup:
 
     def __init__(self, page: ft.Page):
@@ -139,22 +166,26 @@ class InvitingToAGroup:
             limit = get_limit(limits)  # Получаем лимит введенный пользователем
 
             # Получаем ВЕСЬ список пользователей для инвайтинга
-            all_usernames = await select_records_with_limit(limit=None, app_logger=self.app_logger)
+            # all_usernames = await select_records_with_limit(limit=None, app_logger=self.app_logger)
+            #
+            # if not all_usernames:
+            #     await self.app_logger.log_and_display(
+            #         message="В таблице members нет пользователей для инвайтинга."
+            #     )
+            #     await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+            #         message="🔚 Нет пользователей для инвайтинга"
+            #     )
+            #     self.page.go("/inviting")
+            #     return
+            #
+            # await self.app_logger.log_and_display(
+            #     message=f"Всего пользователей для инвайтинга: {len(all_usernames)}\n"
+            #             f"Лимит на аккаунт: {limit if limit else 'не установлен'}\n"
+            #             f"Количество аккаунтов: {len(self.session_string)}"
+            # )
 
-            if not all_usernames:
-                await self.app_logger.log_and_display(
-                    message="В таблице members нет пользователей для инвайтинга."
-                )
-                await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                    message="🔚 Нет пользователей для инвайтинга"
-                )
-                self.page.go("/inviting")
-                return
-
-            await self.app_logger.log_and_display(
-                message=f"Всего пользователей для инвайтинга: {len(all_usernames)}\n"
-                        f"Лимит на аккаунт: {limit if limit else 'не установлен'}\n"
-                        f"Количество аккаунтов: {len(self.session_string)}"
+            all_usernames = await load_and_validate_users(
+                self.app_logger, self.gui_program, self.page, limit, self.session_string
             )
 
             # 🔄 Индекс для отслеживания текущей позиции в списке пользователей

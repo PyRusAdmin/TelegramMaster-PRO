@@ -26,6 +26,7 @@ from src.core.database.database import (
 )
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
+from src.features.account.inviting import get_limit
 from src.features.account.subscribe import Subscribe
 from src.gui.gui import list_view, AppLogger
 from src.gui.gui_elements import GUIProgram
@@ -403,8 +404,8 @@ class SendTelegramMessages:
                         session_name=session_name
                     )
                     try:
-                        for username in await select_records_with_limit(limit=int(self.limits.value),
-                                                                        app_logger=self.app_logger):
+                        limit = get_limit(self.limits)  # Получаем лимит введенный пользователем
+                        for username in await select_records_with_limit(limit=limit, app_logger=self.app_logger):
                             logger.info(f"Отправляем сообщение в личку {username}")
                             await self.app_logger.log_and_display(message=f"[!] Отправляем сообщение: {username}")
                             try:
