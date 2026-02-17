@@ -482,8 +482,9 @@ class SendTelegramMessages:
                                     time_range_2=max_seconds,
                                     username=username
                                 )
-                                await self.app_logger.log_and_display(message=f"Смена аккаунта, ожидайте 8 секунд")
-                                time.sleep(8)
+                                await self.app_logger.log_and_display(
+                                    message=f"Смена аккаунта, ожидайте {max_seconds} секунд")
+                                time.sleep(max_seconds)
                             except FloodWaitError as e:
                                 await self.app_logger.log_and_display(
                                     message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
