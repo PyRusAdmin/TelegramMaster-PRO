@@ -17,8 +17,8 @@ TIME_SENDING_MESSAGES_2 = config.get('time_inviting', 'time_inviting_2', fallbac
 """Настройки внешнего вида программы"""
 
 PROGRAM_NAME = "TelegramMaster-PRO"  # Имя программы
-PROGRAM_VERSION = "2.8.22"  # Версия программы
-DATE_OF_PROGRAM_CHANGE = "17.02.2026"  # Дата изменения (обновления)
+PROGRAM_VERSION = "2.8.24"  # Версия программы
+DATE_OF_PROGRAM_CHANGE = "20.02.2026"  # Дата изменения (обновления)
 
 # Ширина программы / высота программы
 window_width = 1050  # Ширина (программы)

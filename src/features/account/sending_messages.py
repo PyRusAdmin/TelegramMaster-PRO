@@ -433,8 +433,7 @@ class SendTelegramMessages:
                         remaining_users = len(all_usernames) - current_user_index
                         users_per_account = remaining_users // remaining_accounts
 
-                        users_for_this_account = all_usernames[
-                            current_user_index:current_user_index + users_per_account]
+                        users_for_this_account = all_usernames[current_user_index:current_user_index + users_per_account]
                         current_user_index += users_per_account
                     if not users_for_this_account:
                         await self.app_logger.log_and_display(
@@ -580,54 +579,80 @@ class SendTelegramMessages:
             ft.View(
                 route="/sending_messages_via_chats_menu",
                 appbar=await self.gui_program.key_app_bar(),  # Кнопка назад
+                spacing=3,
                 controls=[
-                    await self.gui_program.create_gradient_text(
-                        text=f"{translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"]} и Отправка сообщений в личку"
+                    ft.Row(
+                        expand=True,
+                        controls=[
+                            await self.gui_program.create_gradient_text(
+                                text=f"{translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"]} и Отправка сообщений в личку"
+                            ),
+                        ]
                     ),
-                    list_view,  # Отображение логов 📝
-                    account_drop_down_list,  # Выпадающий список с аккаунтами
+                    ft.Row(
+                        # expand=True,
+                        controls=[
+                            list_view,  # Отображение логов 📝
+                        ],
+                        height=200,  # ← фиксированная высота для логов
+                    ),
+                    ft.Row(
+                        expand=True,
+                        controls=[
+                            account_drop_down_list,  # Выпадающий список с аккаунтами
+                        ]
+                    ),
                     ft.Row(
                         controls=[
                             self.send_message_personal_switch,  # Рассылка сообщений в личку
                             self.send_message_group_switch,  # Рассылка сообщений по чатам
-                        ]
+                        ],
+                        expand=True,
                     ),
-                    # self.limits,  # Ввод лимита на аккаунт при рассылках в личку
-
                     ft.Row(
                         controls=[
                             self.limits
-                        ]
+                        ],
+                        expand=True,
                     ),
-
                     ft.Row(
                         controls=[
                             self.tb_time_from,
                             self.tb_time_to
                         ],
-                        spacing=20,
+                        expand=True,
                     ),
                     ft.Row(
                         controls=[
                             self.auto_reply_text_field,  # Поле для текста автоответчика
                             self.chat_list_field,  # Поле для ввода ссылок на группы
                         ],
+                        expand=True,
                     ),
-                    ft.Column(  # Верхняя часть: контрольные элементы
+                    ft.Column(
+                        expand=True,
                         controls=[
-
-                            ft.Button(
-                                content="Проверка ссылок для рассылки",
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=checking_links_group
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    ft.Button(
+                                        content="Проверка ссылок для рассылки",
+                                        expand=True,
+                                        height=BUTTON_HEIGHT,
+                                        on_click=checking_links_group
+                                    ),
+                                ]
                             ),
-
-                            ft.Button(
-                                content=translations["ru"]["buttons"]["done"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=launching_action
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    ft.Button(
+                                        content=translations["ru"]["buttons"]["done"],
+                                        expand=True,
+                                        height=BUTTON_HEIGHT,
+                                        on_click=launching_action,
+                                    ),
+                                ]
                             ),
                         ],
                     ),
