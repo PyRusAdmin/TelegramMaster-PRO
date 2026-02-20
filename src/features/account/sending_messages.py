@@ -565,30 +565,34 @@ class SendTelegramMessages:
                         self.auto_reply_text_field,
                         self.chat_list_field,
                     ], expand=True),
-                    ft.Column(expand=True, controls=[
-                        ft.Row(expand=True, controls=[
-                            ft.Button(
-                                content="Проверка ссылок для рассылки",
-                                expand=True, height=BUTTON_HEIGHT,
-                                on_click=checking_links_group,
-                            ),
-                        ]),
-                        ft.Row(expand=True, controls=[
-                            ft.Button(
-                                content=translations["ru"]["buttons"]["done"],
-                                expand=True, height=BUTTON_HEIGHT,
-                                on_click=launching_action,
-                            ),
-                        ]),
-                        ft.Row(expand=True, controls=[
-                            ft.Button(
-                                content="⛔ Остановить рассылку",
-                                expand=True, height=BUTTON_HEIGHT,
-                                # ← async-обработчик вместо синхронного lambda
-                                on_click=stop_sending,
-                            ),
-                        ]),
-                    ]),
+
+                    ft.Column(
+                        spacing=5,  # ← расстояние между кнопками в пикселях
+                        controls=[
+                            ft.Row(expand=True, controls=[
+                                ft.Button(
+                                    content="Проверка ссылок для рассылки",
+                                    expand=True, height=BUTTON_HEIGHT,
+                                    on_click=checking_links_group,
+                                ),
+                            ]),
+                            ft.Row(expand=True, controls=[
+                                ft.Button(
+                                    content=translations["ru"]["buttons"]["done"],
+                                    expand=True, height=BUTTON_HEIGHT,
+                                    on_click=launching_action,
+                                ),
+                            ]),
+                            ft.Row(expand=True, controls=[
+                                ft.Button(
+                                    content="⛔ Остановить рассылку",
+                                    expand=True, height=BUTTON_HEIGHT,
+                                    on_click=stop_sending,
+                                ),
+                            ]),
+                        ],
+                    ),
+
                 ],
             )
         )
