@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from loguru import logger
 
 
 class ToggleController:
@@ -41,8 +42,11 @@ class ToggleController:
 
     def element_handler_send_message(self, page):
         """Присоединяем обработчики к элементам интерфейса Рассылка сообщений"""
-        self.send_message_personal_switch.on_change = lambda e: self.toggle_send_message(page)
-        self.send_message_group_switch.on_change = lambda e: self.toggle_send_message_group(page)
+        try:
+            self.send_message_personal_switch.on_change = lambda e: self.toggle_send_message(page)
+            self.send_message_group_switch.on_change = lambda e: self.toggle_send_message_group(page)
+        except Exception as e:
+            logger.exception(e)
 
     """Инвайтинг"""
 
