@@ -17,7 +17,7 @@ from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import CheckChatInviteRequest
 
 from src.core.configs import (
-    BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, path_folder_with_messages
+    BUTTON_HEIGHT, path_folder_with_messages
 )
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import (
@@ -27,6 +27,7 @@ from src.core.utils import Utils
 from src.features.account.connect import TGConnect
 from src.features.account.inviting import get_limit, load_and_validate_users
 from src.features.account.subscribe import Subscribe
+from src.features.account.switch_controller import ToggleController
 from src.gui.gui import list_view, AppLogger
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
@@ -433,7 +434,8 @@ class SendTelegramMessages:
                         remaining_users = len(all_usernames) - current_user_index
                         users_per_account = remaining_users // remaining_accounts
 
-                        users_for_this_account = all_usernames[current_user_index:current_user_index + users_per_account]
+                        users_for_this_account = all_usernames[
+                            current_user_index:current_user_index + users_per_account]
                         current_user_index += users_per_account
                     if not users_for_this_account:
                         await self.app_logger.log_and_display(
@@ -574,6 +576,9 @@ class SendTelegramMessages:
         self.send_message_personal_switch.expand = True
         self.send_message_group_switch.expand = True
 
+        ToggleController(self.send_message_personal_switch, self.send_message_group_switch).element_handler_send_message(
+            self.page)
+
         # Разделение интерфейса на верхнюю и нижнюю части
         self.page.views.append(
             ft.View(
@@ -607,7 +612,7 @@ class SendTelegramMessages:
                             self.send_message_personal_switch,  # Рассылка сообщений в личку
                             self.send_message_group_switch,  # Рассылка сообщений по чатам
                         ],
-                        expand=True,
+                        # expand=True,
                     ),
                     ft.Row(
                         controls=[

@@ -7,7 +7,7 @@ class ToggleController:
     def __init__(self, admin_switch=None, account_groups_switch=None, members_switch=None,
                  account_group_selection_switch=None, active_switch=None, inviting_switch=None,
                  inviting_1_time_per_hour_switch=None, inviting_at_a_certain_time_switch=None,
-                 inviting_every_day_switch=None):
+                 inviting_every_day_switch=None, send_message_personal_switch=None, send_message_group_switch=None):
 
         # Парсинг
         self.admin_switch = admin_switch
@@ -20,7 +20,31 @@ class ToggleController:
         self.inviting_1_time_per_hour_switch = inviting_1_time_per_hour_switch
         self.inviting_at_a_certain_time_switch = inviting_at_a_certain_time_switch
         self.inviting_every_day_switch = inviting_every_day_switch
+        # Рассылка сообщений
+        self.send_message_personal_switch = send_message_personal_switch  # Рассылка в личку
+        self.send_message_group_switch = send_message_group_switch  # Рассылка сообщений по чатам
         # TODO: Добавить self.page = page  # Страница интерфейса Flet для отображения элементов управления.
+
+    """Рассылка сообщений (По чатам, в личку)"""
+
+    def toggle_send_message(self, page):
+        """Обработчик переключателя 'Рассылка сообщений в личку'"""
+        if self.send_message_personal_switch.value:
+            self.send_message_group_switch.value = False
+        page.update()
+
+    def toggle_send_message_group(self, page):
+        """Обработка переключателя 'Рассылка сообщений по чатам'"""
+        if self.send_message_group_switch.value:
+            self.send_message_personal_switch.value = False
+        page.update()
+
+    def element_handler_send_message(self, page):
+        """Присоединяем обработчики к элементам интерфейса Рассылка сообщений"""
+        self.send_message_personal_switch.on_change = lambda e: self.toggle_send_message(page)
+        self.send_message_group_switch.on_change = lambda e: self.toggle_send_message_group(page)
+
+    """Инвайтинг"""
 
     def toggle_inviting_switch(self, page):
         """Обработчик переключателя инвайтинга"""
@@ -51,7 +75,7 @@ class ToggleController:
         if self.inviting_every_day_switch.value:
             self.inviting_switch.value = False
             self.inviting_1_time_per_hour_switch.value = False
-            self.inviting_at_a_certain_time_switch = False
+            self.inviting_at_a_certain_time_switch.value = False
         page.update()
 
     def element_handler_inviting(self, page):
@@ -60,6 +84,8 @@ class ToggleController:
         self.inviting_1_time_per_hour_switch.on_change = lambda e: self.toggle_inviting_1_time_per_hour_switch(page)
         self.inviting_at_a_certain_time_switch.on_change = lambda e: self.toggle_inviting_at_a_certain_time_switch(page)
         self.inviting_every_day_switch.on_change = lambda e: self.toggle_inviting_every_day_switch(page)
+
+    """Парсинг"""
 
     def toggle_admin_switch(self, page):
         """Обработчик переключателя администраторов"""
