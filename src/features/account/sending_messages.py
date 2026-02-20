@@ -128,11 +128,24 @@ class SendTelegramMessages:
             await self.app_logger.log_and_display(f"Всего групп: {len(chat_list_fields)}")
 
             while self.is_sending:
+
+                if not client.is_connected():
+                    await self.app_logger.log_and_display("⚠️ Клиент отключён — завершаем рассылку.")
+                    self.is_sending = False
+                    break
+
                 await self.app_logger.log_and_display("🔄 Новый цикл рассылки...")
 
                 for group_link in chat_list_fields:
                     if not self.is_sending:
                         break
+
+                    # ← НОВОЕ: проверяем соединение перед каждой группой
+                    if not client.is_connected():
+                        await self.app_logger.log_and_display("⚠️ Клиент отключён — прерываем цикл по группам.")
+                        self.is_sending = False
+                        break
+
                     try:
                         await self.subscribe.subscribe_to_group_or_channel(client=client, groups=group_link)
                         messages, files = await self.all_find_and_all_files()
@@ -151,6 +164,10 @@ class SendTelegramMessages:
                         # Ждём, но проверяем флаг каждую секунду
                         for _ in range(e.seconds):
                             if not self.is_sending:
+                                break
+                            # ← НОВОЕ: проверяем соединение во время ожидания
+                            if not client.is_connected():
+                                self.is_sending = False
                                 break
                             await asyncio.sleep(1)
                     except UserBannedInChannelError:
@@ -182,8 +199,10 @@ class SendTelegramMessages:
                     except Exception as error:
                         logger.exception(error)
                     finally:
-                        # Задержка между отправками (прерываемая)
                         delay = random.randint(int(min_sec), int(max_sec))
+
+                        from progress.bar import Bar
+
                         for _ in range(delay):
                             if not self.is_sending:
                                 break
@@ -554,6 +573,13 @@ class SendTelegramMessages:
                         )
                     ]),
                     ft.Row(controls=[list_view], height=200),
+
+                    # ft.Text(
+                    #     value="Linear progress indicator",
+                    #     theme_style=ft.TextThemeStyle.HEADLINE_SMALL,
+                    # ),
+                    # ft.ProgressBar(width=400, value=0.8),
+
                     ft.Row(expand=True, controls=[account_drop_down_list]),
                     ft.Row(controls=[
                         self.send_message_personal_switch,
