@@ -318,22 +318,6 @@ def delete_contact_db(phone: str):
     Contact.delete().where(Contact.phone == phone).execute()
 
 
-# TODO добавить все используемые таблицы
-# def cleaning_db(table_name):
-#     """
-#     Очистка базы данных
-#     :param table_name: Название таблицы, данные из которой требуется очистить.
-#     """
-#     if table_name == 'members':  # Удаляем все записи из таблицы members
-#         MembersGroups.delete().execute()
-#     if table_name == 'contact':  # Удаляем все записи из таблицы contact
-#         Contact.delete().execute()
-#     if table_name == 'writing_group_links':  # Удаляем все записи из таблицы writing_group_links
-#         WritingGroupLinks.delete().execute()
-#     if table_name == 'links_inviting':  # Удаляем все записи из таблицы links_inviting
-#         LinksInviting.delete().execute()
-
-
 """Работа с таблицей members"""
 
 
