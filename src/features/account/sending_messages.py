@@ -6,7 +6,6 @@
 3. Кнопка «Остановить» корректно прерывает оба процесса и отключает клиент
 4. self._active_client хранит ссылку на клиент, чтобы stop-кнопка могла его разорвать
 """
-
 import asyncio
 import random
 import sys
@@ -80,6 +79,14 @@ class SendTelegramMessages:
         self._active_client = None  # ← ссылка на клиент для остановки извне
         self._mailing_task = None  # ← asyncio-задача рассылки
 
+        self.sleep_progress_bar = ft.ProgressBar(
+            # width=400,
+            expand=True,
+            visible=False,
+            value=0,
+            color=ft.Colors.BLUE,
+        )
+
     # ─────────────────────────────────────────────────────────
     # ГЛАВНЫЙ МЕТОД: параллельный запуск рассылки + автоответчик
     # ─────────────────────────────────────────────────────────
@@ -125,6 +132,11 @@ class SendTelegramMessages:
             Бесконечный цикл рассылки по чатам.
             Работает параллельно с обработчиком автоответчика.
             """
+            # total_groups = len(chat_list_fields)
+            # processed = 0
+            # self.progress_bar.value = 0
+            # self.page.update()
+
             await self.app_logger.log_and_display(f"Всего групп: {len(chat_list_fields)}")
 
             while self.is_sending:
@@ -200,13 +212,25 @@ class SendTelegramMessages:
                         logger.exception(error)
                     finally:
                         delay = random.randint(int(min_sec), int(max_sec))
+                        await self.app_logger.log_and_display(
+                            f"🌙 Уходим в режим ожидания на {delay} секунд... скоро продолжим 🚀"
+                        )
+                        # 🔵 Включаем анимацию ожидания
+                        self.sleep_progress_bar.visible = True
+                        self.sleep_progress_bar.value = 0
+                        self.page.update()
 
-                        from progress.bar import Bar
-
-                        for _ in range(delay):
+                        for second in range(delay):
                             if not self.is_sending:
                                 break
+
+                            self.sleep_progress_bar.value = (second + 1) / delay
+                            self.page.update()
                             await asyncio.sleep(1)
+
+                        # 🔴 Выключаем после ожидания
+                        self.sleep_progress_bar.visible = False
+                        self.page.update()
 
             await self.app_logger.log_and_display("🔚 Цикл рассылки завершён.")
 
@@ -574,11 +598,7 @@ class SendTelegramMessages:
                     ]),
                     ft.Row(controls=[list_view], height=200),
 
-                    # ft.Text(
-                    #     value="Linear progress indicator",
-                    #     theme_style=ft.TextThemeStyle.HEADLINE_SMALL,
-                    # ),
-                    # ft.ProgressBar(width=400, value=0.8),
+                    ft.Row(controls=[self.sleep_progress_bar,]),
 
                     ft.Row(expand=True, controls=[account_drop_down_list]),
                     ft.Row(controls=[
