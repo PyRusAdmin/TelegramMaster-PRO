@@ -45,8 +45,8 @@ class ToggleController:
         try:
             self.send_message_personal_switch.on_change = lambda e: self.toggle_send_message(page)
             self.send_message_group_switch.on_change = lambda e: self.toggle_send_message_group(page)
-        except Exception as e:
-            logger.exception(e)
+        except Exception as exeption:
+            logger.exception(exeption)
 
     """Инвайтинг"""
 

@@ -576,7 +576,8 @@ class SendTelegramMessages:
         self.send_message_personal_switch.expand = True
         self.send_message_group_switch.expand = True
 
-        ToggleController(self.send_message_personal_switch, self.send_message_group_switch).element_handler_send_message(
+        ToggleController(send_message_personal_switch=self.send_message_personal_switch,
+                         send_message_group_switch=self.send_message_group_switch).element_handler_send_message(
             self.page)
 
         # Разделение интерфейса на верхнюю и нижнюю части
