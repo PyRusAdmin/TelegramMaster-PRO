@@ -582,7 +582,7 @@ class SendTelegramMessages:
                 spacing=3,
                 controls=[
                     ft.Row(
-                        expand=True,
+                        # expand=True,
                         controls=[
                             await self.gui_program.create_gradient_text(
                                 text=f"{translations["ru"]["message_sending_menu"]["sending_messages_files_via_chats"]} и Отправка сообщений в личку"
