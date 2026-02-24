@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-ИЗМЕНЕНИЯ:
-1. performing_operation: рассылка и автоответчик работают параллельно через asyncio.gather
-2. Рассылка крутится в while-цикле, автоответчик слушает входящие одновременно
-3. Кнопка «Остановить» корректно прерывает оба процесса и отключает клиент
-4. self._active_client хранит ссылку на клиент, чтобы stop-кнопка могла его разорвать
-"""
 import asyncio
 import random
 import sys
@@ -131,11 +124,6 @@ class SendTelegramMessages:
             Бесконечный цикл рассылки по чатам.
             Работает параллельно с обработчиком автоответчика.
             """
-            # total_groups = len(chat_list_fields)
-            # processed = 0
-            # self.progress_bar.value = 0
-            # self.page.update()
-
             await self.app_logger.log_and_display(f"Всего групп: {len(chat_list_fields)}")
 
             while self.is_sending:
@@ -173,15 +161,6 @@ class SendTelegramMessages:
                         await self.app_logger.log_and_display(
                             f"{translations['ru']['errors']['flood_wait']}{e}", level="error"
                         )
-                        # Ждём, но проверяем флаг каждую секунду
-                        # for _ in range(e.seconds):
-                        #     if not self.is_sending:
-                        #         break
-                        # ← НОВОЕ: проверяем соединение во время ожидания
-                        # if not client.is_connected():
-                        #     self.is_sending = False
-                        #     break
-                        # await asyncio.sleep(1)
 
                         # 🔵 Включаем анимацию ожидания
                         self.sleep_progress_bar.visible = True
