@@ -197,23 +197,23 @@ class SubscribeUnsubscribeTelegram:
             )
         )
 
-    @staticmethod
-    async def extract_channel_id(link):
-        """
-        Извлекает идентификатор канала из ссылки.
-
-        :param link: Ссылка на канал
-        :return: Идентификатор канала или None
-        """
-        # Проверяем, начинается ли ссылка с 'https://t.me/'
-        if link.startswith('https://t.me/'):
-            return link[len('https://t.me/'):]
-        # Если ссылка начинается просто с 't.me/', удалим 't.me/'
-        elif link.startswith('t.me/'):
-            return link[len('t.me/'):]
-        # В остальных случаях возвращаем None
-        else:
-            return None
+    # @staticmethod
+    # async def extract_channel_id(link):
+    #     """
+    #     Извлекает идентификатор канала из ссылки.
+    #
+    #     :param link: Ссылка на канал
+    #     :return: Идентификатор канала или None
+    #     """
+    #     # Проверяем, начинается ли ссылка с 'https://t.me/'
+    #     if link.startswith('https://t.me/'):
+    #         return link[len('https://t.me/'):]
+    #     # Если ссылка начинается просто с 't.me/', удалим 't.me/'
+    #     elif link.startswith('t.me/'):
+    #         return link[len('t.me/'):]
+    #     # В остальных случаях возвращаем None
+    #     else:
+    #         return None
 
     async def checking_links(self, client, link) -> None:
         """
