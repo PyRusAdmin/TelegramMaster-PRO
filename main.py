@@ -90,8 +90,6 @@ async def main_view(page: ft.Page):
             await creating_groups_and_chats.creating_groups_and_chats()
         elif page.route == "/sending_messages_files_via_chats":
             await send_telegram_messages.sending_messages_files_via_chats()
-        # elif page.route == "/sending_files_to_personal_account_with_limits":
-        #     await send_telegram_messages.send_files_to_personal_chats()
         elif page.route == "/bio_editing":
             await account_bio.bio_editing_menu()
         elif page.route == "/settings":
@@ -139,10 +137,6 @@ async def main_view(page: ft.Page):
                                     text=translations["ru"]["menu"]["account_connect"],
                                     route="/account_connection_menu",
                                 ),
-                                # await gui_program.menu_button(
-                                #     text=translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
-                                #     route="/sending_files_to_personal_account_with_limits",
-                                # ),
                                 await gui_program.menu_button(
                                     text=translations["ru"]["menu"]["reactions"],
                                     route="/working_with_reactions",
@@ -310,8 +304,6 @@ async def main(page: ft.Page):
             await creating_groups_and_chats.creating_groups_and_chats()
         elif page.route == "/sending_messages_files_via_chats":
             await send_telegram_messages.sending_messages_files_via_chats()
-        # elif page.route == "/sending_files_to_personal_account_with_limits":
-        #     await send_telegram_messages.send_files_to_personal_chats()
         elif page.route == "/bio_editing":
             await account_bio.bio_editing_menu()
         elif page.route == "/settings":
@@ -358,10 +350,6 @@ async def main(page: ft.Page):
                                 await gui_program.menu_button(
                                     translations["ru"]["menu"]["account_connect"],
                                     "/account_connection_menu"),
-                                # await gui_program.menu_button(
-                                #     translations["ru"]["message_sending_menu"]["sending_personal_messages_with_limits"],
-                                #     "/sending_files_to_personal_account_with_limits"
-                                # ),
                                 await gui_program.menu_button(
                                     translations["ru"]["menu"]["reactions"],
                                     "/working_with_reactions"

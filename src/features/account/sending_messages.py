@@ -601,8 +601,8 @@ class SendTelegramMessages:
 
                     ft.Row(expand=True, controls=[account_drop_down_list]),
                     ft.Row(controls=[
-                        self.send_message_personal_switch, # Переключатель рассылки в личку
-                        self.send_message_group_switch, # Переключатель рассылки по группам
+                        self.send_message_personal_switch,  # Переключатель рассылки в личку
+                        self.send_message_group_switch,  # Переключатель рассылки по группам
                     ]),
                     ft.Row(controls=[self.limits], expand=True),
                     ft.Row(controls=[self.tb_time_from, self.tb_time_to], expand=True),
