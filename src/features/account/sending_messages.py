@@ -80,7 +80,6 @@ class SendTelegramMessages:
         self._mailing_task = None  # ← asyncio-задача рассылки
 
         self.sleep_progress_bar = ft.ProgressBar(
-            # width=400,
             expand=True,
             visible=False,
             value=0,
@@ -598,12 +597,12 @@ class SendTelegramMessages:
                     ]),
                     ft.Row(controls=[list_view], height=200),
 
-                    ft.Row(controls=[self.sleep_progress_bar,]),
+                    ft.Row(controls=[self.sleep_progress_bar, ]),
 
                     ft.Row(expand=True, controls=[account_drop_down_list]),
                     ft.Row(controls=[
-                        self.send_message_personal_switch,
-                        self.send_message_group_switch,
+                        self.send_message_personal_switch, # Переключатель рассылки в личку
+                        self.send_message_group_switch, # Переключатель рассылки по группам
                     ]),
                     ft.Row(controls=[self.limits], expand=True),
                     ft.Row(controls=[self.tb_time_from, self.tb_time_to], expand=True),
