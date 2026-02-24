@@ -169,18 +169,43 @@ class SendTelegramMessages:
                         self.is_sending = False
                         break
                     except FloodWaitError as e:
+
                         await self.app_logger.log_and_display(
                             f"{translations['ru']['errors']['flood_wait']}{e}", level="error"
                         )
                         # Ждём, но проверяем флаг каждую секунду
-                        for _ in range(e.seconds):
+                        # for _ in range(e.seconds):
+                        #     if not self.is_sending:
+                        #         break
+                        # ← НОВОЕ: проверяем соединение во время ожидания
+                        # if not client.is_connected():
+                        #     self.is_sending = False
+                        #     break
+                        # await asyncio.sleep(1)
+
+                        # 🔵 Включаем анимацию ожидания
+                        self.sleep_progress_bar.visible = True
+                        self.sleep_progress_bar.value = 0
+                        self.page.update()
+
+                        for second in range(e.seconds):
                             if not self.is_sending:
                                 break
+
                             # ← НОВОЕ: проверяем соединение во время ожидания
                             if not client.is_connected():
                                 self.is_sending = False
                                 break
+
+                            self.sleep_progress_bar.value = (second + 1) / e.seconds
+                            self.page.update()
                             await asyncio.sleep(1)
+
+                        # 🔴 Выключаем после ожидания
+                        self.sleep_progress_bar.visible = False
+                        self.page.update()
+
+
                     except UserBannedInChannelError:
                         await self.app_logger.log_and_display("❌ Запрещено отправлять сообщения в супергруппы.")
                     except ChatAdminRequiredError:
@@ -197,10 +222,27 @@ class SendTelegramMessages:
                         await self.app_logger.log_and_display(
                             f"{translations['ru']['errors']['slow_mode_wait']}{e}"
                         )
-                        for _ in range(e.seconds):
+                        # 🔵 Включаем анимацию ожидания
+                        self.sleep_progress_bar.visible = True
+                        self.sleep_progress_bar.value = 0
+                        self.page.update()
+
+                        for second in range(e.seconds):
                             if not self.is_sending:
                                 break
+
+                            # ← НОВОЕ: проверяем соединение во время ожидания
+                            if not client.is_connected():
+                                self.is_sending = False
+                                break
+
+                            self.sleep_progress_bar.value = (second + 1) / e.seconds
+                            self.page.update()
                             await asyncio.sleep(1)
+
+                        # 🔴 Выключаем после ожидания
+                        self.sleep_progress_bar.visible = False
+                        self.page.update()
                     except ValueError:
                         await self.app_logger.log_and_display(
                             f"❌ Ошибка рассылки, проверьте ссылку: {group_link}"
@@ -251,6 +293,13 @@ class SendTelegramMessages:
                 client: TelegramClient = await self.connect.client_connect_string_session(
                     session_name=account_drop_down_list.value
                 )
+
+                # ✅ Добавить проверку сразу после получения клиента
+                if client is None:
+                    logger.error("❌ Не удалось подключиться к аккаунту. Операция прервана.")
+                    await self.app_logger.log_and_display("❌ Не удалось подключиться к аккаунту. Операция прервана.")
+                    return  # Ранний выход — дальше ничего не выполняется
+
                 self._active_client = client  # сохраняем для кнопки «Стоп»
 
                 # ── Автоответчик ──────────────────────────────
