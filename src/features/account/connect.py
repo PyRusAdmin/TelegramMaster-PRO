@@ -166,12 +166,10 @@ class TGConnect:
                     except AttributeError:  # Если в get_me приходит NoneType (None)
                         pass
                     except TypeNotFoundError as e:
-                        # await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
                         await self.app_logger.log_and_display(
                             message=f"⛔ Битый файл или аккаунт banned: {session_name}.session. Возможно, запущен под другим IP")
                         await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
                     except AuthKeyUnregisteredError as e:
-                        # await client.disconnect()  # Разрываем соединение Telegram, для удаления session файла
                         await self.app_logger.log_and_display(
                             message=translations["ru"]["errors"]["auth_key_unregistered"])
                         await self.handle_banned_account(telegram_client=client, session_name=session_name, exception=e)
@@ -328,7 +326,6 @@ class TGConnect:
                     await client.disconnect()
                     await asyncio.sleep(5)
 
-                    # await delete_account_from_db(session_string=session_name, app_logger=self.app_logger)
                     await self.write_csv(data=session_name)
 
                 else:

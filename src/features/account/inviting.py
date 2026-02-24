@@ -95,7 +95,6 @@ class InvitingToAGroup:
         :return: None
         """
         list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
-        # self.page.controls.append(list_view)  # Добавляем ListView на страницу для отображения логов 📝
 
         self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
 
@@ -165,25 +164,6 @@ class InvitingToAGroup:
 
             limit = get_limit(limits)  # Получаем лимит введенный пользователем
 
-            # Получаем ВЕСЬ список пользователей для инвайтинга
-            # all_usernames = await select_records_with_limit(limit=None, app_logger=self.app_logger)
-            #
-            # if not all_usernames:
-            #     await self.app_logger.log_and_display(
-            #         message="В таблице members нет пользователей для инвайтинга."
-            #     )
-            #     await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-            #         message="🔚 Нет пользователей для инвайтинга"
-            #     )
-            #     self.page.go("/inviting")
-            #     return
-            #
-            # await self.app_logger.log_and_display(
-            #     message=f"Всего пользователей для инвайтинга: {len(all_usernames)}\n"
-            #             f"Лимит на аккаунт: {limit if limit else 'не установлен'}\n"
-            #             f"Количество аккаунтов: {len(self.session_string)}"
-            # )
-
             all_usernames = await load_and_validate_users(
                 app_logger=self.app_logger, gui_program=self.gui_program, page=self.page, limit=limit,
                 session_string=self.session_string, page_go="/inviting", action_text="Инвайтинга"
@@ -228,7 +208,6 @@ class InvitingToAGroup:
                     await self.app_logger.log_and_display(
                         message=f"⚠️ Для аккаунта {session_name} нет пользователей"
                     )
-                    # await client.disconnect()
                     continue
 
                 await self.app_logger.log_and_display(
@@ -260,7 +239,6 @@ class InvitingToAGroup:
                             message=translations["ru"]["errors"]["script_stopped"],
                             level="error"
                         )
-                        # await client.disconnect()
                         return  # Полностью прерываем работу
 
                     except ConnectionError as e:
@@ -509,7 +487,6 @@ class InvitingToAGroup:
         """
         try:
             await self.app_logger.log_and_display(message=f"Попытка приглашения {username} в группу {username_group}.")
-            # await client.connect()
 
             # Выполняем приглашение
             await client(InviteToChannelRequest(username_group, [username]))
@@ -637,7 +614,6 @@ class InvitingToAGroup:
                 time_range_2=time_inviting_2,
                 username=username
             )
-            # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за того, что запись в чат запрещена")
         except InviteRequestSentError:
             await self.app_logger.log_and_display(
@@ -648,19 +624,12 @@ class InvitingToAGroup:
                 time_range_2=time_inviting_2,
                 username=username
             )
-            # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за отправки запроса на приглашение")
         except FloodWaitError as e:
             await self.app_logger.log_and_display(
                 message=f"{translations["ru"]["errors"]["flood_wait"]}{e}",
                 level="error"
             )
-            # await self.utils.random_dream(
-            #     min_seconds=time_inviting_1,
-            #     max_seconds=time_inviting_2
-            # )
-            # await client.disconnect()  # Прерываем работу и меняем аккаунт
-            # return # Прерываем выполнение, чтобы не перегружать API
             raise ConnectionError("Клиент отключен из-за ограничения Flood Wait")  # ⬅️ НОВОЕ!
         except AuthKeyUnregisteredError:
             await self.app_logger.log_and_display(
@@ -670,7 +639,6 @@ class InvitingToAGroup:
                 min_seconds=time_inviting_1,
                 max_seconds=time_inviting_2
             )
-            # await client.disconnect()
             raise ConnectionError("Клиент отключён из-за незарегистрированного ключа аутентификации")
         except PeerFloodError:
             await self.app_logger.log_and_display(
@@ -681,7 +649,6 @@ class InvitingToAGroup:
                 min_seconds=time_inviting_1,
                 max_seconds=time_inviting_2
             )
-            # await client.disconnect()  # Прерываем работу и меняем аккаунт
             raise ConnectionError("Клиент отключен из-за флуда узла")
 
         except Exception as e:

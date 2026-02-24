@@ -11,14 +11,11 @@ time_subscription_2 = config.get('time_subscription', 'time_subscription_2', fal
 api_id = config.get('telegram_settings', 'id', fallback=None)
 api_hash = config.get('telegram_settings', 'hash', fallback=None)
 
-# TIME_SENDING_MESSAGES_1 = config.get('time_inviting', 'time_inviting_1', fallback=None)
-# TIME_SENDING_MESSAGES_2 = config.get('time_inviting', 'time_inviting_2', fallback=None)
-
 """Настройки внешнего вида программы"""
 
 PROGRAM_NAME = "TelegramMaster-PRO"  # Имя программы
-PROGRAM_VERSION = "2.8.24"  # Версия программы
-DATE_OF_PROGRAM_CHANGE = "20.02.2026"  # Дата изменения (обновления)
+PROGRAM_VERSION = "2.8.25"  # Версия программы
+DATE_OF_PROGRAM_CHANGE = "25.02.2026"  # Дата изменения (обновления)
 
 # Ширина программы / высота программы
 window_width = 1050  # Ширина (программы)
@@ -30,8 +27,6 @@ width_one_input = int(window_width) / 2 - 27  # 2 поля ввода (без к
 width_tvo_input = 245  # 4 поля ввода (без кнопки сохранить)
 
 # Широкая одиночная кнопка
-# wide_single_button = 300  # Применяется: Инвайтинг
-
 BUTTON_HEIGHT = 30  # Высота (кнопок главного меню)
 BUTTON_WIDTH = 400  # Ширина (кнопок главного меню)
 

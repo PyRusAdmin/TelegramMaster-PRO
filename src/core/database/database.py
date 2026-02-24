@@ -404,15 +404,6 @@ def add_member_to_db(log_data):
         )
 
 
-# def write_data_to_db(writing_group_links) -> None:
-#     """
-#     Запись действий аккаунта в базу данных
-#
-#     :param writing_group_links: Ссылка на группу
-#     """
-#     MembersGroups.delete().where(WritingGroupLinks.writing_group_links == writing_group_links).execute()
-
-
 def delete_row_db(username) -> None:
     """
     Удаляет строку из таблицы
@@ -493,10 +484,6 @@ def get_proxy_database():
         ))
     logger.warning(proxy_data)
     return proxy_data
-
-
-# def open_and_read_data():
-#     pass
 
 
 """Запись ссылки для инвайтинга"""

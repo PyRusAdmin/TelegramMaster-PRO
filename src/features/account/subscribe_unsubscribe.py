@@ -98,7 +98,6 @@ class SubscribeUnsubscribeTelegram:
                         # Проверка ссылок для подписки и подписка на группу или канал
                         logger.info(f"Работа с аккаунтом {session_name}")
                         await self.checking_links(client, link_tuple)
-                    # await client.disconnect()
                 await self.app_logger.end_time(start)
 
             except Exception as e:
@@ -132,8 +131,6 @@ class SubscribeUnsubscribeTelegram:
             self.page.update()  # обновляем страницу
 
         time_range = [time_subscription_1, time_subscription_2]
-
-        # self.page.controls.append(list_view)  # добавляем ListView на страницу для отображения логов 📝
 
         for time_range_message in time_range: list_view.controls.append(
             ft.Text(f"Записанные данные в файле {time_range_message}"))  # отображаем сообщение в ListView
@@ -196,24 +193,6 @@ class SubscribeUnsubscribeTelegram:
                 ]
             )
         )
-
-    # @staticmethod
-    # async def extract_channel_id(link):
-    #     """
-    #     Извлекает идентификатор канала из ссылки.
-    #
-    #     :param link: Ссылка на канал
-    #     :return: Идентификатор канала или None
-    #     """
-    #     # Проверяем, начинается ли ссылка с 'https://t.me/'
-    #     if link.startswith('https://t.me/'):
-    #         return link[len('https://t.me/'):]
-    #     # Если ссылка начинается просто с 't.me/', удалим 't.me/'
-    #     elif link.startswith('t.me/'):
-    #         return link[len('t.me/'):]
-    #     # В остальных случаях возвращаем None
-    #     else:
-    #         return None
 
     async def checking_links(self, client, link) -> None:
         """
