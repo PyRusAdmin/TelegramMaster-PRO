@@ -7,7 +7,9 @@ from loguru import logger
 from src.core.configs import (
     PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height
 )
+from src.core.database.account import getting_account
 from src.core.database.create_database import create_database
+from src.core.database.database import getting_members
 from src.features.account.account_bio import AccountBIO
 from src.features.account.connect import TGConnect
 from src.features.account.contact import TGContact
@@ -296,6 +298,9 @@ async def main(page: ft.Page):
         fit=ft.BoxFit.CONTAIN,
     )
 
+    session_string = getting_account()  # Получаем строку сессии из файла базы данных
+    usernames = getting_members()  # Получаем username из базы данных
+
     card = ft.Card(
         shadow_color=ft.Colors.ON_SURFACE_VARIANT,
         content=ft.Container(
@@ -305,10 +310,10 @@ async def main(page: ft.Page):
                 # bgcolor=ft.Colors.GREY_400,
                 # leading=ft.Icon(ft.Icons.FOREST),
                 title=ft.Text(
-                    "Подключенных аккаунтов\n"
+                    f"Подключенных аккаунтов: {len(session_string)}\n"
                     "Групп для рассылки\n"
                     "Групп для инвайтинга\n"
-                    "Всего username"
+                    f"Всего username: {len(usernames)}"
                 ),
             ),
         ),

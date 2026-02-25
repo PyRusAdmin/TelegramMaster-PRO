@@ -340,6 +340,21 @@ class MembersGroups(Model):
         table_name = 'members'
 
 
+def getting_members():
+    """
+    Получение username из базы данных
+    :return:
+    """
+    usernames = []
+    query = MembersGroups.select(MembersGroups.username, MembersGroups.user_id)
+    for row in query:
+        if row.username == "":
+            pass
+        else:
+            usernames.append(row.username)
+    return usernames
+
+
 async def select_records_with_limit(limit, app_logger):
     """
     Возвращает список usernames и user_id из таблицы members
@@ -350,10 +365,8 @@ async def select_records_with_limit(limit, app_logger):
     query = MembersGroups.select(MembersGroups.username, MembersGroups.user_id)
     for row in query:
         if row.username == "":
-            # logger.info(f"У пользователя User ID: {row.user_id} нет username", )
             pass
         else:
-            # logger.info(f"Username: {row.username}, User ID: {row.user_id}", )
             usernames.append(row.username)
 
     await app_logger.log_and_display(message=f"Всего username: {len(usernames)}")
