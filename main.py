@@ -296,6 +296,24 @@ async def main(page: ft.Page):
         fit=ft.BoxFit.CONTAIN,
     )
 
+    card = ft.Card(
+        shadow_color=ft.Colors.ON_SURFACE_VARIANT,
+        content=ft.Container(
+            width=400,
+            padding=10,
+            content=ft.ListTile(
+                # bgcolor=ft.Colors.GREY_400,
+                # leading=ft.Icon(ft.Icons.FOREST),
+                title=ft.Text(
+                    "Подключенных аккаунтов\n"
+                    "Групп для рассылки\n"
+                    "Групп для инвайтинга\n"
+                    "Всего username"
+                ),
+            ),
+        ),
+    )
+
     # Обработка смены маршрута
     async def route_change(_):
         page.views.clear()
@@ -460,6 +478,7 @@ async def main(page: ft.Page):
                                         ),
                                     ]
                                 ),
+                                card,
                             ],
                             expand=True,
                         ),
