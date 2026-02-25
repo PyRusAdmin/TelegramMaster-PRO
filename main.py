@@ -304,7 +304,7 @@ async def main(page: ft.Page):
     card = ft.Card(
         shadow_color=ft.Colors.ON_SURFACE_VARIANT,
         content=ft.Container(
-            width=400,
+            width=580,
             padding=10,
             content=ft.ListTile(
                 # bgcolor=ft.Colors.GREY_400,
