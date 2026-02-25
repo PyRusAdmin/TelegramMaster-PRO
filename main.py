@@ -9,7 +9,7 @@ from src.core.configs import (
 )
 from src.core.database.account import getting_account
 from src.core.database.create_database import create_database
-from src.core.database.database import getting_members
+from src.core.database.database import getting_members, get_links_table_group_send_messages, get_links_inviting
 from src.features.account.account_bio import AccountBIO
 from src.features.account.connect import TGConnect
 from src.features.account.contact import TGContact
@@ -300,6 +300,8 @@ async def main(page: ft.Page):
 
     session_string = getting_account()  # Получаем строку сессии из файла базы данных
     usernames = getting_members()  # Получаем username из базы данных
+    writing_group_links = get_links_table_group_send_messages()
+    links_inviting = get_links_inviting()
 
     card = ft.Card(
         shadow_color=ft.Colors.ON_SURFACE_VARIANT,
@@ -311,8 +313,8 @@ async def main(page: ft.Page):
                 # leading=ft.Icon(ft.Icons.FOREST),
                 title=ft.Text(
                     f"Подключенных аккаунтов: {len(session_string)}\n"
-                    "Групп для рассылки\n"
-                    "Групп для инвайтинга\n"
+                    f"Групп для рассылки сообщений по чатам: {len(writing_group_links)}\n"
+                    f"Групп для инвайтинга: {len(links_inviting)}\n"
                     f"Всего username: {len(usernames)}"
                 ),
             ),
