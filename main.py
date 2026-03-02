@@ -65,20 +65,54 @@ async def main_view(page: ft.Page):
         fit=ft.BoxFit.CONTAIN,
     )
 
+    session_string = getting_account()  # Получаем строку сессии из файла базы данных
+    usernames = getting_members()  # Получаем username из базы данных
+    writing_group_links = get_links_table_group_send_messages()
+    links_inviting = get_links_inviting()
+
     card = ft.Card(
         shadow_color=ft.Colors.ON_SURFACE_VARIANT,
+        show_border_on_foreground=True,
         content=ft.Container(
-            width=400,
+            width=580,
             padding=10,
             content=ft.ListTile(
-                # bgcolor=ft.Colors.GREY_400,
-                # leading=ft.Icon(ft.Icons.FOREST),
                 title=ft.Text(
-                    "Подключенных аккаунтов\n"
-                    "Групп для рассылки\n"
-                    "Групп для инвайтинга\n"
-                    "Всего username"
-                ),
+                    spans=[
+                        ft.TextSpan(
+                            text="Подключенных аккаунтов: ",
+                            style=ft.TextStyle(weight=ft.FontWeight.BOLD, color=ft.Colors.GREY_900),
+                        ),
+                        ft.TextSpan(
+                            text=f"{len(session_string)}\n",
+                            style=ft.TextStyle(color=ft.Colors.RED_500, weight=ft.FontWeight.BOLD),  # 🔴
+                        ),
+                        ft.TextSpan(
+                            text="Групп для рассылки сообщений по чатам: ",
+                            style=ft.TextStyle(weight=ft.FontWeight.BOLD, color=ft.Colors.GREY_900),
+                        ),
+                        ft.TextSpan(
+                            text=f"{len(writing_group_links)}\n",
+                            style=ft.TextStyle(color=ft.Colors.RED_500, weight=ft.FontWeight.BOLD),
+                        ),
+                        ft.TextSpan(
+                            text="Групп для инвайтинга: ",
+                            style=ft.TextStyle(weight=ft.FontWeight.BOLD, color=ft.Colors.GREY_900),
+                        ),
+                        ft.TextSpan(
+                            text=f"{len(links_inviting)}\n",
+                            style=ft.TextStyle(color=ft.Colors.RED_500, weight=ft.FontWeight.BOLD),
+                        ),
+                        ft.TextSpan(
+                            text="Всего username: ",
+                            style=ft.TextStyle(weight=ft.FontWeight.BOLD, color=ft.Colors.GREY_900),
+                        ),
+                        ft.TextSpan(
+                            text=f"{len(usernames)}",
+                            style=ft.TextStyle(color=ft.Colors.RED_500, weight=ft.FontWeight.BOLD),
+                        ),
+                    ],
+                )
             ),
         ),
     )
