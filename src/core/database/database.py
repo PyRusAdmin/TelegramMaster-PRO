@@ -77,7 +77,7 @@ class GroupsSendMessages(Model):
 
     # Статистика участников
     participants_count = IntegerField(null=True)  # Количество участников
-    participants_hidden = TextField(null=True)  # Участники скрыты
+    participants_hidden = TextField(null=True, default='')  # Участники скрыты
 
     # Тип группы
     type_display = TextField(null=True)  # Является ли мегагруппой
@@ -193,17 +193,20 @@ def update_group_send_messages_table(link, telegram_id, title, username, about, 
 
 
 def write_group_send_message_table(chat_input):
-    chat_input = chat_input.strip()
-    logger.info(f"Записываем данные: {chat_input}")
+    try:
+        chat_input = chat_input.strip()
+        logger.info(f"Записываем данные: {chat_input}")
 
-    # Разделяем по строкам и фильтруем пустые значения
-    links = [link.strip() for link in chat_input.splitlines() if link.strip()]
+        # Разделяем по строкам и фильтруем пустые значения
+        links = [link.strip() for link in chat_input.splitlines() if link.strip()]
 
-    logger.info(f"Найдено ссылок: {len(links)}")
-    for link in links:
-        logger.debug(f"Сохраняем ссылку: {link}")
-        group = GroupsSendMessages(link=link)
-        group.save()
+        logger.info(f"Найдено ссылок: {len(links)}")
+        for link in links:
+            logger.debug(f"Сохраняем ссылку: {link}")
+            group = GroupsSendMessages(link=link)
+            group.save()
+    except Exception as e:
+        logger.exception(e)
 
 
 def get_links_table_group_send_messages():
