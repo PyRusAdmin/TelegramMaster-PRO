@@ -91,10 +91,9 @@ async def update_phone_by_session(session_string: str, new_phone: str, app_logge
     :return: True при успехе, False при ошибке
     """
     try:
-        rows_updated = (Account
-                        .update(phone_number=new_phone)
-                        .where(Account.session_string == session_string)
-                        .execute())
+        rows_updated = (
+            Account.update(phone_number=new_phone).where(Account.session_string == session_string).execute()
+        )
         if rows_updated > 0:
             await app_logger.log_and_display(f"✅ Номер аккаунта обновлён: {new_phone}")
             return True
