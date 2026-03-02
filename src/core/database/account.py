@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from peewee import Model, CharField
+from peewee import Model, CharField, DoesNotExist
 from loguru import logger
 from src.core.database.database import db
 
@@ -62,7 +62,7 @@ async def delete_account_from_db(session_string: str, app_logger) -> None:
 
         await app_logger.log_and_display(message=f"Аккаунт {phone_number} успешно удалён из базы данных.")
 
-    except Account.DoesNotExist:
+    except DoesNotExist:
         await app_logger.log_and_display(message=f"Аккаунт с session_string='{session_string}' не найден в базе.")
     except Exception as e:
         logger.exception("Ошибка при удалении аккаунта")
