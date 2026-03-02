@@ -3,6 +3,7 @@ ru:
     sending_messages_via_chats: "💬 Рассылка сообщений"
     sending_messages_files_via_chats: "💬 Рассылка сообщений"
     sending_personal_messages_with_limits: "💬 Рассылка сообщений"
+    delete_group_send_messages: "🗑️ Очистка списка для рассылки сообщений по чатам"
 
   edit_bio_menu:
     changing_the_username: "🔄 Изменение username"

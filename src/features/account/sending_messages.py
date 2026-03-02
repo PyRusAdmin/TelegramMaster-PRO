@@ -20,7 +20,8 @@ from src.core.configs import (
 )
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import (
-    write_group_send_message_table, get_links_table_group_send_messages, update_group_send_messages_table
+    write_group_send_message_table, get_links_table_group_send_messages, update_group_send_messages_table,
+    delete_group_send_messages
 )
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
@@ -574,6 +575,13 @@ class SendTelegramMessages:
             except Exception as e:
                 logger.exception(e)
 
+        async def delete_group_send_messag():
+            """
+            Очистка таблицы group_send_messages
+            :return:
+            """
+            await delete_group_send_messages(self.gui_program)
+
         # ── кнопка «Остановить» ──────────────────────────────
 
         async def stop_sending(_=None):
@@ -648,6 +656,12 @@ class SendTelegramMessages:
                                     expand=True, height=BUTTON_HEIGHT,
                                     on_click=checking_links_group,
                                 ),
+                                ft.Button(
+                                    content=translations["ru"]["message_sending_menu"]["delete_group_send_messages"],
+                                    expand=True, height=BUTTON_HEIGHT,
+                                    on_click=delete_group_send_messag,
+                                )
+
                             ]),
                             ft.Row(expand=True, controls=[
                                 ft.Button(

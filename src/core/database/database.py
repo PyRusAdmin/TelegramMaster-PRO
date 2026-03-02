@@ -14,6 +14,22 @@ from src.gui.gui import AppLogger
 db = SqliteDatabase(path_folder_database)
 
 
+async def delete_group_send_messages(gui_program):
+    """Очистка таблицы group_send_messages"""
+
+    # Получаем все записи перед удалением (если нужно сохранить данные)
+    records = []
+    for record in GroupsSendMessages.select():
+        records.append(f"{record.link}")
+
+    # Очищаем таблицу
+    deleted_count = GroupsSendMessages.delete().execute()
+    logger.warning(f"✅ Успешно удалено {deleted_count} записей из таблицы group_send_messages")
+    await gui_program.show_notification(
+        message=f"✅ Успешно удалено {deleted_count} записей из таблицы group_send_messages"
+    )
+
+
 class WritingGroupLinks(Model):
     """
     Таблица для хранения ссылок на группы в таблице writing_group_links
