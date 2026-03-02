@@ -4,6 +4,7 @@ ru:
     sending_messages_files_via_chats: "💬 Рассылка сообщений"
     sending_personal_messages_with_limits: "💬 Рассылка сообщений"
     delete_group_send_messages: "🗑️ Очистка списка для рассылки сообщений по чатам"
+    check_links_for_mailing: "Проверка ссылок для рассылки"
 
   edit_bio_menu:
     changing_the_username: "🔄 Изменение username"
@@ -37,6 +38,7 @@ ru:
     #    back: "⬅️ Назад"
     start: "🚀 Начать"
     done: "✅ Готово"
+    stop_mailing: "⛔ Остановить рассылку"
 
   account_verification:
     spam_check: "🤖 Проверка через спам бот"

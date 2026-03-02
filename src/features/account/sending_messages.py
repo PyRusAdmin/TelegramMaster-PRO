@@ -652,7 +652,7 @@ class SendTelegramMessages:
                         controls=[
                             ft.Row(expand=True, controls=[
                                 ft.Button(
-                                    content="Проверка ссылок для рассылки",
+                                    content=translations["ru"]["message_sending_menu"]["check_links_for_mailing"],
                                     expand=True, height=BUTTON_HEIGHT,
                                     on_click=checking_links_group,
                                 ),
@@ -672,7 +672,7 @@ class SendTelegramMessages:
                             ]),
                             ft.Row(expand=True, controls=[
                                 ft.Button(
-                                    content="⛔ Остановить рассылку",
+                                    content=translations["ru"]["buttons"]["stop_mailing"],
                                     expand=True, height=BUTTON_HEIGHT,
                                     on_click=stop_sending,
                                 ),
