@@ -104,3 +104,28 @@ async def update_phone_by_session(session_string: str, new_phone: str, app_logge
         logger.exception("Ошибка при обновлении номера")
         await app_logger.log_and_display(f"❌ Ошибка обновления номера: {e}")
         return False
+
+
+async def delete_invalid_accounts_from_database(gui_program):
+    """
+    Очистка базы данных от аккаунтов, которые были занесены в базу данных. Перед удалением, аккаунты сохраняются в файл.
+    :return: None
+    """
+    accounts = []
+    for record in Account.select(Account.session_string, Account.phone_number):
+        accounts.append(f"{record.session_string};{record.phone_number}")
+
+    logger.info(f"Сохраняем аккаунты в файл: {accounts}")
+
+    # Дозаписываем данные в txt файл (режим 'a')
+    with open('user_data/accounts.txt', 'a', encoding='utf-8') as f:
+        for account in accounts:
+            f.write(account + '\n')
+
+    # Очищаем базу данных
+    query = Account.delete()
+    query.execute()
+
+    await gui_program.show_notification(  # ✅ Показываем уведомление пользователю
+        message="✅ Все аккаунты сохранены в user_data/accounts.txt и удалены из базы данных."
+    )

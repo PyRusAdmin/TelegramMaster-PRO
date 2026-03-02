@@ -17,7 +17,8 @@ from thefuzz import fuzz
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, api_id, api_hash
 from src.core.database.account import (
-    getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session, Account
+    getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session, Account,
+    delete_invalid_accounts_from_database
 )
 from src.core.utils import Utils
 from src.features.proxy.checking_proxy import Proxy
@@ -388,29 +389,12 @@ class TGConnect:
             max_lines=1
         )
 
-        async def delete_invalid_accounts_from_database():
+        async def delete_invalid_accounts_from_databases():
             """
-            Очистка базы данных от аккаунтов, которые были занесены в базу данных. Перед удалением, аккаунты сохраняются в файл.
-            :return: None
+            Очистка базы данных с аккаунтами
+            :return:
             """
-            accounts = []
-            for record in Account.select(Account.session_string, Account.phone_number):
-                accounts.append(f"{record.session_string};{record.phone_number}")
-
-            logger.info(f"Сохраняем аккаунты в файл: {accounts}")
-
-            # Дозаписываем данные в txt файл (режим 'a')
-            with open('user_data/accounts.txt', 'a', encoding='utf-8') as f:
-                for account in accounts:
-                    f.write(account + '\n')
-
-            # Очищаем базу данных
-            query = Account.delete()
-            query.execute()
-
-            await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                message="✅ Все аккаунты сохранены в user_data/accounts.txt и удалены из базы данных."
-            )
+            await delete_invalid_accounts_from_database(self.gui_program)
 
         async def connecting_number_accounts(_) -> None:
             """Подключение аккаунта Telegram по номеру телефона"""
@@ -638,7 +622,7 @@ class TGConnect:
                         content="Очистить базу данных",
                         width=WIDTH_WIDE_BUTTON,
                         height=BUTTON_HEIGHT,
-                        on_click=delete_invalid_accounts_from_database
+                        on_click=delete_invalid_accounts_from_databases
                     ),
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     # "Подключение аккаунта Telegram по номеру телефона.",
