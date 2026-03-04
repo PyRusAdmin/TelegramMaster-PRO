@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from src.core.database.account import Account
 from src.core.database.database import (
     db, AccountContacts, WritingGroupLinks, GroupsAndChannels, MembersAdmin, LinksInviting, MembersGroups, Contact,
