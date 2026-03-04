@@ -28,7 +28,7 @@ from src.locales.translations_loader import translations
 logger.add("user_data/log/log_INFO.log", rotation="500 KB", compression="zip", level="INFO")
 logger.add("user_data/log/log_ERROR.log", rotation="500 KB", compression="zip", level="ERROR")
 
-create_database()
+create_database()  # Создает таблицы для базы данных
 
 
 async def main_view(page: ft.Page):

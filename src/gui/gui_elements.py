@@ -118,8 +118,10 @@ class GUIProgram:
         :rtype: ft.Container https://docs.flet.dev/controls/container/
         """
         return ft.Container(
+            padding=1,
             content=ft.Button(
                 content=text,
+                style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=3)),
                 width=BUTTON_WIDTH,
                 height=BUTTON_HEIGHT,
                 on_click=lambda _: asyncio.create_task(self.page.push_route(route)),
