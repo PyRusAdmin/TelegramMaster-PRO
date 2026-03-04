@@ -43,7 +43,7 @@ class SendTelegramMessages:
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.gui_program = GUIProgram(page=page)
-        self.session_string = getting_account()
+        self.session_string = getting_account() # Получаем строку сессии из файла базы данных
         self.subscribe = Subscribe(page=page)
         self.account_data = get_account_list()
 

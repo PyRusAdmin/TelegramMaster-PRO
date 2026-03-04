@@ -63,7 +63,7 @@ class TGConnect:
             """
             try:
                 start = await self.app_logger.start_time()  # Запуск таймера
-                session_string = getting_account()
+                session_string = getting_account()  # Получаем строку сессии из файла базы данных
                 for session_name in session_string:
                     client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
                     try:
@@ -131,7 +131,7 @@ class TGConnect:
             try:
                 start = await self.app_logger.start_time()  # Измеряет начало старта функции
                 await self.proxy.checking_the_proxy_for_work()  # Проверка proxy
-                session_string = getting_account()
+                session_string = getting_account()  # Получаем строку сессии из файла базы данных
                 for session_name in session_string:
                     await self.app_logger.log_and_display(message=f"⚠️ Проверяемый аккаунт: {session_name}")
                     # Проверка аккаунтов
