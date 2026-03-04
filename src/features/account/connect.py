@@ -17,7 +17,7 @@ from thefuzz import fuzz
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, api_id, api_hash
 from src.core.database.account import (
-    getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session, Account,
+    getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session,
     delete_invalid_accounts_from_database
 )
 from src.core.utils import Utils

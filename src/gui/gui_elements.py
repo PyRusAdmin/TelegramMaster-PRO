@@ -171,6 +171,15 @@ class GUIProgram:
         """
         return ft.Divider(height=1, color="red")
 
+    @staticmethod
+    async def vertical_diver():
+        """
+        Создает вертикальную разделительную линию
+
+        :return: Объект VerticalDivider
+        """
+        ft.VerticalDivider(width=1, color="red")
+
     def create_account_dropdown(self, account_data):
         """
         Создаёт выпадающий список (Dropdown) для выбора аккаунта.

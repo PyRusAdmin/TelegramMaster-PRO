@@ -226,6 +226,9 @@ async def main_view(page: ft.Page):
                             ],
                         ),
 
+                        # Вертикальный дивер
+                        await gui_program.vertical_diver(),  # Вертикальная линия
+
                         # ===== Правая колонка — надписи =====
                         ft.Column(
                             controls=[
@@ -491,6 +494,9 @@ async def main(page: ft.Page):
                                 ),
                             ],
                         ),
+
+                        # Вертикальный дивер
+                        await gui_program.vertical_diver(),  # Вертикальная линия
 
                         # ===== Правая колонка — надписи =====
                         ft.Column(
