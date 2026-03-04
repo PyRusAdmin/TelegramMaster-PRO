@@ -118,13 +118,18 @@ class GUIProgram:
         :rtype: ft.Container https://docs.flet.dev/controls/container/
         """
         return ft.Container(
-            padding=1,
+            padding=1,  # Внутренний отступ контейнера (маленький, чтобы кнопка не "прилипала" к краям)
             content=ft.Button(
-                content=text,
-                style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=3)),
-                width=BUTTON_WIDTH,
-                height=BUTTON_HEIGHT,
+                content=text,  # Текст кнопки, переданный как параметр
+                style=ft.ButtonStyle(
+                    shape=ft.RoundedRectangleBorder(  # Стиль кнопки с закруглёнными краями
+                        radius=3
+                    )
+                ),
+                width=BUTTON_WIDTH,  # Ширина кнопки берётся из конфигурации
+                height=BUTTON_HEIGHT,  # Высота кнопки берётся из конфигурации
                 on_click=lambda _: asyncio.create_task(self.page.push_route(route)),
+                # При клике — переход по указанному маршруту
             )
         )
 
