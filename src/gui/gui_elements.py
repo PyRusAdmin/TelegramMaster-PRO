@@ -12,6 +12,7 @@ class GUIProgram:
 
     def __init__(self, page: ft.Page):
         self.page = page
+        self.color_diver = "red"
 
     async def build_link_input_with_save_button(self, label_text, width):
         """
@@ -161,24 +162,21 @@ class GUIProgram:
             bgcolor=ft.Colors.SURFACE_CONTAINER_HIGHEST,
         )
 
-    # TODO: Применить во всем проекте, для одинакового оформления GUI программы
-    @staticmethod
-    async def diver_castom():
+    async def diver_castom(self):
         """
         Создает разделительную линию в интерфейсе.
 
         :return: Объект Divider
         """
-        return ft.Divider(height=1, color="red")
+        return ft.Divider(height=1, color=self.color_diver)
 
-    @staticmethod
-    async def vertical_diver():
+    async def vertical_diver(self):
         """
         Создает вертикальную разделительную линию
 
         :return: Объект VerticalDivider
         """
-        return ft.VerticalDivider(width=1, color="red")
+        return ft.VerticalDivider(width=1, color=self.color_diver)
 
     def create_account_dropdown(self, account_data):
         """
