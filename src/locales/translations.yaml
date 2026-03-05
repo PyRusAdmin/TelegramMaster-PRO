@@ -39,6 +39,7 @@ ru:
     start: "🚀 Начать"
     done: "✅ Готово"
     stop_mailing: "⛔ Остановить рассылку"
+    start_inviting: "Запуск"
 
   account_verification:
     spam_check: "🤖 Проверка через спам бот"

@@ -404,13 +404,14 @@ class InvitingToAGroup:
         ).element_handler_inviting(self.page)
 
         start_inviting = ft.Button(
-            content="Запуск",
-            width=window_width,  # Широкая одиночная кнопка
+            content=translations["ru"]["buttons"]["start_inviting"],
             height=BUTTON_HEIGHT,
+            expand=True,
             on_click=start_inviting_grup,  # Используем синхронную обёртку
             style=ft.ButtonStyle(
-                shape=ft.RoundedRectangleBorder(radius=8),
+                shape=ft.RoundedRectangleBorder(radius=30),
                 padding=ft.Padding(15, 10, 15, 10),
+                bgcolor=ft.Colors.GREEN,
             ),
         )
 
@@ -465,8 +466,11 @@ class InvitingToAGroup:
                         ]
                     ),
                     ft.Column(  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                        [
-                            start_inviting,
+                        controls=[
+                            ft.Row(
+                                expand=True,
+                                controls=[start_inviting]
+                            )
                         ]
                     )
                 ]
