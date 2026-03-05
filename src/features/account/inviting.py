@@ -403,16 +403,9 @@ class InvitingToAGroup:
             inviting_every_day_switch=inviting_every_day_switch
         ).element_handler_inviting(self.page)
 
-        start_inviting = ft.Button(
-            content=translations["ru"]["buttons"]["start_inviting"],
-            height=BUTTON_HEIGHT,
-            expand=True,
-            on_click=start_inviting_grup,  # Используем синхронную обёртку
-            style=ft.ButtonStyle(
-                shape=ft.RoundedRectangleBorder(radius=30),
-                padding=ft.Padding(15, 10, 15, 10),
-                bgcolor=ft.Colors.GREEN,
-            ),
+        start_inviting = await self.gui_program.gui_button(
+            text=translations["ru"]["buttons"]["start_inviting"],
+            route=start_inviting_grup
         )
 
         inviting_switch.disabled = False

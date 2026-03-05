@@ -134,6 +134,19 @@ class GUIProgram:
             )
         )
 
+    async def gui_button(self, text: str, route: str):
+        return ft.Button(
+            content=text,
+            height=BUTTON_HEIGHT,
+            expand=True,
+            on_click=route,  # Используем синхронную обёртку
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=30),
+                padding=ft.Padding(15, 10, 15, 10),
+                bgcolor=ft.Colors.GREEN,
+            ),
+        )
+
     async def show_notification(self, message: str):
         """
         Показывает пользователю всплывающее уведомление на странице Flet.
