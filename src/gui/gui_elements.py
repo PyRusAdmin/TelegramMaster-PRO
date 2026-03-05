@@ -12,7 +12,7 @@ class GUIProgram:
 
     def __init__(self, page: ft.Page):
         self.page = page
-        self.color_diver = "red"
+        self.color_diver = "#363636"
 
     async def build_link_input_with_save_button(self, label_text, width):
         """
