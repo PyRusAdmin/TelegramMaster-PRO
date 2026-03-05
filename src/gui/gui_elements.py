@@ -178,7 +178,7 @@ class GUIProgram:
 
         :return: Объект VerticalDivider
         """
-        ft.VerticalDivider(width=1, color="red")
+        return ft.VerticalDivider(width=1, color="red")
 
     def create_account_dropdown(self, account_data):
         """
