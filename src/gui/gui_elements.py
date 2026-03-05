@@ -183,7 +183,6 @@ class GUIProgram:
         Создаёт выпадающий список (Dropdown) для выбора аккаунта.
 
         :param account_data: Список кортежей вида (phone: str, session_str: str)
-        :param width: Ширина выпадающего списка
         :return: Экземпляр ft.Dropdown
         """
         # Создаём опции: текст — номер, ключ — session_string
