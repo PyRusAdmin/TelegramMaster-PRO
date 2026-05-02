@@ -29,7 +29,7 @@ async def index(request: Request):
     logger.info("Запущена главная страница документации")
     try:
         return templates.TemplateResponse(
-            "index.html", {
+            request, "index.html", {
                 "request": request,
                 "program_name": PROGRAM_NAME
             }
@@ -44,7 +44,7 @@ async def message_recording(request: Request):
     """Запись сообщений"""
     logger.info("Запущена страница — Запись сообщений")
     return templates.TemplateResponse(
-        'message_recording.html', {
+        request, 'message_recording.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "message_recording": translations["ru"]["menu_settings"]["message_recording"],
@@ -57,7 +57,7 @@ async def menu(request: Request):
     """Меню программы"""
     logger.info("Запущено меню программы")
     return templates.TemplateResponse(
-        "menu.html", {
+        request, "menu.html", {
             "request": request,
             "program_name": PROGRAM_NAME,
             "program_version": PROGRAM_VERSION,
@@ -74,7 +74,7 @@ async def inviting_page(request: Request):
     """🚀 Инвайтинг"""
     logger.info("Запущена страница инвайтинга")
     return templates.TemplateResponse(
-        "inviting.html", {
+        request, "inviting.html", {
             "request": request,
             "program_name": PROGRAM_NAME,
             "inviting": translations["ru"]["inviting_menu"]["inviting"],
@@ -92,7 +92,7 @@ async def sending_messages(request: Request):
     try:
         logger.info("Запущено страница рассылки сообщений")
         return templates.TemplateResponse(
-            'sending_messages.html', {
+            request, 'sending_messages.html', {
                 "request": request,
                 "program_name": PROGRAM_NAME,
                 "sending_messages_via_chats": translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
@@ -109,7 +109,7 @@ async def editing_bio(request: Request):
     """Редактирование BIO"""
     logger.info("Запущена страница редактирования БИО")
     return templates.TemplateResponse(
-        'editing_bio.html', {
+        request, 'editing_bio.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "changing_the_username": translations["ru"]["edit_bio_menu"]["changing_the_username"],
@@ -131,7 +131,7 @@ async def working_with_contacts(request: Request):
     """
     logger.info("Запущена страница работы с контактами")
     return templates.TemplateResponse(
-        'working_with_contacts.html', {
+        request, 'working_with_contacts.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "creating_a_contact_list": translations["ru"]["contacts_menu"]["creating_a_contact_list"],
@@ -154,7 +154,7 @@ async def settings(request: Request):
     """
     logger.info("Запущена страница настроек")
     return templates.TemplateResponse(
-        'settings.html', {
+        request, 'settings.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "choice_of_reactions": translations["ru"]["menu_settings"]["choice_of_reactions"],
@@ -173,7 +173,7 @@ async def working_with_reactions(request: Request):
     """👍 Работа с реакциями"""
     logger.info("Запущена страница работы с реакциями")
     return templates.TemplateResponse(
-        'working_with_reactions.html', {
+        request, 'working_with_reactions.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "setting_reactions": translations["ru"]["reactions_menu"]["setting_reactions"],
@@ -189,7 +189,7 @@ async def we_are_winding_up_post_views(request: Request):
     """👁️‍🗨️ Накручиваем просмотры постов"""
     logger.info("Запущена страница '👁️‍🗨️ Накручиваем просмотры постов' ")
     return templates.TemplateResponse(
-        'we_are_winding_up_post_views.html', {
+        request, 'we_are_winding_up_post_views.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "setting_reactions": translations["ru"]["reactions_menu"]["setting_reactions"],
@@ -204,7 +204,7 @@ async def parsing(request: Request):
     """🔍 Парсинг"""
     logger.info("Запущена страница парсинга")
     return templates.TemplateResponse(
-        'parsing.html', {
+        request, 'parsing.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "parse_single_or_multiple_groups": translations["ru"]["parsing_menu"]["parse_single_or_multiple_groups"],
@@ -223,7 +223,7 @@ async def subscribe_unsubscribe(request: Request):
     """Подписка, отписка"""
     logger.info("Запущена страница подписки, отписки")
     return templates.TemplateResponse(
-        'subscribe_unsubscribe.html', {
+        request, 'subscribe_unsubscribe.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "subscription": translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
@@ -238,7 +238,7 @@ async def connect_accounts(request: Request):
     """Подключение аккаунтов"""
     logger.info("Запущена страница подключения аккаунтов")
     return templates.TemplateResponse(
-        'connect_accounts.html', {
+        request, 'connect_accounts.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "connecting_accounts_by_phone_number": translations["ru"]["account_connect_menu"][
@@ -255,7 +255,7 @@ async def account_verification(request: Request):
     """Проверка аккаунтов"""
     logger.info("Запущена страница проверки аккаунтов")
     return templates.TemplateResponse(
-        'account_verification.html', {
+        request, 'account_verification.html', {
             "request": request,
             "program_name": PROGRAM_NAME
         }
@@ -267,7 +267,7 @@ async def creating_groups(request: Request):
     """Создание групп (чатов)"""
     logger.info("Запущена страница создания групп (чатов)")
     return templates.TemplateResponse(
-        'creating_groups.html', {
+        request, 'creating_groups.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "create_groups": translations["ru"]["menu"]["create_groups"],
@@ -280,7 +280,7 @@ async def launch_telegrammaster(request: Request):
     """Запуск TelegramMaster"""
     logger.info("Запущена страница документации, о запуске TelegramMaster-PRO")
     return templates.TemplateResponse(
-        'launch_telegrammaster.html', {
+        request, 'launch_telegrammaster.html', {
             "request": request,
             "program_name": PROGRAM_NAME
         }
@@ -292,7 +292,7 @@ async def working_with_errors_telegrammaster(request: Request):
     """Работа с ошибками TelegramMaster-PRO"""
     logger.info("Запущена страница документации, о работе с ошибками TelegramMaster-PRO")
     return templates.TemplateResponse(
-        'working_with_errors_telegrammaster.html', {
+        request, 'working_with_errors_telegrammaster.html', {
             "request": request,
             "program_name": PROGRAM_NAME
         }
@@ -304,7 +304,7 @@ async def install_python_update_pip(request: Request):
     """Установка Python, обновление PIP"""
     logger.info("Запущена страница документации, о установке Python, обновлении PIP")
     return templates.TemplateResponse(
-        'install_python_update_pip.html', {
+        request, 'install_python_update_pip.html', {
             "request": request,
             "program_name": PROGRAM_NAME
         }
@@ -317,7 +317,7 @@ async def preliminary_setting_of_program_installation_of_program_by_default(requ
     logger.info(
         "Запущена страница документации, о предварительной настройке программы, установке программы по умолчанию")
     return templates.TemplateResponse(
-        'preliminary_setting_of_program_installation_of_program_by_default.html', {
+        request, 'preliminary_setting_of_program_installation_of_program_by_default.html', {
             "request": request,
             "program_name": PROGRAM_NAME
         }
@@ -329,7 +329,7 @@ async def registration_api_id_api_hash(request: Request):
     """Получение api и hash"""
     logger.info('Запущена страница, о получении api и hash')
     return templates.TemplateResponse(
-        'registration_api_id_api_hash.html', {
+        request, 'registration_api_id_api_hash.html', {
             "request": request,
             "program_name": PROGRAM_NAME
         }
@@ -341,7 +341,7 @@ async def telegram_limits(request: Request):
     """Лимиты Telegram"""
     logger.info("Запущена страница документации, о лимитах Telegram")
     return templates.TemplateResponse(
-        'telegram_limits.html', {
+        request, 'telegram_limits.html', {
             "request": request,
             "program_name": PROGRAM_NAME
         }
@@ -353,7 +353,7 @@ async def importing_a_list_of_parsed_data(request: Request):
     """📋 Импорт списка от ранее спарсенных данных"""
     logger.info("Запущена страница 📋 Импорт списка от ранее спарсенных данных")
     return templates.TemplateResponse(
-        'importing_a_list_of_parsed_data.html', {
+        request, 'importing_a_list_of_parsed_data.html', {
             "request": request,
             "program_name": PROGRAM_NAME,
             "importing_a_list_of_parsed_data": translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
