@@ -90,14 +90,14 @@ TelegramMaster-PRO предоставляет следующий функцио�
 
 1. Установка Python 🐍:
 
-* Перейдите на официальный сайт Python.
-* Скачайте последнюю стабильную версию Python.
-* Запустите установку и обязательно добавьте Python в переменные среды (PATH).
-* Проверьте установку через командную строку командой:
+    * Перейдите на официальный сайт Python.
+    * Скачайте последнюю стабильную версию Python.
+    * Запустите установку и обязательно добавьте Python в переменные среды (PATH).
+    * Проверьте установку через командную строку командой:
 
-```sh
-python --version
-```
+    ```sh
+    python --version
+    ```
 
 2. Установка TelegramMaster-PRO 🚀:
 
@@ -117,23 +117,23 @@ pip install -r requirements.txt
 
 1. Установка Python:
 
-* Откройте терминал и установите Homebrew 🍺, если его еще нет:
+    * Откройте терминал и установите Homebrew 🍺, если его еще нет:
 
-```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+    ```sh
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
 
-* Установите Python 🐍:
+    * Установите Python 🐍:
 
-```sh
-brew install python
-```
+    ```sh
+    brew install python
+    ```
 
-Проверьте установку Python 🐍:
+   Проверьте установку Python 🐍:
 
-```sh
-python3 --version
-```
+    ```sh
+    python3 --version
+    ```
 
 2. Установка TelegramMaster-PRO 🚀:
 
@@ -143,19 +143,19 @@ python3 --version
 
 1. Установка Python 🐍:
 
-* Обновите пакеты и установите Python 🐍:
+    * Обновите пакеты и установите Python 🐍:
 
-```sh
-sudo apt update
-sudo apt install python3
-```
+    ```sh
+    sudo apt update
+    sudo apt install python3
+    ```
 
-Проверьте установку:
+   Проверьте установку:
 
-```sh
-python3 --version
-
-```
+    ```sh
+    python3 --version
+    
+    ```
 
 2. Установка TelegramMaster-PRO:
 
