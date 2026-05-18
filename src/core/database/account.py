@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from peewee import Model, CharField, DoesNotExist
 from loguru import logger
 from src.core.database.database import db

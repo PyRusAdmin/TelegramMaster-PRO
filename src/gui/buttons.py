@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import flet as ft  # Импортируем библиотеку flet
 
 from src.core.configs import WIDTH_WIDE_BUTTON, BUTTON_HEIGHT

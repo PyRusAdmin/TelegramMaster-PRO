@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Запуск документации"""
 from docs.app import start_app
 from loguru import logger

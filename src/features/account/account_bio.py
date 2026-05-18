@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger  # Импортируем библиотеку loguru
 from telethon import functions  # Импортируем библиотеку telethon
