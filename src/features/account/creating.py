@@ -64,7 +64,8 @@ class CreatingGroupsAndChats:
                 logger.exception(error)
             await self.app_logger.end_time(start=start)
             await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                message="🔚 Создания групп (чатов)")  # Выводим уведомление пользователю
+                message="🔚 Создания групп (чатов)"
+            )  # Выводим уведомление пользователю
 
         # Добавляем элементы интерфейса на страницу
         self.page.views.append(

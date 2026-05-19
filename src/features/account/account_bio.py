@@ -102,7 +102,8 @@ class AccountBIO:
                 client = await self.connect.client_connect_string_session(session_name=account_drop_down_list.value)
                 if len(profile_description_input_field.value) > 70:
                     await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                        f"❌ Описание профиля превышает 70 символов ({len(profile_description_input_field.value)}).")
+                        f"❌ Описание профиля превышает 70 символов ({len(profile_description_input_field.value)})."
+                    )
                     return
                 try:
                     result = await client(

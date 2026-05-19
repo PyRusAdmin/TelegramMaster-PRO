@@ -532,11 +532,15 @@ class SendTelegramMessages:
                         sys.exit(1)
 
                     await self.app_logger.end_time(start=start)
-                    await self.gui_program.show_notification(message="🔚 Конец рассылки сообщений")
+                    await self.gui_program.show_notification(
+                        message="🔚 Конец рассылки сообщений"
+                    )
                     self._active_client = None
 
             except ValueError as e:
-                await self.gui_program.show_notification(message=f"❌ Ошибка валидации времени: {e}")
+                await self.gui_program.show_notification(
+                    message=f"❌ Ошибка валидации времени: {e}"
+                )
             except Exception as error:
                 logger.exception(error)
             self.page.update()
@@ -570,7 +574,9 @@ class SendTelegramMessages:
                         max_seconds=max_seconds,
                     )
             except ValueError as e:
-                await self.gui_program.show_notification(message=f"❌ Ошибка валидации времени: {e}")
+                await self.gui_program.show_notification(
+                    message=f"❌ Ошибка валидации времени: {e}"
+                )
             except Exception as e:
                 logger.exception(e)
 

@@ -121,3 +121,5 @@ celerybeat.pid
 /uv.lock
 /user_data/accounts.txt
 /.venv/
+docs/__pycache__
+.antigravitycli

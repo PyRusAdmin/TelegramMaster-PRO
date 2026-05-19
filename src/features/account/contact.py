@@ -66,7 +66,8 @@ class TGContact:
 
                 await self.app_logger.end_time(start=start)
                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                    "🔚 Конец парсинга контактов")  # Выводим уведомление пользователю
+                    "🔚 Конец парсинга контактов"
+                )  # Выводим уведомление пользователю
             except Exception as error:
                 logger.exception(error)
 
@@ -85,7 +86,8 @@ class TGContact:
 
             await self.app_logger.end_time(start=start)
             await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
-                message="🔚 Конец удаления контактов контактов")  # Выводим уведомление пользователю
+                message="🔚 Конец удаления контактов контактов"
+            )  # Выводим уведомление пользователю
 
         async def inviting_contact(_) -> None:
             """
