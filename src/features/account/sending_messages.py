@@ -42,7 +42,7 @@ class SendTelegramMessages:
         self.app_logger = AppLogger(page=page)
         self.utils = Utils(page=page)
         self.gui_program = GUIProgram(page=page)
-        self.session_string = getting_account() # Получаем строку сессии из файла базы данных
+        self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe = Subscribe(page=page)
         self.account_data = get_account_list()
 
@@ -260,20 +260,18 @@ class SendTelegramMessages:
             """
             Запускает автоответчик + рассылку параллельно.
 
-            Автоответчик: обработчик events.NewMessage работает
-            автоматически в фоне Telethon (через asyncio event loop).
-            Рассылка: запускается как asyncio.Task, чтобы обе корутины
-            могли выполняться одновременно.
+            Автоответчик: обработчик events.NewMessage работает автоматически в фоне Telethon (через asyncio event loop).
+            Рассылка: запускается как asyncio.Task, чтобы обе корутины могли выполняться одновременно.
             """
             logger.warning(f"Выбранный аккаунт: {account_drop_down_list.value}")
 
             try:
                 start = await self.app_logger.start_time()
                 client: TelegramClient = await self.connect.client_connect_string_session(
-                    session_name=account_drop_down_list.value
+                    session_name=account_drop_down_list.value  # Аккаунт, который был выбран из списка, пользователем
                 )
 
-                # ✅ Добавить проверку сразу после получения клиента
+                # Проверка после получения клиента, если client is None, то прерываем выполнение и выводим сообщение
                 if client is None:
                     logger.error("❌ Не удалось подключиться к аккаунту. Операция прервана.")
                     await self.app_logger.log_and_display("❌ Не удалось подключиться к аккаунту. Операция прервана.")
@@ -288,12 +286,14 @@ class SendTelegramMessages:
                         await self.app_logger.log_and_display(
                             f"📩 Входящее: {event.message.message}"
                         )
-                        reply_text = (
-                                self.auto_reply_text_field.value
-                                or "Спасибо за сообщение! Мы ответим позже."
-                        )
-                        await event.respond(reply_text)
-                        await self.app_logger.log_and_display(f"🤖 Ответ: {reply_text}")
+
+                        # Получаем текст из поля ввода
+                        reply_text = self.auto_reply_text_field.value
+
+                        # Если текст не пустой, отправляем ответ
+                        if reply_text:
+                            await event.respond(reply_text)
+                            await self.app_logger.log_and_display(f"🤖 Ответ: {reply_text}")
 
                 # ── Запускаем рассылку как задачу ─────────────
                 # asyncio.create_task позволяет Telethon обрабатывать
