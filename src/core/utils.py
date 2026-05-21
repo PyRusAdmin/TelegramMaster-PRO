@@ -4,6 +4,7 @@ import os
 import os.path
 import random  # Импортируем модуль random, чтобы генерировать случайное число
 
+import flet as ft
 from loguru import logger
 
 from src.core.database.database import delete_row_db
@@ -12,7 +13,7 @@ from src.gui.gui import AppLogger
 
 class Utils:
 
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
         self.page = page
         self.app_logger = AppLogger(self.page)
 

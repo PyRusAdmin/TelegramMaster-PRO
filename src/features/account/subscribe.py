@@ -2,6 +2,7 @@ import asyncio
 import random
 import sqlite3
 
+import flet as ft
 from loguru import logger
 from telethon.errors import (
     ChannelPrivateError, SessionRevokedError, UserDeactivatedBanError, UsernameInvalidError, InviteRequestSentError,
@@ -16,7 +17,7 @@ from src.locales.translations_loader import translations
 
 class Subscribe:
 
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
         """
         Инициализация класса для подписки на группы и каналы в Telegram.
 

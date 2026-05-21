@@ -1,7 +1,7 @@
 import asyncio
 import sqlite3
 
-import flet as ft  # Импортируем библиотеку flet
+import flet as ft
 from loguru import logger
 from telethon import functions
 from telethon.errors import (
@@ -29,7 +29,7 @@ from src.locales.translations_loader import translations
 class ParsingGroupMembers:
     """Класс для парсинга групп, на которые подписан аккаунт."""
 
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
         """
         Инициализация класса для парсинга участников групп Telegram.
 

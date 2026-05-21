@@ -28,7 +28,7 @@ from src.locales.translations_loader import translations
 
 class SubscribeUnsubscribeTelegram:
 
-    def __init__(self, page):
+    def __init__(self, page: ft.Page):
         """
         Инициализация класса для подписки и отписки от групп и каналов в Telegram.
 

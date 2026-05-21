@@ -14,9 +14,7 @@ from telethon.errors import (
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import CheckChatInviteRequest
 
-from src.core.configs import (
-    BUTTON_HEIGHT, path_folder_with_messages
-)
+from src.core.configs import BUTTON_HEIGHT, path_folder_with_messages
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import (
     write_group_send_message_table, get_links_table_group_send_messages, update_group_send_messages_table,
@@ -296,8 +294,7 @@ class SendTelegramMessages:
                             await self.app_logger.log_and_display(f"🤖 Ответ: {reply_text}")
 
                 # ── Запускаем рассылку как задачу ─────────────
-                # asyncio.create_task позволяет Telethon обрабатывать
-                # входящие события (автоответчик) пока идёт рассылка
+                # asyncio.create_task позволяет Telethon обрабатывать входящие события (автоответчик) пока идёт рассылка
                 self._mailing_task = asyncio.create_task(
                     mailing_loop(client, chat_list_fields, min_seconds, max_seconds)
                 )
