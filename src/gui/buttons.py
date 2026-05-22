@@ -6,22 +6,30 @@ from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 
-async def menu_button_fun(text: str, width, height, on_click):
+async def menu_button_fun(text: str, on_click, bgcolor):
     """
     :param text: Текст, отображаемый на кнопке меню.
-    :type text: str
     :param on_click: Функция, которая должна быть выполнена
-    :param width: Ширина
-    :param height: Высота
     :return: Контейнер с кнопкой меню, готовый для добавления в layout (`Column`, `Row`, `View`).
-    :rtype: ft.Container https://docs.flet.dev/controls/container/
     """
-    return ft.Container(
-        content=ft.Button(
-            content=text,
-            width=width,
-            height=height,
-            on_click=on_click
+    # return ft.Container(  # ft.Container https://docs.flet.dev/controls/container/
+    #     content=ft.Button(
+    #         content=text,
+    #         width=width,
+    # height=BUTTON_HEIGHT, # Задает высоту кнопки.
+    # expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
+    # on_click=on_click
+    # ),
+    # )
+    return ft.Button(
+        content=text,  # Задает содержимое кнопки.
+        height=BUTTON_HEIGHT,  # Задает высоту кнопки.
+        expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
+        on_click=on_click,  # Используем синхронную обёртку
+        style=ft.ButtonStyle(
+            shape=ft.RoundedRectangleBorder(radius=30),  # Делает края кнопки сильно скругленными
+            padding=ft.Padding(15, 10, 15, 10),
+            bgcolor=bgcolor,  # Цвет кнопки
         ),
     )
 

@@ -134,15 +134,21 @@ class GUIProgram:
         )
 
     async def gui_button(self, text: str, route: str):
+        """
+        Формирует кнопку с текстом и маршрутом
+        :param text: Текст кнопки
+        :param route: Маршрут, на который будет выполнен переход при нажатии (например: "/parsing", "/settings").
+        :return: Объект кнопки Flet, готовый для добавления в интерфейс.
+        """
         return ft.Button(
-            content=text,
-            height=BUTTON_HEIGHT,
-            expand=True,
+            content=text,  # Задает содержимое кнопки.
+            height=BUTTON_HEIGHT,  # Задает высоту кнопки.
+            expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
             on_click=route,  # Используем синхронную обёртку
             style=ft.ButtonStyle(
-                shape=ft.RoundedRectangleBorder(radius=30),
+                shape=ft.RoundedRectangleBorder(radius=30),  # Делает края кнопки сильно скругленными
                 padding=ft.Padding(15, 10, 15, 10),
-                bgcolor=ft.Colors.GREEN,
+                bgcolor=ft.Colors.GREEN,  # Цвет кнопки
             ),
         )
 

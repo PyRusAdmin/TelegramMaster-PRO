@@ -266,36 +266,57 @@ class SettingPage:
                         ),
                         ft.Column(
                             controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                                await menu_button_fun(  # 👍 Выбор реакций
-                                    text=translations["ru"]["menu_settings"]["choice_of_reactions"],
-                                    width=WIDTH_WIDE_BUTTON,
-                                    height=BUTTON_HEIGHT,
-                                    on_click=reaction_gui
+                                ft.Row(
+                                    expand=True,
+                                    controls=[
+                                        await menu_button_fun(  # 👍 Выбор реакций
+                                            text=translations["ru"]["menu_settings"]["choice_of_reactions"],
+                                            on_click=reaction_gui,
+                                            bgcolor=ft.Colors.GREEN,
+                                        ),
+                                    ]
                                 ),
-                                await menu_button_fun(  # 🔐 Запись proxy
-                                    text=translations["ru"]["menu_settings"]["proxy_entry"],
-                                    width=WIDTH_WIDE_BUTTON,
-                                    height=BUTTON_HEIGHT,
-                                    on_click=creating_the_main_window_for_proxy_data_entry
+                                ft.Row(
+                                    expand=True,
+                                    controls=[
+                                        await menu_button_fun(  # 🔐 Запись proxy
+                                            text=translations["ru"]["menu_settings"]["proxy_entry"],
+                                            on_click=creating_the_main_window_for_proxy_data_entry,
+                                            bgcolor=ft.Colors.GREEN,
+                                        ),
+                                    ]
                                 ),
-                                await menu_button_fun(  # 📝 Запись api_id, api_hash
-                                    text=translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
-                                    width=WIDTH_WIDE_BUTTON,
-                                    height=BUTTON_HEIGHT,
-                                    on_click=writing_api_id_api_hash
+                                ft.Row(
+                                    expand=True,
+                                    controls=[
+                                        await menu_button_fun(  # 📝 Запись api_id, api_hash
+                                            text=translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
+                                            on_click=writing_api_id_api_hash,
+                                            bgcolor=ft.Colors.GREEN,
+                                        ),
+                                    ]
                                 ),
-                                await menu_button_fun(  # ✉️ Запись сообщений
-                                    text=translations["ru"]["menu_settings"]["message_recording"],
-                                    width=WIDTH_WIDE_BUTTON,
-                                    height=BUTTON_HEIGHT,
-                                    on_click=message_recording
+                                ft.Row(
+                                    expand=True,
+                                    controls=[
+                                        await menu_button_fun(  # ✉️ Запись сообщений
+                                            text=translations["ru"]["menu_settings"]["message_recording"],
+                                            on_click=message_recording,
+                                            bgcolor=ft.Colors.GREEN,
+                                        ),
+                                    ]
                                 ),
-                                await menu_button_fun(  # 🔗 Запись ссылки для реакций
-                                    text=translations["ru"]["menu_settings"]["recording_reaction_link"],
-                                    width=WIDTH_WIDE_BUTTON,
-                                    height=BUTTON_HEIGHT,
-                                    on_click=recording_reaction_link
+                                ft.Row(
+                                    expand=True,
+                                    controls=[
+                                        await menu_button_fun(  # 🔗 Запись ссылки для реакций
+                                            text=translations["ru"]["menu_settings"]["recording_reaction_link"],
+                                            on_click=recording_reaction_link,
+                                            bgcolor=ft.Colors.GREEN,
+                                        ),
+                                    ]
                                 ),
+
                             ]
                         )
                     ]
