@@ -6,32 +6,32 @@ from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 
-async def menu_button_fun(text: str, on_click, bgcolor):
-    """
-    :param text: Текст, отображаемый на кнопке меню.
-    :param on_click: Функция, которая должна быть выполнена
-    :return: Контейнер с кнопкой меню, готовый для добавления в layout (`Column`, `Row`, `View`).
-    """
-    # return ft.Container(  # ft.Container https://docs.flet.dev/controls/container/
-    #     content=ft.Button(
-    #         content=text,
-    #         width=width,
-    # height=BUTTON_HEIGHT, # Задает высоту кнопки.
-    # expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
-    # on_click=on_click
-    # ),
-    # )
-    return ft.Button(
-        content=text,  # Задает содержимое кнопки.
-        height=BUTTON_HEIGHT,  # Задает высоту кнопки.
-        expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
-        on_click=on_click,  # Используем синхронную обёртку
-        style=ft.ButtonStyle(
-            shape=ft.RoundedRectangleBorder(radius=30),  # Делает края кнопки сильно скругленными
-            padding=ft.Padding(15, 10, 15, 10),
-            bgcolor=bgcolor,  # Цвет кнопки
-        ),
-    )
+# async def gui_button(text: str, on_click, bgcolor):
+#     """
+#     :param text: Текст, отображаемый на кнопке меню.
+#     :param on_click: Функция, которая должна быть выполнена
+#     :return: Контейнер с кнопкой меню, готовый для добавления в layout (`Column`, `Row`, `View`).
+#     """
+#     # return ft.Container(  # ft.Container https://docs.flet.dev/controls/container/
+#     #     content=ft.Button(
+#     #         content=text,
+#     #         width=width,
+#     # height=BUTTON_HEIGHT, # Задает высоту кнопки.
+#     # expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
+#     # on_click=on_click
+#     # ),
+#     # )
+#     return ft.Button(
+#         content=text,  # Задает содержимое кнопки.
+#         height=BUTTON_HEIGHT,  # Задает высоту кнопки.
+#         expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
+#         on_click=on_click,  # Используем синхронную обёртку
+#         style=ft.ButtonStyle(
+#             shape=ft.RoundedRectangleBorder(radius=30),  # Делает края кнопки сильно скругленными
+#             padding=ft.Padding(15, 10, 15, 10),
+#             bgcolor=bgcolor,  # Цвет кнопки
+#         ),
+#     )
 
 
 class FunctionButton:

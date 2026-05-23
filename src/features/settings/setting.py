@@ -9,7 +9,6 @@ from loguru import logger
 
 from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.database.database import save_proxy_data_to_db
-from src.gui.buttons import menu_button_fun
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
@@ -269,50 +268,50 @@ class SettingPage:
                                 ft.Row(
                                     expand=True,
                                     controls=[
-                                        await menu_button_fun(  # 👍 Выбор реакций
+                                        await self.gui_program.gui_button(  # 👍 Выбор реакций
                                             text=translations["ru"]["menu_settings"]["choice_of_reactions"],
                                             on_click=reaction_gui,
-                                            bgcolor=ft.Colors.GREEN,
+                                            bgcolor=ft.Colors.WHITE_10,
                                         ),
                                     ]
                                 ),
                                 ft.Row(
                                     expand=True,
                                     controls=[
-                                        await menu_button_fun(  # 🔐 Запись proxy
+                                        await self.gui_program.gui_button(  # 🔐 Запись proxy
                                             text=translations["ru"]["menu_settings"]["proxy_entry"],
                                             on_click=creating_the_main_window_for_proxy_data_entry,
-                                            bgcolor=ft.Colors.GREEN,
+                                            bgcolor=ft.Colors.WHITE_10,
                                         ),
                                     ]
                                 ),
                                 ft.Row(
                                     expand=True,
                                     controls=[
-                                        await menu_button_fun(  # 📝 Запись api_id, api_hash
+                                        await self.gui_program.gui_button(  # 📝 Запись api_id, api_hash
                                             text=translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
                                             on_click=writing_api_id_api_hash,
-                                            bgcolor=ft.Colors.GREEN,
+                                            bgcolor=ft.Colors.WHITE_10,
                                         ),
                                     ]
                                 ),
                                 ft.Row(
                                     expand=True,
                                     controls=[
-                                        await menu_button_fun(  # ✉️ Запись сообщений
+                                        await self.gui_program.gui_button(  # ✉️ Запись сообщений
                                             text=translations["ru"]["menu_settings"]["message_recording"],
                                             on_click=message_recording,
-                                            bgcolor=ft.Colors.GREEN,
+                                            bgcolor=ft.Colors.WHITE_10,
                                         ),
                                     ]
                                 ),
                                 ft.Row(
                                     expand=True,
                                     controls=[
-                                        await menu_button_fun(  # 🔗 Запись ссылки для реакций
+                                        await self.gui_program.gui_button(  # 🔗 Запись ссылки для реакций
                                             text=translations["ru"]["menu_settings"]["recording_reaction_link"],
                                             on_click=recording_reaction_link,
-                                            bgcolor=ft.Colors.GREEN,
+                                            bgcolor=ft.Colors.WHITE_10,
                                         ),
                                     ]
                                 ),

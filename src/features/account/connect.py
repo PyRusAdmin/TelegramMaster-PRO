@@ -21,7 +21,6 @@ from src.core.database.account import (
 )
 from src.core.utils import Utils
 from src.features.proxy.checking_proxy import Proxy
-from src.gui.buttons import menu_button_fun
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
@@ -651,9 +650,10 @@ class TGConnect:
                     ft.Column(
                         [  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                             # 🔑 Подключение session аккаунтов
-                            await menu_button_fun(
+                            await self.gui_program.gui_button(
                                 text=translations["ru"]["create_groups_menu"]["choose_session_files"],
-                                on_click=handle_get_directory_path
+                                on_click=handle_get_directory_path,
+                                bgcolor=ft.Colors.WHITE
                             ),  # Кнопка выбора файла
                             directory_path := ft.Text(),
                         ]

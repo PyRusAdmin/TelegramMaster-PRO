@@ -14,7 +14,7 @@ from telethon.errors import (
 )
 from telethon.tl.functions.channels import InviteToChannelRequest
 
-from src.core.configs import width_tvo_input, width_one_input, window_width, BUTTON_HEIGHT
+from src.core.configs import width_tvo_input, width_one_input, window_width
 from src.core.database.account import getting_account
 from src.core.database.database import select_records_with_limit, get_links_inviting, save_links_inviting
 from src.core.utils import Utils
@@ -404,7 +404,8 @@ class InvitingToAGroup:
 
         start_inviting = await self.gui_program.gui_button(
             text=translations["ru"]["buttons"]["start_inviting"],
-            route=start_inviting_grup
+            on_click=start_inviting_grup,
+            bgcolor=ft.Colors.GREEN
         )
 
         inviting_switch.disabled = False
