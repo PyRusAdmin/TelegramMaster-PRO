@@ -303,7 +303,7 @@ def write_to_database_contacts_accounts(data):
     ).execute()
 
 
-""""Работа с таблицей contact (телефонная книга аккаунта Telegram)"""
+"""Работа с таблицей contact (телефонная книга аккаунта Telegram)"""
 
 
 class Contact(Model):

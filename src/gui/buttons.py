@@ -69,11 +69,16 @@ class FunctionButton:
                     link_channel,  # Поле ввода ссылки на чат
                     link_post,  # Поле ввода ссылки пост
                     ft.Column(),  # Колонка для размещения других элементов (при необходимости)
-                    ft.Button(
-                        content=translations["ru"]["buttons"]["done"],
-                        width=WIDTH_WIDE_BUTTON,
-                        height=BUTTON_HEIGHT,
-                        on_click=btn_click),
+                    ft.Row(
+                        expand=True,
+                        controls=[
+                            await self.gui_program.gui_button(  # ✅ Готово
+                                text=translations["ru"]["buttons"]["done"],
+                                on_click=btn_click,
+                                bgcolor=ft.Colors.GREEN,
+                            ),
+                        ]
+                    ),
                 ]
             )
         )

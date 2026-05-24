@@ -393,8 +393,11 @@ class InvitingToAGroup:
             value=False,
             disabled=True
         )
-        inviting_every_day_switch = ft.CupertinoSwitch(label=translations["ru"]["inviting_menu"]["inviting_every_day"],
-                                                       value=False, disabled=True)
+        inviting_every_day_switch = ft.CupertinoSwitch(
+            label=translations["ru"]["inviting_menu"]["inviting_every_day"],
+            value=False,
+            disabled=True
+        )
         ToggleController(
             inviting_switch=inviting_switch,
             inviting_1_time_per_hour_switch=inviting_1_time_per_hour_switch,
