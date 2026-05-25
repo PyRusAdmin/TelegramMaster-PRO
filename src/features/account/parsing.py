@@ -308,11 +308,19 @@ class ParsingGroupMembers:
                 except Exception as error:
                     logger.exception(error)
 
-            parse_button = ft.Button(
-                content="🔍 Парсить",
-                width=WIDTH_WIDE_BUTTON,
-                height=BUTTON_HEIGHT,
+            # parse_text
+            # parse_button = ft.Button(
+            #     content="🔍 Парсить",
+            #     width=WIDTH_WIDE_BUTTON,
+            #     height=BUTTON_HEIGHT,
+            #     on_click=add_items,
+            #     disabled=True
+            # )
+
+            parse_button = await self.gui_program.gui_button(
+                text=translations["ru"]["parsing_menu"]["parse_text"],
                 on_click=add_items,
+                bgcolor=ft.Colors.GREEN,
                 disabled=True
             )
 
@@ -363,7 +371,9 @@ class ParsingGroupMembers:
                                 await self.gui_program.diver_castom(),  # Горизонтальная линия
                                 result_text,
                                 dropdown,
-                                parse_button,  # ⬅️ Кнопка для парсинга
+                                ft.Row(
+                                    controls=[parse_button]
+                                ),  # ⬅️ Кнопка для парсинга
                             ])
                     ]
                 )

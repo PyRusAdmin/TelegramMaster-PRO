@@ -133,7 +133,7 @@ class GUIProgram:
             )
         )
 
-    async def gui_button(self, text: str, on_click, bgcolor):
+    async def gui_button(self, text: str, on_click, bgcolor, disabled=False):
         """
         Формирует кнопку с текстом и маршрутом
         :param bgcolor:
@@ -147,6 +147,7 @@ class GUIProgram:
             height=BUTTON_HEIGHT,  # Задает высоту кнопки.
             expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
             on_click=on_click,  # Используем синхронную обёртку
+            disabled=disabled,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=30),  # Делает края кнопки сильно скругленными
                 padding=ft.Padding(15, 10, 15, 10),

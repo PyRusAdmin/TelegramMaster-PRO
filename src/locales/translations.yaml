@@ -65,6 +65,7 @@ ru:
     forming_list_of_chats_channels: "📑 Формирование списка чатов / каналов"
 
   parsing_menu:
+    parse_text: "🔍 Парсить"
     parse_single_or_multiple_groups: "🔍 Парсинг одной группы / групп"
     parse_selected_user_subscribed_group: "📂 Парсинг выбранной группы из подписанных пользователем"
     parse_active_group_members: "👥 Парсинг активных участников группы"
