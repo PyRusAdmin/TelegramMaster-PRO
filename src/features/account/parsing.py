@@ -308,15 +308,6 @@ class ParsingGroupMembers:
                 except Exception as error:
                     logger.exception(error)
 
-            # parse_text
-            # parse_button = ft.Button(
-            #     content="🔍 Парсить",
-            #     width=WIDTH_WIDE_BUTTON,
-            #     height=BUTTON_HEIGHT,
-            #     on_click=add_items,
-            #     disabled=True
-            # )
-
             parse_button = await self.gui_program.gui_button(
                 text=translations["ru"]["parsing_menu"]["parse_text"],
                 on_click=add_items,

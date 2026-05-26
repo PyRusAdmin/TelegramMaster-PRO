@@ -1,5 +1,6 @@
 import flet as ft  # Импортируем библиотеку flet
 import openpyxl
+from datetime import datetime, time
 
 from src.core.database.database import read_parsed_chat_participants_from_db
 
@@ -23,7 +24,12 @@ class ReceivingAndRecording:
             "user_premium"
         ])
         for row in read_parsed_chat_participants_from_db():
-            sheet.append(row)
+            clean_row = []
+            for item in row:
+                if isinstance(item, (datetime, time)) and item.tzinfo is not None:
+                    item = item.replace(tzinfo=None)
+                clean_row.append(item)
+            sheet.append(clean_row)
 
         workbook.save(file_name)
 
