@@ -69,7 +69,12 @@ class SubscribeUnsubscribeTelegram:
                     await self.app_logger.log_and_display(message=f"Диалоги: {dialogs}")
                     async for dialog in dialogs:
                         await self.app_logger.log_and_display(message=f"{dialog.name}, {dialog.id}")
-                        await client.delete_dialog(dialog)
+                        try:
+                            await client.delete_dialog(dialog)
+                        except UserNotParticipantError as e:
+                            logger.warning(f"Не является участником {dialog.name} ({dialog.id}): {e}")
+                        except Exception as del_err:
+                            logger.error(f"Ошибка при удалении диалога {dialog.name} ({dialog.id}): {del_err}")
                     await client.disconnect()
             except Exception as error:
                 logger.exception(error)
@@ -257,7 +262,8 @@ class SubscribeUnsubscribeTelegram:
                         logger.info(f"Подписка на группу / канал по ссылке {link}")
                         try:
                             await client(JoinChannelRequest(link))
-                        except ChannelsTooMuchError:
+                        except ChannelsTooMuchError as e:
+                            logger.error(f"ChannelsTooMuchError при подписке на {link}: {e}")
                             await self.app_logger.log_and_display(
                                 message=translations["ru"]["errors"]["user_channels_too_much"])
                     else:

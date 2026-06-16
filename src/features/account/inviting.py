@@ -216,8 +216,11 @@ class InvitingToAGroup:
                 )
 
                 # Подписываемся на группы
-                await self.subscribe.subscribe_to_group_or_channel(client=client, groups=links)
-                await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {links}")
+                try:
+                    await self.subscribe.subscribe_to_group_or_channel(client=client, groups=links)
+                    await self.app_logger.log_and_display(message=f"✅ Подписка на группы: {links}")
+                except Exception as sub_err:
+                    logger.exception(f"Ошибка при подписке на группу {links}: {sub_err}")
 
                 # 🎯 Инвайтим ТОЛЬКО пользователей для этого аккаунта
                 for idx, username in enumerate(users_for_this_account, 1):
@@ -248,10 +251,13 @@ class InvitingToAGroup:
                         break  # Прерываем цикл обработки пользователей для этого аккаунта
 
                 # Отписываемся от группы после завершения работы аккаунта
-                await self.subscribe_unsubscribe_telegram.unsubscribe_from_the_group(
-                    client=client,
-                    group_link=links
-                )
+                try:
+                    await self.subscribe_unsubscribe_telegram.unsubscribe_from_the_group(
+                        client=client,
+                        group_link=links
+                    )
+                except Exception as unsub_err:
+                    logger.exception(f"Ошибка при отписке от группы {links}: {unsub_err}")
                 await self.app_logger.log_and_display(
                     message=f"✅ Аккаунт {session_name} завершил работу. "
                             f"Приглашено: {len(users_for_this_account)} пользователей"
