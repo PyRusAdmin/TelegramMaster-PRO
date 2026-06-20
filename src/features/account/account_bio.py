@@ -161,7 +161,8 @@ class AccountBIO:
                     await self.app_logger.log_and_display(message=f"{result}\nФамилия успешно обновлена!")
                 except AuthKeyUnregisteredError:
                     await self.app_logger.log_and_display(
-                        message=translations["ru"]["errors"]["auth_key_unregistered"])
+                        message=translations["ru"]["errors"]["auth_key_unregistered"]
+                    )
                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                     message="Работа окончена"
                 )

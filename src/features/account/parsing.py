@@ -7,11 +7,11 @@ from telethon import functions
 from telethon.errors import (
     AuthKeyUnregisteredError, ChannelPrivateError, ChatAdminRequiredError, FloodWaitError, UsernameInvalidError
 )
+from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsSearch, InputPeerEmpty, InputUser
 from telethon.tl.functions.channels import GetParticipantsRequest
 from telethon.tl.functions.messages import GetDialogsRequest
-from telethon.tl.types import ChannelParticipantsAdmins, ChannelParticipantsSearch, InputPeerEmpty, InputUser, Chat
 
-from src.core.configs import WIDTH_WIDE_BUTTON, TIME_ACTIVITY_USER_2, BUTTON_HEIGHT
+from src.core.configs import WIDTH_WIDE_BUTTON, TIME_ACTIVITY_USER_2
 from src.core.database.account import get_account_list
 from src.core.database.database import (
     MembersAdmin, add_member_to_db, save_group_channel_info, administrators_entries_in_database
@@ -62,13 +62,14 @@ class ParsingGroupMembers:
         :param result_text: Текст
         """
         try:
-            result = await client(GetDialogsRequest(
-                offset_date=None,
-                offset_id=0,
-                offset_peer=InputPeerEmpty(),
-                limit=200,
-                hash=0
-            )
+            result = await client(
+                GetDialogsRequest(
+                    offset_date=None,
+                    offset_id=0,
+                    offset_peer=InputPeerEmpty(),
+                    limit=200,
+                    hash=0
+                )
             )
             groups = [chat for chat in result.chats if getattr(chat, 'megagroup', False)]
             titles = [group.title for group in groups]

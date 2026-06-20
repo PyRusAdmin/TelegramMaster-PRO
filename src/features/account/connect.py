@@ -64,6 +64,9 @@ class TGConnect:
                 session_string = getting_account()  # Получаем строку сессии из файла базы данных
                 for session_name in session_string:
                     client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
+                    if client is None:
+                        await self.app_logger.log_and_display(message=f"❌ Пропуск проверки спама для {session_name} из-за ошибки подключения.")
+                        continue
                     try:
                         await client.send_message(entity='SpamBot',
                                                   message='/start')  # Находим спам бот, и вводим команду /start
@@ -155,6 +158,9 @@ class TGConnect:
                     await self.app_logger.log_and_display(message=f"⚠️ Переименовываемый аккаунт: {session_name}")
                     # Переименовывание аккаунтов
                     client = await self.client_connect_string_session(session_name=session_name)
+                    if client is None:
+                        await self.app_logger.log_and_display(message=f"❌ Пропуск переименования для {session_name} из-за ошибки подключения.")
+                        continue
                     try:
                         me = await client.get_me()  # Получаем информацию о пользователе
                         await update_phone_by_session(  # Обновляем номер телефона в базе данных
@@ -261,6 +267,7 @@ class TGConnect:
             app_version=mobile_device["app_version"],
             lang_code=mobile_device["lang_code"],
             system_lang_code=mobile_device["system_lang_code"],
+            connection_retries=2,  # Ограничиваем попытки подключения, чтобы избежать долгого зависания
         )
         try:
             await client.connect()
@@ -286,6 +293,26 @@ class TGConnect:
             await client.disconnect()
             await self.write_csv(data=session_name)
             return None  # Не возвращаем клиента
+        except (ConnectionError, OSError, asyncio.TimeoutError) as e:
+            logger.error(f"❌ Ошибка подключения для сессии {session_name}: {e}")
+            await self.app_logger.log_and_display(
+                message=f"❌ Ошибка подключения ({session_name}): Проверьте интернет или прокси. Ошибка: {e}"
+            )
+            try:
+                await client.disconnect()
+            except Exception:
+                pass
+            return None
+        except Exception as e:
+            logger.exception(f"❌ Непредвиденная ошибка при подключении сессии {session_name}: {e}")
+            await self.app_logger.log_and_display(
+                message=f"❌ Ошибка при подключении ({session_name}): {e}"
+            )
+            try:
+                await client.disconnect()
+            except Exception:
+                pass
+            return None
 
     async def write_csv(self, data):
         """
@@ -320,6 +347,9 @@ class TGConnect:
         try:
             await self.app_logger.log_and_display(message=f"Проверка аккаунта {session_name}")
             client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
+            if client is None:
+                await self.app_logger.log_and_display(message=f"❌ Пропуск проверки для {session_name} из-за ошибки подключения.")
+                return
             try:
                 if not await client.is_user_authorized():  # Если аккаунт не авторизирован
                     await client.disconnect()
@@ -410,8 +440,30 @@ class TGConnect:
                 app_version=mobile_device["app_version"],
                 lang_code=mobile_device["lang_code"],
                 system_lang_code=mobile_device["system_lang_code"],
+                connection_retries=2,  # Ограничиваем попытки подключения, чтобы избежать долгого зависания
             )
-            await client.connect()  # Подключаемся к Telegram
+            try:
+                await client.connect()  # Подключаемся к Telegram
+            except (ConnectionError, OSError, asyncio.TimeoutError) as e:
+                logger.error(f"❌ Ошибка подключения для номера {phone_number_value}: {e}")
+                await self.app_logger.log_and_display(
+                    message=f"❌ Ошибка подключения: Проверьте интернет или прокси. Ошибка: {e}"
+                )
+                try:
+                    await client.disconnect()
+                except Exception:
+                    pass
+                return
+            except Exception as e:
+                logger.exception(f"❌ Непредвиденная ошибка при подключении: {e}")
+                await self.app_logger.log_and_display(
+                    message=f"❌ Ошибка при подключении: {e}"
+                )
+                try:
+                    await client.disconnect()
+                except Exception:
+                    pass
+                return
 
             if not await client.is_user_authorized():
                 await self.app_logger.log_and_display(message=f"Пользователь не авторизован")
@@ -535,10 +587,17 @@ class TGConnect:
                         app_version=mobile_device["app_version"],
                         lang_code=mobile_device["lang_code"],
                         system_lang_code=mobile_device["system_lang_code"],
+                        connection_retries=2,  # Ограничиваем попытки подключения, чтобы избежать долгого зависания
                     )
 
                     try:
-                        await client.connect()
+                        try:
+                            await client.connect()
+                        except (ConnectionError, OSError, asyncio.TimeoutError) as e:
+                            await self.app_logger.log_and_display(
+                                message=f"❌ Ошибка подключения к Telegram для {file_name}: {e}"
+                            )
+                            raise e
 
                         # Преобразуем в StringSession
                         session_string = StringSession.save(client.session)
@@ -555,9 +614,17 @@ class TGConnect:
                             lang_code=mobile_device["lang_code"],
                             system_lang_code=mobile_device["system_lang_code"],
                             proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
+                            connection_retries=2,  # Ограничиваем попытки подключения, чтобы избежать долгого зависания
                         )
 
-                        await client.connect()
+                        try:
+                            await client.connect()
+                        except (ConnectionError, OSError, asyncio.TimeoutError) as e:
+                            await self.app_logger.log_and_display(
+                                message=f"❌ Ошибка подключения по StringSession для {file_name}: {e}"
+                            )
+                            raise e
+
                         me = await client.get_me()
 
                         if not me:
@@ -582,8 +649,17 @@ class TGConnect:
                         )
                         await client.disconnect()
 
+                    except (ConnectionError, OSError, asyncio.TimeoutError) as error:
+                        logger.error(f"❌ Ошибка подключения при обработке {file_name}: {error}")
+                        await self.app_logger.log_and_display(
+                            message=f"❌ Ошибка подключения при обработке {file_name}: {str(error)}"
+                        )
+                        try:
+                            await client.disconnect()
+                        except:
+                            pass
                     except Exception as error:
-                        logger.exception(f"Ошибка при обработке {file_name}: {error}")
+                        logger.exception(f"❌ Непредвиденная ошибка при обработке {file_name}: {error}")
                         await self.app_logger.log_and_display(
                             message=f"❌ Ошибка при обработке {file_name}: {str(error)}"
                         )
@@ -635,7 +711,7 @@ class TGConnect:
                     ),
                     # 📞 Подключение аккаунтов по номеру телефона
                     ft.Button(
-                        content="Получить код",
+                        content=translations["ru"]["account_connect_menu"]["get_connected_code"],
                         width=WIDTH_WIDE_BUTTON,
                         height=BUTTON_HEIGHT,
                         on_click=connecting_number_accounts
@@ -643,7 +719,7 @@ class TGConnect:
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     # "Подключение session аккаунтов Telegram"
                     await self.gui_program.create_gradient_text(
-                        text="Подключение session аккаунтов Telegram"
+                        text=translations["ru"]["account_connect_menu"]["connecting_session_accounts_telegram"]
                     ),
                     ft.Text(f"Выберите session файл\n", size=15),
                     selected_files,  # Поле для отображения выбранного файла

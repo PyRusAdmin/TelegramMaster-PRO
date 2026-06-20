@@ -3,9 +3,7 @@ import base64
 import flet as ft
 from loguru import logger
 
-from src.core.configs import (
-    PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height
-)
+from src.core.configs import PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height
 from src.core.database.account import getting_account
 from src.core.database.create_database import create_database
 from src.core.database.database import getting_members, get_links_table_group_send_messages, get_links_inviting

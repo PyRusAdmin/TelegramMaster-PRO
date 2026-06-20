@@ -26,7 +26,10 @@ ru:
   account_connect_menu:
     connecting_accounts_by_phone_number: "📞 Подключение по номеру телефона"
     connecting_session_accounts: "🔑 Подключение session аккаунтов"
+    connecting_qr_code: "Подключение по QR-коду"
     delete_connected_accounts: "🗑️ Удалить подключенные аккаунты"
+    get_connected_code: "Получить код"
+    connecting_session_accounts_telegram: "Подключение session аккаунтов Telegram"
 
   main_menu_texts:
     text_1: "Аккаунт Telegram: "

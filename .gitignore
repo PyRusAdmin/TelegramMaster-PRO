@@ -123,3 +123,4 @@ celerybeat.pid
 /.venv/
 docs/__pycache__
 .antigravitycli
+/.gigacode/
