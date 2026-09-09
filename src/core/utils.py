@@ -3,12 +3,19 @@ import json
 import os
 import os.path
 import random  # Импортируем модуль random, чтобы генерировать случайное число
-
+import re
 import flet as ft
 from loguru import logger
 
 from src.core.database.database import delete_row_db
 from src.gui.gui import AppLogger
+from typing import Optional
+
+MIN_USERNAME_LENGTH = 5
+MAX_USERNAME_LENGTH = 64
+
+# Формируем часть шаблона с длиной один раз, чтобы не дублировать
+len_pattern = f"{{{MIN_USERNAME_LENGTH},{MAX_USERNAME_LENGTH}}}"
 
 
 class Utils:
@@ -104,3 +111,63 @@ class Utils:
         except (ValueError, AttributeError) as e:
             raise ValueError(
                 f"Некорректный ввод времени: {min_seconds!r} – {max_seconds!r}. Введите целые числа.") from e
+
+    async def verifites_time_user_input(self, time_user_input: str):
+        """
+        Проверяет введенное время пользователем. Проверяет 1 введенное значение на корректность.
+        :param time_user_input:
+        :return:
+        """
+        try:
+            time_user_input = time_user_input.strip()
+            time_user_input = int(time_user_input)
+            if time_user_input < 0:
+                raise ValueError("Время не может быть отрицательным")
+            return time_user_input
+        except (ValueError, AttributeError) as e:
+            raise ValueError(f"Некорректный ввод времени: {time_user_input}") from e
+
+    def normalize_telegram_link(self, input_link: str) -> Optional[str]:
+        """
+        Приводит ссылку/юзернейм к единому виду: https://t.me/<username>
+        Поддерживает:
+          - @username
+          - username (без @ и без ссылки)
+          - t.me/username
+          - https://t.me/username
+          - https://t.me/username/1448 (ссылка на конкретный пост)
+          - https://t.me/s/username/1448 (веб-просмотр канала и постов)
+          - https://telegram.dog/username
+        Возвращает:
+          - Нормализованную ссылку https://t.me/<username>, если удалось извлечь username
+          - None, если валидный username не найден
+        """
+        if not input_link or not isinstance(input_link, str):
+            return None
+
+        link = input_link.strip()
+        if not link:
+            return None
+
+        # 1. Вариант: @username (строка целиком)
+        match_at = re.fullmatch(rf'^@([a-zA-Z0-9_]{len_pattern})$', link)
+        if match_at:
+            return f"https://t.me/{match_at.group(1)}"
+
+        # 2. Вариант: просто username (без @, без URL)
+        # Важно: не должно быть в строке http/t.me и т.п., иначе это не «голый» юзернейм
+        if not re.search(r'https?://|t\.me|telegram\.dog', link, flags=re.IGNORECASE):
+            match_bare = re.fullmatch(rf'^([a-zA-Z0-9_]{len_pattern})$', link)
+            if match_bare:
+                return f"https://t.me/{match_bare.group(1)}"
+
+        # 3. Вариант: URL (t.me или telegram.dog, с поддержкой /s/ и постов /123)
+        match_url = re.search((
+            rf'(?:https?://)?(?:t\.me|telegram\.dog)/(?:s/)?'
+            rf'([a-zA-Z0-9_]{len_pattern})'
+            r'(?:[/?#].*)?$'
+        ), link, flags=re.IGNORECASE)
+        if match_url:
+            return f"https://t.me/{match_url.group(1)}"
+
+        return None

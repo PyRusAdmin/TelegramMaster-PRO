@@ -44,8 +44,16 @@ class SendTelegramMessages:
         self.subscribe = Subscribe(page=page)
         self.account_data = get_account_list()
 
-        self.tb_time_from = ft.TextField(label="Время сна от", expand=True, hint_text="Введите время")
-        self.tb_time_to = ft.TextField(label="Время сна до", expand=True, hint_text="Введите время")
+        self.tb_time_from = ft.TextField(
+            label="Время сна от", expand=True, hint_text="Введите время в секундах"
+        )
+        self.tb_time_to = ft.TextField(
+            label="Время сна до", expand=True, hint_text="Введите время в секундах"
+        )
+        self.time_sleep_raund = ft.TextField(
+            label="Время сна между циклами", expand=True, hint_text="Введите время в секундах"
+        )
+
         self.chat_list_field = ft.TextField(
             label="Формирование списка чатов", expand=True,
             multiline=True, min_lines=5, max_lines=5,
@@ -117,10 +125,15 @@ class SendTelegramMessages:
 
         # ── цикл рассылки (запускается как asyncio-задача) ───
 
-        async def mailing_loop(client: TelegramClient, chat_list_fields: list, min_sec, max_sec):
+        async def mailing_loop(client: TelegramClient, chat_list_fields: list, min_sec, max_sec, time_sleep):
             """
             Бесконечный цикл рассылки по чатам.
             Работает параллельно с обработчиком автоответчика.
+            :param client: клиент Telegram
+            :param chat_list_fields: список чатов
+            :param min_sec: минимальное время ожидания
+            :param max_sec: максимальное время ожидания
+            :param time_sleep: время ожидания
             """
             await self.app_logger.log_and_display(f"Всего групп: {len(chat_list_fields)}")
 
@@ -136,6 +149,10 @@ class SendTelegramMessages:
                 for group_link in chat_list_fields:
                     if not self.is_sending:
                         break
+
+                    normalized_link = self.utils.normalize_telegram_link(group_link)
+                    if normalized_link:
+                        group_link = normalized_link
 
                     # ← НОВОЕ: проверяем соединение перед каждой группой
                     if not client.is_connected():
@@ -246,20 +263,43 @@ class SendTelegramMessages:
                             self.page.update()
                             await asyncio.sleep(1)
 
-                        # 🔴 Выключаем после ожидания
-                        self.sleep_progress_bar.visible = False
+                # TODO Написать более изящный способ
+                if self.is_sending and int(time_sleep) > 0:
+                    await self.app_logger.log_and_display(
+                        f"🌙 Цикл рассылки по всем группам завершён. Ожидание {time_sleep} секунд перед новым циклом... 🚀"
+                    )
+                    # 🔵 Включаем анимацию ожидания
+                    self.sleep_progress_bar.visible = True
+                    self.sleep_progress_bar.value = 0
+                    self.page.update()
+
+                    for second in range(int(time_sleep)):
+                        if not self.is_sending or not client.is_connected():
+                            break
+
+                        self.sleep_progress_bar.value = (second + 1) / int(time_sleep)
                         self.page.update()
+                        await asyncio.sleep(1)
+
+                    # 🔴 Выключаем после ожидания
+                    self.sleep_progress_bar.visible = False
+                    self.page.update()
 
             await self.app_logger.log_and_display("🔚 Цикл рассылки завершён.")
 
         # ── основной обработчик запуска рассылки по чатам ────
 
-        async def performing_operation(chat_list_fields: list, min_seconds, max_seconds) -> None:
+        async def performing_operation(chat_list_fields: list, min_seconds, max_seconds, time_sleep) -> None:
             """
             Запускает автоответчик + рассылку параллельно.
 
             Автоответчик: обработчик events.NewMessage работает автоматически в фоне Telethon (через asyncio event loop).
             Рассылка: запускается как asyncio.Task, чтобы обе корутины могли выполняться одновременно.
+
+            :param chat_list_fields: список чатов, которые нужно рассылать
+            :param min_seconds: минимальное время ожидания перед отправкой сообщения
+            :param max_seconds: максимальное время ожидания перед отправкой сообщения
+            :param time_sleep: время ожидания перед отправкой сообщения
             """
             logger.warning(f"Выбранный аккаунт: {account_drop_down_list.value}")
 
@@ -296,7 +336,7 @@ class SendTelegramMessages:
                 # ── Запускаем рассылку как задачу ─────────────
                 # asyncio.create_task позволяет Telethon обрабатывать входящие события (автоответчик) пока идёт рассылка
                 self._mailing_task = asyncio.create_task(
-                    mailing_loop(client, chat_list_fields, min_seconds, max_seconds)
+                    mailing_loop(client, chat_list_fields, min_seconds, max_seconds, time_sleep)
                 )
 
                 # Ждём завершения задачи (по флагу или ошибке)
@@ -562,6 +602,9 @@ class SendTelegramMessages:
                             message="❌ Нет чатов для рассылки. Укажите ссылки."
                         )
                         return
+
+                    time_sleep = await self.utils.verifites_time_user_input(time_user_input=self.time_sleep_raund.value)
+
                     min_seconds, max_seconds = await self.utils.verifies_time_range_entered_correctly(
                         min_seconds=self.tb_time_from.value, max_seconds=self.tb_time_to.value
                     )
@@ -569,6 +612,8 @@ class SendTelegramMessages:
                         chat_list_fields=writing_group_links,
                         min_seconds=min_seconds,
                         max_seconds=max_seconds,
+                        time_sleep=time_sleep
+                        # Время введенное пользователем, с которым будет производиться пауза между циклами (чаты закончились, поспал и по новой)
                     )
             except ValueError as e:
                 await self.gui_program.show_notification(
@@ -627,12 +672,14 @@ class SendTelegramMessages:
                 appbar=await self.gui_program.key_app_bar(),
                 spacing=3,
                 controls=[
-                    ft.Row(controls=[
-                        await self.gui_program.create_gradient_text(
-                            text=f"{translations['ru']['message_sending_menu']['sending_messages_files_via_chats']}"
-                                 f" и Отправка сообщений в личку"
-                        )
-                    ]),
+                    ft.Row(
+                        controls=[
+                            await self.gui_program.create_gradient_text(
+                                text=f"{translations['ru']['message_sending_menu']['sending_messages_files_via_chats']}"
+                                     f" и Отправка сообщений в личку"
+                            )
+                        ]
+                    ),
                     ft.Row(controls=[list_view], height=200),
 
                     ft.Row(controls=[self.sleep_progress_bar, ]),
@@ -646,6 +693,12 @@ class SendTelegramMessages:
                     ),
                     ft.Row(controls=[self.limits], expand=True),
                     ft.Row(controls=[self.tb_time_from, self.tb_time_to], expand=True),
+                    ft.Row(  # Время перерыва в секундах между проходами по чатам Telegram
+                        controls=[
+                            self.time_sleep_raund
+                        ],
+                        expand=True
+                    ),
                     ft.Row(controls=[
                         self.auto_reply_text_field,
                         self.chat_list_field,

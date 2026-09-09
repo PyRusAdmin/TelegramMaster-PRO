@@ -35,6 +35,10 @@ class Subscribe:
         :param groups: Ссылка на группу или канал
         :return: None
         """
+        normalized_group = self.utils.normalize_telegram_link(groups)
+        if normalized_group:
+            groups = normalized_group
+
         # цикл for нужен для того, что бы сработала команда brake команда break в Python используется только для выхода из
         # цикла, а не выхода из программы в целом.
         await self.app_logger.log_and_display(f"✅ Группа для подписки {groups}")
