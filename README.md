@@ -12,7 +12,7 @@
 
 <hr>
 
-[English readme](README.eng.md) • [Русский readme](README.md) • [Lengua española readme](README.es.md)
+[English readme](README.eng.md) • [简体中文 readme](README.zh-CN.md) • [正體中文 readme](README.zh-TW.md) • [Lengua española readme](README.es.md) • [Deutsche readme](README.de.md) • [Läs på svenska](README.sv.md) • [日本語 readme](README.ja.md) • [한국어 readme](README.ko.md) • [Français readme](README.fr.md) • [Schwizerdütsch readme](README.gsw.md) • [हिन्दी readme](README.hi.md) • [Português brasileiro readme](README.pt-BR.md) • [Italian readme](README.it.md) • [Русский readme](README.md) • [Indonesian readme](README.id.md) • [فارسی readme](README.fa.md) • [Türkçe readme](README.tr.md) • [Polskie readme](README.pl.md)
 
 ![alt text](docs/static/images/TelegramMaster_2.png "TelegramMaster_2")
 
