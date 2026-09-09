@@ -414,7 +414,7 @@ class InvitingToAGroup:
         start_inviting = await self.gui_program.gui_button(
             text=translations["ru"]["buttons"]["start_inviting"],
             on_click=start_inviting_grup,
-            bgcolor=ft.Colors.GREEN
+            bgcolor=ft.Colors.GREEN,
         )
 
         inviting_switch.disabled = False

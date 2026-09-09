@@ -677,8 +677,11 @@ class SendTelegramMessages:
                             ft.Row(expand=True, controls=[
                                 ft.Button(
                                     content=translations["ru"]["buttons"]["stop_mailing"],
-                                    expand=True, height=BUTTON_HEIGHT,
+                                    expand=True,
+                                    height=BUTTON_HEIGHT,
                                     on_click=stop_sending,
+                                    bgcolor=ft.Colors.RED,
+                                    color=ft.Colors.WHITE,
                                 ),
                             ]),
                         ],
