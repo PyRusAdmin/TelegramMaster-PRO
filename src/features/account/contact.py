@@ -79,7 +79,7 @@ class TGContact:
             for session_name in self.session_string:  # Перебор всех сессий
                 # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                 client = await self.connect.client_connect_string_session(session_name=session_name)
-                await self.connect.getting_account_data(client=client) # TODO проверить на работоспособность
+                await self.connect.getting_account_data(client=client)  # TODO проверить на работоспособность
 
                 await self.we_get_the_account_id(client=client)
                 client.disconnect()  # Разрываем соединение telegram
@@ -98,7 +98,7 @@ class TGContact:
                 for session_name in self.session_string:  # Перебор всех сессий
                     # Подключение к Telegram и вывод имя аккаунта в консоль / терминал
                     client = await self.connect.client_connect_string_session(session_name=session_name)
-                    await self.connect.getting_account_data(client=client) # TODO проверить на работоспособность
+                    await self.connect.getting_account_data(client=client)  # TODO проверить на работоспособность
 
                     await self.add_contact_to_phone_book(client=client)
             except Exception as error:

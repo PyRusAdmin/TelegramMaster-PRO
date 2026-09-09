@@ -65,7 +65,8 @@ class TGConnect:
                 for session_name in session_string:
                     client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
                     if client is None:
-                        await self.app_logger.log_and_display(message=f"❌ Пропуск проверки спама для {session_name} из-за ошибки подключения.")
+                        await self.app_logger.log_and_display(
+                            message=f"❌ Пропуск проверки спама для {session_name} из-за ошибки подключения.")
                         continue
                     try:
                         await client.send_message(entity='SpamBot',
@@ -159,7 +160,8 @@ class TGConnect:
                     # Переименовывание аккаунтов
                     client = await self.client_connect_string_session(session_name=session_name)
                     if client is None:
-                        await self.app_logger.log_and_display(message=f"❌ Пропуск переименования для {session_name} из-за ошибки подключения.")
+                        await self.app_logger.log_and_display(
+                            message=f"❌ Пропуск переименования для {session_name} из-за ошибки подключения.")
                         continue
                     try:
                         me = await client.get_me()  # Получаем информацию о пользователе
@@ -348,7 +350,8 @@ class TGConnect:
             await self.app_logger.log_and_display(message=f"Проверка аккаунта {session_name}")
             client: TelegramClient = await self.client_connect_string_session(session_name=session_name)
             if client is None:
-                await self.app_logger.log_and_display(message=f"❌ Пропуск проверки для {session_name} из-за ошибки подключения.")
+                await self.app_logger.log_and_display(
+                    message=f"❌ Пропуск проверки для {session_name} из-за ошибки подключения.")
                 return
             try:
                 if not await client.is_user_authorized():  # Если аккаунт не авторизирован
@@ -422,7 +425,15 @@ class TGConnect:
             Очистка базы данных с аккаунтами
             :return:
             """
+            list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
             await delete_invalid_accounts_from_database(self.gui_program)
+
+        async def connecting_qr_code():
+            """Подключение аккаунта Telegram по QR-коду"""
+            
+            list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
+            self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
+            await self.app_logger.log_and_display(message="Подключение по QR-коду")
 
         async def connecting_number_accounts(_) -> None:
             """Подключение аккаунта Telegram по номеру телефона"""
@@ -732,7 +743,14 @@ class TGConnect:
                                 bgcolor=ft.Colors.WHITE
                             ),  # Кнопка выбора файла
                             directory_path := ft.Text(),
-                        ]
+                        ],
+
+                    ),
+                    ft.Button(
+                        content="Подключение по QR-коду",
+                        width=WIDTH_WIDE_BUTTON,
+                        height=BUTTON_HEIGHT,
+                        on_click=connecting_qr_code
                     )
                 ]
             )

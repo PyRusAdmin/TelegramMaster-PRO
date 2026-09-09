@@ -15,5 +15,5 @@ flet-desktop~=0.86.5
 flet-cli~=0.86.5
 peewee~=4.3.0
 python-csv~=0.0.14
-python-socks~=2.8.1
+python-socks~=3.1.1
 progress~=1.6.1
