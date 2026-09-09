@@ -430,7 +430,7 @@ class TGConnect:
 
         async def connecting_qr_code():
             """Подключение аккаунта Telegram по QR-коду"""
-            
+
             list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
             self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
             await self.app_logger.log_and_display(message="Подключение по QR-коду")
@@ -513,8 +513,9 @@ class TGConnect:
                             content=translations["ru"]["buttons"]["done"],
                             width=WIDTH_WIDE_BUTTON,
                             height=BUTTON_HEIGHT,
-                            on_click=btn_click_password
-                        )  # Кнопка "Готово"
+                            on_click=btn_click_password,
+                            bgcolor=ft.Colors.GREEN
+                        )  # ✅ Готово
                         self.page.views.append(ft.View(controls=[pass_2fa, button_password]))
                         self.page.update()  # Обновляем страницу, чтобы интерфейс отобразился
                     except PhoneCodeInvalidError:
@@ -535,8 +536,9 @@ class TGConnect:
                                 content=translations["ru"]["buttons"]["done"],
                                 width=WIDTH_WIDE_BUTTON,
                                 height=BUTTON_HEIGHT,
-                                on_click=btn_click_code
-                            )
+                                on_click=btn_click_code,
+                                bgcolor=ft.Colors.GREEN
+                            )  # ✅ Готово
                         ]
                     )
                 )  # Кнопка "Готово"

@@ -109,7 +109,9 @@ class SettingPage:
                                     content=translations["ru"]["buttons"]["done"],
                                     width=WIDTH_WIDE_BUTTON,
                                     height=BUTTON_HEIGHT,
-                                    on_click=button_clicked),  # Кнопка "Готово"
+                                    on_click=button_clicked,
+                                    bgcolor=ft.Colors.GREEN
+                                ),  # ✅ Готово
                             ]
                         )
                     )
@@ -346,8 +348,9 @@ class SettingPage:
                                 content=translations["ru"]["buttons"]["done"],
                                 width=WIDTH_WIDE_BUTTON,  # Ширина
                                 height=BUTTON_HEIGHT,  # Высота
-                                on_click=btn_click
-                            ),
+                                on_click=btn_click,
+                                bgcolor=ft.Colors.GREEN
+                            ),  # ✅ Готово
                         ]
                     )
                 ]

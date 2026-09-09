@@ -668,9 +668,11 @@ class SendTelegramMessages:
                             ft.Row(expand=True, controls=[
                                 ft.Button(
                                     content=translations["ru"]["buttons"]["done"],
-                                    expand=True, height=BUTTON_HEIGHT,
+                                    expand=True,
+                                    height=BUTTON_HEIGHT,
                                     on_click=launching_action,
-                                ),
+                                    bgcolor=ft.Colors.GREEN
+                                ),  # ✅ Готово
                             ]),
                             ft.Row(expand=True, controls=[
                                 ft.Button(
