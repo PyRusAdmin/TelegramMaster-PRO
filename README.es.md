@@ -19,8 +19,8 @@
 <h2>📖 Descripción</h2>
 
 - Nombre del proyecto: TelegramMaster-PRO 🚀<br>
-- Versión actual:  2.8.26 🆕<br>
-- Última fecha de actualización: 04.03.2026 📅<br > <br>
+- Versión actual:  2.9.0 🆕<br>
+- Última fecha de actualización: 09.09.2026 📅<br > <br>
 
 [![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
 [![made-with-PyAdminRU](https://img.shields.io/badge/Made%20with-PyAdminRU-1f425f.svg)](https://t.me/PyAdminRU)
