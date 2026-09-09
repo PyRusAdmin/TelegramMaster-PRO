@@ -638,10 +638,12 @@ class SendTelegramMessages:
                     ft.Row(controls=[self.sleep_progress_bar, ]),
 
                     ft.Row(expand=True, controls=[account_drop_down_list]),
-                    ft.Row(controls=[
-                        self.send_message_personal_switch,  # Переключатель рассылки в личку
-                        self.send_message_group_switch,  # Переключатель рассылки по группам
-                    ]),
+                    ft.Row(
+                        controls=[
+                            self.send_message_personal_switch,  # Переключатель рассылки в личку
+                            self.send_message_group_switch,  # Переключатель рассылки по группам
+                        ]
+                    ),
                     ft.Row(controls=[self.limits], expand=True),
                     ft.Row(controls=[self.tb_time_from, self.tb_time_to], expand=True),
                     ft.Row(controls=[
@@ -652,41 +654,51 @@ class SendTelegramMessages:
                     ft.Column(
                         spacing=5,  # ← расстояние между кнопками в пикселях
                         controls=[
-                            ft.Row(expand=True, controls=[
-                                ft.Button(
-                                    content=translations["ru"]["message_sending_menu"]["check_links_for_mailing"],
-                                    expand=True, height=BUTTON_HEIGHT,
-                                    on_click=checking_links_group,
-                                ),
-                                ft.Button(
-                                    content=translations["ru"]["message_sending_menu"]["delete_group_send_messages"],
-                                    expand=True, height=BUTTON_HEIGHT,
-                                    on_click=delete_group_send_messag,
-                                )
-
-                            ]),
-                            ft.Row(expand=True, controls=[
-                                ft.Button(
-                                    content=translations["ru"]["buttons"]["done"],
-                                    expand=True,
-                                    height=BUTTON_HEIGHT,
-                                    on_click=launching_action,
-                                    bgcolor=ft.Colors.GREEN
-                                ),  # ✅ Готово
-                            ]),
-                            ft.Row(expand=True, controls=[
-                                ft.Button(
-                                    content=translations["ru"]["buttons"]["stop_mailing"],
-                                    expand=True,
-                                    height=BUTTON_HEIGHT,
-                                    on_click=stop_sending,
-                                    bgcolor=ft.Colors.RED,
-                                    color=ft.Colors.WHITE,
-                                ),
-                            ]),
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    ft.Button(
+                                        content=translations["ru"]["message_sending_menu"]["check_links_for_mailing"],
+                                        expand=True,
+                                        height=BUTTON_HEIGHT,
+                                        on_click=checking_links_group,
+                                    ),
+                                    ft.Button(
+                                        content=translations["ru"]["message_sending_menu"][
+                                            "delete_group_send_messages"],
+                                        expand=True,
+                                        height=BUTTON_HEIGHT,
+                                        on_click=delete_group_send_messag,
+                                    )
+                                ]
+                            ),
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    ft.Button(
+                                        content=translations["ru"]["buttons"]["done"],
+                                        expand=True,
+                                        height=BUTTON_HEIGHT,
+                                        on_click=launching_action,
+                                        bgcolor=ft.Colors.GREEN
+                                    ),  # ✅ Готово
+                                ]
+                            ),
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    ft.Button(
+                                        content=translations["ru"]["buttons"]["stop_mailing"],
+                                        expand=True,
+                                        height=BUTTON_HEIGHT,
+                                        on_click=stop_sending,
+                                        bgcolor=ft.Colors.RED,
+                                        color=ft.Colors.WHITE,
+                                    ),
+                                ]
+                            ),
                         ],
                     ),
-
                 ],
             )
         )
