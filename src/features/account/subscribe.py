@@ -35,15 +35,19 @@ class Subscribe:
         :param groups: Ссылка на группу или канал
         :return: None
         """
-        normalized_group = self.utils.normalize_telegram_link(groups)
-        if normalized_group:
-            groups = normalized_group
+        # normalized_group = self.utils.normalize_telegram_link(groups)
+        # if normalized_group:
+        #     groups = normalized_group
 
         # цикл for нужен для того, что бы сработала команда brake команда break в Python используется только для выхода из
         # цикла, а не выхода из программы в целом.
         await self.app_logger.log_and_display(f"✅ Группа для подписки {groups}")
         try:
-            await client(JoinChannelRequest(groups))
+            try:
+                entity = await client.get_entity(groups)
+                await client(JoinChannelRequest(entity))
+            except Exception:
+                await client(JoinChannelRequest(groups))
             await self.app_logger.log_and_display(f"✅ Аккаунт подписался на группу / канал: {groups}")
         except SessionRevokedError as e:
             logger.error(f"Сессия прекращена при подписке на {groups}: {e}")
@@ -79,8 +83,13 @@ class Subscribe:
             await self.app_logger.log_and_display(translations["ru"]["errors"]["channel_private"])
         except (UsernameInvalidError, ValueError, TypeError) as e:
             logger.warning(f"Неверная ссылка или имя группы {groups}: {e}")
-            await self.app_logger.log_and_display(
-                f"❌ Попытка подписки на группу / канал {groups}. Не верное имя или cсылка {groups} не является группой / каналом: {groups}")
+            if "No user has" in str(e):
+                await self.app_logger.log_and_display(
+                    f"⚠️ Аккаунт не может найти {groups} (возможно, спам-блок на аккаунте или ссылка не существует)."
+                )
+            else:
+                await self.app_logger.log_and_display(
+                    f"❌ Попытка подписки на группу / канал {groups}. Не верное имя или cсылка {groups} не является группой / каналом: {groups}")
         except PeerFloodError as e:
             logger.error(f"PeerFloodError при подписке на {groups}: {e}")
             await self.app_logger.log_and_display(translations["ru"]["errors"]["peer_flood"], level="error")

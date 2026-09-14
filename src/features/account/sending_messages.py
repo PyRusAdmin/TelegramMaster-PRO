@@ -98,15 +98,20 @@ class SendTelegramMessages:
         async def send_content(client, target, messages, files):
             """Отправляет сообщения / файлы в цель."""
             await self.app_logger.log_and_display(f"Отправляем сообщение: {target}")
+            try:
+                entity = await client.get_entity(target)
+            except Exception:
+                entity = target
+
             if not messages:
                 for file in files:
-                    await client.send_file(target, f"user_data/files_to_send/{file}")
+                    await client.send_file(entity, f"user_data/files_to_send/{file}")
                     await self.app_logger.log_and_display(f"Файл {file} отправлен в {target}.")
             else:
                 message = await self.select_and_read_random_file(entities=messages, folder="message")
                 if not files:
                     try:
-                        await client.send_message(entity=target, message=message)
+                        await client.send_message(entity=entity, message=message)
                     except AttributeError:
                         logger.warning("Не валидный аккаунт, выполните проверку аккаунтов")
                     except ForbiddenError as e:
@@ -120,7 +125,7 @@ class SendTelegramMessages:
                         )
                 else:
                     for file in files:
-                        await client.send_file(target, f"user_data/files_to_send/{file}", caption=message)
+                        await client.send_file(entity, f"user_data/files_to_send/{file}", caption=message)
                         await self.app_logger.log_and_display(f"Сообщение и файл отправлены: {target}")
 
         # ── цикл рассылки (запускается как asyncio-задача) ───
@@ -150,9 +155,9 @@ class SendTelegramMessages:
                     if not self.is_sending:
                         break
 
-                    normalized_link = self.utils.normalize_telegram_link(group_link)
-                    if normalized_link:
-                        group_link = normalized_link
+                    # normalized_link = self.utils.normalize_telegram_link(group_link)
+                    # if normalized_link:
+                    #     group_link = normalized_link
 
                     # ← НОВОЕ: проверяем соединение перед каждой группой
                     if not client.is_connected():
@@ -237,10 +242,15 @@ class SendTelegramMessages:
                         # 🔴 Выключаем после ожидания
                         self.sleep_progress_bar.visible = False
                         self.page.update()
-                    except ValueError:
-                        await self.app_logger.log_and_display(
-                            f"❌ Ошибка рассылки, проверьте ссылку: {group_link}"
-                        )
+                    except ValueError as e:
+                        if "No user has" in str(e):
+                            await self.app_logger.log_and_display(
+                                f"⚠️ Не удалось найти {group_link} (возможно, спам-блок на аккаунте или юзернейм недоступен)."
+                            )
+                        else:
+                            await self.app_logger.log_and_display(
+                                f"❌ Ошибка рассылки, проверьте ссылку: {group_link}"
+                            )
                     except (TypeError, UnboundLocalError):
                         continue
                     except Exception as error:

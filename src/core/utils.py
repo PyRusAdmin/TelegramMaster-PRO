@@ -127,47 +127,47 @@ class Utils:
         except (ValueError, AttributeError) as e:
             raise ValueError(f"Некорректный ввод времени: {time_user_input}") from e
 
-    def normalize_telegram_link(self, input_link: str) -> Optional[str]:
-        """
-        Приводит ссылку/юзернейм к единому виду: https://t.me/<username>
-        Поддерживает:
-          - @username
-          - username (без @ и без ссылки)
-          - t.me/username
-          - https://t.me/username
-          - https://t.me/username/1448 (ссылка на конкретный пост)
-          - https://t.me/s/username/1448 (веб-просмотр канала и постов)
-          - https://telegram.dog/username
-        Возвращает:
-          - Нормализованную ссылку https://t.me/<username>, если удалось извлечь username
-          - None, если валидный username не найден
-        """
-        if not input_link or not isinstance(input_link, str):
-            return None
-
-        link = input_link.strip()
-        if not link:
-            return None
-
-        # 1. Вариант: @username (строка целиком)
-        match_at = re.fullmatch(rf'^@([a-zA-Z0-9_]{len_pattern})$', link)
-        if match_at:
-            return f"https://t.me/{match_at.group(1)}"
-
-        # 2. Вариант: просто username (без @, без URL)
-        # Важно: не должно быть в строке http/t.me и т.п., иначе это не «голый» юзернейм
-        if not re.search(r'https?://|t\.me|telegram\.dog', link, flags=re.IGNORECASE):
-            match_bare = re.fullmatch(rf'^([a-zA-Z0-9_]{len_pattern})$', link)
-            if match_bare:
-                return f"https://t.me/{match_bare.group(1)}"
-
-        # 3. Вариант: URL (t.me или telegram.dog, с поддержкой /s/ и постов /123)
-        match_url = re.search((
-            rf'(?:https?://)?(?:t\.me|telegram\.dog)/(?:s/)?'
-            rf'([a-zA-Z0-9_]{len_pattern})'
-            r'(?:[/?#].*)?$'
-        ), link, flags=re.IGNORECASE)
-        if match_url:
-            return f"https://t.me/{match_url.group(1)}"
-
-        return None
+    # def normalize_telegram_link(self, input_link: str) -> Optional[str]:
+    #     """
+    #     Приводит ссылку/юзернейм к единому виду: https://t.me/<username>
+    #     Поддерживает:
+    #       - @username
+    #       - username (без @ и без ссылки)
+    #       - t.me/username
+    #       - https://t.me/username
+    #       - https://t.me/username/1448 (ссылка на конкретный пост)
+    #       - https://t.me/s/username/1448 (веб-просмотр канала и постов)
+    #       - https://telegram.dog/username
+    #     Возвращает:
+    #       - Нормализованную ссылку https://t.me/<username>, если удалось извлечь username
+    #       - None, если валидный username не найден
+    #     """
+    #     if not input_link or not isinstance(input_link, str):
+    #         return None
+    #
+    #     link = input_link.strip()
+    #     if not link:
+    #         return None
+    #
+    #     # 1. Вариант: @username (строка целиком)
+    #     match_at = re.fullmatch(rf'^@([a-zA-Z0-9_]{len_pattern})$', link)
+    #     if match_at:
+    #         return f"https://t.me/{match_at.group(1)}"
+    #
+    #     # 2. Вариант: просто username (без @, без URL)
+    #     # Важно: не должно быть в строке http/t.me и т.п., иначе это не «голый» юзернейм
+    #     if not re.search(r'https?://|t\.me|telegram\.dog', link, flags=re.IGNORECASE):
+    #         match_bare = re.fullmatch(rf'^([a-zA-Z0-9_]{len_pattern})$', link)
+    #         if match_bare:
+    #             return f"https://t.me/{match_bare.group(1)}"
+    #
+    #     # 3. Вариант: URL (t.me или telegram.dog, с поддержкой /s/ и постов /123)
+    #     match_url = re.search((
+    #         rf'(?:https?://)?(?:t\.me|telegram\.dog)/(?:s/)?'
+    #         rf'([a-zA-Z0-9_]{len_pattern})'
+    #         r'(?:[/?#].*)?$'
+    #     ), link, flags=re.IGNORECASE)
+    #     if match_url:
+    #         return f"https://t.me/{match_url.group(1)}"
+    #
+    #     return None
