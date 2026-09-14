@@ -3,13 +3,12 @@ import json
 import os
 import os.path
 import random  # Импортируем модуль random, чтобы генерировать случайное число
-import re
+
 import flet as ft
 from loguru import logger
 
 from src.core.database.database import delete_row_db
 from src.gui.gui import AppLogger
-from typing import Optional
 
 MIN_USERNAME_LENGTH = 5
 MAX_USERNAME_LENGTH = 64
