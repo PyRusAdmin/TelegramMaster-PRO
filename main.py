@@ -1,4 +1,5 @@
 import base64
+import configparser
 
 import flet as ft
 from loguru import logger
@@ -37,6 +38,16 @@ async def main_view(page: ft.Page):
     page.adaptive = True
     page.window.width = window_width  # Ширина
     page.window.height = window_height  # Высота
+
+    # Загружаем сохраненную тему оформления из config.ini
+    config = configparser.ConfigParser()
+    config.read("user_data/config.ini", encoding="utf-8")
+    if config.has_section("theme"):
+        saved_theme = config.get("theme", "theme_mode", fallback=None)
+        if saved_theme == "dark":
+            page.theme_mode = ft.ThemeMode.DARK
+        elif saved_theme == "light":
+            page.theme_mode = ft.ThemeMode.LIGHT
 
     setting_page = SettingPage(page=page)
     account_bio = AccountBIO(page=page)

@@ -14,7 +14,7 @@ from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
 
 config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-config.read("user_data/config.ini")
+config.read("user_data/config.ini", encoding="utf-8")
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
@@ -210,6 +210,33 @@ class SettingPage:
                 except Exception as e:
                     logger.exception(e)
 
+            async def toggle_theme(e=None):
+                """
+                Дает пользователю выбрать тему программы.
+
+                :param e: Событие клика
+                """
+                if not config.has_section("theme"):
+                    config.add_section("theme")
+
+                if self.page.theme_mode == ft.ThemeMode.DARK:
+                    self.page.theme_mode = ft.ThemeMode.LIGHT
+                    config.set("theme", "theme_mode", "light")
+                    new_text = "🌙 Переключить на тёмную тему"
+                    msg = "Установлена светлая тема ☀️"
+                else:
+                    self.page.theme_mode = ft.ThemeMode.DARK
+                    config.set("theme", "theme_mode", "dark")
+                    new_text = "☀️ Переключить на светлую тему"
+                    msg = "Установлена тёмная тема 🌙"
+
+                if e and hasattr(e, "control") and e.control:
+                    e.control.content = new_text
+
+                self.writing_settings_to_a_file(config)
+                self.page.update()
+                await self.gui_program.show_notification(message=msg)
+
             async def recording_text_for_sending_messages(label, unique_filename) -> None:
                 """
                 Создает интерфейс для записи текста в JSON-файл для отправки сообщений в Telegram.
@@ -259,6 +286,12 @@ class SettingPage:
                     unique_filename='user_data/reactions/link_channel.json'
                 )
 
+            theme_btn_text = (
+                "☀️ Переключить на светлую тему"
+                if self.page.theme_mode == ft.ThemeMode.DARK
+                else "🌙 Переключить на тёмную тему"
+            )
+
             self.page.views.append(
                 ft.View(
                     route="/settings",
@@ -269,6 +302,18 @@ class SettingPage:
                         ),
                         ft.Column(
                             controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+
+                                ft.Row(
+                                    expand=True,
+                                    controls=[
+                                        await self.gui_program.gui_button(  # Выбор темы приложения
+                                            text=theme_btn_text,
+                                            on_click=toggle_theme,
+                                            bgcolor=ft.Colors.WHITE_10,
+                                        ),
+                                    ]
+                                ),
+
                                 ft.Row(
                                     expand=True,
                                     controls=[
