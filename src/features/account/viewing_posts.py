@@ -98,7 +98,7 @@ class ViewingPosts:
                     await asyncio.sleep(1)
                     await client.disconnect()
                     # Изменение маршрута на новый (если необходимо)
-                    self.page.go("/viewing_posts_menu")
+                    await self.page.push_route("/viewing_posts_menu")
                     self.page.update()  # Обновление страницы для отображения изменений
 
                 await self.app_logger.end_time(start)  # Завершение таймера

@@ -35,4 +35,4 @@ class ReceivingAndRecording:
 
         # Возврат в главное меню
         self.page.route = "/"
-        self.page.go("/")  # или page.update() + вызов route_change, но go() лучше
+        await self.page.push_route("/")  # или page.update() + вызов route_change, но go() лучше

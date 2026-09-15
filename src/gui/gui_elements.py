@@ -172,12 +172,16 @@ class GUIProgram:
         """
         Создает верхнюю панель приложения с кнопкой возврата в главное меню.
         """
+
+        async def go_home(_):
+            await self.page.push_route("/")
+
         return ft.AppBar(
             toolbar_height=40,
             leading=ft.IconButton(
                 icon=ft.Icons.ARROW_BACK,
                 tooltip="На главную",
-                on_click=lambda _: self.page.go("/"),
+                on_click=go_home,
             ),
             title=ft.Text(translations["ru"]["menu"]["main"]),
             bgcolor=ft.Colors.SURFACE_CONTAINER_HIGHEST,

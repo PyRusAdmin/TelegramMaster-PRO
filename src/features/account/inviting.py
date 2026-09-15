@@ -147,7 +147,7 @@ class InvitingToAGroup:
                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                     message="Время должно быть больше 0"
                 )
-                self.page.go("/inviting")
+                await self.page.push_route("/inviting")
                 return
 
             time_inviting_2 = TIME_INVITING_2.value
@@ -155,7 +155,7 @@ class InvitingToAGroup:
                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                     message="Время должно быть больше 0"
                 )
-                self.page.go("/inviting")
+                await self.page.push_route("/inviting")
                 return
 
             start = await self.app_logger.start_time()
@@ -272,7 +272,7 @@ class InvitingToAGroup:
             await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                 message="🔚 Конец инвайтинга"
             )
-            self.page.go("/inviting")
+            await self.page.push_route("/inviting")
 
         async def launching_an_invite_once_an_hour(_):
             """

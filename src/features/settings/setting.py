@@ -92,7 +92,7 @@ class SettingPage:
                         await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                             message="Данные успешно записаны!"
                         )
-                        self.page.go("/settings")  # Переход к странице настроек
+                        await self.page.push_route("/settings")  # Переход к странице настроек
 
                     # Добавляем элементы на страницу
                     self.page.views.append(
@@ -165,7 +165,8 @@ class SettingPage:
                         await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                             message="Данные успешно записаны!"
                         )
-                        self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                        await self.page.push_route(
+                            "/settings")  # Изменение маршрута в представлении существующих настроек
                         self.page.update()
 
                     await self.add_view_with_fields_and_button(
@@ -202,7 +203,7 @@ class SettingPage:
                         config.get("telegram_settings", "hash")
                         config.set("telegram_settings", "hash", api_hash_data.value)
                         self.writing_settings_to_a_file(config)
-                        self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                        self.page.push_route("/settings")  # Изменение маршрута в представлении существующих настроек
                         self.page.update()
 
                     await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
@@ -235,7 +236,8 @@ class SettingPage:
                         await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                             message="Данные успешно записаны!"
                         )
-                        self.page.go("/settings")  # Изменение маршрута в представлении существующих настроек
+                        await self.page.push_route(
+                            "/settings")  # Изменение маршрута в представлении существующих настроек
                         self.page.update()
 
                     await self.add_view_with_fields_and_button(

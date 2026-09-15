@@ -487,7 +487,7 @@ class TGConnect:
                         await self.app_logger.log_and_display(message=f"Код telegram: {passww.value}")
                         await client.sign_in(phone_number_value, passww.value)  # Авторизация с кодом
                         client.disconnect()
-                        self.page.go("/")  # Перенаправление в настройки, если 2FA не требуется
+                        await self.page.push_route("/")  # Перенаправление в настройки, если 2FA не требуется
                         self.page.update()
                     except SessionPasswordNeededError:  # Если аккаунт защищен паролем, запрашиваем пароль
                         await self.app_logger.log_and_display(
@@ -500,14 +500,16 @@ class TGConnect:
                                 await client.sign_in(password=pass_2fa.value)
                                 await self.app_logger.log_and_display(message=f"Успешная авторизация.")
                                 client.disconnect()
-                                self.page.go("/")  # Изменение маршрута в представлении существующих настроек
+                                await self.page.push_route(
+                                    "/")  # Изменение маршрута в представлении существующих настроек
                                 self.page.update()
                             except PasswordHashInvalidError:
                                 await self.app_logger.log_and_display(message=f"❌ Неверный пароль.")
                                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                                     message=f"⚠️ Неверный пароль. Попробуйте еще раз."
                                 )
-                                self.page.go("/")  # Изменение маршрута в представлении существующих настроек
+                                await self.page.push_route(
+                                    "/")  # Изменение маршрута в представлении существующих настроек
 
                         button_password = ft.Button(
                             content=translations["ru"]["buttons"]["done"],
