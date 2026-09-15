@@ -1,10 +1,9 @@
 import base64
-import configparser
 
 import flet as ft
 from loguru import logger
 
-from src.core.configs import PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height
+from src.core.configs import PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height, theme
 from src.core.database.account import getting_account
 from src.core.database.create_database import create_database
 from src.core.database.database import getting_members, get_links_table_group_send_messages, get_links_inviting
@@ -39,15 +38,7 @@ async def main_view(page: ft.Page):
     page.window.width = window_width  # Ширина
     page.window.height = window_height  # Высота
 
-    # Загружаем сохраненную тему оформления из config.ini
-    config = configparser.ConfigParser()
-    config.read("user_data/config.ini", encoding="utf-8")
-    if config.has_section("theme"):
-        saved_theme = config.get("theme", "theme_mode", fallback=None)
-        if saved_theme == "dark":
-            page.theme_mode = ft.ThemeMode.DARK
-        elif saved_theme == "light":
-            page.theme_mode = ft.ThemeMode.LIGHT
+    page.theme_mode = theme  # Тема программы (светлая или темная)
 
     setting_page = SettingPage(page=page)
     account_bio = AccountBIO(page=page)
@@ -317,7 +308,7 @@ async def main(page: ft.Page):
     page.window.width = window_width  # Ширина
     page.window.height = window_height  # Высота
 
-    # create_database()
+    page.theme_mode = theme  # Тема программы (светлая или темная)
 
     setting_page = SettingPage(page=page)
     account_bio = AccountBIO(page=page)

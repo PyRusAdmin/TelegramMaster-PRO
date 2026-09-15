@@ -210,32 +210,27 @@ class SettingPage:
                 except Exception as e:
                     logger.exception(e)
 
-            async def toggle_theme(e=None):
-                """
-                Дает пользователю выбрать тему программы.
-
-                :param e: Событие клика
-                """
+            async def set_light_theme(_=None):
+                """Устанавливает светлую тему приложения"""
+                config.read("user_data/config.ini", encoding="utf-8")
                 if not config.has_section("theme"):
                     config.add_section("theme")
-
-                if self.page.theme_mode == ft.ThemeMode.DARK:
-                    self.page.theme_mode = ft.ThemeMode.LIGHT
-                    config.set("theme", "theme_mode", "light")
-                    new_text = "🌙 Переключить на тёмную тему"
-                    msg = "Установлена светлая тема ☀️"
-                else:
-                    self.page.theme_mode = ft.ThemeMode.DARK
-                    config.set("theme", "theme_mode", "dark")
-                    new_text = "☀️ Переключить на светлую тему"
-                    msg = "Установлена тёмная тема 🌙"
-
-                if e and hasattr(e, "control") and e.control:
-                    e.control.content = new_text
-
+                self.page.theme_mode = ft.ThemeMode.LIGHT
+                config.set("theme", "theme_mode", "light")
                 self.writing_settings_to_a_file(config)
                 self.page.update()
-                await self.gui_program.show_notification(message=msg)
+                await self.gui_program.show_notification(message="Установлена светлая тема ☀️")
+
+            async def set_dark_theme(_=None):
+                """Устанавливает тёмную тему приложения"""
+                config.read("user_data/config.ini", encoding="utf-8")
+                if not config.has_section("theme"):
+                    config.add_section("theme")
+                self.page.theme_mode = ft.ThemeMode.DARK
+                config.set("theme", "theme_mode", "dark")
+                self.writing_settings_to_a_file(config)
+                self.page.update()
+                await self.gui_program.show_notification(message="Установлена тёмная тема 🌙")
 
             async def recording_text_for_sending_messages(label, unique_filename) -> None:
                 """
@@ -286,11 +281,7 @@ class SettingPage:
                     unique_filename='user_data/reactions/link_channel.json'
                 )
 
-            theme_btn_text = (
-                "☀️ Переключить на светлую тему"
-                if self.page.theme_mode == ft.ThemeMode.DARK
-                else "🌙 Переключить на тёмную тему"
-            )
+            is_light = self.page.theme_mode == ft.ThemeMode.LIGHT
 
             self.page.views.append(
                 ft.View(
@@ -306,10 +297,15 @@ class SettingPage:
                                 ft.Row(
                                     expand=True,
                                     controls=[
-                                        await self.gui_program.gui_button(  # Выбор темы приложения
-                                            text=theme_btn_text,
-                                            on_click=toggle_theme,
-                                            bgcolor=ft.Colors.WHITE_10,
+                                        await self.gui_program.gui_button(  # ☀️ Светлая тема
+                                            text="☀️ Светлая тема",
+                                            on_click=set_light_theme,
+                                            bgcolor=ft.Colors.ORANGE_800 if is_light else ft.Colors.WHITE_10,
+                                        ),
+                                        await self.gui_program.gui_button(  # 🌙 Тёмная тема
+                                            text="🌙 Тёмная тема",
+                                            on_click=set_dark_theme,
+                                            bgcolor=ft.Colors.BLUE_GREY_800 if not is_light else ft.Colors.WHITE_10,
                                         ),
                                     ]
                                 ),

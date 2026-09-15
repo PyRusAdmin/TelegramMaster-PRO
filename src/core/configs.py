@@ -1,4 +1,5 @@
 import configparser
+import flet as ft
 
 """Настройки программы"""
 config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
@@ -28,6 +29,19 @@ width_tvo_input = 245  # 4 поля ввода (без кнопки сохран
 # Широкая одиночная кнопка
 BUTTON_HEIGHT = 30  # Высота (кнопок главного меню)
 BUTTON_WIDTH = 400  # Ширина (кнопок главного меню)
+
+"""Тема программы темная или светлая"""
+
+# Загружаем сохраненную тему оформления из config.ini
+# config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
+# config.read("user_data/config.ini", encoding="utf-8")
+# if config.has_section("theme"):
+saved_theme = config.get("theme", "theme_mode", fallback=None)
+if saved_theme == "dark":
+    theme = ft.ThemeMode.DARK
+elif saved_theme == "light":
+    theme = ft.ThemeMode.LIGHT
+# page.update()
 
 """Путь к папкам"""
 
