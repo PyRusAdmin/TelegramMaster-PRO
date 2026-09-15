@@ -14,8 +14,8 @@ api_hash = config.get('telegram_settings', 'hash', fallback=None)
 """Настройки внешнего вида программы"""
 
 PROGRAM_NAME = "TelegramMaster-PRO"  # Имя программы
-PROGRAM_VERSION = "2.9.0"  # Версия программы
-DATE_OF_PROGRAM_CHANGE = "09.09.2026"  # Дата изменения (обновления)
+PROGRAM_VERSION = "2.9.1"  # Версия программы
+DATE_OF_PROGRAM_CHANGE = "16.09.2026"  # Дата изменения (обновления)
 
 # Ширина программы / высота программы
 window_width = 1050  # Ширина (программы)
@@ -30,18 +30,16 @@ width_tvo_input = 245  # 4 поля ввода (без кнопки сохран
 BUTTON_HEIGHT = 30  # Высота (кнопок главного меню)
 BUTTON_WIDTH = 400  # Ширина (кнопок главного меню)
 
-"""Тема программы темная или светлая"""
+"""
+Тема программы темная или светлая
 
-# Загружаем сохраненную тему оформления из config.ini
-# config = configparser.ConfigParser(empty_lines_in_values=False, allow_no_value=True)
-# config.read("user_data/config.ini", encoding="utf-8")
-# if config.has_section("theme"):
+Получаем сохраненную тему из файла конфигурации user_data/config.ini. Если тема light, значит это светлая тема, иначе темная.
+"""
 saved_theme = config.get("theme", "theme_mode", fallback=None)
 if saved_theme == "dark":
     theme = ft.ThemeMode.DARK
 elif saved_theme == "light":
     theme = ft.ThemeMode.LIGHT
-# page.update()
 
 """Путь к папкам"""
 
