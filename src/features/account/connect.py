@@ -14,7 +14,7 @@ from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, api_id, api_hash
+from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, API_ID, API_HASH
 from src.core.database.account import (
     getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session,
     delete_invalid_accounts_from_database
@@ -261,8 +261,8 @@ class TGConnect:
         # Создаем клиент, используя StringSession и вашу строку
         client = TelegramClient(  # Создаем клиента Telegram
             StringSession(session_name),  # Строка сессии
-            api_id=api_id,  # ID приложения
-            api_hash=api_hash,  # Хэш приложения
+            api_id=API_ID,  # ID приложения
+            api_hash=API_HASH,  # Хэш приложения
             proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
             device_model=mobile_device["device_model"],
             system_version=mobile_device["system_version"],
@@ -443,8 +443,8 @@ class TGConnect:
             # Дальнейшая обработка после записи номера телефона
             client = TelegramClient(
                 session=f"{phone_number_value}",
-                api_id=api_id,
-                api_hash=api_hash,
+                api_id=API_ID,
+                api_hash=API_HASH,
                 proxy=self.proxy.reading_proxy_data_from_the_database(),
                 device_model=mobile_device["device_model"],
                 system_version=mobile_device["system_version"],
@@ -594,8 +594,8 @@ class TGConnect:
                     # Создаем клиент с обычной сессией
                     client = TelegramClient(
                         session=session_path,
-                        api_id=api_id,
-                        api_hash=api_hash,
+                        api_id=API_ID,
+                        api_hash=API_HASH,
                         proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
                         device_model=mobile_device["device_model"],
                         system_version=mobile_device["system_version"],
@@ -621,8 +621,8 @@ class TGConnect:
                         # Переподключаемся через StringSession
                         client = TelegramClient(
                             StringSession(session_string),
-                            api_id=api_id,
-                            api_hash=api_hash,
+                            api_id=API_ID,
+                            api_hash=API_HASH,
                             device_model=mobile_device["device_model"],
                             system_version=mobile_device["system_version"],
                             app_version=mobile_device["app_version"],

@@ -8,8 +8,8 @@ TIME_ACTIVITY_USER_2 = config.get('time_activity_user', 'time_activity_user_2', 
 # Удалены неиспользуемые переменные TIME_SENDING_MESSAGES_1 и TIME_SENDING_MESSAGES_2
 time_subscription_1 = config.get('time_subscription', 'time_subscription_1', fallback=None)
 time_subscription_2 = config.get('time_subscription', 'time_subscription_2', fallback=None)
-api_id = config.get('telegram_settings', 'id', fallback=None)
-api_hash = config.get('telegram_settings', 'hash', fallback=None)
+API_ID = config.get('telegram_settings', 'id', fallback=None)
+API_HASH = config.get('telegram_settings', 'hash', fallback=None)
 
 """Настройки внешнего вида программы"""
 
