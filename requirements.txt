@@ -17,3 +17,4 @@ peewee~=4.5.1
 python-csv~=0.0.14
 python-socks~=3.1.1
 progress~=1.6.1
+qrcode ~=8.2
