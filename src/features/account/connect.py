@@ -283,6 +283,7 @@ class TGConnect:
                     logger.error("❌ Сессия недействительна или аккаунт не авторизован!")
                 return None  # Не возвращаем клиента
 
+            # TODO: Проверить на дублирование кода
             me = await client.get_me()  # Получаем информацию о пользователе
             phone = me.phone or ""
             logger.info(f"🧾 Аккаунт: | ID: {me.id} | Phone: {phone}")
@@ -428,12 +429,162 @@ class TGConnect:
             list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
             await delete_invalid_accounts_from_database(self.gui_program)
 
-        async def connecting_qr_code():
+        async def connecting_qr_code(e=None):
             """Подключение аккаунта Telegram по QR-коду"""
 
-            list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
-            self.page.update()  # обновляем страницу, чтобы сразу показать ListView 🔄
-            await self.app_logger.log_and_display(message="Подключение по QR-коду")
+            import io
+            import os
+            import asyncio
+            import qrcode  # https://pypi.org/project/qrcode/
+            import flet as ft
+            from telethon.errors import SessionPasswordNeededError
+
+            # Текстовый статус для пользователя
+            status_text = ft.Text(
+                "Отсканируйте QR-код в приложении Telegram на телефоне (Настройки -> Устройства -> Подключить устройство)")
+
+            # Временное имя сессии
+            temp_session_name = "temp_qr_session"
+
+            client = TelegramClient(
+                session=temp_session_name,
+                api_id=API_ID,
+                api_hash=API_HASH,
+                proxy=self.proxy.reading_proxy_data_from_the_database(),  # Прокси
+                device_model=mobile_device["device_model"],
+                system_version=mobile_device["system_version"],
+                app_version=mobile_device["app_version"],
+                lang_code=mobile_device["lang_code"],
+                system_lang_code=mobile_device["system_lang_code"],
+                connection_retries=2,  # Ограничиваем попытки подключения, чтобы избежать долгого зависания
+            )
+
+            try:
+                await client.connect()
+
+                # 1. Запрашиваем авторизацию по QR-коду у Telegram
+                qr_login = await client.qr_login()
+
+                # 2. Генерируем QR-код из ссылки qr_login.url
+                qr = qrcode.QRCode(
+                    version=1,
+                    error_correction=qrcode.constants.ERROR_CORRECT_L,
+                    box_size=10,
+                    border=4,
+                )
+                qr.add_data(qr_login.url)
+                qr.make(fit=True)
+
+                img = qr.make_image(fill_color="black", back_color="white")
+
+                # 3. Сохраняем байты изображения в память
+                buffer = io.BytesIO()
+                img.save(buffer, format="PNG")
+
+                # 4. Выводим картинку в интерфейс Flet
+                qr_image = ft.Image(
+                    src=buffer.getvalue(),  # Байты изображения из памяти
+                    width=250,
+                    height=250,
+                    fit=ft.BoxFit.CONTAIN
+                )
+
+                # 5. Добавляем новую страницу в Flet
+                self.page.views.append(
+                    ft.View(
+                        route="/qr",
+                        appbar=await self.gui_program.key_app_bar(),
+                        controls=[
+                            ft.Text("Подключение по QR-коду", size=20, weight=ft.FontWeight.BOLD),
+                            status_text,
+                            qr_image,
+                        ]
+                    )
+                )
+                # await self.page.push_route("/qr")
+                self.page.update()
+
+                # 6. Фоновая асинхронная функция ожидания сканирования QR-кода
+                async def wait_for_scan():
+                    try:
+                        # Ожидаем сканирования QR-кода пользователем
+                        await qr_login.wait()
+
+                        # Получаем данные вошедшего пользователя
+                        me = await client.get_me()
+                        phone_number = me.phone if me.phone else f"id_{me.id}"
+
+                        await client.disconnect()
+
+                        # Переименовываем файл сессии на номер телефона
+                        if os.path.exists(f"{temp_session_name}.session"):
+                            if os.path.exists(f"{phone_number}.session"):
+                                os.remove(f"{phone_number}.session")
+                            os.rename(f"{temp_session_name}.session", f"{phone_number}.session")
+
+                        # Записываем аккаунт в базу данных
+                        write_account_to_db(session_string=phone_number, phone_number=phone_number)
+
+                        await self.app_logger.log_and_display(
+                            message=f"✅ Аккаунт +{phone_number} успешно подключен по QR-коду!")
+                        await self.gui_program.show_notification(
+                            message=f"✅ Успешное подключение аккаунта +{phone_number}!")
+
+                        # Возвращаемся в главное меню
+                        await self.page.push_route("/")
+                        self.page.update()
+
+                    except SessionPasswordNeededError:
+                        # Если на аккаунте включен 2FA (двухфакторный пароль)
+                        status_text.value = "⚠️ На аккаунте установлен 2FA пароль. Введите его:"
+                        pass_2fa = ft.TextField(label="Введите пароль Telegram:", password=True,
+                                                can_reveal_password=True)
+
+                        async def submit_2fa(_):
+                            try:
+                                await client.sign_in(password=pass_2fa.value)
+                                me = await client.get_me()
+                                phone_number = me.phone if me.phone else f"id_{me.id}"
+                                await client.disconnect()
+
+                                if os.path.exists(f"{temp_session_name}.session"):
+                                    if os.path.exists(f"{phone_number}.session"):
+                                        os.remove(f"{phone_number}.session")
+                                    os.rename(f"{temp_session_name}.session", f"{phone_number}.session")
+
+                                write_account_to_db(session_string=phone_number, phone_number=phone_number)
+
+                                await self.app_logger.log_and_display(
+                                    message=f"✅ Аккаунт +{phone_number} успешно подключен по QR-коду (с 2FA)!")
+                                await self.page.push_route("/")
+                                self.page.update()
+                            except Exception as err:
+                                await self.app_logger.log_and_display(message=f"❌ Ошибка 2FA авторизации: {err}")
+
+                        self.page.views[-1].controls.extend([
+                            pass_2fa,
+                            ft.Button("Подтвердить пароль", on_click=submit_2fa)
+                        ])
+                        self.page.update()
+
+                    except Exception as error:
+                        logger.exception(error)
+                        await self.app_logger.log_and_display(message=f"❌ Ошибка при авторизации по QR: {error}")
+                        try:
+                            await client.disconnect()
+                        except Exception:
+                            pass
+
+                # Запускаем процесс ожидания в фоне, чтобы интерфейс не зависал
+                asyncio.create_task(wait_for_scan())
+
+            except Exception as error:
+                logger.exception(error)
+                await self.app_logger.log_and_display(message=f"❌ Ошибка инициализации QR-кода: {error}")
+                try:
+                    await client.disconnect()
+                except Exception:
+                    pass
 
         async def connecting_number_accounts(_) -> None:
             """Подключение аккаунта Telegram по номеру телефона"""
@@ -746,7 +897,7 @@ class TGConnect:
                                 on_click=handle_get_directory_path,
                                 bgcolor=ft.Colors.WHITE
                             ),  # Кнопка выбора файла
-                            directory_path := ft.Text(),
+                            # directory_path := ft.Text(),
                         ],
 
                     ),
