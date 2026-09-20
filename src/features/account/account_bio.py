@@ -207,12 +207,16 @@ class AccountBIO:
                             ft.Row(
                                 [
                                     input_field_username_change,  # Поле для ввода username Telegram
-                                    # 🔄 Изменение username
-                                    ft.Button(
-                                        content=translations["ru"]["edit_bio_menu"]["changing_the_username"],
-                                        width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=change_username_profile_gui),
+                                    ft.Row(
+                                        expand=True,
+                                        controls=[
+                                            await self.gui_program.gui_button(  # 🔄 Изменение username
+                                                text=translations["ru"]["edit_bio_menu"]["changing_the_username"],
+                                                on_click=change_username_profile_gui,
+                                                bgcolor=ft.Colors.WHITE_10,
+                                            ),
+                                        ]
+                                    ),
                                 ]
                             ),
                             await self.gui_program.diver_castom(),  # Горизонтальная линия

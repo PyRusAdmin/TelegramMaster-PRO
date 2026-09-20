@@ -14,7 +14,7 @@ from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 from thefuzz import fuzz
 
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, API_ID, API_HASH
+from src.core.configs import API_ID, API_HASH
 from src.core.database.account import (
     getting_account, write_account_to_db, delete_account_from_db, update_phone_by_session,
     delete_invalid_accounts_from_database
@@ -217,33 +217,45 @@ class TGConnect:
                     list_view,
                     ft.Column(
                         [  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                            # 🤖 Проверка через спам бот
-                            ft.Button(
-                                content=translations["ru"]["account_verification"]["spam_check"],
-                                width=WIDTH_WIDE_BUTTON,  # Ширина кнопки
-                                height=BUTTON_HEIGHT,  # Высота кнопки
-                                on_click=check_for_spam  # Вызов функции проверки на спам
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # 🤖 Проверка через спам бот
+                                        text=translations["ru"]["account_verification"]["spam_check"],
+                                        on_click=check_for_spam,
+                                        bgcolor=ft.Colors.WHITE_10,
+                                    ),
+                                ]
                             ),
-                            # ✅ Проверка на валидность
-                            ft.Button(
-                                content=translations["ru"]["account_verification"]["validation"],
-                                width=WIDTH_WIDE_BUTTON,  # Ширина кнопки
-                                height=BUTTON_HEIGHT,  # Высота кнопки
-                                on_click=validation_check  # Вызов функции проверки на валидность
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # ✅ Проверка на валидность
+                                        text=translations["ru"]["account_verification"]["validation"],
+                                        on_click=validation_check,
+                                        bgcolor=ft.Colors.WHITE_10,
+                                    ),
+                                ]
                             ),
-                            # ✏️ Переименование аккаунтов
-                            ft.Button(
-                                content=translations["ru"]["account_verification"]["renaming"],
-                                width=WIDTH_WIDE_BUTTON,  # Ширина кнопки
-                                height=BUTTON_HEIGHT,  # Высота кнопки
-                                on_click=renaming_accounts  # Вызов функции переименования аккаунтов
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # ✏️ Переименование аккаунтов
+                                        text=translations["ru"]["account_verification"]["renaming"],
+                                        on_click=renaming_accounts,
+                                        bgcolor=ft.Colors.WHITE_10,
+                                    ),
+                                ]
                             ),
-                            # 🔍 Полная проверка
-                            ft.Button(
-                                content=translations["ru"]["account_verification"]["full_verification"],
-                                width=WIDTH_WIDE_BUTTON,  # Ширина кнопки
-                                height=BUTTON_HEIGHT,  # Высота кнопки
-                                on_click=full_verification  # Вызов функции полной проверки
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # 🔍 Полная проверка
+                                        text=translations["ru"]["account_verification"]["full_verification"],
+                                        on_click=full_verification,
+                                        bgcolor=ft.Colors.WHITE_10,
+                                    ),
+                                ]
                             ),
                         ]
                     )
@@ -659,17 +671,25 @@ class TGConnect:
                                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                                     message=f"⚠️ Неверный пароль. Попробуйте еще раз."
                                 )
-                                await self.page.push_route(
-                                    "/")  # Изменение маршрута в представлении существующих настроек
-
-                        button_password = ft.Button(
-                            content=translations["ru"]["buttons"]["done"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=btn_click_password,
-                            bgcolor=ft.Colors.GREEN
-                        )  # ✅ Готово
-                        self.page.views.append(ft.View(controls=[pass_2fa, button_password]))
+                                await self.page.push_route("/")  # Изменение маршрута в представлении существующих настроек
+                        self.page.views.append(
+                            ft.View(
+                                controls=[
+                                    pass_2fa,
+                                    # button_password
+                                    ft.Row(
+                                        expand=True,
+                                        controls=[
+                                            await self.gui_program.gui_button(  # ✅ Готово
+                                                text=translations["ru"]["buttons"]["done"],
+                                                on_click=btn_click_password,
+                                                bgcolor=ft.Colors.GREEN,
+                                            ),
+                                        ]
+                                    ),
+                                ]
+                            )
+                        )
                         self.page.update()  # Обновляем страницу, чтобы интерфейс отобразился
                     except PhoneCodeInvalidError:
                         await self.app_logger.log_and_display(message=f"❌ Неверный код.")
@@ -685,13 +705,16 @@ class TGConnect:
                     ft.View(
                         controls=[
                             passww,
-                            ft.Button(
-                                content=translations["ru"]["buttons"]["done"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=btn_click_code,
-                                bgcolor=ft.Colors.GREEN
-                            )  # ✅ Готово
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # ✅ Готово
+                                        text=translations["ru"]["buttons"]["done"],
+                                        on_click=btn_click_code,
+                                        bgcolor=ft.Colors.GREEN,
+                                    ),
+                                ]
+                            ),
                         ]
                     )
                 )  # Кнопка "Готово"
@@ -858,12 +881,18 @@ class TGConnect:
                         text="Удалить подключенные аккаунты"
                     ),
                     # 📞 Подключение аккаунтов по номеру телефона
-                    ft.Button(
-                        content="Очистить базу данных",
-                        width=WIDTH_WIDE_BUTTON,
-                        height=BUTTON_HEIGHT,
-                        on_click=delete_invalid_accounts_from_databases
+
+                    ft.Row(
+                        expand=True,
+                        controls=[
+                            await self.gui_program.gui_button(  # Очистить базу данных
+                                text=translations["ru"]["account_connect_menu"]["clear_database"],
+                                on_click=delete_invalid_accounts_from_databases,
+                                bgcolor=ft.Colors.WHITE_10,
+                            ),
+                        ]
                     ),
+
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     # "Подключение аккаунта Telegram по номеру телефона.",
                     await self.gui_program.create_gradient_text(
@@ -876,12 +905,17 @@ class TGConnect:
                         ]
                     ),
                     # 📞 Подключение аккаунтов по номеру телефона
-                    ft.Button(
-                        content=translations["ru"]["account_connect_menu"]["get_connected_code"],
-                        width=WIDTH_WIDE_BUTTON,
-                        height=BUTTON_HEIGHT,
-                        on_click=connecting_number_accounts
+                    ft.Row(
+                        expand=True,
+                        controls=[
+                            await self.gui_program.gui_button(  # Получить код
+                                text=translations["ru"]["account_connect_menu"]["get_connected_code"],
+                                on_click=connecting_number_accounts,
+                                bgcolor=ft.Colors.WHITE_10,
+                            ),
+                        ]
                     ),
+
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     # "Подключение session аккаунтов Telegram"
                     await self.gui_program.create_gradient_text(
@@ -892,21 +926,28 @@ class TGConnect:
                     ft.Column(
                         [  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                             # 🔑 Подключение session аккаунтов
-                            await self.gui_program.gui_button(
-                                text=translations["ru"]["create_groups_menu"]["choose_session_files"],
-                                on_click=handle_get_directory_path,
-                                bgcolor=ft.Colors.WHITE
-                            ),  # Кнопка выбора файла
-                            # directory_path := ft.Text(),
+                            ft.Row(  # Кнопка выбора файла
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # 📂 Выбрать session файл(ы)
+                                        text=translations["ru"]["create_groups_menu"]["choose_session_files"],
+                                        on_click=handle_get_directory_path,
+                                        bgcolor=ft.Colors.WHITE_10,
+                                    ),
+                                ]
+                            ),
                         ],
-
                     ),
-                    ft.Button(
-                        content="Подключение по QR-коду",
-                        width=WIDTH_WIDE_BUTTON,
-                        height=BUTTON_HEIGHT,
-                        on_click=connecting_qr_code
-                    )
+                    ft.Row(  # Кнопка выбора файла
+                        expand=True,
+                        controls=[
+                            await self.gui_program.gui_button(  # Подключение по QR-коду
+                                text=translations["ru"]["account_connect_menu"]["connecting_qr_code"],
+                                on_click=connecting_qr_code,
+                                bgcolor=ft.Colors.WHITE_10,
+                            ),
+                        ]
+                    ),
                 ]
             )
         )
