@@ -107,6 +107,8 @@ class GUIProgram:
             ]
         )
 
+
+
     async def menu_button(self, text: str, route: str):
         """
         Кнопка-меню главного экрана проекта
@@ -133,6 +135,9 @@ class GUIProgram:
             )
         )
 
+
+
+
     async def gui_button(self, text: str, on_click, bgcolor, disabled=False):
         """
         Формирует кнопку с текстом и маршрутом
@@ -149,7 +154,7 @@ class GUIProgram:
             on_click=on_click,  # Используем синхронную обёртку
             disabled=disabled,
             style=ft.ButtonStyle(
-                shape=ft.RoundedRectangleBorder(radius=30),  # Делает края кнопки сильно скругленными
+                shape=ft.RoundedRectangleBorder(radius=3),  # Делает края кнопки сильно скругленными
                 padding=ft.Padding(15, 10, 15, 10),
                 bgcolor=bgcolor,  # Цвет кнопки
             ),

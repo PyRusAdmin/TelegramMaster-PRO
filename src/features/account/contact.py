@@ -141,21 +141,26 @@ class TGContact:
                         ft.Row(
                             [
                                 input_numbers,  # Ввод номеров
-                                # 📋 Формирование списка контактов
-                                ft.Button(
-                                    content=translations["ru"]["contacts_menu"]["creating_a_contact_list"],
-                                    width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                    height=BUTTON_HEIGHT,
-                                    on_click=write_contact_to_db
-                                )
+                                await self.gui_program.gui_button(  # 📋 Формирование списка контактов
+                                    text=translations["ru"]["contacts_menu"]["creating_a_contact_list"],
+                                    on_click=write_contact_to_db,
+                                    bgcolor=ft.Colors.WHITE,
+                                ),
                             ]
                         ),
                         # 👥 Парсинг списка контактов
-                        ft.Button(
-                            content=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=show_account_contact_list),
+                        # ft.Button(
+                        #     content=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
+                        #     width=WIDTH_WIDE_BUTTON,
+                        #     height=BUTTON_HEIGHT,
+                        #     on_click=show_account_contact_list),
+
+                        await self.gui_program.gui_button(  # 👥 Парсинг списка контактов
+                            text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
+                            on_click=show_account_contact_list,
+                            bgcolor=ft.Colors.WHITE,
+                        ),
+
                         # 🗑️ Удаление контактов
                         ft.Button(
                             content=translations["ru"]["contacts_menu"]["deleting_contacts"],
