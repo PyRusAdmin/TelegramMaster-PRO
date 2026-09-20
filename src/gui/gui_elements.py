@@ -107,8 +107,6 @@ class GUIProgram:
             ]
         )
 
-
-
     async def menu_button(self, text: str, route: str):
         """
         Кнопка-меню главного экрана проекта
@@ -134,9 +132,6 @@ class GUIProgram:
                 # При клике — переход по указанному маршруту
             )
         )
-
-
-
 
     async def gui_button(self, text: str, on_click, bgcolor, disabled=False):
         """

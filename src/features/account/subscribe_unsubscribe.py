@@ -14,7 +14,7 @@ from telethon.tl.functions.channels import JoinChannelRequest, LeaveChannelReque
 from telethon.tl.functions.messages import ImportChatInviteRequest
 
 from src.core.configs import (
-    BUTTON_HEIGHT, WIDTH_WIDE_BUTTON, time_subscription_1, time_subscription_2, width_one_input
+    WIDTH_WIDE_BUTTON, time_subscription_1, time_subscription_2, width_one_input
 )
 from src.core.database.account import getting_account
 from src.core.database.database import get_writing_group_links, write_writing_group_links_to_db
@@ -180,17 +180,25 @@ class SubscribeUnsubscribeTelegram:
                     await self.gui_program.diver_castom(),  # Горизонтальная линия
                     ft.Column(  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
                         [
-                            ft.Button(  # 🔔 Подписка
-                                content=translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=btn_click
+                            ft.Row(  # 🔔 Подписка
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # 🔔 Подписка
+                                        text=translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
+                                        on_click=btn_click,
+                                        bgcolor=ft.Colors.WHITE_10,
+                                    ),
+                                ]
                             ),
-                            ft.Button(  # 🚫 Отписываемся
-                                content=translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=unsubscribe_all
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # 🚫 Отписываемся
+                                        text=translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"],
+                                        on_click=unsubscribe_all,
+                                        bgcolor=ft.Colors.WHITE_10,
+                                    ),
+                                ]
                             ),
                         ]
                     )
