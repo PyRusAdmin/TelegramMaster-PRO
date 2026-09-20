@@ -671,7 +671,9 @@ class TGConnect:
                                 await self.gui_program.show_notification(  # ✅ Показываем уведомление пользователю
                                     message=f"⚠️ Неверный пароль. Попробуйте еще раз."
                                 )
-                                await self.page.push_route("/")  # Изменение маршрута в представлении существующих настроек
+                                await self.page.push_route(
+                                    "/")  # Изменение маршрута в представлении существующих настроек
+
                         self.page.views.append(
                             ft.View(
                                 controls=[

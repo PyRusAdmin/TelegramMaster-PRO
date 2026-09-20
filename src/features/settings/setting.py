@@ -7,7 +7,7 @@ import sys
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
+from src.core.configs import WIDTH_WIDE_BUTTON
 from src.core.database.database import save_proxy_data_to_db
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
@@ -105,13 +105,23 @@ class SettingPage:
                                 ft.Column(
                                     [ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
                                 # Чекбоксы в колонках
-                                ft.Button(
-                                    content=translations["ru"]["buttons"]["done"],
-                                    width=WIDTH_WIDE_BUTTON,
-                                    height=BUTTON_HEIGHT,
-                                    on_click=button_clicked,
-                                    bgcolor=ft.Colors.GREEN
-                                ),  # ✅ Готово
+                                # ft.Button(
+                                #     content=translations["ru"]["buttons"]["done"],
+                                #     width=WIDTH_WIDE_BUTTON,
+                                #     height=BUTTON_HEIGHT,
+                                #     on_click=button_clicked,
+                                #     bgcolor=ft.Colors.GREEN
+                                # ),  # ✅ Готово
+                                ft.Row(
+                                    expand=True,
+                                    controls=[
+                                        await self.gui_program.gui_button(  # ✅ Готово
+                                            text=translations["ru"]["buttons"]["done"],
+                                            on_click=button_clicked,
+                                            bgcolor=ft.Colors.GREEN,
+                                        ),
+                                    ]
+                                ),
                             ]
                         )
                     )
@@ -387,13 +397,24 @@ class SettingPage:
                     list_view,  # отображение логов 📝
                     ft.Column(
                         controls=fields + [
-                            ft.Button(
-                                content=translations["ru"]["buttons"]["done"],
-                                width=WIDTH_WIDE_BUTTON,  # Ширина
-                                height=BUTTON_HEIGHT,  # Высота
-                                on_click=btn_click,
-                                bgcolor=ft.Colors.GREEN
-                            ),  # ✅ Готово
+                            # ft.Button(
+                            #     content=translations["ru"]["buttons"]["done"],
+                            #     width=WIDTH_WIDE_BUTTON,  # Ширина
+                            #     height=BUTTON_HEIGHT,  # Высота
+                            #     on_click=btn_click,
+                            #     bgcolor=ft.Colors.GREEN
+                            # ),  # ✅ Готово
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # ✅ Готово
+                                        text=translations["ru"]["buttons"]["done"],
+                                        on_click=btn_click,
+                                        bgcolor=ft.Colors.GREEN,
+                                    ),
+                                ]
+                            ),
+
                         ]
                     )
                 ]

@@ -14,7 +14,7 @@ from telethon.errors import (
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import CheckChatInviteRequest
 
-from src.core.configs import BUTTON_HEIGHT, path_folder_with_messages
+from src.core.configs import path_folder_with_messages
 from src.core.database.account import getting_account, get_account_list
 from src.core.database.database import (
     write_group_send_message_table, get_links_table_group_send_messages, update_group_send_messages_table,
@@ -691,9 +691,7 @@ class SendTelegramMessages:
                         ]
                     ),
                     ft.Row(controls=[list_view], height=200),
-
                     ft.Row(controls=[self.sleep_progress_bar, ]),
-
                     ft.Row(expand=True, controls=[account_drop_down_list]),
                     ft.Row(
                         controls=[
@@ -702,61 +700,112 @@ class SendTelegramMessages:
                         ]
                     ),
                     ft.Row(controls=[self.limits], expand=True),
-                    ft.Row(controls=[self.tb_time_from, self.tb_time_to], expand=True),
+                    ft.Row(
+                        controls=[
+                            self.tb_time_from,
+                            self.tb_time_to
+                        ],
+                        expand=True
+                    ),
                     ft.Row(  # Время перерыва в секундах между проходами по чатам Telegram
                         controls=[
                             self.time_sleep_raund
                         ],
                         expand=True
                     ),
-                    ft.Row(controls=[
-                        self.auto_reply_text_field,
-                        self.chat_list_field,
-                    ], expand=True),
-
+                    ft.Row(
+                        controls=[
+                            self.auto_reply_text_field,
+                            self.chat_list_field,
+                        ],
+                        expand=True
+                    ),
                     ft.Column(
                         spacing=5,  # ← расстояние между кнопками в пикселях
                         controls=[
                             ft.Row(
                                 expand=True,
                                 controls=[
-                                    ft.Button(
-                                        content=translations["ru"]["message_sending_menu"]["check_links_for_mailing"],
+                                    # ft.Button(
+                                    #     content=translations["ru"]["message_sending_menu"]["check_links_for_mailing"],
+                                    #     expand=True,
+                                    #     height=BUTTON_HEIGHT,
+                                    #     on_click=checking_links_group,
+                                    # ),
+                                    ft.Row(
                                         expand=True,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=checking_links_group,
+                                        controls=[
+                                            await self.gui_program.gui_button(  # Проверка ссылок для рассылки
+                                                text=translations["ru"]["message_sending_menu"][
+                                                    "check_links_for_mailing"],
+                                                on_click=checking_links_group,
+                                                bgcolor=ft.Colors.WHITE_10,
+                                            ),
+                                        ]
                                     ),
-                                    ft.Button(
-                                        content=translations["ru"]["message_sending_menu"][
-                                            "delete_group_send_messages"],
+                                    # ft.Button(
+                                    #     content=translations["ru"]["message_sending_menu"]["delete_group_send_messages"],
+                                    #     expand=True,
+                                    #     height=BUTTON_HEIGHT,
+                                    #     on_click=delete_group_send_messag,
+                                    # )
+                                    ft.Row(
                                         expand=True,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=delete_group_send_messag,
-                                    )
+                                        controls=[
+                                            await self.gui_program.gui_button(
+                                                # 🗑️ Очистка списка для рассылки сообщений по чатам
+                                                text=translations["ru"]["message_sending_menu"][
+                                                    "delete_group_send_messages"],
+                                                on_click=delete_group_send_messag,
+                                                bgcolor=ft.Colors.WHITE_10,
+                                            ),
+                                        ]
+                                    ),
                                 ]
                             ),
                             ft.Row(
                                 expand=True,
                                 controls=[
-                                    ft.Button(
-                                        content=translations["ru"]["buttons"]["done"],
+                                    # ft.Button(
+                                    #     content=translations["ru"]["buttons"]["done"],
+                                    #     expand=True,
+                                    #     height=BUTTON_HEIGHT,
+                                    #     on_click=launching_action,
+                                    #     bgcolor=ft.Colors.GREEN
+                                    # ),  # ✅ Готово
+                                    ft.Row(
                                         expand=True,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=launching_action,
-                                        bgcolor=ft.Colors.GREEN
-                                    ),  # ✅ Готово
+                                        controls=[
+                                            await self.gui_program.gui_button(  # ✅ Готово
+                                                text=translations["ru"]["buttons"]["done"],
+                                                on_click=launching_action,
+                                                bgcolor=ft.Colors.GREEN,
+                                            ),
+                                        ]
+                                    ),
                                 ]
                             ),
                             ft.Row(
                                 expand=True,
                                 controls=[
-                                    ft.Button(
-                                        content=translations["ru"]["buttons"]["stop_mailing"],
+                                    # ft.Button(
+                                    #     content=translations["ru"]["buttons"]["stop_mailing"],
+                                    #     expand=True,
+                                    #     height=BUTTON_HEIGHT,
+                                    #     on_click=stop_sending,
+                                    #     bgcolor=ft.Colors.RED,
+                                    #     color=ft.Colors.WHITE,
+                                    # ),
+
+                                    ft.Row(
                                         expand=True,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=stop_sending,
-                                        bgcolor=ft.Colors.RED,
-                                        color=ft.Colors.WHITE,
+                                        controls=[
+                                            await self.gui_program.gui_button(  # ⛔ Остановить рассылку
+                                                text=translations["ru"]["buttons"]["stop_mailing"],
+                                                on_click=stop_sending,
+                                                bgcolor=ft.Colors.RED,
+                                            ),
+                                        ]
                                     ),
                                 ]
                             ),

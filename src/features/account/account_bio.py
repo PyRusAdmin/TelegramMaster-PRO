@@ -223,11 +223,15 @@ class AccountBIO:
                             ft.Row(
                                 [
                                     profile_description_input_field,  # Поле для ввода описания профиля Telegram
-                                    # ✏️ Изменение описания
-                                    ft.Button(
-                                        content=translations["ru"]["edit_bio_menu"]["changing_the_description"],
-                                        width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
-                                        on_click=change_bio_profile
+                                    ft.Row(
+                                        expand=True,
+                                        controls=[
+                                            await self.gui_program.gui_button(  # ✏️ Изменение описания
+                                                text=translations["ru"]["edit_bio_menu"]["changing_the_description"],
+                                                on_click=change_bio_profile,
+                                                bgcolor=ft.Colors.WHITE_10,
+                                            ),
+                                        ]
                                     ),
                                 ]
                             ),
@@ -235,11 +239,15 @@ class AccountBIO:
                             ft.Row(
                                 [
                                     profile_name_input_field,  # Поле для ввода имени профиля Telegram
-                                    # 📝 Изменение имени
-                                    ft.Button(
-                                        content=translations["ru"]["edit_bio_menu"]["name_change_n"],
-                                        width=WIDTH_INPUT_FIELD_AND_BUTTON, height=BUTTON_HEIGHT,
-                                        on_click=change_name_profile_gui
+                                    ft.Row(
+                                        expand=True,
+                                        controls=[
+                                            await self.gui_program.gui_button(  # 📝 Изменение имени
+                                                text=translations["ru"]["edit_bio_menu"]["name_change_n"],
+                                                on_click=change_name_profile_gui,
+                                                bgcolor=ft.Colors.WHITE_10,
+                                            ),
+                                        ]
                                     ),
                                 ]
                             ),
@@ -247,22 +255,28 @@ class AccountBIO:
                             ft.Row(
                                 [
                                     profile_last_name_input_field,
-                                    # 📝 Изменение фамилии
-                                    ft.Button(
-                                        content=translations["ru"]["edit_bio_menu"]["name_change_f"],
-                                        width=WIDTH_INPUT_FIELD_AND_BUTTON,
-                                        height=BUTTON_HEIGHT,
-                                        on_click=change_last_name_profile_gui
+                                    ft.Row(
+                                        expand=True,
+                                        controls=[
+                                            await self.gui_program.gui_button(  # 📝 Изменение фамилии
+                                                text=translations["ru"]["edit_bio_menu"]["name_change_f"],
+                                                on_click=change_last_name_profile_gui,
+                                                bgcolor=ft.Colors.WHITE_10,
+                                            ),
+                                        ]
                                     ),
                                 ]
                             ),
                             await self.gui_program.diver_castom(),  # Горизонтальная линия
-                            # 🖼️ Изменение фото
-                            ft.Button(
-                                content=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
-                                width=WIDTH_WIDE_BUTTON,
-                                height=BUTTON_HEIGHT,
-                                on_click=change_photo_profile_gui
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # 🖼️ Изменение фото
+                                        text=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
+                                        on_click=change_photo_profile_gui,
+                                        bgcolor=ft.Colors.WHITE_10,
+                                    ),
+                                ]
                             ),
                         ]
                     )
