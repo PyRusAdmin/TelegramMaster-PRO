@@ -3,7 +3,6 @@ from loguru import logger
 from telethon import TelegramClient
 from telethon import functions
 
-from src.core.configs import BUTTON_HEIGHT, WIDTH_WIDE_BUTTON
 from src.core.database.account import getting_account, get_account_list
 from src.core.utils import Utils
 from src.features.account.connect import TGConnect
@@ -78,11 +77,23 @@ class CreatingGroupsAndChats:
                     ),
                     list_view,
                     account_drop_down_list,
-                    ft.Button(
-                        content=translations["ru"]["buttons"]["start"],
-                        width=WIDTH_WIDE_BUTTON,
-                        height=BUTTON_HEIGHT,
-                        on_click=add_items),
+                    # ft.Button(
+                    #     content=translations["ru"]["buttons"]["start"],
+                    #     width=WIDTH_WIDE_BUTTON,
+                    #     height=BUTTON_HEIGHT,
+                    #     on_click=add_items
+                    # ),
+                    ft.Row(
+                        expand=True,
+                        controls=[
+                            await self.gui_program.gui_button(  # 🚀 Начать
+                                text=translations["ru"]["buttons"]["start"],
+                                on_click=add_items,
+                                bgcolor=ft.Colors.GREEN,
+                            ),
+                        ]
+                    ),
+
                 ]))
         self.page.update()
 # 144
