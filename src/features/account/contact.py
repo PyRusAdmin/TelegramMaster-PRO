@@ -137,43 +137,54 @@ class TGContact:
                         text=translations["ru"]["menu"]["contacts"]
                     ),
                     list_view,  # Отображение логов 📝
-                    ft.Column([  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
-                        ft.Row(
-                            [
-                                input_numbers,  # Ввод номеров
-                                await self.gui_program.gui_button(  # 📋 Формирование списка контактов
-                                    text=translations["ru"]["contacts_menu"]["creating_a_contact_list"],
-                                    on_click=write_contact_to_db,
-                                    bgcolor=ft.Colors.WHITE,
-                                ),
-                            ]
-                        ),
-                        # 👥 Парсинг списка контактов
-                        # ft.Button(
-                        #     content=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
-                        #     width=WIDTH_WIDE_BUTTON,
-                        #     height=BUTTON_HEIGHT,
-                        #     on_click=show_account_contact_list),
-
-                        await self.gui_program.gui_button(  # 👥 Парсинг списка контактов
-                            text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
-                            on_click=show_account_contact_list,
-                            bgcolor=ft.Colors.WHITE,
-                        ),
-
-                        # 🗑️ Удаление контактов
-                        ft.Button(
-                            content=translations["ru"]["contacts_menu"]["deleting_contacts"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=delete_contact),
-                        # ➕ Добавление контактов
-                        ft.Button(
-                            content=translations["ru"]["contacts_menu"]["adding_contacts"],
-                            width=WIDTH_WIDE_BUTTON,
-                            height=BUTTON_HEIGHT,
-                            on_click=inviting_contact),
-                    ])]))
+                    ft.Column(
+                        controls=[  # Добавляет все чекбоксы и кнопку на страницу (page) в виде колонок.
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    input_numbers,  # Ввод номеров
+                                    await self.gui_program.gui_button(  # 📋 Формирование списка контактов
+                                        text=translations["ru"]["contacts_menu"]["creating_a_contact_list"],
+                                        on_click=write_contact_to_db,
+                                        bgcolor=ft.Colors.WHITE,
+                                    ),
+                                ]
+                            ),
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # 👥 Парсинг списка контактов
+                                        text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
+                                        on_click=show_account_contact_list,
+                                        bgcolor=ft.Colors.WHITE,
+                                    )
+                                ]
+                            ),
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # 🗑️ Удаление контактов
+                                        text=translations["ru"]["contacts_menu"]["deleting_contacts"],
+                                        on_click=delete_contact,
+                                        bgcolor=ft.Colors.WHITE,
+                                    )
+                                ]
+                            ),
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # ➕ Добавление контактов
+                                        text=translations["ru"]["contacts_menu"]["adding_contacts"],
+                                        on_click=inviting_contact,
+                                        bgcolor=ft.Colors.WHITE,
+                                    )
+                                ]
+                            ),
+                        ]
+                    )
+                ]
+            )
+        )
 
     async def parsing_contacts(self, client):
         """
