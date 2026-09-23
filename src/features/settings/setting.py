@@ -7,7 +7,6 @@ import sys
 import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 
-from src.core.configs import WIDTH_WIDE_BUTTON
 from src.core.database.database import save_proxy_data_to_db
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
@@ -30,6 +29,41 @@ class SettingPage:
         self.page = page
         self.app_logger = AppLogger(page=page)
         self.gui_program = GUIProgram(page=page)
+        self.proxy_type = ft.TextField(
+            label="Введите тип прокси, например SOCKS5: ",
+            multiline=True,
+            expand=True,  # Полноразмерное расширение
+        )
+        self.addr_type = ft.TextField(
+            label="Введите ip адрес, например 194.67.248.9: ",
+            multiline=True,
+            expand=True,  # Полноразмерное расширение
+        )
+        self.port_type = ft.TextField(
+            label="Введите порт прокси, например 9795: ",
+            multiline=True,
+            expand=True,  # Полноразмерное расширение
+        )
+        self.username_type = ft.TextField(
+            label="Введите username, например NnbjvX: ",
+            multiline=True,
+            expand=True,  # Полноразмерное расширение
+        )
+        self.password_type = ft.TextField(
+            label="Введите пароль, например ySfCfk: ",
+            multiline=True,
+            expand=True,  # Полноразмерное расширение
+        )
+        self.api_id_data = ft.TextField(
+            label="Введите api_id",
+            multiline=True,
+            expand=True,  # Полноразмерное расширение
+        )
+        self.api_hash_data = ft.TextField(
+            label="Введите api_hash",
+            multiline=True,
+            expand=True,  # Полноразмерное расширение
+        )
 
     def get_unique_filename(self, base_filename) -> str:
         """
@@ -137,38 +171,14 @@ class SettingPage:
                 try:
                     list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
                     list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-                    proxy_type = ft.TextField(
-                        label="Введите тип прокси, например SOCKS5: ", multiline=True,
-                        max_lines=19,
-                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
-                    )
-                    addr_type = ft.TextField(
-                        label="Введите ip адрес, например 194.67.248.9: ", multiline=True,
-                        max_lines=19,
-                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
-                    )
-                    port_type = ft.TextField(
-                        label="Введите порт прокси, например 9795: ", multiline=True, max_lines=19,
-                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
-                    )
-                    username_type = ft.TextField(
-                        label="Введите username, например NnbjvX: ", multiline=True,
-                        max_lines=19,
-                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
-                    )
-                    password_type = ft.TextField(
-                        label="Введите пароль, например ySfCfk: ", multiline=True,
-                        max_lines=19,
-                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
-                    )
 
                     async def btn_click(_) -> None:
                         proxy = {
-                            "proxy_type": proxy_type.value,
-                            "addr": addr_type.value,
-                            "port": port_type.value,
-                            "username": username_type.value,
-                            "password": password_type.value,
+                            "proxy_type": self.proxy_type.value,
+                            "addr": self.addr_type.value,
+                            "port": self.port_type.value,
+                            "username": self.username_type.value,
+                            "password": self.password_type.value,
                             "rdns": "True"
                         }
                         save_proxy_data_to_db(proxy=proxy)
@@ -180,7 +190,7 @@ class SettingPage:
                         self.page.update()
 
                     await self.add_view_with_fields_and_button(
-                        [proxy_type, addr_type, port_type, username_type, password_type],
+                        [self.proxy_type, self.addr_type, self.port_type, self.username_type, self.password_type],
                         btn_click)
                 except Exception as e:
                     logger.exception(e)
@@ -194,29 +204,17 @@ class SettingPage:
                     list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
 
                     list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
-                    api_id_data = ft.TextField(
-                        label="Введите api_id",
-                        multiline=True,
-                        max_lines=19,
-                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
-                    )
-                    api_hash_data = ft.TextField(
-                        label="Введите api_hash",
-                        multiline=True,
-                        max_lines=19,
-                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
-                    )
 
                     def btn_click(_) -> None:
                         config.get("telegram_settings", "id")
-                        config.set("telegram_settings", "id", api_id_data.value)
+                        config.set("telegram_settings", "id", self.api_id_data.value)
                         config.get("telegram_settings", "hash")
-                        config.set("telegram_settings", "hash", api_hash_data.value)
+                        config.set("telegram_settings", "hash", self.api_hash_data.value)
                         self.writing_settings_to_a_file(config)
                         self.page.push_route("/settings")  # Изменение маршрута в представлении существующих настроек
                         self.page.update()
 
-                    await self.add_view_with_fields_and_button([api_id_data, api_hash_data], btn_click)
+                    await self.add_view_with_fields_and_button([self.api_id_data, self.api_hash_data], btn_click)
                 except Exception as e:
                     logger.exception(e)
 
@@ -256,8 +254,9 @@ class SettingPage:
                     text_to_send = ft.TextField(
                         label=label,  # ✅ Текстовая метка поля ввода (например, "Введите сообщение")
                         multiline=True,  # ✅ Разрешает ввод нескольких строк (многострочный режим)
-                        max_lines=19,  # ✅ Ограничивает отображение максимум 19 строками
-                        width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
+                        expand=True,  # Полноразмерное расширение
+                        # max_lines=19,  # ✅ Ограничивает отображение максимум 19 строками
+                        # width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
                     )
 
                     async def btn_click(_) -> None:
