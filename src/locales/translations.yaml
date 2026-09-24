@@ -3,7 +3,7 @@ ru:
     sending_messages_via_chats: "💬 Рассылка сообщений"
     sending_messages_files_via_chats: "💬 Рассылка сообщений"
     sending_personal_messages_with_limits: "💬 Рассылка сообщений"
-    delete_group_send_messages: "🗑️ Очистка списка для рассылки сообщений по чатам"
+    delete_group_send_messages: "Очистка списка для рассылки сообщений по чатам"
     check_links_for_mailing: "Проверка ссылок для рассылки"
 
   edit_bio_menu:
@@ -57,7 +57,7 @@ ru:
     changing_accounts: "🔄 Смена аккаунтов"
     recording_api_id_api_hash: "📝 Запись api_id, api_hash"
     time_between_subscriptions: "⏰ Запись времени"
-    message_recording: "✉️ Запись сообщений"
+    message_recording: "✉️ Создать сообщение для рассылки"
     link_entry: "🔗 Запись ссылки для инвайтинга"
     account_limits: "📊 Лимиты на аккаунт"
     message_limits: "📨 Лимиты на сообщения"

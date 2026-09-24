@@ -25,6 +25,7 @@ from src.features.account.connect import TGConnect
 from src.features.account.inviting import get_limit, load_and_validate_users
 from src.features.account.subscribe import Subscribe
 from src.features.account.switch_controller import ToggleController
+from src.features.settings.setting import SettingPage
 from src.gui.gui import list_view, AppLogger
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
@@ -43,6 +44,7 @@ class SendTelegramMessages:
         self.session_string = getting_account()  # Получаем строку сессии из файла базы данных
         self.subscribe = Subscribe(page=page)
         self.account_data = get_account_list()
+        self.setting_page = SettingPage(page=page)
 
         self.tb_time_from = ft.TextField(
             label="Время сна от", expand=True, hint_text="Введите время в секундах"
@@ -592,6 +594,12 @@ class SendTelegramMessages:
                 logger.exception(error)
             self.page.update()
 
+        async def message_recording():
+            await self.setting_page.recording_text_for_sending_messages(
+                label="Введите текст для сообщения",
+                unique_filename=self.setting_page.get_unique_filename(base_filename='user_data/message/message')
+            )
+
         # ── кнопка «Готово» ──────────────────────────────────
 
         async def launching_action(_=None):
@@ -702,14 +710,9 @@ class SendTelegramMessages:
                     ft.Row(controls=[self.limits], expand=True),
                     ft.Row(
                         controls=[
-                            self.tb_time_from,
-                            self.tb_time_to
-                        ],
-                        expand=True
-                    ),
-                    ft.Row(  # Время перерыва в секундах между проходами по чатам Telegram
-                        controls=[
-                            self.time_sleep_raund
+                            self.tb_time_from,  # Время сна от
+                            self.tb_time_to,  # Время сна до
+                            self.time_sleep_raund  # Время перерыва в секундах между проходами по чатам Telegram
                         ],
                         expand=True
                     ),
@@ -726,16 +729,11 @@ class SendTelegramMessages:
                             ft.Row(
                                 expand=True,
                                 controls=[
-                                    # ft.Button(
-                                    #     content=translations["ru"]["message_sending_menu"]["check_links_for_mailing"],
-                                    #     expand=True,
-                                    #     height=BUTTON_HEIGHT,
-                                    #     on_click=checking_links_group,
-                                    # ),
                                     ft.Row(
                                         expand=True,
                                         controls=[
                                             await self.gui_program.gui_button(  # Проверка ссылок для рассылки
+                                                icon=ft.Icons.SPELLCHECK,
                                                 text=translations["ru"]["message_sending_menu"][
                                                     "check_links_for_mailing"],
                                                 on_click=checking_links_group,
@@ -743,17 +741,12 @@ class SendTelegramMessages:
                                             ),
                                         ]
                                     ),
-                                    # ft.Button(
-                                    #     content=translations["ru"]["message_sending_menu"]["delete_group_send_messages"],
-                                    #     expand=True,
-                                    #     height=BUTTON_HEIGHT,
-                                    #     on_click=delete_group_send_messag,
-                                    # )
                                     ft.Row(
                                         expand=True,
                                         controls=[
                                             await self.gui_program.gui_button(
                                                 # 🗑️ Очистка списка для рассылки сообщений по чатам
+                                                icon=ft.Icons.CLEANING_SERVICES_OUTLINED,
                                                 text=translations["ru"]["message_sending_menu"][
                                                     "delete_group_send_messages"],
                                                 on_click=delete_group_send_messag,
@@ -766,20 +759,20 @@ class SendTelegramMessages:
                             ft.Row(
                                 expand=True,
                                 controls=[
-                                    # ft.Button(
-                                    #     content=translations["ru"]["buttons"]["done"],
-                                    #     expand=True,
-                                    #     height=BUTTON_HEIGHT,
-                                    #     on_click=launching_action,
-                                    #     bgcolor=ft.Colors.GREEN
-                                    # ),  # ✅ Готово
                                     ft.Row(
                                         expand=True,
                                         controls=[
-                                            await self.gui_program.gui_button(  # ✅ Готово
-                                                text=translations["ru"]["buttons"]["done"],
+                                            await self.gui_program.gui_button(  # ▶️ Начать рассылку
+                                                icon=ft.Icons.START,
+                                                text="Начать рассылку",
                                                 on_click=launching_action,
                                                 bgcolor=ft.Colors.GREEN,
+                                            ),
+                                            await self.gui_program.gui_button(  # ⛔ Остановить рассылку
+                                                icon=ft.Icons.STOP,
+                                                text="Остановить рассылку",
+                                                on_click=stop_sending,
+                                                bgcolor=ft.Colors.RED,
                                             ),
                                         ]
                                     ),
@@ -788,24 +781,11 @@ class SendTelegramMessages:
                             ft.Row(
                                 expand=True,
                                 controls=[
-                                    # ft.Button(
-                                    #     content=translations["ru"]["buttons"]["stop_mailing"],
-                                    #     expand=True,
-                                    #     height=BUTTON_HEIGHT,
-                                    #     on_click=stop_sending,
-                                    #     bgcolor=ft.Colors.RED,
-                                    #     color=ft.Colors.WHITE,
-                                    # ),
-
-                                    ft.Row(
-                                        expand=True,
-                                        controls=[
-                                            await self.gui_program.gui_button(  # ⛔ Остановить рассылку
-                                                text=translations["ru"]["buttons"]["stop_mailing"],
-                                                on_click=stop_sending,
-                                                bgcolor=ft.Colors.RED,
-                                            ),
-                                        ]
+                                    await self.gui_program.gui_button(  # ✉️ Запись сообщений
+                                        icon=ft.Icons.MESSAGE,
+                                        text="Создать сообщение для рассылки",
+                                        on_click=message_recording,
+                                        bgcolor=ft.Colors.WHITE_10,
                                     ),
                                 ]
                             ),

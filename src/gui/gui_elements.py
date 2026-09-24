@@ -133,16 +133,18 @@ class GUIProgram:
             )
         )
 
-    async def gui_button(self, text: str, on_click, bgcolor, disabled=False):
+    async def gui_button(self, text: str, on_click, bgcolor, disabled=False, icon=None):
         """
         Формирует кнопку с текстом и маршрутом
         :param bgcolor:
         :param on_click:
         :param text: Текст кнопки
         :param route: Маршрут, на который будет выполнен переход при нажатии (например: "/parsing", "/settings").
+        :param icon: Иконка кнопки из https://flet.dev/docs/types/icons/. Если None, то иконка не будет отображаться.
         :return: Объект кнопки Flet, готовый для добавления в интерфейс.
         """
         return ft.Button(
+            icon=icon, # Задает иконку кнопки из https://flet.dev/docs/types/icons/.
             content=text,  # Задает содержимое кнопки.
             height=BUTTON_HEIGHT,  # Задает высоту кнопки.
             expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
