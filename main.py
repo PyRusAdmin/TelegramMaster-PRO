@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import webbrowser
 
 import flet as ft
 from loguru import logger
@@ -82,7 +83,7 @@ async def main_view(page: ft.Page):
                         ),
                         ft.TextButton(
                             content=ft.Text("👉 Получить новую версию", color=ft.Colors.BLUE_400, weight=ft.FontWeight.BOLD),
-                            on_click=lambda _: page.launch_url("https://t.me/+8LO09QUNtvJkYmJi")
+                            on_click=lambda _: webbrowser.open("https://t.me/+8LO09QUNtvJkYmJi")
                         ),
                         ft.Text(f"Дата выхода текущей версии: {DATE_OF_PROGRAM_CHANGE}", size=12, color=ft.Colors.GREY_500),
                     ]
@@ -556,8 +557,7 @@ async def main(page: ft.Page):
                                     ]
                                 ),
 
-                                ft.Text(f"Версия программы: {PROGRAM_VERSION}"),
-                                ft.Text(f"Дата выхода: {DATE_OF_PROGRAM_CHANGE}"),
+                                version_info_container,
 
                                 ft.Row(
                                     controls=[
