@@ -19,8 +19,8 @@
 <h2>📖 Описание</h2>
 
 - Название проекта: TelegramMaster-PRO 🚀<br>
-- Текущая версия: 2.9.2 🆕<br>
-- Дата последнего обновления: 18.09.2026 📅<br><br>
+- Текущая версия: 2.9.3 🆕<br>
+- Дата последнего обновления: 25.09.2026 📅<br><br>
 
 [![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
 [![made-with-PyAdminRU](https://img.shields.io/badge/Made%20with-PyAdminRU-1f425f.svg)](https://t.me/PyAdminRU)

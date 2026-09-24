@@ -4,8 +4,10 @@ import os
 import os.path
 import random  # Импортируем модуль random, чтобы генерировать случайное число
 
+import aiohttp
 import flet as ft
 from loguru import logger
+from packaging.version import parse
 
 from src.core.database.database import delete_row_db
 from src.gui.gui import AppLogger
@@ -33,6 +35,24 @@ class Utils:
         with open(filename, 'r', encoding="utf-8") as file:
             data = json.load(file)
         return data
+
+    async def check_github_update(self, repo_owner: str = "PyRusAdmin", repo_name: str = "TelegramMaster-PRO") -> str | None:
+        """
+        Проверяет наличие новой версии на GitHub через REST API.
+        Возвращает тег последней версии (например '3.0.0'), если версия новее текущей, иначе None.
+        """
+        url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest"
+        headers = {"User-Agent": "TelegramMaster-PRO"}
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=5)) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        tag_name = data.get("tag_name", "").lstrip("v").strip()
+                        return tag_name
+        except Exception as e:
+            logger.warning(f"Не удалось проверить обновления на GitHub: {e}")
+        return None
 
     async def all_find_files(self, directory_path) -> list:
         """

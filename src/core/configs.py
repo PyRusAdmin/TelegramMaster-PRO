@@ -14,8 +14,8 @@ API_HASH = config.get('telegram_settings', 'hash', fallback=None)
 """Настройки внешнего вида программы"""
 
 PROGRAM_NAME = "TelegramMaster-PRO"  # Имя программы
-PROGRAM_VERSION = "2.9.2"  # Версия программы
-DATE_OF_PROGRAM_CHANGE = "18.09.2026"  # Дата изменения (обновления)
+PROGRAM_VERSION = "2.9.3"  # Версия программы
+DATE_OF_PROGRAM_CHANGE = "25.09.2026"  # Дата изменения (обновления)
 
 # Ширина программы / высота программы
 window_width = 1050  # Ширина (программы)

@@ -387,16 +387,6 @@ class SettingPage:
                                         ),
                                     ]
                                 ),
-                                # ft.Row(
-                                #     expand=True,
-                                #     controls=[
-                                #         await self.gui_program.gui_button(  # ✉️ Создание сообщений
-                                #             text=translations["ru"]["menu_settings"]["message_recording"],
-                                #             on_click=message_recording,
-                                #             bgcolor=ft.Colors.WHITE_10,
-                                #         ),
-                                #     ]
-                                # ),
                                 ft.Row(
                                     expand=True,
                                     controls=[

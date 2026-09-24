@@ -1,9 +1,12 @@
+import asyncio
 import base64
 
 import flet as ft
 from loguru import logger
+from packaging.version import parse
 
 from src.core.configs import PROGRAM_NAME, PROGRAM_VERSION, DATE_OF_PROGRAM_CHANGE, window_width, window_height, theme
+from src.core.utils import Utils
 from src.core.database.account import getting_account
 from src.core.database.create_database import create_database
 from src.core.database.database import getting_members, get_links_table_group_send_messages, get_links_inviting
@@ -53,6 +56,41 @@ async def main_view(page: ft.Page):
     send_telegram_messages = SendTelegramMessages(page=page)
     gui_program = GUIProgram(page=page)  # Создаем экземпляр класса GUIProgram
     inviting_to_a_group = InvitingToAGroup(page=page)
+    utils = Utils(page=page)
+
+    version_info_container = ft.Column(
+        spacing=2,
+        controls=[
+            ft.Text(f"Версия программы: {PROGRAM_VERSION}"),
+            ft.Text(f"Дата выхода: {DATE_OF_PROGRAM_CHANGE}"),
+        ]
+    )
+
+    async def check_version_task():
+        latest_tag = await utils.check_github_update()
+        if latest_tag:
+            try:
+                if parse(latest_tag) > parse(PROGRAM_VERSION):
+                    version_info_container.controls = [
+                        ft.Text(
+                            spans=[
+                                ft.TextSpan("Ваша версия: ", style=ft.TextStyle(weight=ft.FontWeight.BOLD)),
+                                ft.TextSpan(f"{PROGRAM_VERSION}\n", style=ft.TextStyle(color=ft.Colors.RED_500, weight=ft.FontWeight.BOLD)),
+                                ft.TextSpan("Доступна новая версия: ", style=ft.TextStyle(weight=ft.FontWeight.BOLD)),
+                                ft.TextSpan(f"{latest_tag}\n", style=ft.TextStyle(color=ft.Colors.GREEN_500, weight=ft.FontWeight.BOLD)),
+                            ]
+                        ),
+                        ft.TextButton(
+                            content=ft.Text("👉 Получить новую версию", color=ft.Colors.BLUE_400, weight=ft.FontWeight.BOLD),
+                            on_click=lambda _: page.launch_url("https://t.me/+8LO09QUNtvJkYmJi")
+                        ),
+                        ft.Text(f"Дата выхода текущей версии: {DATE_OF_PROGRAM_CHANGE}", size=12, color=ft.Colors.GREY_500),
+                    ]
+                    version_info_container.update()
+            except Exception as e:
+                logger.warning(f"Ошибка при сравнении версий: {e}")
+
+    asyncio.create_task(check_version_task())
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
@@ -252,8 +290,7 @@ async def main_view(page: ft.Page):
                                     ]
                                 ),
 
-                                ft.Text(f"Версия программы: {PROGRAM_VERSION}"),
-                                ft.Text(f"Дата выхода: {DATE_OF_PROGRAM_CHANGE}"),
+                                version_info_container,
 
                                 ft.Row(
                                     controls=[
