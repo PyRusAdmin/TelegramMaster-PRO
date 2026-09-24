@@ -1,3 +1,4 @@
+import asyncio
 import configparser
 import io
 import json
@@ -8,6 +9,7 @@ import flet as ft  # Импортируем библиотеку flet
 from loguru import logger
 
 from src.core.database.database import save_proxy_data_to_db
+from src.core.utils import Utils
 from src.gui.gui import AppLogger, list_view
 from src.gui.gui_elements import GUIProgram
 from src.locales.translations_loader import translations
@@ -29,6 +31,7 @@ class SettingPage:
         self.page = page
         self.app_logger = AppLogger(page=page)
         self.gui_program = GUIProgram(page=page)
+        self.utils = Utils(page=page)
         self.proxy_type = ft.TextField(
             label="Введите тип прокси, например SOCKS5: ",
             multiline=True,
@@ -138,14 +141,6 @@ class SettingPage:
                                 t,
                                 ft.Column(
                                     [ft.Row(checkboxes[i:i + 9]) for i in range(0, len(checkboxes), 9)]),
-                                # Чекбоксы в колонках
-                                # ft.Button(
-                                #     content=translations["ru"]["buttons"]["done"],
-                                #     width=WIDTH_WIDE_BUTTON,
-                                #     height=BUTTON_HEIGHT,
-                                #     on_click=button_clicked,
-                                #     bgcolor=ft.Colors.GREEN
-                                # ),  # ✅ Готово
                                 ft.Row(
                                     expand=True,
                                     controls=[
@@ -251,12 +246,17 @@ class SettingPage:
                 try:
                     list_view.controls.clear()  # ✅ Очистка логов перед новым запуском
                     list_view.controls.append(ft.Text(f"Введите данные для записи"))  # отображаем сообщение в ListView
+
+                    entities: list = await self.utils.all_find_files(directory_path="user_data/message")
+
+                    await self.app_logger.log_and_display(
+                        f"В папке TelegramMaster-PRO/user_data/message найдено {len(entities)} файлов"
+                    )
+
                     text_to_send = ft.TextField(
                         label=label,  # ✅ Текстовая метка поля ввода (например, "Введите сообщение")
                         multiline=True,  # ✅ Разрешает ввод нескольких строк (многострочный режим)
                         expand=True,  # Полноразмерное расширение
-                        # max_lines=19,  # ✅ Ограничивает отображение максимум 19 строками
-                        # width=WIDTH_WIDE_BUTTON  # ✅ Устанавливает ширину поля ввода
                     )
 
                     async def btn_click(_) -> None:
@@ -271,10 +271,54 @@ class SettingPage:
                             "/settings")  # Изменение маршрута в представлении существующих настроек
                         self.page.update()
 
+                    async def clean_message(_) -> None:
+                        """
+                        Очищает ранее введенные сообщения пользователем в папке TelegramMaster-PRO/user_data/message.
+                        Формат сообщения message_1.json
+                        """
+
+                        await self.app_logger.log_and_display(
+                            f"Начинаю очистку данных"
+                        )
+                        await asyncio.sleep(0.2)
+
+                        entities: list = await self.utils.all_find_files(directory_path="user_data/message")
+                        await self.app_logger.log_and_display(
+                            f"В папке TelegramMaster-PRO/user_data/message найдено {len(entities)} файлов"
+                        )
+                        await asyncio.sleep(0.2)
+
+                        for entity in entities:
+                            logger.info(f"Удаляем файл {entity}")
+                            # Удаляем файл в папке TelegramMaster-PRO\user_data\message
+                            os.remove(f"user_data/message/{entity}")
+                            await self.app_logger.log_and_display(
+                                f"В папке TelegramMaster-PRO/user_data/message удален {entity} файл"
+                            )
+                            await asyncio.sleep(0.2)
+
+                        await self.app_logger.log_and_display(
+                            f"В папке TelegramMaster-PRO/user_data/message все файлы удалены"
+                        )
+
                     await self.add_view_with_fields_and_button(
-                        fields=[text_to_send],
+                        fields=[
+                            ft.Row(
+                                expand=True,
+                                controls=[
+                                    await self.gui_program.gui_button(  # ✅ Готово
+                                        text="Очистка ранее введенных сообщений",
+                                        on_click=clean_message,
+                                        bgcolor=ft.Colors.RED,
+                                    ),
+                                ]
+                            ),
+                            text_to_send,
+                        ],
                         btn_click=btn_click
                     )
+
+
                 except Exception as e:
                     logger.exception(e)
 

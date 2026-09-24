@@ -53,7 +53,12 @@ class AppLogger:
         """
         if level.lower() == "error":
             logger.error(message)
+            self.list_view.controls.append(ft.Text(message, color=ft.Colors.RED))
         else:
             self.list_view.controls.append(ft.Text(message))
             logger.info(message)
+        try:
+            self.list_view.update()  # 👈 Гарантирует немедленную отрисовку каждой строки в GUI
+        except Exception:
+            pass
         self.page.update()
