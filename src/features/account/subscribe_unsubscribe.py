@@ -186,7 +186,6 @@ class SubscribeUnsubscribeTelegram:
                                     await self.gui_program.gui_button(  # 🔔 Подписка
                                         text=translations["ru"]["subscribe_unsubscribe_menu"]["subscription"],
                                         on_click=btn_click,
-                                        bgcolor=ft.Colors.WHITE_10,
                                         icon=ft.Icons.NOTIFICATIONS,
                                     ),
                                 ]
@@ -197,7 +196,6 @@ class SubscribeUnsubscribeTelegram:
                                     await self.gui_program.gui_button(  # 🚫 Отписываемся
                                         text=translations["ru"]["subscribe_unsubscribe_menu"]["unsubscribe"],
                                         on_click=unsubscribe_all,
-                                        bgcolor=ft.Colors.WHITE_10,
                                         icon=ft.Icons.NOTIFICATIONS_OFF,
                                     ),
                                 ]

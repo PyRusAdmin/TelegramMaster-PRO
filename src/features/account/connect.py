@@ -223,7 +223,6 @@ class TGConnect:
                                     await self.gui_program.gui_button(  # 🤖 Проверка через спам бот
                                         text=translations["ru"]["account_verification"]["spam_check"],
                                         on_click=check_for_spam,
-                                        bgcolor=ft.Colors.WHITE_10,
                                         icon=ft.Icons.SMART_TOY,
                                     ),
                                 ]
@@ -234,7 +233,6 @@ class TGConnect:
                                     await self.gui_program.gui_button(  # ✅ Проверка на валидность
                                         text=translations["ru"]["account_verification"]["validation"],
                                         on_click=validation_check,
-                                        bgcolor=ft.Colors.WHITE_10,
                                         icon=ft.Icons.CHECK_CIRCLE,
                                     ),
                                 ]
@@ -245,7 +243,6 @@ class TGConnect:
                                     await self.gui_program.gui_button(  # ✏️ Переименование аккаунтов
                                         text=translations["ru"]["account_verification"]["renaming"],
                                         on_click=renaming_accounts,
-                                        bgcolor=ft.Colors.WHITE_10,
                                         icon=ft.Icons.DRIVE_FILE_RENAME_OUTLINE,
                                     ),
                                 ]
@@ -256,7 +253,6 @@ class TGConnect:
                                     await self.gui_program.gui_button(  # 🔍 Полная проверка
                                         text=translations["ru"]["account_verification"]["full_verification"],
                                         on_click=full_verification,
-                                        bgcolor=ft.Colors.WHITE_10,
                                         icon=ft.Icons.VERIFIED_USER,
                                     ),
                                 ]
@@ -896,7 +892,6 @@ class TGConnect:
                             await self.gui_program.gui_button(  # Очистить базу данных
                                 text=translations["ru"]["account_connect_menu"]["clear_database"],
                                 on_click=delete_invalid_accounts_from_databases,
-                                bgcolor=ft.Colors.WHITE_10,
                             ),
                         ]
                     ),
@@ -919,7 +914,6 @@ class TGConnect:
                             await self.gui_program.gui_button(  # Получить код
                                 text=translations["ru"]["account_connect_menu"]["get_connected_code"],
                                 on_click=connecting_number_accounts,
-                                bgcolor=ft.Colors.WHITE_10,
                             ),
                         ]
                     ),
@@ -940,7 +934,6 @@ class TGConnect:
                                     await self.gui_program.gui_button(  # 📂 Выбрать session файл(ы)
                                         text=translations["ru"]["create_groups_menu"]["choose_session_files"],
                                         on_click=handle_get_directory_path,
-                                        bgcolor=ft.Colors.WHITE_10,
                                     ),
                                 ]
                             ),
@@ -952,7 +945,7 @@ class TGConnect:
                             await self.gui_program.gui_button(  # Подключение по QR-коду
                                 text=translations["ru"]["account_connect_menu"]["connecting_qr_code"],
                                 on_click=connecting_qr_code,
-                                bgcolor=ft.Colors.WHITE_10,
+                                # bgcolor=ft.Colors.WHITE_10,
                             ),
                         ]
                     ),

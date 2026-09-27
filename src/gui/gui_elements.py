@@ -134,7 +134,7 @@ class GUIProgram:
             )
         )
 
-    async def gui_button(self, text: str, on_click, bgcolor, disabled=False, icon=None):
+    async def gui_button(self, text: str, on_click, bgcolor=None, disabled=False, icon=None):
         """
         Формирует кнопку с текстом и маршрутом
         :param disabled: Если True, то кнопка будет неактивна.

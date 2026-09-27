@@ -737,7 +737,6 @@ class SendTelegramMessages:
                                                 text=translations["ru"]["message_sending_menu"][
                                                     "check_links_for_mailing"],
                                                 on_click=checking_links_group,
-                                                bgcolor=ft.Colors.WHITE_10,
                                             ),
                                         ]
                                     ),
@@ -750,7 +749,6 @@ class SendTelegramMessages:
                                                 text=translations["ru"]["message_sending_menu"][
                                                     "delete_group_send_messages"],
                                                 on_click=delete_group_send_messag,
-                                                bgcolor=ft.Colors.WHITE_10,
                                             ),
                                         ]
                                     ),
@@ -785,7 +783,7 @@ class SendTelegramMessages:
                                         icon=ft.Icons.MESSAGE,
                                         text="Создать сообщение для рассылки",
                                         on_click=message_recording,
-                                        bgcolor=ft.Colors.WHITE_10,
+                                        # bgcolor=ft.Colors.WHITE_10,
                                     ),
                                 ]
                             ),

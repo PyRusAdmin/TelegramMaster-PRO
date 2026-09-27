@@ -366,7 +366,6 @@ class SettingPage:
                                         await self.gui_program.gui_button(  # 👍 Выбор реакций
                                             text=translations["ru"]["menu_settings"]["choice_of_reactions"],
                                             on_click=reaction_gui,
-                                            bgcolor=ft.Colors.WHITE_10,
                                             icon=ft.Icons.THUMB_UP,
                                         ),
                                     ]
@@ -377,7 +376,6 @@ class SettingPage:
                                         await self.gui_program.gui_button(  # 🔐 Запись proxy
                                             text=translations["ru"]["menu_settings"]["proxy_entry"],
                                             on_click=creating_the_main_window_for_proxy_data_entry,
-                                            bgcolor=ft.Colors.WHITE_10,
                                             icon=ft.Icons.SECURITY,
                                         ),
                                     ]
@@ -388,7 +386,6 @@ class SettingPage:
                                         await self.gui_program.gui_button(  # 📝 Запись api_id, api_hash
                                             text=translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
                                             on_click=writing_api_id_api_hash,
-                                            bgcolor=ft.Colors.WHITE_10,
                                             icon=ft.Icons.KEY,
                                         ),
                                     ]
@@ -399,7 +396,6 @@ class SettingPage:
                                         await self.gui_program.gui_button(  # 🔗 Запись ссылки для реакций
                                             text=translations["ru"]["menu_settings"]["recording_reaction_link"],
                                             on_click=recording_reaction_link,
-                                            bgcolor=ft.Colors.WHITE_10,
                                             icon=ft.Icons.LINK,
                                         ),
                                     ]

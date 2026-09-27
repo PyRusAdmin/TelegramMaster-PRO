@@ -186,7 +186,6 @@ class WorkingWithReactions:
                                         await self.gui_program.gui_button(  # 👍 Ставим реакции
                                             text=translations["ru"]["reactions_menu"]["setting_reactions"],
                                             on_click=send_reaction_request,
-                                            bgcolor=ft.Colors.WHITE_10,
                                             icon=ft.Icons.THUMB_UP,
                                         ),
                                     ]
@@ -197,7 +196,6 @@ class WorkingWithReactions:
                                         await self.gui_program.gui_button(  # 🤖 Автоматическое выставление реакций
                                             text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
                                             on_click=setting_reactions,
-                                            bgcolor=ft.Colors.WHITE_10,
                                             icon=ft.Icons.SMART_TOY,
                                         ),
                                     ]
