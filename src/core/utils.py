@@ -7,7 +7,6 @@ import random  # Импортируем модуль random, чтобы гене
 import aiohttp
 import flet as ft
 from loguru import logger
-from packaging.version import parse
 
 from src.core.database.database import delete_row_db
 from src.gui.gui import AppLogger
@@ -36,7 +35,8 @@ class Utils:
             data = json.load(file)
         return data
 
-    async def check_github_update(self, repo_owner: str = "PyRusAdmin", repo_name: str = "TelegramMaster-PRO") -> str | None:
+    async def check_github_update(self, repo_owner: str = "PyRusAdmin",
+                                  repo_name: str = "TelegramMaster-PRO") -> str | None:
         """
         Проверяет наличие новой версии на GitHub через REST API.
         Возвращает тег последней версии (например '3.0.0'), если версия новее текущей, иначе None.

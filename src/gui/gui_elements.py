@@ -144,7 +144,7 @@ class GUIProgram:
         :return: Объект кнопки Flet, готовый для добавления в интерфейс.
         """
         return ft.Button(
-            icon=icon, # Задает иконку кнопки из https://flet.dev/docs/types/icons/.
+            icon=icon,  # Задает иконку кнопки из https://flet.dev/docs/types/icons/.
             content=text,  # Задает содержимое кнопки.
             height=BUTTON_HEIGHT,  # Задает высоту кнопки.
             expand=True,  # Заставляет кнопку растягиваться, занимая всю доступную ширину.
