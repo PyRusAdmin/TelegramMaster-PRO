@@ -76,16 +76,20 @@ async def main_view(page: ft.Page):
                         ft.Text(
                             spans=[
                                 ft.TextSpan("Ваша версия: ", style=ft.TextStyle(weight=ft.FontWeight.BOLD)),
-                                ft.TextSpan(f"{PROGRAM_VERSION}\n", style=ft.TextStyle(color=ft.Colors.RED_500, weight=ft.FontWeight.BOLD)),
+                                ft.TextSpan(f"{PROGRAM_VERSION}\n",
+                                            style=ft.TextStyle(color=ft.Colors.RED_500, weight=ft.FontWeight.BOLD)),
                                 ft.TextSpan("Доступна новая версия: ", style=ft.TextStyle(weight=ft.FontWeight.BOLD)),
-                                ft.TextSpan(f"{latest_tag}\n", style=ft.TextStyle(color=ft.Colors.GREEN_500, weight=ft.FontWeight.BOLD)),
+                                ft.TextSpan(f"{latest_tag}\n",
+                                            style=ft.TextStyle(color=ft.Colors.GREEN_500, weight=ft.FontWeight.BOLD)),
                             ]
                         ),
                         ft.TextButton(
-                            content=ft.Text("👉 Получить новую версию", color=ft.Colors.BLUE_400, weight=ft.FontWeight.BOLD),
+                            content=ft.Text("👉 Получить новую версию", color=ft.Colors.BLUE_400,
+                                            weight=ft.FontWeight.BOLD),
                             on_click=lambda _: webbrowser.open("https://t.me/+8LO09QUNtvJkYmJi")
                         ),
-                        ft.Text(f"Дата выхода текущей версии: {DATE_OF_PROGRAM_CHANGE}", size=12, color=ft.Colors.GREY_500),
+                        ft.Text(f"Дата выхода текущей версии: {DATE_OF_PROGRAM_CHANGE}", size=12,
+                                color=ft.Colors.GREY_500),
                     ]
                     version_info_container.update()
             except Exception as e:
@@ -210,54 +214,67 @@ async def main_view(page: ft.Page):
                         ft.Column(
                             controls=[
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.INSERT_INVITATION,
                                     text=translations["ru"]["inviting_menu"]["inviting"],
                                     route="/inviting",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.ANALYTICS,
                                     text=translations["ru"]["menu"]["parsing"],
                                     route="/parsing",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.CONTACT_PAGE,
                                     text=translations["ru"]["menu"]["contacts"],
                                     route="/working_with_contacts",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.AUTORENEW,
                                     text=translations["ru"]["menu"]["subscribe_unsubscribe"],
                                     route="/subscribe_unsubscribe",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.MANAGE_ACCOUNTS,
                                     text=translations["ru"]["menu"]["account_connect"],
                                     route="/account_connection_menu",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.FAVORITE,
                                     text=translations["ru"]["menu"]["reactions"],
                                     route="/working_with_reactions",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.VERIFIED_USER,
                                     text=translations["ru"]["menu"]["account_check"],
                                     route="/account_verification_menu",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.GROUP_ADD,
                                     text=translations["ru"]["menu"]["create_groups"],
                                     route="/creating_groups",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.EDIT_NOTE,
                                     text=translations["ru"]["menu"]["edit_bio"],
                                     route="/bio_editing",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.REMOVE_RED_EYE,
                                     text=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
                                     route="/viewing_posts_menu",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.SEND,
                                     text=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
                                     route="/sending_messages_files_via_chats",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.FILE_DOWNLOAD,
                                     text=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
                                     route="/importing_a_list_of_parsed_data",
                                 ),
                                 await gui_program.menu_button(
+                                    icon=ft.Icons.SETTINGS,
                                     text=translations["ru"]["menu"]["settings"],
                                     route="/settings",
                                 ),
@@ -361,6 +378,45 @@ async def main(page: ft.Page):
     send_telegram_messages = SendTelegramMessages(page=page)
     gui_program = GUIProgram(page=page)  # Создаем экземпляр класса GUIProgram
     inviting_to_a_group = InvitingToAGroup(page=page)
+    utils = Utils(page=page)
+
+    version_info_container = ft.Column(
+        spacing=2,
+        controls=[
+            ft.Text(f"Версия программы: {PROGRAM_VERSION}"),
+            ft.Text(f"Дата выхода: {DATE_OF_PROGRAM_CHANGE}"),
+        ]
+    )
+
+    async def check_version_task():
+        latest_tag = await utils.check_github_update()
+        if latest_tag:
+            try:
+                if parse(latest_tag) > parse(PROGRAM_VERSION):
+                    version_info_container.controls = [
+                        ft.Text(
+                            spans=[
+                                ft.TextSpan("Ваша версия: ", style=ft.TextStyle(weight=ft.FontWeight.BOLD)),
+                                ft.TextSpan(f"{PROGRAM_VERSION}\n",
+                                            style=ft.TextStyle(color=ft.Colors.RED_500, weight=ft.FontWeight.BOLD)),
+                                ft.TextSpan("Доступна новая версия: ", style=ft.TextStyle(weight=ft.FontWeight.BOLD)),
+                                ft.TextSpan(f"{latest_tag}\n",
+                                            style=ft.TextStyle(color=ft.Colors.GREEN_500, weight=ft.FontWeight.BOLD)),
+                            ]
+                        ),
+                        ft.TextButton(
+                            content=ft.Text("👉 Получить новую версию", color=ft.Colors.BLUE_400,
+                                            weight=ft.FontWeight.BOLD),
+                            on_click=lambda _: webbrowser.open("https://t.me/+8LO09QUNtvJkYmJi")
+                        ),
+                        ft.Text(f"Дата выхода текущей версии: {DATE_OF_PROGRAM_CHANGE}", size=12,
+                                color=ft.Colors.GREY_500),
+                    ]
+                    version_info_container.update()
+            except Exception as e:
+                logger.warning(f"Ошибка при сравнении версий: {e}")
+
+    asyncio.create_task(check_version_task())
 
     with open("src/gui/image_display/telegram.png", "rb") as f:
         img_base64 = base64.b64encode(f.read()).decode("utf-8")
@@ -479,55 +535,69 @@ async def main(page: ft.Page):
                         ft.Column(
                             controls=[
                                 await gui_program.menu_button(
-                                    translations["ru"]["inviting_menu"]["inviting"],
-                                    "/inviting",
+                                    icon=ft.Icons.INSERT_INVITATION,
+                                    text=translations["ru"]["inviting_menu"]["inviting"],
+                                    route="/inviting",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["menu"]["parsing"],
-                                    "/parsing"
+                                    icon=ft.Icons.ANALYTICS,
+                                    text=translations["ru"]["menu"]["parsing"],
+                                    route="/parsing",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["menu"]["contacts"],
-                                    "/working_with_contacts"
+                                    icon=ft.Icons.CONTACT_PAGE,
+                                    text=translations["ru"]["menu"]["contacts"],
+                                    route="/working_with_contacts",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["menu"]["subscribe_unsubscribe"],
-                                    "/subscribe_unsubscribe"
+                                    icon=ft.Icons.AUTORENEW,
+                                    text=translations["ru"]["menu"]["subscribe_unsubscribe"],
+                                    route="/subscribe_unsubscribe",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["menu"]["account_connect"],
-                                    "/account_connection_menu"),
-                                await gui_program.menu_button(
-                                    translations["ru"]["menu"]["reactions"],
-                                    "/working_with_reactions"
+                                    icon=ft.Icons.MANAGE_ACCOUNTS,
+                                    text=translations["ru"]["menu"]["account_connect"],
+                                    route="/account_connection_menu",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["menu"]["account_check"],
-                                    "/account_verification_menu"
+                                    icon=ft.Icons.FAVORITE,
+                                    text=translations["ru"]["menu"]["reactions"],
+                                    route="/working_with_reactions",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["menu"]["create_groups"],
-                                    "/creating_groups"
+                                    icon=ft.Icons.VERIFIED_USER,
+                                    text=translations["ru"]["menu"]["account_check"],
+                                    route="/account_verification_menu",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["menu"]["edit_bio"],
-                                    "/bio_editing"
+                                    icon=ft.Icons.GROUP_ADD,
+                                    text=translations["ru"]["menu"]["create_groups"],
+                                    route="/creating_groups",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
-                                    "/viewing_posts_menu"
+                                    icon=ft.Icons.EDIT_NOTE,
+                                    text=translations["ru"]["menu"]["edit_bio"],
+                                    route="/bio_editing",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
-                                    "/sending_messages_files_via_chats"
+                                    icon=ft.Icons.REMOVE_RED_EYE,
+                                    text=translations["ru"]["reactions_menu"]["we_are_winding_up_post_views"],
+                                    route="/viewing_posts_menu",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
-                                    "/importing_a_list_of_parsed_data"
+                                    icon=ft.Icons.SEND,
+                                    text=translations["ru"]["message_sending_menu"]["sending_messages_via_chats"],
+                                    route="/sending_messages_files_via_chats",
                                 ),
                                 await gui_program.menu_button(
-                                    translations["ru"]["menu"]["settings"],
-                                    "/settings"
+                                    icon=ft.Icons.FILE_DOWNLOAD,
+                                    text=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
+                                    route="/importing_a_list_of_parsed_data",
+                                ),
+                                await gui_program.menu_button(
+                                    icon=ft.Icons.SETTINGS,
+                                    text=translations["ru"]["menu"]["settings"],
+                                    route="/settings",
                                 ),
                             ],
                         ),

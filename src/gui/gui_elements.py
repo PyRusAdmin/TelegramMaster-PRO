@@ -107,7 +107,7 @@ class GUIProgram:
             ]
         )
 
-    async def menu_button(self, text: str, route: str):
+    async def menu_button(self, text: str, route: str, icon=None):
         """
         Кнопка-меню главного экрана проекта
         :param text: Текст, отображаемый на кнопке меню.
@@ -120,6 +120,7 @@ class GUIProgram:
         return ft.Container(
             padding=1,  # Внутренний отступ контейнера (маленький, чтобы кнопка не "прилипала" к краям)
             content=ft.Button(
+                icon=icon,  # Задает иконку кнопки из https://flet.dev/docs/types/icons/.
                 content=text,  # Текст кнопки, переданный как параметр
                 style=ft.ButtonStyle(
                     shape=ft.RoundedRectangleBorder(  # Стиль кнопки с закруглёнными краями
@@ -136,10 +137,10 @@ class GUIProgram:
     async def gui_button(self, text: str, on_click, bgcolor, disabled=False, icon=None):
         """
         Формирует кнопку с текстом и маршрутом
-        :param bgcolor:
-        :param on_click:
+        :param disabled: Если True, то кнопка будет неактивна.
+        :param bgcolor: Цвет кнопки.
+        :param on_click: Функция, которая будет выполняться при нажатии на кнопку.
         :param text: Текст кнопки
-        :param route: Маршрут, на который будет выполнен переход при нажатии (например: "/parsing", "/settings").
         :param icon: Иконка кнопки из https://flet.dev/docs/types/icons/. Если None, то иконка не будет отображаться.
         :return: Объект кнопки Flet, готовый для добавления в интерфейс.
         """

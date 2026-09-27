@@ -1,6 +1,6 @@
 ru:
   message_sending_menu:
-    sending_messages_via_chats: "💬 Рассылка сообщений"
+    sending_messages_via_chats: "Рассылка сообщений"
     sending_messages_files_via_chats: "💬 Рассылка сообщений"
     sending_personal_messages_with_limits: "💬 Рассылка сообщений"
     delete_group_send_messages: "Очистка списка для рассылки сообщений по чатам"
@@ -14,14 +14,14 @@ ru:
     name_change_f: "📝 Изменение фамилии"
 
   contacts_menu:
-    creating_a_contact_list: "📋 Формирование списка контактов"
-    show_a_list_of_contacts: "👥 Парсинг списка контактов"
-    deleting_contacts: "🗑️ Удаление контактов"
-    adding_contacts: "➕ Добавление контактов"
+    creating_a_contact_list: "Формирование списка контактов"
+    show_a_list_of_contacts: "Парсинг списка контактов"
+    deleting_contacts: "Удаление контактов"
+    adding_contacts: "Добавление контактов"
 
   subscribe_unsubscribe_menu:
-    subscription: "🔔 Подписка"
-    unsubscribe: "🚫 Отписываемся"
+    subscription: "Подписка"
+    unsubscribe: "Отписываемся"
 
   account_connect_menu:
     connecting_accounts_by_phone_number: "📞 Подключение по номеру телефона"
@@ -75,7 +75,7 @@ ru:
     parse_active_group_members: "👥 Парсинг активных участников группы"
     parse_account_subscribed_groups_channels: "📜 Парсинг групп / каналов на которые подписан аккаунт"
     clear_previously_parsed_data_list: "🗑️ Очистка списка от ранее спарсенных данных"
-    importing_a_list_of_parsed_data: "📋 Импорт списка от ранее спарсенных данных"
+    importing_a_list_of_parsed_data: "Импорт списка от ранее спарсенных данных"
 
   #  account_connection_menu:
   #    for_the_answering_machine: "🤖 Для автоответчика"
@@ -92,27 +92,27 @@ ru:
   #    to_boost_views: "📈 Для накрутки просмотров"
 
   inviting_menu:
-    inviting: "🚀 Инвайтинг"
+    inviting: "Инвайтинг"
     invitation_1_time_per_hour: "⏰ Инвайтинг 1 раз в час"
     invitation_at_a_certain_time: "🕒 Инвайтинг в определенное время"
     inviting_every_day: "📅 Инвайтинг каждый день"
 
   reactions_menu:
-    setting_reactions: "👍 Ставим реакции"
-    we_are_winding_up_post_views: "👁️‍🗨️ Накручиваем просмотры постов"
-    automatic_setting_of_reactions: "🤖 Автоматическое выставление реакций"
+    setting_reactions: "Ставим реакции"
+    we_are_winding_up_post_views: "Накручиваем просмотры постов"
+    automatic_setting_of_reactions: "Автоматическое выставление реакций"
 
   menu:
     main: "Главное меню"
-    parsing: "📊 Парсинг"
-    contacts: "📇 Работа с контактами"
-    subscribe_unsubscribe: "🔄 Подписка, отписка"
-    account_connect: "🔐 Работа с аккаунтами"
-    reactions: "❤️ Работа с реакциями"
-    account_check: "🔍 Проверка аккаунтов"
-    create_groups: "👥 Создание групп (чатов)"
-    edit_bio: "✏️ Редактирование BIO"
-    settings: "⚙️ Настройки"
+    parsing: "Парсинг"
+    contacts: "Работа с контактами"
+    subscribe_unsubscribe: "Подписка, отписка"
+    account_connect: "Работа с аккаунтами"
+    reactions: "Работа с реакциями"
+    account_check: "Проверка аккаунтов"
+    create_groups: "Создание групп (чатов)"
+    edit_bio: "Редактирование BIO"
+    settings: "Настройки"
 
   create_groups_menu:
     choose_session_files: "📂 Выбрать session файл(ы)"

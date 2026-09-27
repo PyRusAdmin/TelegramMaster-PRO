@@ -187,6 +187,7 @@ class WorkingWithReactions:
                                             text=translations["ru"]["reactions_menu"]["setting_reactions"],
                                             on_click=send_reaction_request,
                                             bgcolor=ft.Colors.WHITE_10,
+                                            icon=ft.Icons.THUMB_UP,
                                         ),
                                     ]
                                 ),
@@ -197,6 +198,7 @@ class WorkingWithReactions:
                                             text=translations["ru"]["reactions_menu"]["automatic_setting_of_reactions"],
                                             on_click=setting_reactions,
                                             bgcolor=ft.Colors.WHITE_10,
+                                            icon=ft.Icons.SMART_TOY,
                                         ),
                                     ]
                                 ),

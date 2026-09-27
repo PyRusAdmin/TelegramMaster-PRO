@@ -147,6 +147,7 @@ class TGContact:
                                         text=translations["ru"]["contacts_menu"]["creating_a_contact_list"],
                                         on_click=write_contact_to_db,
                                         bgcolor=ft.Colors.WHITE,
+                                        icon=ft.Icons.LIST_ALT,
                                     ),
                                 ]
                             ),
@@ -157,6 +158,7 @@ class TGContact:
                                         text=translations["ru"]["contacts_menu"]["show_a_list_of_contacts"],
                                         on_click=show_account_contact_list,
                                         bgcolor=ft.Colors.WHITE,
+                                        icon=ft.Icons.PERSON_SEARCH,
                                     )
                                 ]
                             ),
@@ -167,6 +169,7 @@ class TGContact:
                                         text=translations["ru"]["contacts_menu"]["deleting_contacts"],
                                         on_click=delete_contact,
                                         bgcolor=ft.Colors.WHITE,
+                                        icon=ft.Icons.PERSON_REMOVE,
                                     )
                                 ]
                             ),
@@ -177,6 +180,7 @@ class TGContact:
                                         text=translations["ru"]["contacts_menu"]["adding_contacts"],
                                         on_click=inviting_contact,
                                         bgcolor=ft.Colors.WHITE,
+                                        icon=ft.Icons.PERSON_ADD,
                                     )
                                 ]
                             ),
