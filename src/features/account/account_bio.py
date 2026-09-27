@@ -210,10 +210,11 @@ class AccountBIO:
                                     ft.Row(
                                         expand=True,
                                         controls=[
-                                            await self.gui_program.gui_button(  # 🔄 Изменение username
+                                             await self.gui_program.gui_button(  # 🔄 Изменение username
                                                 text=translations["ru"]["edit_bio_menu"]["changing_the_username"],
                                                 on_click=change_username_profile_gui,
                                                 bgcolor=ft.Colors.WHITE_10,
+                                                icon=ft.Icons.ALTERNATE_EMAIL,
                                             ),
                                         ]
                                     ),
@@ -230,6 +231,7 @@ class AccountBIO:
                                                 text=translations["ru"]["edit_bio_menu"]["changing_the_description"],
                                                 on_click=change_bio_profile,
                                                 bgcolor=ft.Colors.WHITE_10,
+                                                icon=ft.Icons.EDIT_NOTE,
                                             ),
                                         ]
                                     ),
@@ -246,6 +248,7 @@ class AccountBIO:
                                                 text=translations["ru"]["edit_bio_menu"]["name_change_n"],
                                                 on_click=change_name_profile_gui,
                                                 bgcolor=ft.Colors.WHITE_10,
+                                                icon=ft.Icons.BADGE,
                                             ),
                                         ]
                                     ),
@@ -262,6 +265,7 @@ class AccountBIO:
                                                 text=translations["ru"]["edit_bio_menu"]["name_change_f"],
                                                 on_click=change_last_name_profile_gui,
                                                 bgcolor=ft.Colors.WHITE_10,
+                                                icon=ft.Icons.BADGE_OUTLINED,
                                             ),
                                         ]
                                     ),
@@ -275,6 +279,7 @@ class AccountBIO:
                                         text=translations["ru"]["edit_bio_menu"]["changing_the_photo"],
                                         on_click=change_photo_profile_gui,
                                         bgcolor=ft.Colors.WHITE_10,
+                                        icon=ft.Icons.ADD_A_PHOTO,
                                     ),
                                 ]
                             ),

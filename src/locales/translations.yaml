@@ -7,11 +7,11 @@ ru:
     check_links_for_mailing: "Проверка ссылок для рассылки"
 
   edit_bio_menu:
-    changing_the_username: "🔄 Изменение username"
-    changing_the_photo: "🖼️ Изменение фото"
-    changing_the_description: "✏️ Изменение описания"
-    name_change_n: "📝 Изменение имени"
-    name_change_f: "📝 Изменение фамилии"
+    changing_the_username: "Изменение username"
+    changing_the_photo: "Изменение фото"
+    changing_the_description: "Изменение описания"
+    name_change_n: "Изменение имени"
+    name_change_f: "Изменение фамилии"
 
   contacts_menu:
     creating_a_contact_list: "Формирование списка контактов"
@@ -41,21 +41,23 @@ ru:
   buttons:
     #    back: "⬅️ Назад"
     start: "🚀 Начать"
-    done: "✅ Готово"
+    done: "Готово"
     stop_mailing: "⛔ Остановить рассылку"
     start_inviting: "Запуск"
 
   account_verification:
-    spam_check: "🤖 Проверка через спам бот"
-    validation: "✅ Проверка на валидность"
-    renaming: "✏️ Переименование аккаунтов"
-    full_verification: "🔍 Полная проверка"
+    spam_check: "Проверка через спам бот"
+    validation: "Проверка на валидность"
+    renaming: "Переименование аккаунтов"
+    full_verification: "Полная проверка"
 
   menu_settings:
-    choice_of_reactions: "👍 Выбор реакций"
-    proxy_entry: "🔐 Запись proxy"
+    light_theme: "Светлая тема"
+    dark_theme: "Тёмная тема"
+    choice_of_reactions: "Выбор реакций"
+    proxy_entry: "Запись proxy"
     changing_accounts: "🔄 Смена аккаунтов"
-    recording_api_id_api_hash: "📝 Запись api_id, api_hash"
+    recording_api_id_api_hash: "Запись api_id, api_hash"
     time_between_subscriptions: "⏰ Запись времени"
     message_recording: "✉️ Создать сообщение для рассылки"
     link_entry: "🔗 Запись ссылки для инвайтинга"
@@ -65,11 +67,11 @@ ru:
     creating_username_list: "📋 Формирование списка username"
     recording_the_time_between_messages: "⏱️ Запись времени между сообщениями"
     time_between_invites_sending_messages: "🕒 Время между инвайтингом, рассылка сообщений"
-    recording_reaction_link: "🔗 Запись ссылки для реакций"
+    recording_reaction_link: "Запись ссылки для реакций"
     forming_list_of_chats_channels: "📑 Формирование списка чатов / каналов"
 
   parsing_menu:
-    parse_text: "🔍 Парсить"
+    parse_text: "Парсить"
     parse_single_or_multiple_groups: "🔍 Парсинг одной группы / групп"
     parse_selected_user_subscribed_group: "📂 Парсинг выбранной группы из подписанных пользователем"
     parse_active_group_members: "👥 Парсинг активных участников группы"

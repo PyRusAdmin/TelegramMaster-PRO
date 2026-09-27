@@ -47,6 +47,7 @@ class FunctionButton:
                                 text=translations["ru"]["buttons"]["done"],
                                 on_click=btn_click,
                                 bgcolor=ft.Colors.GREEN,
+                                icon=ft.Icons.CHECK,
                             ),  # ✅ Готово
                         ]
                     ),

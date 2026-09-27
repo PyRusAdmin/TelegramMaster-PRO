@@ -235,6 +235,7 @@ class SettingPage:
                                             text=translations["ru"]["buttons"]["done"],
                                             on_click=button_clicked,
                                             bgcolor=ft.Colors.GREEN,
+                                            icon=ft.Icons.CHECK,
                                         ),
                                     ]
                                 ),
@@ -345,14 +346,16 @@ class SettingPage:
                                     expand=True,
                                     controls=[
                                         await self.gui_program.gui_button(  # ☀️ Светлая тема
-                                            text="☀️ Светлая тема",
+                                            text=translations["ru"]["menu_settings"]["light_theme"],
                                             on_click=set_light_theme,
                                             bgcolor=ft.Colors.ORANGE_800 if is_light else ft.Colors.WHITE_10,
+                                            icon=ft.Icons.LIGHT_MODE,
                                         ),
                                         await self.gui_program.gui_button(  # 🌙 Тёмная тема
-                                            text="🌙 Тёмная тема",
+                                            text=translations["ru"]["menu_settings"]["dark_theme"],
                                             on_click=set_dark_theme,
                                             bgcolor=ft.Colors.BLUE_GREY_800 if not is_light else ft.Colors.WHITE_10,
+                                            icon=ft.Icons.DARK_MODE,
                                         ),
                                     ]
                                 ),
@@ -364,6 +367,7 @@ class SettingPage:
                                             text=translations["ru"]["menu_settings"]["choice_of_reactions"],
                                             on_click=reaction_gui,
                                             bgcolor=ft.Colors.WHITE_10,
+                                            icon=ft.Icons.THUMB_UP,
                                         ),
                                     ]
                                 ),
@@ -374,6 +378,7 @@ class SettingPage:
                                             text=translations["ru"]["menu_settings"]["proxy_entry"],
                                             on_click=creating_the_main_window_for_proxy_data_entry,
                                             bgcolor=ft.Colors.WHITE_10,
+                                            icon=ft.Icons.SECURITY,
                                         ),
                                     ]
                                 ),
@@ -384,6 +389,7 @@ class SettingPage:
                                             text=translations["ru"]["menu_settings"]["recording_api_id_api_hash"],
                                             on_click=writing_api_id_api_hash,
                                             bgcolor=ft.Colors.WHITE_10,
+                                            icon=ft.Icons.KEY,
                                         ),
                                     ]
                                 ),
@@ -394,6 +400,7 @@ class SettingPage:
                                             text=translations["ru"]["menu_settings"]["recording_reaction_link"],
                                             on_click=recording_reaction_link,
                                             bgcolor=ft.Colors.WHITE_10,
+                                            icon=ft.Icons.LINK,
                                         ),
                                     ]
                                 ),
@@ -431,6 +438,7 @@ class SettingPage:
                                         text=translations["ru"]["buttons"]["done"],
                                         on_click=btn_click,
                                         bgcolor=ft.Colors.GREEN,
+                                        icon=ft.Icons.CHECK,
                                     ),
                                 ]
                             ),

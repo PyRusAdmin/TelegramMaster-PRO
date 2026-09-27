@@ -313,7 +313,8 @@ class ParsingGroupMembers:
                 text=translations["ru"]["parsing_menu"]["parse_text"],
                 on_click=add_items,
                 bgcolor=ft.Colors.GREEN,
-                disabled=True
+                disabled=True,
+                icon=ft.Icons.SEARCH,
             )
 
             # После успешного выбора файла:

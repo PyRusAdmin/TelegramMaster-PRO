@@ -224,6 +224,7 @@ class TGConnect:
                                         text=translations["ru"]["account_verification"]["spam_check"],
                                         on_click=check_for_spam,
                                         bgcolor=ft.Colors.WHITE_10,
+                                        icon=ft.Icons.SMART_TOY,
                                     ),
                                 ]
                             ),
@@ -234,6 +235,7 @@ class TGConnect:
                                         text=translations["ru"]["account_verification"]["validation"],
                                         on_click=validation_check,
                                         bgcolor=ft.Colors.WHITE_10,
+                                        icon=ft.Icons.CHECK_CIRCLE,
                                     ),
                                 ]
                             ),
@@ -244,6 +246,7 @@ class TGConnect:
                                         text=translations["ru"]["account_verification"]["renaming"],
                                         on_click=renaming_accounts,
                                         bgcolor=ft.Colors.WHITE_10,
+                                        icon=ft.Icons.DRIVE_FILE_RENAME_OUTLINE,
                                     ),
                                 ]
                             ),
@@ -254,6 +257,7 @@ class TGConnect:
                                         text=translations["ru"]["account_verification"]["full_verification"],
                                         on_click=full_verification,
                                         bgcolor=ft.Colors.WHITE_10,
+                                        icon=ft.Icons.VERIFIED_USER,
                                     ),
                                 ]
                             ),
@@ -686,6 +690,7 @@ class TGConnect:
                                                 text=translations["ru"]["buttons"]["done"],
                                                 on_click=btn_click_password,
                                                 bgcolor=ft.Colors.GREEN,
+                                                icon=ft.Icons.CHECK,
                                             ),
                                         ]
                                     ),
@@ -714,6 +719,7 @@ class TGConnect:
                                         text=translations["ru"]["buttons"]["done"],
                                         on_click=btn_click_code,
                                         bgcolor=ft.Colors.GREEN,
+                                        icon=ft.Icons.CHECK,
                                     ),
                                 ]
                             ),
