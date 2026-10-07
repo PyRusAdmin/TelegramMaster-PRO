@@ -176,8 +176,12 @@ async def main_view(page: ft.Page):
             await working_with_reactions.reactions_menu()
         elif page.route == "/viewing_posts_menu":
             await viewing_posts.viewing_posts_request()
-        elif page.route == "/importing_a_list_of_parsed_data":
+        elif page.route == "/importing_a_list_of_parsed_data":  # Импорт списка распарсенных данных
             await receiving_and_recording.write_data_to_excel("user_data/parsed_chat_participants.xlsx")
+
+        elif page.route == "/clear_database":
+            await receiving_and_recording.clear_database()
+
         elif page.route == "/working_with_contacts":
             await tg_contact.working_with_contacts_menu()
         elif page.route == "/account_connection_menu":
@@ -273,6 +277,13 @@ async def main_view(page: ft.Page):
                                     text=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
                                     route="/importing_a_list_of_parsed_data",
                                 ),
+
+                                await gui_program.menu_button(
+                                    icon=ft.Icons.SETTINGS,
+                                    text="Очистка базы данных",
+                                    route="/clear_database",
+                                ),
+
                                 await gui_program.menu_button(
                                     icon=ft.Icons.SETTINGS,
                                     text=translations["ru"]["menu"]["settings"],
@@ -499,6 +510,10 @@ async def main(page: ft.Page):
             await viewing_posts.viewing_posts_request()
         elif page.route == "/importing_a_list_of_parsed_data":
             await receiving_and_recording.write_data_to_excel("user_data/parsed_chat_participants.xlsx")
+
+        elif page.route == "/clear_database":
+            await receiving_and_recording.clear_database()
+
         elif page.route == "/working_with_contacts":
             await tg_contact.working_with_contacts_menu()
         elif page.route == "/account_connection_menu":
@@ -594,6 +609,13 @@ async def main(page: ft.Page):
                                     text=translations["ru"]["parsing_menu"]["importing_a_list_of_parsed_data"],
                                     route="/importing_a_list_of_parsed_data",
                                 ),
+
+                                await gui_program.menu_button(
+                                    icon=ft.Icons.SETTINGS,
+                                    text="Очистка базы данных",
+                                    route="/clear_database",
+                                ),
+
                                 await gui_program.menu_button(
                                     icon=ft.Icons.SETTINGS,
                                     text=translations["ru"]["menu"]["settings"],

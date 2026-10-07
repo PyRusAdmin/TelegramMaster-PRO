@@ -20,3 +20,11 @@ progress~=1.6.1
 qrcode~=8.2
 packaging~=26.3
 aiohttp
+groq
+python-dotenv
+asgiref
+aiogram
+g4f
+openai
+fluent-logger-pyramid
+lingua-autotranslate
