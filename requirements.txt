@@ -1,4 +1,4 @@
-flet~=1.0.0
+flet~=1.0.3
 loguru~=0.7.3
 configparser~=7.2.0
 phonenumbers~=9.0.36
@@ -19,12 +19,3 @@ python-socks~=3.1.1
 progress~=1.6.1
 qrcode~=8.2
 packaging~=26.3
-aiohttp
-groq
-python-dotenv
-asgiref
-aiogram
-g4f
-openai
-fluent-logger-pyramid
-lingua-autotranslate
